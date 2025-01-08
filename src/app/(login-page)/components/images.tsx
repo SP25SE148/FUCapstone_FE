@@ -20,7 +20,7 @@ export default function Images() {
 
     return (
         <Carousel
-            className="w-full h-full"
+            className="w-full h-full rounded-2xl overflow-hidden"
             plugins={[
                 Autoplay({
                     delay: 3500,
@@ -31,16 +31,16 @@ export default function Images() {
                 loop: true,
             }}
         >
-            <CarouselContent>
+            <CarouselContent className="rounded-lg">
                 {images.map((src, index) => (
-                    <CarouselItem key={index} className="h-screen">
-                        <div className="relative w-full h-full">
+                    <CarouselItem key={index} className="h-screen rounded-2xl">
+                        <div className="relative w-full h-full rounded-2xl">
                             <Image
                                 src={src}
                                 alt={`Image ${index + 1}`}
                                 fill
-                                className="object-cover"
-                                priority={index === 0}
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, (max-width: 1280px) 100vw, 100vw"
+                                className="object-cover rounded-2xl"
                             />
                         </div>
                     </CarouselItem>
