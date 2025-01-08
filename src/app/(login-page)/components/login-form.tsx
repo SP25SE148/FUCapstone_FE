@@ -18,7 +18,8 @@ export default function Loginform() {
     
     return (
         <div className="flex-1">
-            <h1 className="text-[32px] font-bold mb-8">SIGN IN</h1>
+            <h1 className="text-xl font-bold text-center mb-6">Welcome To FUC</h1>
+            <p className="text-sm text-center text-zinc-400 font-semibold mb-6">FUC - Capstone management system for FPT university teachers and students</p>
 
             {/* Error message */}
             {/* <div className="text-[#C13181] mb-6">
