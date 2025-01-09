@@ -28,8 +28,8 @@ const menuItems = [
 
 export function SuperAdminSidebar() {
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b border-border px-6 py-4">
+    <Sidebar className="mt-[68px]">
+      {/* <SidebarHeader className="border-b border-border px-6 py-4">
         <Link
           href="/"
           className="flex items-center gap-2 text-xl font-bold text-purple-500"
@@ -39,7 +39,7 @@ export function SuperAdminSidebar() {
           </div>
           <span className="text-xl font-bold">FUC</span>
         </Link>
-      </SidebarHeader>
+      </SidebarHeader> */}
       <SidebarContent className="flex-1 flex flex-col m-auto pt-14">
         <SidebarMenu>
           {menuItems.map((item) => (
@@ -55,9 +55,9 @@ export function SuperAdminSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="border-t border-border p-4">
+      {/* <SidebarFooter className="border-t border-border p-4">
         <SidebarTrigger />
-      </SidebarFooter>
+      </SidebarFooter> */}
     </Sidebar>
   );
 }
