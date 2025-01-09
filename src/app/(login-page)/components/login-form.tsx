@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -15,19 +15,21 @@ export default function Loginform() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [focusedInput, setFocusedInput] = useState<"email" | "password" | null>(null);
-    
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Add your login logic here
+        router.push('/superadmin');
+    };
+
     return (
         <div className="flex-1">
-            <h1 className="text-xl font-bold text-center mb-6">Welcome To FUC</h1>
-            <p className="text-sm text-center text-zinc-400 font-semibold mb-6">FUC - Capstone management system for FPT university teachers and students</p>
+            <h1 className="text-2xl font-bold text-center mb-6 dark:text-white">Welcome To FUC</h1>
+            <p className="text-sm text-center text-zinc-400 dark:text-slate-400 font-semibold mb-6">
+                FUC - Capstone management system for FPT university teachers and students
+            </p>
 
-            {/* Error message */}
-            {/* <div className="text-[#C13181] mb-6">
-                Your login credentials don&apos;t match
-                <br />an account in our system.
-            </div> */}
-
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
                 {/* EMAIL */}
                 <div className="relative">
                     <Label
@@ -41,14 +43,13 @@ export default function Loginform() {
                     </Label>
                     <Input
                         id="email"
-                        type="text"
+                        type="email"
                         value={email}
                         onFocus={() => setFocusedInput("email")}
                         onBlur={() => setFocusedInput(null)}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="bg-zinc-200 border-none h-12 pt-6"
+                        className="bg-zinc-200 dark:bg-zinc-600 border-zinc-200 dark:border-zinc-600 h-12 pt-6"
                     />
-
                 </div>
 
                 {/* PASSWORD */}
@@ -69,13 +70,13 @@ export default function Loginform() {
                         onFocus={() => setFocusedInput("password")}
                         onBlur={() => setFocusedInput(null)}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="bg-zinc-200 border-none h-12 pt-6"
+                        className="bg-zinc-200 dark:bg-zinc-600 border-zinc-200 dark:border-zinc-600 h-12 pt-6"
                     />
                     <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-2 top-1.5 hover:bg-zinc-200"
+                        className="absolute right-2 top-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-600"
                         onClick={() => setShowPassword(!showPassword)}
                     >
                         {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
@@ -86,10 +87,9 @@ export default function Loginform() {
                     <Button
                         className="w-14 h-14 rounded-2xl mt-6"
                         size="icon"
-                        type="button"
-                        onClick={() => router.push('/superadmin')}
+                        type="submit"
                     >
-                        <ArrowRight />
+                        <ArrowRight className="w-6 h-6" />
                     </Button>
                 </div>
             </form>
