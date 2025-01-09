@@ -1,5 +1,6 @@
-export default function SuperadminPage() {
-    return (
-        <div>Superadmin</div>
-    )
+import { redirect } from 'next/navigation'
+
+export default function Home() {
+  redirect('/superadmin/campus')
 }
+
