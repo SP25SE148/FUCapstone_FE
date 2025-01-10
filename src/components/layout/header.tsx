@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ModeToggle } from "../theme/mode-toggle";
-import { Zap } from 'lucide-react';
+import { Zap } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
@@ -12,10 +12,12 @@ export default function Header() {
   if (pathname === "/") return null;
 
   return (
-    <header className="shadow-sm sticky top-0 z-50 bg-white dark:bg-darkbackground transition-colors duration-200">
+    <header className="shadow-sm sticky top-0 z-50 bg-white dark:bg-darkbackground border-b border-gray-200 dark:border-white dark:shadow-[0_4px_6px_rgba(255,255,255,0.1)] transition-colors duration-200">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         <div className="flex items-center space-x-2">
-          <div className="text-primary dark:text-primary-foreground font-bold text-xl">FUC</div>
+          <div className="text-primary dark:text-primary-foreground font-bold text-xl">
+            FUC
+          </div>
         </div>
 
         <div className="flex items-center space-x-4">
