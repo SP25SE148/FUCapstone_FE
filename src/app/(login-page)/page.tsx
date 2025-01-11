@@ -1,12 +1,10 @@
 import { Globe } from 'lucide-react';
 import Images from "./components/images";
 import Loginform from "./components/login-form";
-import { ModeToggle } from "@/components/theme/mode-toggle";
 
 export default function LoginPage() {
   return (
     <div className="relative h-screen flex items-center justify-center">
-      <ModeToggle className="absolute top-2 right-2"/>
       <div className="w-[90%] max-w-[1200px] h-[90%] max-h-[800px] bg-zinc-50 dark:bg-zinc-800 shadow-2xl rounded-2xl flex">
         {/* Left side - Login Form */}
         <div className="w-[440px] bg-zinc-50 dark:bg-zinc-800 p-12 flex flex-col rounded-2xl">
