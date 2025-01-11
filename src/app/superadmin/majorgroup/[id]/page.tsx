@@ -35,7 +35,7 @@ export default function MajorPage() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Link>
-        <h2 className="text-2xl text-black font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-4">
           {group.name} - {group.code}
         </h2>
         <p className="text-gray-500 text-sm leading-relaxed max-w-full">
@@ -45,13 +45,13 @@ export default function MajorPage() {
 
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl text-black font-semibold">Majors</h2>
+          <h2 className="text-2xl font-semibold">Majors</h2>
           <Button className="bg-purple-500 hover:bg-purple-600">
             Add Major
           </Button>
         </div>
 
-        <div className="bg-white text-black rounded-lg shadow-sm">
+        <div className="rounded-lg shadow-sm">
           <Table>
             <TableHeader>
               <TableRow>

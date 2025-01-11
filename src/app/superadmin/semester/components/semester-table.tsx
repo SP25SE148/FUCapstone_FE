@@ -8,9 +8,8 @@ import { semesterData } from '@/app/superadmin/semester/table-data'
 
 export default function SemesterTable() {
   return (
-    <div className="bg-white text-black rounded-lg shadow-sm">
+    <div className="rounded-lg shadow-sm">
       <div className="flex justify-between items-center mb-4 px-4 py-2">
-        {/* <h2 className="text-2xl text-black font-semibold">Semesters</h2> */}
         <div className="flex gap-2 w-full justify-end">
           <Button variant="outline">Filters</Button>
           <Button className="bg-purple-500 hover:bg-purple-600">

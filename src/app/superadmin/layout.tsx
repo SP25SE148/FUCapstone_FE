@@ -10,7 +10,7 @@ export default function SuperadminLayout({
     <SidebarProvider>
       <div className="flex w-full min-h-full">
         <SuperAdminSidebar />
-        <div className="flex-1 bg-gray-50">
+        <div className="flex-1">
           {children}
         </div>
       </div>

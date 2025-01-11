@@ -15,7 +15,7 @@ import { data } from "@/app/superadmin/campus/table-data";
 
 export default function CampusTable() {
   return (
-    <div className="bg-white text-black rounded-lg shadow-sm">
+    <div className="rounded-lg shadow-sm ">
       <div className="flex justify-between items-center mb-4 px-4 py-2">
         <div className="w-full flex gap-2 justify-end">
           <Button variant="outline">Filters</Button>
