@@ -20,11 +20,11 @@ export default function MajorGroupPage() {
   return (
     <div className="p-8 w-full">
       <div className="mb-8">
-        <h2 className="text-2xl text-black font-semibold mb-4">Overall</h2>
-        <div className="bg-white p-4 rounded-lg shadow-sm">
+        <h2 className="text-2xl font-semibold mb-4">Overall</h2>
+        <div className="p-4 rounded-lg shadow-sm">
           <div>
             <h3 className="text-purple-500 mb-2">Total Major Groups</h3>
-            <p className="text-2xl text-black font-semibold">
+            <p className="text-2xl font-semibold">
               {majorData.length}
             </p>
           </div>
@@ -33,7 +33,7 @@ export default function MajorGroupPage() {
 
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl text-black font-semibold">Major Group</h2>
+          <h2 className="text-2xl  font-semibold">Major Group</h2>
           <div className="flex gap-2">
             <Button variant="outline">Filters</Button>
             <Button className="bg-purple-500 hover:bg-purple-600">
@@ -42,7 +42,7 @@ export default function MajorGroupPage() {
           </div>
         </div>
 
-        <div className="bg-white text-black rounded-lg shadow-sm">
+        <div className=" rounded-lg shadow-sm">
           <Table>
             <TableHeader>
               <TableRow>
