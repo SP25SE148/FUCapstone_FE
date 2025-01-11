@@ -1,30 +1,17 @@
-import { Globe } from 'lucide-react';
 import Images from "./components/images";
 import Loginform from "./components/login-form";
 
 export default function LoginPage() {
   return (
-    <div className="relative h-screen flex items-center justify-center">
-      <div className="w-[90%] max-w-[1200px] h-[90%] max-h-[800px] bg-zinc-50 dark:bg-zinc-800 shadow-2xl rounded-2xl flex">
+    <div className="flex h-screen flex-col items-center justify-center bg-muted">
+      <div className="w-[90%] max-w-[1200px] h-[90%] max-h-[800px] border-primary border-2 bg-background shadow-2xl rounded-2xl flex">
         {/* Left side - Login Form */}
-        <div className="w-[440px] bg-zinc-50 dark:bg-zinc-800 p-12 flex flex-col rounded-2xl">
-          <div className="flex items-center justify-between mb-20">
-            <strong className="font-extrabold text-2xl dark:text-white">FUC</strong>
-            <div className="flex items-center gap-2 text-sm dark:text-zinc-300">
-              <span>VIETNAM</span>
-              <Globe className="w-4 h-4" />
-            </div>
-          </div>
-
+        <div className="w-[440px] p-12 flex flex-col rounded-2xl">
           <Loginform />
-
-          <p className="text-sm text-center text-zinc-400 dark:text-slate-400">
-            Developed by FUC team
-          </p>
         </div>
 
         {/* Right side - Background Image */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 p-2 relative overflow-hidden">
           <Images />
         </div>
       </div>

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ModeToggle } from "@/components/theme/mode-toggle";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,7 +29,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ModeToggle className="absolute top-2 right-2"/>
+          <ModeToggle className="absolute top-2 right-2 z-50"/>
           {children}
         </ThemeProvider>
       </body>
