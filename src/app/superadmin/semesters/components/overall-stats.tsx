@@ -1,6 +1,6 @@
 'use client'
 
-import { semesterData } from '@/app/superadmin/semester/table-data'
+import { semesterData } from '@/app/superadmin/semesters/table-data'
 
 export default function SemesterOverallStats() {
   return (

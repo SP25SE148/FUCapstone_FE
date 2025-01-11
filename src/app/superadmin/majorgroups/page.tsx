@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Pencil } from "lucide-react";
-import { majorData } from "@/app/superadmin/majorgroup/table-data";
+import { majorData } from "@/app/superadmin/majorgroups/table-data";
 
 export default function MajorGroupPage() {
   const router = useRouter();

@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import { Pencil } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { semesterData } from '@/app/superadmin/semester/table-data'
+import { semesterData } from '@/app/superadmin/semesters/table-data'
 
 export default function SemesterTable() {
   return (
