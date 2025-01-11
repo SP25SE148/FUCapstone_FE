@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
-import { ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Globe } from 'lucide-react';
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -23,13 +23,21 @@ export default function Loginform() {
     };
 
     return (
-        <div className="flex-1">
-            <h1 className="text-2xl font-bold text-center mb-6 dark:text-white">Welcome To FUC</h1>
-            <p className="text-sm text-center text-zinc-400 dark:text-slate-400 font-semibold mb-6">
-                FUC - Capstone management system for FPT university teachers and students
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="h-full flex flex-col">
+            <div className="flex items-center justify-between mb-20">
+                <strong className="font-extrabold text-2xl">FUC</strong>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>VIETNAM</span>
+                    <Globe className="w-4 h-4" />
+                </div>
+            </div>
+            <div className="mb-6 flex flex-col gap-6 items-center text-center">
+                <h1 className="text-2xl font-bold">Welcome To FUC</h1>
+                <p className="text-sm font-semibold text-muted-foreground">
+                    FUC - Capstone management system for FPT university teachers and students
+                </p>
+            </div>
+            <form onSubmit={handleSubmit} className="flex-1 space-y-4">
                 {/* EMAIL */}
                 <div className="relative">
                     <Label
@@ -48,7 +56,7 @@ export default function Loginform() {
                         onFocus={() => setFocusedInput("email")}
                         onBlur={() => setFocusedInput(null)}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="bg-zinc-200 dark:bg-zinc-600 border-zinc-200 dark:border-zinc-600 h-12 pt-6"
+                        className="h-12 pt-6"
                     />
                 </div>
 
@@ -70,13 +78,13 @@ export default function Loginform() {
                         onFocus={() => setFocusedInput("password")}
                         onBlur={() => setFocusedInput(null)}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="bg-zinc-200 dark:bg-zinc-600 border-zinc-200 dark:border-zinc-600 h-12 pt-6"
+                        className="h-12 pt-6"
                     />
                     <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-2 top-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-600"
+                        className="absolute right-2 top-1.5"
                         onClick={() => setShowPassword(!showPassword)}
                     >
                         {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
@@ -93,6 +101,9 @@ export default function Loginform() {
                     </Button>
                 </div>
             </form>
+            <p className="text-sm text-center text-muted-foreground">
+                Developed by FUC team
+            </p>
         </div>
     )
 }
