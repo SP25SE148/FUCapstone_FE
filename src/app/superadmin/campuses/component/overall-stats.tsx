@@ -1,6 +1,6 @@
 "use client";
 
-import { data } from "@/app/superadmin/campus/table-data";
+import { data } from "@/app/superadmin/campuses/table-data";
 
 export default function OverallStats() {
   return (

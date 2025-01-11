@@ -11,11 +11,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { data } from "@/app/superadmin/campus/table-data";
+import { data } from "@/app/superadmin/campuses/table-data";
 
 export default function CampusTable() {
   return (
-    <div className="rounded-lg shadow-sm ">
+    <div className="rounded-lg shadow-sm w-full">
       <div className="flex justify-between items-center mb-4 px-4 py-2">
         <div className="w-full flex gap-2 justify-end">
           <Button variant="outline">Filters</Button>
