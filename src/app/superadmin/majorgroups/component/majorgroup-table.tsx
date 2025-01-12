@@ -1,4 +1,6 @@
 "use client";
+import { useRouter } from "next/navigation";
+
 
 import {
   Table,
@@ -21,60 +23,64 @@ import { Badge } from "@/components/ui/badge";
 import { Pencil, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { data } from "@/app/superadmin/campuses/table-data";
+import { majorData } from "@/app/superadmin/majorgroups/table-data";
 
-export default function CampusTable() {
+export default function MajorGroupTable() {
+    const router = useRouter();
+  
   return (
     <div className="rounded-lg border shadow-sm w-full">
       <div className="flex justify-between items-center mb-6 px-3 py-4 ">
         <div className="relative w-4/5">
           <Input
             type="text"
-            placeholder="Search campuses..."
+            placeholder="Search..."
             className="pl-10 pr-4 py-2 w-full"
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 " />
         </div>
         <div className="flex gap-3">
           <Button variant="outline">Filters</Button>
-          <Button className="bg-primary hover:bg-primary/90">Add Campus</Button>
+          <Button className="bg-primary hover:bg-primary/90">Add Major Group</Button>
         </div>
       </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold ">Name</TableHead>
-            <TableHead className="font-semibold ">Code</TableHead>
-            <TableHead className="font-semibold ">Address</TableHead>
-            <TableHead className="font-semibold ">Phone</TableHead>
-            <TableHead className="font-semibold ">Email</TableHead>
-            <TableHead className="font-semibold ">Status</TableHead>
-            <TableHead className="font-semibold">Actions</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Code</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {data.map((campus, index) => (
-            <TableRow key={index} className=" transition-colors">
-              <TableCell className="font-medium">{campus.name}</TableCell>
-              <TableCell>{campus.code}</TableCell>
-              <TableCell>{campus.address}</TableCell>
-              <TableCell>{campus.phone}</TableCell>
-              <TableCell>{campus.email}</TableCell>
+        <TableBody className="cursor-pointer">
+          {majorData.map((major) => (
+            <TableRow
+              key={major.id}
+              onClick={() => router.push(`/superadmin/majorgroups/${major.id}`)}
+            >
+              <TableCell>{major.name}</TableCell>
+              <TableCell>{major.code}</TableCell>
+              <TableCell>
+                <p className="text-gray-500 text-sm leading-relaxed max-w-[600px] overflow-hidden text-ellipsis whitespace-nowrap">
+                  {major.description}
+                </p>
+              </TableCell>
               <TableCell>
                 <Badge
                   className={`${
-                    campus.status === "Active"
+                    major.status === "Active"
                       ? "bg-green-100 text-green-600 hover:bg-green-100"
                       : "bg-red-100 text-red-600 hover:bg-red-100"
                   }`}
                 >
-                  {campus.status}
+                  {major.status}
                 </Badge>
               </TableCell>
               <TableCell>
-                <Button variant="ghost" size="sm" className="p-2">
+                <Button variant="ghost" size="icon">
                   <Pencil className="h-4 w-4" />
-                  <span className="sr-only">Edit</span>
                 </Button>
               </TableCell>
             </TableRow>
