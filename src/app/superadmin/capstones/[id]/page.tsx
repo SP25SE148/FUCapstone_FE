@@ -19,26 +19,25 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Badge } from "@/components/ui/badge";
-import { majorData } from "@/app/superadmin/majorgroups/table-data";
+import { CapstoneData } from "@/app/superadmin/capstones/table-data";
 import Link from "next/link";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Download, Pencil, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-export default function MajorPage() {
+export default function CapstoneDetailPage() {
   const params = useParams();
-  const groupId = params.id;
-  const group = majorData.find((g) => g.id === groupId);
+  const capstoneId = params.id;
+  const capstone = CapstoneData.find((g) => g.id === capstoneId);
 
-  if (!group) {
-    return <p className="text-center mt-8">Major Group not found</p>;
+  if (!capstone) {
+    return <p className="text-center mt-8">Capstone not found</p>;
   }
 
   return (
     <div className="p-8 w-full">
       <div className="mb-8">
         <Link
-          href="/superadmin/majorgroups"
+          href="/superadmin/capstones"
           className="inline-flex items-center text-purple-600 mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -46,17 +45,20 @@ export default function MajorPage() {
         </Link>
         <div className="p-4 bg-accent rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">
-            {group.name} - {group.code}
+            {capstone.capstoneName} - {capstone.capstoneCode}
           </h2>
-          <p className="text-gray-500 text-sm leading-relaxed max-w-full">
-            {group.description}
-          </p>
+          <div className="flex text-gray-500 text-l leading-relaxed max-w-full">
+            <p className="mr-2">Member(Min/Max): </p><p>{capstone.minMember}/{capstone.maxMember}</p>
+          </div>
+          <div className="flex text-gray-500 text-l leading-relaxed max-w-full">
+            <p className="mr-2">Review Count: </p><p>{capstone.reviewsCount}</p>
+          </div>
         </div>
       </div>
 
       <div>
         <div className="flex justify-between items-center mb-4 mt-2">
-          <h2 className="text-2xl font-semibold">Majors</h2>
+          <h2 className="text-2xl font-semibold">Templates</h2>
         </div>
 
         <div className="rounded-lg border shadow-sm w-full">
@@ -72,7 +74,7 @@ export default function MajorPage() {
             <div className="flex gap-3">
               <Button variant="outline">Filters</Button>
               <Button className="bg-primary hover:bg-primary/90">
-                Add Major Group
+                Add Template
               </Button>
             </div>
           </div>
@@ -80,41 +82,32 @@ export default function MajorPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Code</TableHead>
-                <TableHead>Description</TableHead>
+                <TableHead>Date Created</TableHead>
+                <TableHead>Date Modified </TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {group.majors.map((major) => (
-                <TableRow key={major.id}>
-                  <TableCell>{major.name}</TableCell>
-                  <TableCell>{major.code}</TableCell>
+              {capstone.templateDocument.map((template) => (
+                <TableRow key={template.id}>
+                  <TableCell>{template.name}</TableCell>
+                  <TableCell>{template.createDate}</TableCell>
+                  <TableCell>{template.updatedDate}</TableCell>
                   <TableCell>
-                    <p className="text-gray-500 text-sm leading-relaxed max-w-[500px] overflow-hidden text-ellipsis whitespace-nowrap">
-                      {major.description}
-                    </p>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      className={`${
-                        major.status === "Active"
-                          ? "bg-green-100 text-green-600 hover:bg-green-100"
-                          : "bg-red-100 text-red-600 hover:bg-red-100"
-                      }`}
-                    >
-                      {major.status}
-                    </Badge>
+                    <Button variant="ghost" size="icon">
+                      <Link href={template.url}>
+                        <Download className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                      <Pencil className="h-4 w-4" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
           <div className="flex items-center justify-between px-6 py-4 border-t">
-            {/* <p className="text-sm text-gray-700">
-          Showing page <span className="font-medium">1</span> of{" "}
-          <span className="font-medium">10</span>
-        </p> */}
             <Pagination>
               <PaginationContent>
                 <PaginationItem>

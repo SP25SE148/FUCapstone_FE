@@ -1,4 +1,6 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { Pencil, Search } from "lucide-react";
 
 import {
   Table,
@@ -18,63 +20,70 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { data } from "@/app/superadmin/campuses/table-data";
+import { CapstoneData } from "@/app/superadmin/capstones/table-data";
 
-export default function CampusTable() {
+export default function CapstoneTable() {
+  const router = useRouter();
+
   return (
     <div className="rounded-lg border shadow-sm w-full">
       <div className="flex justify-between items-center mb-6 px-3 py-4 ">
         <div className="relative w-4/5">
           <Input
             type="text"
-            placeholder="Search campuses..."
+            placeholder="Search..."
             className="pl-10 pr-4 py-2 w-full"
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 " />
         </div>
         <div className="flex gap-3">
           <Button variant="outline">Filters</Button>
-          <Button className="bg-primary hover:bg-primary/90">Add Campus</Button>
+          <Button className="bg-primary hover:bg-primary/90">
+            Add Capstone
+          </Button>
         </div>
       </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold ">Name</TableHead>
-            <TableHead className="font-semibold ">Code</TableHead>
-            <TableHead className="font-semibold ">Address</TableHead>
-            <TableHead className="font-semibold ">Phone</TableHead>
-            <TableHead className="font-semibold ">Email</TableHead>
-            <TableHead className="font-semibold ">Status</TableHead>
-            <TableHead className="font-semibold">Actions</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Code</TableHead>
+            <TableHead>Min Member</TableHead>
+            <TableHead>Max Member</TableHead>
+            <TableHead>Review Count</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {data.map((campus, index) => (
-            <TableRow key={index} className=" transition-colors">
-              <TableCell className="font-medium">{campus.name}</TableCell>
-              <TableCell>{campus.code}</TableCell>
-              <TableCell>{campus.address}</TableCell>
-              <TableCell>{campus.phone}</TableCell>
-              <TableCell>{campus.email}</TableCell>
+        <TableBody className="cursor-pointer">
+          {CapstoneData.map((capstone) => (
+            <TableRow
+              key={capstone.id}
+              onClick={() =>
+                router.push(`/superadmin/capstones/${capstone.id}`)
+              }
+            >
+              <TableCell>{capstone.capstoneName}</TableCell>
+              <TableCell>{capstone.capstoneCode}</TableCell>
+              <TableCell>{capstone.minMember}</TableCell>
+              <TableCell>{capstone.maxMember}</TableCell>
+              <TableCell>{capstone.reviewsCount}</TableCell>
               <TableCell>
                 <Badge
                   className={`${
-                    campus.status === "Active"
+                    capstone.status === "Active"
                       ? "bg-green-100 text-green-600 hover:bg-green-100"
                       : "bg-red-100 text-red-600 hover:bg-red-100"
                   }`}
                 >
-                  {campus.status}
+                  {capstone.status}
                 </Badge>
               </TableCell>
               <TableCell>
-                <Button variant="ghost" size="sm" className="p-2">
+                <Button variant="ghost" size="icon">
                   <Pencil className="h-4 w-4" />
-                  <span className="sr-only">Edit</span>
                 </Button>
               </TableCell>
             </TableRow>
@@ -82,10 +91,6 @@ export default function CampusTable() {
         </TableBody>
       </Table>
       <div className="flex items-center justify-between px-6 py-4 border-t">
-        {/* <p className="text-sm text-gray-700">
-          Showing page <span className="font-medium">1</span> of{" "}
-          <span className="font-medium">10</span>
-        </p> */}
         <Pagination>
           <PaginationContent>
             <PaginationItem>
