@@ -34,7 +34,7 @@ export default function CapstoneDetailPage() {
   }
 
   return (
-    <div className="p-8 w-full">
+    <div>
       <div className="mb-8">
         <Link
           href="/superadmin/capstones"
@@ -43,7 +43,7 @@ export default function CapstoneDetailPage() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Link>
-        <div className="p-4 bg-accent rounded-lg">
+        <div className="p-4 rounded-lg bg-background">
           <h2 className="text-2xl font-semibold mb-4">
             {capstone.capstoneName} - {capstone.capstoneCode}
           </h2>
@@ -61,8 +61,8 @@ export default function CapstoneDetailPage() {
           <h2 className="text-2xl font-semibold">Templates</h2>
         </div>
 
-        <div className="rounded-lg border shadow-sm w-full">
-          <div className="flex justify-between items-center mb-6 px-3 py-4 ">
+        <div className="rounded-lg border shadow-sm w-full bg-background">
+          <div className="flex justify-between items-center px-3 py-4 ">
             <div className="relative w-4/5">
               <Input
                 type="text"

@@ -35,10 +35,10 @@ export function AppSidebar({ items }: {
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>Admin</SidebarGroupLabel>
-                    <SidebarGroupContent className="mt-4">
+                    <SidebarGroupContent>
                         <SidebarMenu>
                             {items?.map((item) => (
-                                <SidebarMenuItem className="pb-4" key={item.title}>
+                                <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild>
                                         <Link href={item.url}>
                                             <item.icon />

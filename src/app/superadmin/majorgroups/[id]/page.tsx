@@ -35,7 +35,7 @@ export default function MajorPage() {
   }
 
   return (
-    <div className="p-8 w-full">
+    <div>
       <div className="mb-8">
         <Link
           href="/superadmin/majorgroups"
@@ -44,7 +44,7 @@ export default function MajorPage() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Link>
-        <div className="p-4 bg-accent rounded-lg">
+        <div className="p-4 rounded-lg bg-background">
           <h2 className="text-2xl font-semibold mb-4">
             {group.name} - {group.code}
           </h2>
@@ -59,8 +59,8 @@ export default function MajorPage() {
           <h2 className="text-2xl font-semibold">Majors</h2>
         </div>
 
-        <div className="rounded-lg border shadow-sm w-full">
-          <div className="flex justify-between items-center mb-6 px-3 py-4 ">
+        <div className="rounded-lg border shadow-sm w-full bg-background">
+          <div className="flex justify-between items-center px-3 py-4 ">
             <div className="relative w-4/5">
               <Input
                 type="text"
