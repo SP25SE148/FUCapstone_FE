@@ -3,7 +3,7 @@ import MajorGroupOverallStats from "@/app/superadmin/majorgroups/component/major
 
 export default function MajorGroupPage() {
   return (
-    <div className="p-8 w-full">
+    <div>
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Overall</h2>
         <MajorGroupOverallStats />

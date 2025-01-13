@@ -28,8 +28,8 @@ export default function CapstoneTable() {
   const router = useRouter();
 
   return (
-    <div className="rounded-lg border shadow-sm w-full">
-      <div className="flex justify-between items-center mb-6 px-3 py-4 ">
+    <div className="rounded-lg border shadow-sm w-full bg-background">
+      <div className="flex justify-between items-center px-3 py-4 ">
         <div className="relative w-4/5">
           <Input
             type="text"

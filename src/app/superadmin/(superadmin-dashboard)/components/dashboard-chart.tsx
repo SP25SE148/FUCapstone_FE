@@ -2,31 +2,31 @@
 import React from "react";
 
 import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Label,
-    Pie,
-    PieChart,
-    XAxis,
-  } from "recharts";
-  import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-  import {
-    ChartConfig,
-    ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
-    ChartTooltip,
-    ChartTooltipContent,
-  } from "@/components/ui/chart";
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Label,
+  Pie,
+  PieChart,
+  XAxis,
+} from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 export default function DashBoardCharts() {
   const topicgroupData = [
-    { name: "Ho Chi Minh", topic: 401, group: 120 },
-    { name: "Hoa Lac", topic: 398, group: 122 },
-    { name: "Da Nang", topic: 190, group: 80 },
-    { name: "Quy Nho", topic: 200, group: 76 },
-    { name: "Can Tho", topic: 122, group: 67 },
+    { name: "Ho Chi Minh", shortName: "HCM", topic: 401, group: 120 },
+    { name: "Hoa Lac", shortName: "HL", topic: 398, group: 122 },
+    { name: "Da Nang", shortName: "DN", topic: 190, group: 80 },
+    { name: "Quy Nho", shortName: "QN", topic: 200, group: 76 },
+    { name: "Can Tho", shortName: "CT", topic: 122, group: 67 },
   ];
 
   const supervisortData = [
@@ -72,7 +72,7 @@ export default function DashBoardCharts() {
       color: "#fca5a5",
     },
   } satisfies ChartConfig;
-  
+
   const totalSupervisorss = React.useMemo(() => {
     return supervisortData.reduce((acc, curr) => acc + curr.supervisor, 0);
   }, []);
@@ -88,11 +88,16 @@ export default function DashBoardCharts() {
             <BarChart accessibilityLayer data={topicgroupData}>
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="campus"
-                tickLine={false}
+                dataKey="shortName"
+                tickLine={true}
                 tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
+                axisLine={true}
+                tickFormatter={(value) => {
+                  const campus = topicgroupData.find(
+                    (item) => item.shortName === value
+                  );
+                  return campus ? campus.name : value;
+                }}
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <ChartLegend content={<ChartLegendContent />} />

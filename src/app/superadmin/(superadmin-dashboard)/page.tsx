@@ -6,7 +6,7 @@ import DashBoardOverallStats from "@/app/superadmin/(superadmin-dashboard)/compo
 export default function Dashboard() {
   
   return (
-    <div className="flex min-h-screen flex-col gap-4 p-8">
+    <div className="flex flex-col gap-4">
       <DashBoardOverallStats />
       <DashBoardCharts />
     </div>
