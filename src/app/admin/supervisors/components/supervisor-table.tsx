@@ -53,7 +53,7 @@ export default function SupervisorTable() {
                 <CardDescription>Campus Hồ Chí Minh</CardDescription>
             </CardHeader>
             <CardContent>
-                <DataTable columns={columns} data={data} filter="code" />
+                <DataTable columns={columns} data={data} />
             </CardContent>
         </Card>
     );
