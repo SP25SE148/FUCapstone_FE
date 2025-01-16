@@ -153,7 +153,7 @@ export default function ManagerTable() {
                 <CardDescription>Campus Hồ Chí Minh</CardDescription>
             </CardHeader>
             <CardContent>
-                <DataTable columns={columns} data={data} filter="email" />
+                <DataTable columns={columns} data={data} />
             </CardContent>
         </Card>
     );
