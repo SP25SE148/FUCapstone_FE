@@ -4,15 +4,9 @@ import CampusOverallStats from "@/app/superadmin/campuses/component/campus-overa
 
 export default function CampusPage() {
   return (
-    <div>
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Overall</h2>
+    <div className="flex flex-col gap-4">
         <CampusOverallStats />
-      </div>
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Campuses</h2>
         <CampusTable />
-      </div>
     </div>
   );
 }

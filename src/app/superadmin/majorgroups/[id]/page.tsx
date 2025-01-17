@@ -1,29 +1,19 @@
 "use client";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Badge } from "@/components/ui/badge";
 import { majorData } from "@/app/superadmin/majorgroups/table-data";
-import Link from "next/link";
-import { ArrowLeft, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { DataTable } from "@/components/ui/data-table";
+import { majorColumns } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"; 
 
 export default function MajorPage() {
   const params = useParams();
@@ -54,86 +44,26 @@ export default function MajorPage() {
         </div>
       </div>
 
-      <div>
-        <div className="flex justify-between items-center mb-4 mt-2">
-          <h2 className="text-2xl font-semibold">Majors</h2>
-        </div>
-
-        <div className="rounded-lg border shadow-sm w-full bg-background">
-          <div className="flex justify-between items-center px-3 py-4 ">
-            <div className="relative w-4/5">
-              <Input
-                type="text"
-                placeholder="Search..."
-                className="pl-10 pr-4 py-2 w-full"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 " />
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="font-semibold tracking-tight text-xl">
+                Major Groups
+              </CardTitle>
+              <CardDescription>
+                List of FPT University Major Groups
+              </CardDescription>
             </div>
-            <div className="flex gap-3">
-              <Button variant="outline">Filters</Button>
-              <Button className="bg-primary hover:bg-primary/90">
-                Add Major Group
-              </Button>
-            </div>
+            <Button className="bg-primary hover:bg-primary/90">
+              Add Major Groups
+            </Button>
           </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Code</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {group.majors.map((major) => (
-                <TableRow key={major.id}>
-                  <TableCell>{major.name}</TableCell>
-                  <TableCell>{major.code}</TableCell>
-                  <TableCell>
-                    <p className="text-gray-500 text-sm leading-relaxed max-w-[500px] overflow-hidden text-ellipsis whitespace-nowrap">
-                      {major.description}
-                    </p>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      className={`${
-                        major.status === "Active"
-                          ? "bg-green-100 text-green-600 hover:bg-green-100"
-                          : "bg-red-100 text-red-600 hover:bg-red-100"
-                      }`}
-                    >
-                      {major.status}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <div className="flex items-center justify-between px-6 py-4 border-t">
-            {/* <p className="text-sm text-gray-700">
-          Showing page <span className="font-medium">1</span> of{" "}
-          <span className="font-medium">10</span>
-        </p> */}
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        </div>
-      </div>
+        </CardHeader>
+        <CardContent>
+          <DataTable columns={majorColumns} data={group.majors} />
+        </CardContent>
+      </Card>
     </div>
   );
 }
