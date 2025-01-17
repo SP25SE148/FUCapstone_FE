@@ -1,5 +1,5 @@
 import AdminDashBoardCharts from "./components/admin-dashboard-chart";
-import AdminDashBoardOverall from "./components/admin-dashboadr-overall";
+import AdminDashBoardOverall from "./components/admin-dashboard-overall";
 
 export default function AdminDashboardPage() {
     return (
