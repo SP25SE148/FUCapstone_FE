@@ -4,20 +4,32 @@ import { Button } from "@/components/ui/button";
 import { majorData } from "@/app/superadmin/majorgroups/table-data";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 export default function MajorGroupTable() {
   const data = majorData;
 
   return (
-    <div className="rounded-lg border shadow-sm w-full bg-background">
-      <div className="justify-between items-center px-3 py-4 ">
-        <div className="flex w-full justify-between">
-          <Button className="bg-primary hover:bg-primary/90">
-            Add Major Group
-          </Button>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="font-semibold tracking-tight text-xl">
+              Major Groups
+            </CardTitle>
+            <CardDescription>List of FPT University Major Groups</CardDescription>
+          </div>
+          <Button className="bg-primary hover:bg-primary/90">Add Major Groups</Button>
         </div>
-        <DataTable columns={columns} data={data} filter="name"/>
-      </div>
-    </div>
+      </CardHeader>
+      <CardContent>
+        <DataTable columns={columns} data={data} />
+      </CardContent>
+    </Card>
   );
 }

@@ -1,22 +1,38 @@
 "use client";
 
-
 import { columns } from "@/app/superadmin/semesters/components/semester-table-columns";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { semesterData } from "@/app/superadmin/semesters/table-data";
 
 export default function SemesterTable() {
   const data = semesterData;
 
   return (
-    <div className="rounded-lg border shadow-sm w-full bg-background">
-      <div className="justify-between items-center px-3 py-4 ">
-        <div className="flex w-full justify-between">
-          <Button className="bg-primary hover:bg-primary/90">Add Semester</Button>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="font-semibold tracking-tight text-xl">
+              Semesters
+            </CardTitle>
+            <CardDescription>List of FPT University smesters</CardDescription>
+          </div>
+          <Button className="bg-primary hover:bg-primary/90">
+            Add Semester
+          </Button>
         </div>
-        <DataTable columns={columns} data={data} filter="name" />
-      </div>
-    </div>
+      </CardHeader>
+      <CardContent>
+        <DataTable columns={columns} data={data} />
+      </CardContent>
+    </Card>
   );
 }

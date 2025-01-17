@@ -1,20 +1,26 @@
-"use client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 export default function OverallStats({
-  items,
+    items,
 }: {
-  items: {
-    title: string;
-    stat: number;
-  }[];
+    items?: {
+        title: string;
+        stat: string | number;
+    }[];
 }) {
-  return (
-    <div className="flex gap-5 p-4 rounded-lg shadow-sm bg-background">
-      {items?.map((item) => (
-        <div key={item.title} className="flex-1">
-          <h3 className="text-purple-500 mb-2">{item.title}</h3>
-          <p className="text-2xl font-semibold">{item.stat}</p>
-        </div>
-      ))}
-    </div>
-  );
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="font-semibold tracking-tight text-xl">Overall</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {items?.map((item, index) => (
+                    <div key={index}>
+                        <p className="pb-2 tracking-tight text-sm font-medium">{item.title}</p>
+                        <p className="text-2xl font-bold">{item.stat}</p>
+                    </div>
+                ))}
+            </CardContent>
+        </Card>
+    );
 }

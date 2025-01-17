@@ -5,7 +5,7 @@ import OverallStats from "@/components/layout/overall-stats";
 
 export default function SemesterOverallStats() {
   const items = [
-    { title: "Total Campuses", stat: semesterData.length }
+    { title: "Total Semesters", stat: semesterData.length }
   ];
 
   return (
