@@ -1,6 +1,4 @@
 "use client";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -13,7 +11,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"; 
+} from "@/components/ui/card";
 
 export default function MajorPage() {
   const params = useParams();
@@ -26,14 +24,7 @@ export default function MajorPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <Link
-          href="/superadmin/majorgroups"
-          className="inline-flex items-center text-purple-600 mb-4"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Link>
+      <div className="mb-4">
         <div className="p-4 rounded-lg bg-background">
           <h2 className="text-2xl font-semibold mb-4">
             {group.name} - {group.code}

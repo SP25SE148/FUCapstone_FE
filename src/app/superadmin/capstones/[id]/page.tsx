@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/pagination";
 import { CapstoneData } from "@/app/superadmin/capstones/table-data";
 import Link from "next/link";
-import { ArrowLeft, Download, Pencil, Search } from "lucide-react";
+import { Download, Pencil, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 export default function CapstoneDetailPage() {
@@ -35,23 +35,20 @@ export default function CapstoneDetailPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <Link
-          href="/superadmin/capstones"
-          className="inline-flex items-center text-purple-600 mb-4"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Link>
+      <div className="mb-4">
         <div className="p-4 rounded-lg bg-background">
           <h2 className="text-2xl font-semibold mb-4">
             {capstone.capstoneName} - {capstone.capstoneCode}
           </h2>
           <div className="flex text-gray-500 text-l leading-relaxed max-w-full">
-            <p className="mr-2">Member(Min/Max): </p><p>{capstone.minMember}/{capstone.maxMember}</p>
+            <p className="mr-2">Member(Min/Max): </p>
+            <p>
+              {capstone.minMember}/{capstone.maxMember}
+            </p>
           </div>
           <div className="flex text-gray-500 text-l leading-relaxed max-w-full">
-            <p className="mr-2">Review Count: </p><p>{capstone.reviewsCount}</p>
+            <p className="mr-2">Review Count: </p>
+            <p>{capstone.reviewsCount}</p>
           </div>
         </div>
       </div>

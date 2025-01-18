@@ -10,22 +10,21 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 
-export type Campus = {
+export type Admin = {
   id: string;
   name: string;
-  code: string;
-  address: string;
-  phone: string;
   email: string;
+  campus: string;
   status: string;
 };
 
-export const columns: ColumnDef<Campus>[] = [
+export const columns: ColumnDef<Admin>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -52,27 +51,15 @@ export const columns: ColumnDef<Campus>[] = [
     ),
   },
   {
-    accessorKey: "code",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
-    ),
-  },
-  {
-    accessorKey: "address",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Address" />
-    ),
-  },
-  {
-    accessorKey: "phone",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phone" />
-    ),
-  },
-  {
     accessorKey: "email",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
+    ),
+  },
+  {
+    accessorKey: "campus",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Campus" />
     ),
   },
   {
@@ -81,8 +68,8 @@ export const columns: ColumnDef<Campus>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const campus = row.original;
-      const status = campus.status;
+      const admin = row.original;
+      const status = admin.status;
 
       return (
         <Badge
@@ -92,7 +79,7 @@ export const columns: ColumnDef<Campus>[] = [
               : "bg-red-100 text-red-600 hover:bg-red-100"
           }`}
         >
-          {campus.status}
+          {admin.status}
         </Badge>
       );
     },
@@ -100,7 +87,7 @@ export const columns: ColumnDef<Campus>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const manager = row.original;
+      const admin = row.original;
 
       return (
         <div className="flex items-center justify-center">
@@ -114,12 +101,14 @@ export const columns: ColumnDef<Campus>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(manager.id)}
+                onClick={() => navigator.clipboard.writeText(admin.id)}
               >
-                Copy Campus ID
+                Copy Admin ID
               </DropdownMenuItem>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Remove</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View Admin</DropdownMenuItem>
+              <DropdownMenuItem>Edit Admin</DropdownMenuItem>
+              <DropdownMenuItem>Delete Admin</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
