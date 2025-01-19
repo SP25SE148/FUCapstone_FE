@@ -1,3 +1,4 @@
+import AddStudent from "./add-student";
 import { columns, Student } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,10 +49,13 @@ const data: Student[] = [
 export default function StudentTable() {
     return (
         <Card>
-            <CardHeader>
-                <CardTitle className="font-semibold tracking-tight text-xl">Students</CardTitle>
-                <CardDescription>Campus Hồ Chí Minh</CardDescription>
-            </CardHeader>
+            <div className="flex items-center justify-between">
+                <CardHeader>
+                    <CardTitle className="font-semibold tracking-tight text-xl">Students</CardTitle>
+                    <CardDescription>Campus Hồ Chí Minh</CardDescription>
+                </CardHeader>
+                <AddStudent />
+            </div>
             <CardContent>
                 <DataTable columns={columns} data={data} />
             </CardContent>
