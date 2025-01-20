@@ -28,10 +28,7 @@ export default function Loginform() {
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between mb-20">
-        {/* <strong className="font-extrabold text-2xl">FUC</strong> */}
-        <div className="flex justify-center items-center">
-          <Image src={logo} alt="logo" width={60} height={60} />
-        </div>
+        <Image src={logo} alt="logo" width={60} height={60} style={{ width: "auto", height: "auto" }} />
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span>VIETNAM</span>
           <Globe className="w-4 h-4" />
@@ -49,11 +46,10 @@ export default function Loginform() {
         <div className="relative">
           <Label
             htmlFor="email"
-            className={`absolute left-4 top-4 text-foreground transition-all duration-200 ${
-              focusedInput === "email" || email
-                ? "-translate-y-3 -translate-x-2 scale-90 text-muted-foreground text-xs"
-                : ""
-            }`}
+            className={`absolute left-4 top-4 text-foreground transition-all duration-200 ${focusedInput === "email" || email
+              ? "-translate-y-3 -translate-x-2 scale-90 text-muted-foreground text-xs"
+              : ""
+              }`}
           >
             EMAIL
           </Label>
@@ -72,11 +68,10 @@ export default function Loginform() {
         <div className="relative">
           <Label
             htmlFor="password"
-            className={`absolute left-4 top-4 text-foreground transition-all duration-200 ${
-              focusedInput === "password" || password
-                ? "-translate-y-3 -translate-x-2 scale-90 text-muted-foreground text-xs"
-                : ""
-            }`}
+            className={`absolute left-4 top-4 text-foreground transition-all duration-200 ${focusedInput === "password" || password
+              ? "-translate-y-3 -translate-x-2 scale-90 text-muted-foreground text-xs"
+              : ""
+              }`}
           >
             PASSWORD
           </Label>
