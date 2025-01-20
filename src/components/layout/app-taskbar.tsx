@@ -20,7 +20,7 @@ export function Taskbar({
   const pathname = usePathname();
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex justify-center w-full">
+    <div className="fixed bottom-4 w-full flex justify-center">
       <nav
         className="flex items-center justify-center 
                    rounded-2xl py-1 shadow-lg 

@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { data } from "@/app/superadmin/campuses/table-data";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/superadmin/campuses/component/campus-table-columns";
@@ -11,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import AddCampus from "./add-campus";
 
 export default function CampusTable() {
   return (
@@ -23,7 +23,7 @@ export default function CampusTable() {
             </CardTitle>
             <CardDescription>List of FPT University campuses</CardDescription>
           </div>
-          <Button className="bg-primary hover:bg-primary/90">Add Campus</Button>
+          <AddCampus />
         </div>
       </CardHeader>
       <CardContent>
