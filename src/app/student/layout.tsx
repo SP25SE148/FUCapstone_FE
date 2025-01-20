@@ -39,7 +39,7 @@ export default function RootLayout({
           </Breadcrumb>
         </div>
       </header>
-      <main className="flex-1 p-4">
+      <main>
         {children}
         <StudentTaskbar />
       </main>
