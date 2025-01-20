@@ -1,18 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LucideProps } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { type LucideIcon } from "lucide-react";
+
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/components/ui/tooltip"
 
 export function Taskbar({
   items,
 }: {
   items: {
-    icon: ForwardRefExoticComponent<
-      Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-    >;
+    icon: LucideIcon;
     label: string;
     href: string;
   }[];
@@ -28,22 +27,32 @@ export function Taskbar({
                    min-w-[50%] max-w-[80%] 
                    bg-background"
       >
-        {items.map((item) => {
+        {items.map((item, index) => {
           const isActive = pathname === item.href;
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex flex-col items-center px-3 py-2 mx-2 rounded-xl transition-colors",
-                isActive
-                  ? "bg-primary text-white shadow-md"
-                  : "hover:bg-[#6C47FF]/10"
-              )}
+            <TooltipProvider
+              key={index}
+              delayDuration={200}
             >
-              <item.icon className="h-5 w-5 transition-transform hover:scale-125" />
-              <span className="text-[10px] font-normal ">{item.label}</span>
-            </Link>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "flex flex-col items-center p-2 mx-2 rounded-lg",
+                      isActive
+                        ? "bg-primary text-white shadow-md"
+                        : "hover:bg-primary/10"
+                    )}
+                  >
+                    <item.icon className="h-6 w-6" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <span className="text-xs font-normal ">{item.label}</span>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           );
         })}
       </nav>
