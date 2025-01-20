@@ -15,11 +15,9 @@ export default function RootLayout({
   const paths = pathname.split("/").filter(Boolean).slice(1);
 
   return (
-    <div className="bg-muted">
-      <main className=" p-4">
-        {children}
-        <StudentTaskbar />
-      </main>
-    </div>
+    <main className="flex-1 p-4">
+      {children}
+      <StudentTaskbar />
+    </main>
   );
 }
