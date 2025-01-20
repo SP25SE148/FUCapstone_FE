@@ -32,8 +32,6 @@ export default function StudentTaskbar() {
   ];
 
   return (
-    <div>
-      <Taskbar items={taskbarItems} />
-    </div>
+    <Taskbar items={taskbarItems} />
   );
 }

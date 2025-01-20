@@ -16,30 +16,7 @@ export default function RootLayout({
 
   return (
     <div className="bg-muted">
-      <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear">
-        <div className="flex items-center gap-2 px-4">
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              {paths.length == 0
-                ? <BreadcrumbPage>Dashboard</BreadcrumbPage>
-                : paths.map((crumb, index) => (
-                    <React.Fragment key={index}>
-                      {index > 0 && <BreadcrumbSeparator />}
-                      <BreadcrumbItem>
-                        {index === paths.length - 1 ? (
-                          <BreadcrumbPage>{crumb.charAt(0).toUpperCase() + crumb.slice(1)}</BreadcrumbPage>
-                        ) : (
-                          <BreadcrumbLink href={`/student/${crumb}`}>{crumb.charAt(0).toUpperCase() + crumb.slice(1)}</BreadcrumbLink>
-                        )}
-                      </BreadcrumbItem>
-                    </React.Fragment>
-                  ))}
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-      </header>
-      <main className="flex-1 p-4">
+      <main className=" p-4">
         {children}
         <StudentTaskbar />
       </main>
