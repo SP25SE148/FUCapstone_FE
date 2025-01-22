@@ -6,13 +6,13 @@ export default function StudentTaskbar() {
   const taskbarItems = [
     {
       icon: Home,
-      label: "Home",
-      href: "/student",
+      label: "Annoucements",
+      href: "/student/home",
     },
     {
       icon: Users,
       label: "Groups",
-      href: "/student/groups",
+      href: "/student/groups/my-group",
     },
     {
       icon: Monitor,
