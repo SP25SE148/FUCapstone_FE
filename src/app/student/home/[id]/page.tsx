@@ -53,7 +53,7 @@ export default function NewsDetailPage() {
           <div className="text-left">
             <h3 className="text-sm text-muted-foreground">BÀI TIẾP</h3>
             <button
-              onClick={() => router.push(`/student/${nextItem.id}`)}
+              onClick={() => router.push(`/student/home/${nextItem.id}`)}
               className="text-primary hover:underline truncate max-w-[300px] overflow-hidden whitespace-nowrap"
             >
               ← {nextItem.title}
@@ -66,7 +66,7 @@ export default function NewsDetailPage() {
           <div className="text-right">
             <h3 className="text-sm text-muted-foreground">BÀI TRƯỚC</h3>
             <button
-              onClick={() => router.push(`/student/${prevItem.id}`)}
+              onClick={() => router.push(`/student/home/${prevItem.id}`)}
               className="text-primary hover:underline truncate max-w-[300px] overflow-hidden whitespace-nowrap"
             >
               {prevItem.title} →
@@ -82,7 +82,7 @@ export default function NewsDetailPage() {
           <div
             key={news.id}
             className="bg-muted rounded-lg overflow-hidden cursor-pointer"
-            onClick={() => router.push(`/student/${news.id}`)}
+            onClick={() => router.push(`/student/home/${news.id}`)}
           >
             <Image
               src={news.image}
