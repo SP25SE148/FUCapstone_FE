@@ -42,7 +42,7 @@ export function AppSidebar({
       <SidebarHeader>
         {/* <p className="text-center font-bold">FUC</p> */}
         <div className="flex justify-center items-center">
-            <Image src={logo} alt="logo" width={55} height={55}/>
+          <Image src={logo} alt="logo" width={55} height={55} style={{ width: "auto", height: "auto" }} priority/>
         </div>
       </SidebarHeader>
       <SidebarContent>
