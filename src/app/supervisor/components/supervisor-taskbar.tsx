@@ -7,7 +7,7 @@ export default function SupervisorTaskbar() {
     {
       icon: Home,
       label: "Home",
-      href: "/supervisor",
+      href: "/supervisor/home",
     },
     {
       icon: FileText,

@@ -34,7 +34,7 @@ export function Taskbar({
                   href={item.href}
                   className={cn(
                     "flex flex-col items-center p-2 mx-2 rounded-md text-white",
-                    pathname === item.href
+                    pathname.includes(item.href)
                       ? "bg-background text-primary shadow-md"
                       : "hover:bg-background/20"
                   )}
