@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 
@@ -10,9 +10,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="bg-muted">
-      {children}
+    <div className="p-4 min-h-screen max-h-screen flex flex-col gap-4 bg-muted">
+      <div className="flex-1 flex overflow-auto">{children}</div>
       <StudentTaskbar />
-    </main>
+    </div>
   );
 }
