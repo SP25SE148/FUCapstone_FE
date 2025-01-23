@@ -1,13 +1,25 @@
 "use client"
 
 import React from "react";
-import { FilePlus, FileText, } from "lucide-react";
+// import { FilePlus, FileText, } from "lucide-react";
 
-import SupervisorSidebar from "../components/supervisor-sidebar";
+// import SupervisorSidebar from "../components/supervisor-sidebar";
+// import { Button } from "@/components/ui/button"
+// import {
+//     Card,
+//     CardContent,
+//     CardDescription,
+//     CardFooter,
+//     CardHeader,
+//     CardTitle,
+// } from "@/components/ui/card"
+// import { Input } from "@/components/ui/input"
+// import { Label } from "@/components/ui/label"
+import { Tabs } from "@/components/layout/app-tabs";
 
 const items = [
-    { title: "Topics", url: "/supervisor/topics", icon: FileText, },
-    { title: "Register new topic", url: "/supervisor/topics/register-new-topic", icon: FilePlus, },
+    { label: "Topics", href: "/supervisor/topics", },
+    { label: "Register new topic", href: "/supervisor/topics/register-new-topic", },
 ];
 
 export default function Layout({
@@ -16,11 +28,9 @@ export default function Layout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="flex w-full gap-4">
-            <SupervisorSidebar items={items} />
-            <div className="flex-1 bg-background border-2 rounded-lg shadow-lg flex items-center justify-center">
-                {children}
-            </div>
+        <div className="flex flex-col gap-2">
+            <Tabs items={items} />
+            {children}
         </div>
     );
 } 
