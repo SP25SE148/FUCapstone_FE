@@ -20,7 +20,7 @@ export function Taskbar({
 
   return (
     <nav
-      className="h-[48px] flex items-center justify-center rounded-lg shadow-lg border-2 border-primary bg-primary"
+      className="fixed top-2 bottom-2 flex flex-col items-center justify-center gap-4 rounded-lg shadow-lg border-2 border-primary bg-primary"
     >
       {items.map((item, index) => {
         return (
@@ -35,14 +35,14 @@ export function Taskbar({
                   className={cn(
                     "flex flex-col items-center p-2 mx-2 rounded-md text-white",
                     pathname.includes(item.href)
-                      ? "bg-background text-primary shadow-md"
-                      : "hover:bg-background/20"
+                      ? "bg-white text-primary shadow-md"
+                      : "hover:bg-white/20"
                   )}
                 >
                   <item.icon className="h-6 w-6" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent side="right">
                 <span className="text-xs font-normal ">{item.label}</span>
               </TooltipContent>
             </Tooltip>

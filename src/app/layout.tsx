@@ -29,7 +29,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="fixed top-2 right-2 z-50">
+          <div className="fixed top-2 right-2 z-[99]">
             <ModeToggle />
           </div>
           {children}
