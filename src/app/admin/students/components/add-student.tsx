@@ -75,7 +75,7 @@ export default function AddStudent() {
                                 </CardHeader>
                                 <CardContent className="space-y-2">
                                     <div className="space-y-1">
-                                        <Label htmlFor="ffile">File</Label>
+                                        <Label htmlFor="file">File</Label>
                                         <Input id="file" type="file" />
                                     </div>
                                 </CardContent>

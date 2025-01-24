@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { MoreHorizontal } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
@@ -12,10 +13,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 // You can use a Zod schema here if you want.
 export type Topic = {
     id: string
-    name: string
-    email: string
     capstone: string
-    status: "Active" | "Inactive"
+    code: string
+    englishName: string
+    vietnameseName: string
+    abbreviation: string
+    supervisor: string
+    supervisor2: string
+    status: "Pending" | "Available"
 }
 
 export const columns: ColumnDef<Topic>[] = [
@@ -42,21 +47,45 @@ export const columns: ColumnDef<Topic>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "name",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Name" />
-        ),
-    },
-    {
-        accessorKey: "email",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Email" />
-        ),
-    },
-    {
         accessorKey: "capstone",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Capstone" />
+        ),
+    },
+    {
+        accessorKey: "code",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Code" />
+        ),
+    },
+    {
+        accessorKey: "englishName",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="English Name" />
+        ),
+    },
+    {
+        accessorKey: "vietnameseName",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Vietnamese Name" />
+        ),
+    },
+    {
+        accessorKey: "abbreviation",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Abbreviation" />
+        ),
+    },
+    {
+        accessorKey: "supervisor",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Supervisor" />
+        ),
+    },
+    {
+        accessorKey: "supervisor2",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Supervisor 2" />
         ),
     },
     {
@@ -68,7 +97,8 @@ export const columns: ColumnDef<Topic>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            const manager = row.original
+            const router = useRouter();
+            const topic = row.original;
 
             return (
                 <div className="flex items-center justify-center">
@@ -82,13 +112,11 @@ export const columns: ColumnDef<Topic>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(manager.id)}
+                                onClick={() => router.push(`topics/${topic.id}`)}
                             >
-                                Copy payment ID
+                                View details
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>View customer</DropdownMenuItem>
-                            <DropdownMenuItem>View payment details</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
