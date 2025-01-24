@@ -12,7 +12,7 @@ export default function StudentTaskbar() {
     {
       icon: Users,
       label: "Groups",
-      href: "/student/groups/my-group",
+      href: "/student/groups",
     },
     {
       icon: Monitor,

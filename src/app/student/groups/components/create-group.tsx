@@ -181,7 +181,7 @@ export function CreateGroup() {
         {invitedStudents.length > 0 && (
           <div className="space-y-2">
             <h3 className="text-lg font-medium">Students invited</h3>
-            <div className="space-y-2 overflow-y-auto max-h-60">
+            <div className="space-y-2 overflow-y-auto max-h-64">
               {invitedStudents.map((email) => (
                 <div
                   key={email}
