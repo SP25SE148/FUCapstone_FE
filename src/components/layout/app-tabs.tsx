@@ -16,7 +16,7 @@ export function Tabs({
 
     return (
         <nav
-            className="sticky top-2 z-50 flex items-center h-[40px] rounded-lg shadow-lg bg-primary"
+            className="sticky top-2 z-50 flex items-center h-9 rounded-lg shadow-lg bg-primary"
         >
             {items.map((item, index) => {
                 return (
