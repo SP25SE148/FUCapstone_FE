@@ -1,5 +1,7 @@
 "use client";
+
 import Image from "next/image";
+import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Eye, EyeOff, Globe } from "lucide-react";
@@ -7,21 +9,29 @@ import { ArrowRight, Eye, EyeOff, Globe } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function Loginform() {
   const router = useRouter();
+  const { login } = useAuth();
+
+  const logo = "/images/original-logo.png";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [focusedInput, setFocusedInput] = useState<"email" | "password" | null>(
-    null
-  );
-  const logo = "/images/original-logo.png";
+  const [focusedInput, setFocusedInput] = useState<"email" | "password" | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Add your login logic here
+    // try {
+    //   await login(email, password);
+    //   toast.success("Login successfully", { description: "Welcome to FUC" })
+    //   // Chuyển hướng sau khi đăng nhập thành công
+    // } catch (error) {
+    //   toast.error(`${error}`)
+    // }
     router.push("/superadmin");
   };
 
