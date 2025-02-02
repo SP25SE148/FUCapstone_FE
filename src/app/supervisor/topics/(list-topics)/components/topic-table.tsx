@@ -62,7 +62,7 @@ const data: Topic[] = [
 
 export default function TopicTable() {
     return (
-        <Card >
+        <Card className="min-h-[calc(100vh-60px)]">
             <CardHeader>
                 <CardTitle className="font-semibold tracking-tight text-xl">Topics</CardTitle>
                 <CardDescription>List information of topics</CardDescription>
