@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function TopicDetailsPage() {
     return (
-        <Card >
+        <Card className="min-h-[calc(100vh-60px)]">
             <CardHeader>
                 <CardTitle className="font-semibold tracking-tight text-xl">Capstone management system for FPT university teachers and students</CardTitle>
                 <CardDescription>Hệ thống quản lý đồ án cho giảng viên và sinh viên của trường đại học FPT</CardDescription>
