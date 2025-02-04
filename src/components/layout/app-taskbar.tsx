@@ -1,19 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { type LucideIcon } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/components/ui/tooltip"
 
 export function Taskbar({
   items,
 }: {
   items: {
-    icon: LucideIcon;
-    label: string;
     href: string;
+    label: string;
+    icon: LucideIcon;
   }[];
 }) {
   const pathname = usePathname();
