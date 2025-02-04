@@ -1,53 +1,43 @@
 import Link from "next/link";
-import { ChevronsUpDown, LucideProps } from "lucide-react";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
 import Image from "next/image";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { ChevronsUpDown, LucideIcon } from "lucide-react";
 
-
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { useAuth } from "@/contexts/auth-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "../ui/dropdown-menu";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, } from "@/components/ui/sidebar";
 
 export function AppSidebar({
   items,
 }: {
   items: {
-    title: string;
     url: string;
-    icon: ForwardRefExoticComponent<
-      Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-    >;
+    title: string;
+    icon: LucideIcon;
   }[];
 }) {
+  const router = useRouter();
+  const { logout, user } = useAuth();
   const logo = "/images/original-logo.png";
+
+  const signOutHandler = () => {
+    logout()
+    router.push("/")
+    toast.success("Sign Out successfully", { description: "See you again" })
+  }
 
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarHeader>
-        {/* <p className="text-center font-bold">FUC</p> */}
         <div className="flex justify-center items-center">
-          <Image src={logo} alt="logo" width={55} height={55} style={{ width: "auto", height: "auto" }} priority/>
+          <Image src={logo} alt="logo" width={55} height={55} style={{ width: "auto", height: "auto" }} priority />
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupLabel>{user?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items?.map((item) => (
@@ -81,8 +71,8 @@ export function AppSidebar({
                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Name</span>
-                    <span className="truncate text-xs">Email</span>
+                    <span className="truncate font-semibold">{user?.name}</span>
+                    <span className="truncate text-xs">{user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -92,10 +82,13 @@ export function AppSidebar({
                 side="right"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
                   <span>Account</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={signOutHandler}
+                >
                   <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

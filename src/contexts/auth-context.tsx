@@ -1,6 +1,7 @@
 "use client"
 
 import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'next/navigation';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 interface User {
@@ -27,6 +28,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
 
@@ -59,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const login = async (email: string, password: string) => {
         try {
-            const response = await fetch('http://localhost:5000/api/Auth/login', {
+            const response = await fetch('http://localhost:8000/identity/Auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -83,6 +85,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             // Lưu thông tin vào localStorage
             localStorage.setItem('token', data.accessToken);
+            // Điều hướng sau khi đăng nhập thành công
+            switch (decodedToken?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]) {
+                case "SuperAdmin":
+                    router.push("/superadmin");
+                    break;
+                case "Admin":
+                    router.push("/admin");
+                    break;
+                case "Manager":
+                    router.push("/manager");
+                    break;
+                case "Supervisor":
+                    router.push("/supervisor/home");
+                    break;
+                case "Student":
+                    router.push("/student/home");
+                    break;
+                default:
+                    break;
+            }
         } catch (error) {
             throw error;
         }
@@ -91,7 +113,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const logout = async () => {
         const accessToken = localStorage.getItem('token');
         try {
-            const response = await fetch('http://localhost:5000/api/Auth/token/revoke', {
+            const response = await fetch('http://localhost:8000/identity/Auth/token/revoke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ accessToken }),
