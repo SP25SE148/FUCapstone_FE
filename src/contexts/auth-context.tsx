@@ -128,6 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(null);
         setToken(null);
         localStorage.removeItem('token');
+        router.push("/");
     };
 
     return (
