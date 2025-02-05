@@ -11,11 +11,16 @@ export const useApi = () => {
     const callApi = async (endpoint: string, options: ApiOptions = {}) => {
         const { method = 'GET', body } = options;
 
+        let contentType = "application/json"
+        if (body instanceof FormData) {
+            contentType = "multipart/form-data"
+        }
+
         try {
-            const response = await fetch(`http://localhost:5000/api/${endpoint}`, {
+            const response = await fetch(`http://localhost:8000/${endpoint}`, {
                 method,
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': `${contentType}`,
                     'Authorization': `Bearer ${token}`,
                 },
                 body: body ? JSON.stringify(body) : undefined,

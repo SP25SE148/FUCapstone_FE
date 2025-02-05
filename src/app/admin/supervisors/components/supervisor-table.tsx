@@ -1,6 +1,6 @@
-import AddSupervisor from "./add-supervisor";
 import { columns, Supervisor } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
+import AddSupervisor from "./add-supervisor/add-supervisor";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const data: Supervisor[] = [

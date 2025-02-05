@@ -1,5 +1,5 @@
-import AddStudent from "./add-student";
 import { columns, Student } from "./columns";
+import AddStudent from "./add-student/add-student";
 import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
