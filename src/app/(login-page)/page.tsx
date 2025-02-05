@@ -1,18 +1,11 @@
-import Images from "./components/images";
 import Loginform from "./components/login-form";
 
 export default function LoginPage() {
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gradient-animation">
-      <div className="w-[90%] max-w-[1200px] h-[90%] max-h-[800px] border-primary border-2 bg-background shadow-2xl rounded-2xl flex">
-        {/* Left side - Login Form */}
-        <div className="w-[440px] p-12 flex flex-col rounded-2xl">
+    <div className="h-screen max-h-screen flex items-center justify-center">
+      <div className="h-[95%] w-[90%] flex items-center justify-center bg-[url(/images/fuhochiminh.webp)] bg-center bg-cover border-primary border-2 shadow-2xl rounded-2xl">
+        <div className="h-[95%] max-h-[800px] w-[440px] max-w-[90%] p-12 border-primary border-2 bg-background/80 shadow-2xl rounded-2xl backdrop-blur-sm">
           <Loginform />
-        </div>
-
-        {/* Right side - Background Image */}
-        <div className="flex-1 p-2 relative overflow-hidden">
-          <Images />
         </div>
       </div>
     </div>

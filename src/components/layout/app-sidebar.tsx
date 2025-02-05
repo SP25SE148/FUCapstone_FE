@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { ChevronsUpDown, LucideIcon } from "lucide-react";
 
 import { useAuth } from "@/contexts/auth-context";
@@ -18,13 +17,11 @@ export function AppSidebar({
     icon: LucideIcon;
   }[];
 }) {
-  const router = useRouter();
   const { logout, user } = useAuth();
   const logo = "/images/original-logo.png";
 
   const signOutHandler = () => {
     logout()
-    router.push("/")
     toast.success("Sign Out successfully", { description: "See you again" })
   }
 
