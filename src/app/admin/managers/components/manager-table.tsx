@@ -1,4 +1,5 @@
 import { columns, Manager } from "./columns";
+import AddManager from "./add-manager/add-manager";
 import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -148,10 +149,13 @@ const data: Manager[] = [
 export default function ManagerTable() {
     return (
         <Card>
-            <CardHeader>
-                <CardTitle className="font-semibold tracking-tight text-xl">Managers</CardTitle>
-                <CardDescription>Campus Hồ Chí Minh</CardDescription>
-            </CardHeader>
+            <div className="flex items-center justify-between">
+                <CardHeader>
+                    <CardTitle className="font-semibold tracking-tight text-xl">Managers</CardTitle>
+                    <CardDescription>Campus Hồ Chí Minh</CardDescription>
+                </CardHeader>
+                <AddManager />
+            </div>
             <CardContent>
                 <DataTable columns={columns} data={data} />
             </CardContent>
