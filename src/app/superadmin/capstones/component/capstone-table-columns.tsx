@@ -16,15 +16,26 @@ import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 
-export type Capstone = {
+// export type Capstone = {
+//   id: string;
+//   capstoneName: string;
+//   minMember: string | number;
+//   maxMember: string | number;
+//   reviewsCount: string;
+//   status: string;
+//   templateDocument: CapstoneTemplate[];
+// };
+export type Capstone =  {
   id: string;
-  capstoneName: string;
-  minMember: string | number;
-  maxMember: string | number;
-  reviewsCount: string;
-  status: string;
-  templateDocument: CapstoneTemplate[];
+  majorId: string;
+  name: string;
+  minMember: number;
+  maxMember: number;
+  reviewCount: number;
+  isDeleted: boolean;
+  deletedAt: string | null;
 };
+
 
 export type CapstoneTemplate = {
   id: string;
@@ -117,13 +128,13 @@ export const columns: ColumnDef<Capstone>[] = [
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "isDeleted",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const campus = row.original;
-      const status = campus.status;
+      const capstone = row.original;
+      const status = capstone.isDeleted ? "Inactive" : "Active";
 
       return (
         <Badge
@@ -133,7 +144,7 @@ export const columns: ColumnDef<Capstone>[] = [
               : "bg-red-100 text-red-600 hover:bg-red-100"
           }`}
         >
-          {campus.status}
+          {status}
         </Badge>
       );
     },
