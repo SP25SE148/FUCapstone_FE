@@ -2,7 +2,6 @@
 
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -14,6 +13,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
+import { useApi } from "@/hooks/use-api";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+
+// export type Campus = {
+//   id: string;
+//   name: string;
+//   code: string;
+//   address: string;
+//   phone: string;
+//   email: string;
+//   isDeleted: boolean;
+//   createdDate: string;
+//   updatedDate: string | null;
+//   createdBy: string;
+//   updatedBy: string | null;
+//   deletedAt: string | null;
+// };
 
 export type Campus = {
   id: string;
@@ -23,6 +47,68 @@ export type Campus = {
   phone: string;
   email: string;
   status: string;
+};
+
+const ActionsCell = ({ campus }: { campus: Campus }) => {
+  const { callApi } = useApi();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="flex items-center justify-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={() => navigator.clipboard.writeText(campus.id)}
+          >
+            Copy Campus ID
+          </DropdownMenuItem>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            Remove
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Removal</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove the campus {campus.name}?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                try {
+                  await callApi(`fuc/AcademicManagement/major/${campus.id}`, {
+                    method: "DELETE",
+                  });
+                  alert("Campus removed successfully");
+                } catch (error) {
+                  console.error("Error removing campus:", error);
+                  alert("Failed to remove campus");
+                }
+              }}
+            >
+              Yes, Remove
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
 };
 
 export const columns: ColumnDef<Campus>[] = [
@@ -52,7 +138,7 @@ export const columns: ColumnDef<Campus>[] = [
     ),
   },
   {
-    accessorKey: "code",
+    accessorKey: "id",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Code" />
     ),
@@ -82,7 +168,9 @@ export const columns: ColumnDef<Campus>[] = [
     ),
     cell: ({ row }) => {
       const campus = row.original;
+      // const status = campus.isDeleted ? "Inactive" : "Active";
       const status = campus.status;
+
 
       return (
         <Badge
@@ -92,38 +180,13 @@ export const columns: ColumnDef<Campus>[] = [
               : "bg-red-100 text-red-600 hover:bg-red-100"
           }`}
         >
-          {campus.status}
+          {status}
         </Badge>
       );
     },
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const manager = row.original;
-
-      return (
-        <div className="flex items-center justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(manager.id)}
-              >
-                Copy Campus ID
-              </DropdownMenuItem>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Remove</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
+    cell: ({ row }) => <ActionsCell campus={row.original} />,
   },
 ];

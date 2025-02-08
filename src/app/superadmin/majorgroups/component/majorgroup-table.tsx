@@ -1,7 +1,7 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { majorData } from "@/app/superadmin/majorgroups/table-data";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
 import {
@@ -11,8 +11,45 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useApi } from "@/hooks/use-api";
+import { useAuth } from '@/contexts/auth-context';
+
 export default function MajorGroupTable() {
-  const data = majorData;
+  const { callApi } = useApi();
+  const [majorGroupData, setMajorGroupData] = useState([]);
+  const [error, setError] = useState<Error | null>(null);
+  const [loading, setLoading] = useState(true);
+  const {token} = useAuth();
+
+  useEffect(() => {
+    const fetchMajorGroupList = async () => {
+      setLoading(true);
+      try {
+        const data = await callApi('fuc/AcademicManagement/majorgroup', { method: 'GET' });
+        setMajorGroupData(data);
+      } catch (err) {
+        console.error('Error fetching major group data:', err);
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    console.log(token);
+
+    fetchMajorGroupList();
+  }, []);
+
+  if (loading) {
+    return <div>Loading major group data...</div>;
+  }
+
+  if (error) {
+    return (
+      <strong>
+        Error loading major group data: {error.message}
+      </strong>
+    );
+  }
 
   return (
     <Card>
@@ -28,7 +65,7 @@ export default function MajorGroupTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={majorGroupData} />
       </CardContent>
     </Card>
   );
