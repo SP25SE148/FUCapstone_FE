@@ -50,11 +50,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     });
                 } else {
                     // Token đã hết hạn, xóa khỏi localStorage
+                    setUser(null);
+                    setToken(null);
                     localStorage.removeItem('token');
+                    router.push("/");
                 }
             } catch (error) {
                 console.error('Lỗi khi decode token:', error);
+                setUser(null);
+                setToken(null);
                 localStorage.removeItem('token');
+                router.push("/");
             }
         }
     }, []);
