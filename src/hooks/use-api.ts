@@ -27,7 +27,7 @@ export const useApi = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8000/${endpoint}`, {
+            const response = await fetch(`https://localhost:8000/${endpoint}`, {
                 method,
                 headers: {
                     'Content-Type': contentType,

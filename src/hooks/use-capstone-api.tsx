@@ -16,7 +16,7 @@ export const useCapstoneApi = () => {
 
   const fetchCapstoneList = async (): Promise<Capstone[]> => {
     try {
-      const response = await callApi("/fuc/AcademicManagement/capstone", {
+      const response = await callApi("fuc/AcademicManagement/capstone", {
         method: "GET",
       });
 
