@@ -50,18 +50,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     });
                 } else {
                     // Token đã hết hạn, xóa khỏi localStorage
+                    setUser(null);
+                    setToken(null);
                     localStorage.removeItem('token');
+                    router.push("/");
                 }
             } catch (error) {
                 console.error('Lỗi khi decode token:', error);
+                setUser(null);
+                setToken(null);
                 localStorage.removeItem('token');
+                router.push("/");
             }
         }
     }, []);
 
     const login = async (email: string, password: string) => {
         try {
-            const response = await fetch('http://localhost:8000/identity/Auth/login', {
+            const response = await fetch('https://localhost:8000/identity/Auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -113,7 +119,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const logout = async () => {
         const accessToken = localStorage.getItem('token');
         try {
-            const response = await fetch('http://localhost:8000/identity/Auth/token/revoke', {
+            const response = await fetch('https://localhost:8000/identity/Auth/token/revoke', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ accessToken }),
