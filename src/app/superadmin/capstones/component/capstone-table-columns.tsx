@@ -14,7 +14,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
+import { useCapstone } from "@/contexts/capstone-context";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import UpdateCapstone from "@/app/superadmin/capstones/component/update-capstone";
 
 export type Capstone = {
   id: string;
@@ -28,7 +31,9 @@ export type Capstone = {
 };
 
 const ActionsCell = ({ capstone }: { capstone: Capstone }) => {
-  const router = useRouter();
+  const { removeCapstone } = useCapstone();
+  const [open, setOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
 
   return (
     <div className="flex items-center justify-center">
@@ -46,15 +51,46 @@ const ActionsCell = ({ capstone }: { capstone: Capstone }) => {
           >
             Copy Capstone ID
           </DropdownMenuItem>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => router.push(`/superadmin/capstones/${capstone.id}`)}
-          >
-            View More
+          <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
+            Edit
           </DropdownMenuItem>
-          <DropdownMenuItem>Remove</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            Remove
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Removal</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove the capstone {capstone.name}?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                try {
+                  await removeCapstone(capstone.id);
+                  setOpen(false);
+                } catch (error) {
+                  console.error("Error removing capstone:", error);
+                  alert("Failed to remove capstone");
+                }
+              }}
+            >
+              Yes, Remove
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <UpdateCapstone capstone={capstone} open={updateOpen} setOpen={setUpdateOpen} />
     </div>
   );
 };
@@ -83,6 +119,12 @@ export const columns: ColumnDef<Capstone>[] = [
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
+    ),
+  },
+  {
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Capstone Code" />
     ),
   },
   {

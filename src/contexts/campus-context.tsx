@@ -1,3 +1,6 @@
+"use client"
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useApi } from '@/hooks/use-api';
 
 interface Campus {
@@ -14,10 +17,21 @@ interface Campus {
   deletedAt: string | null;
 }
 
-export const useCampusApi = () => {
-  const { callApi } = useApi();
+interface CampusContextProps {
+  campuses: Campus[];
+  fetchCampusList: () => Promise<void>;
+  addCampus: (data: Campus) => Promise<void>;
+  updateCampus: (data: Campus) => Promise<void>;
+  removeCampus: (id: string) => Promise<void>;
+}
 
-  const fetchCampusList = async (): Promise<Campus[]> => {
+const CampusContext = createContext<CampusContextProps | undefined>(undefined);
+
+export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
+  const { callApi } = useApi();
+  const [campuses, setCampuses] = useState<Campus[]>([]);
+
+  const fetchCampusList = async () => {
     try {
       const response = await callApi("fuc/AcademicManagement/campus", {
         method: "GET",
@@ -27,10 +41,9 @@ export const useCampusApi = () => {
         throw new Error("Invalid response format");
       }
 
-      return response;
+      setCampuses(response);
     } catch (error) {
       console.error("Error fetching campus data:", error);
-      throw error;
     }
   };
 
@@ -42,6 +55,7 @@ export const useCampusApi = () => {
       });
 
       if (response && response.id) {
+        setCampuses((prev) => [...prev, response]);
         alert("Campus added successfully");
       } else {
         throw new Error("Failed to add campus");
@@ -60,6 +74,9 @@ export const useCampusApi = () => {
       });
 
       if (response && response.id) {
+        setCampuses((prev) =>
+          prev.map((campus) => (campus.id === data.id ? response : campus))
+        );
         alert("Campus updated successfully");
       } else {
         throw new Error("Failed to update campus");
@@ -75,6 +92,7 @@ export const useCampusApi = () => {
       await callApi(`fuc/AcademicManagement/campus/${id}`, {
         method: "DELETE",
       });
+      setCampuses((prev) => prev.filter((campus) => campus.id !== id));
       alert("Campus removed successfully");
     } catch (error) {
       console.error("Error removing campus:", error);
@@ -82,5 +100,23 @@ export const useCampusApi = () => {
     }
   };
 
-  return { fetchCampusList, addCampus, updateCampus, removeCampus };
+  useEffect(() => {
+    fetchCampusList();
+  }, []);
+
+  return (
+    <CampusContext.Provider
+      value={{ campuses, fetchCampusList, addCampus, updateCampus, removeCampus }}
+    >
+      {children}
+    </CampusContext.Provider>
+  );
+};
+
+export const useCampus = () => {
+  const context = useContext(CampusContext);
+  if (!context) {
+    throw new Error("useCampus must be used within a CampusProvider");
+  }
+  return context;
 };
