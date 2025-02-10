@@ -1,20 +1,33 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CirclePlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useCampusApi } from "@/hooks/use-campus-api";
 
-export default function AddCampus() {
-  const { addCampus } = useCampusApi();
-  const [campusName, setCampusName] = useState("");
-  const [campusCode, setCampusCode] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+interface Campus {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  isDeleted: boolean;
+  createdDate: string;
+  updatedDate: string | null;
+  createdBy: string;
+  updatedBy: string | null;
+  deletedAt: string | null;
+}
+
+export default function UpdateCampus({ campus, open, setOpen }: { campus: Campus, open: boolean, setOpen: (open: boolean) => void }) {
+  const { updateCampus } = useCampusApi();
+  const [campusName, setCampusName] = useState(campus.name);
+  const [campusCode, setCampusCode] = useState(campus.id);
+  const [address, setAddress] = useState(campus.address);
+  const [phone, setPhone] = useState(campus.phone);
+  const [email, setEmail] = useState(campus.email);
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
@@ -25,35 +38,30 @@ export default function AddCampus() {
     }
   }, [campusName, campusCode, address, phone, email]);
 
-  const handleAddCampus = async () => {
+  const handleUpdateCampus = async () => {
     const data = {
       id: campusCode,
       name: campusName,
       address,
       phone,
       email,
-      isDeleted: false,
-      createdDate: new Date().toISOString(),
-      updatedDate: null,
-      createdBy: "admin",
-      updatedBy: null,
-      deletedAt: null,
+      isDeleted: campus.isDeleted,
+      createdDate: campus.createdDate,
+      updatedDate: new Date().toISOString(),
+      createdBy: campus.createdBy,
+      updatedBy: "admin",
+      deletedAt: campus.deletedAt,
     };
-    await addCampus(data);
+    await updateCampus(data);
+    setOpen(false);
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90">
-          <CirclePlus />
-          Add Campus
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add new campus</DialogTitle>
-          <DialogDescription>Add the details of the campus below.</DialogDescription>
+          <DialogTitle>Update campus</DialogTitle>
+          <DialogDescription>Update the details of the campus below.</DialogDescription>
         </DialogHeader>
         <div className="space-y-2">
           <div className="space-y-1">
@@ -102,9 +110,8 @@ export default function AddCampus() {
             />
           </div>
         </div>
-        <Button className="w-full mt-4" onClick={handleAddCampus} disabled={!isFormValid}>
-          <CirclePlus />
-          Add
+        <Button className="w-full mt-4" onClick={handleUpdateCampus} disabled={!isFormValid}>
+          Update
         </Button>
       </DialogContent>
     </Dialog>
