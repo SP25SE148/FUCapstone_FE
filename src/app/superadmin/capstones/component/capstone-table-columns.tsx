@@ -16,16 +16,7 @@ import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 
-// export type Capstone = {
-//   id: string;
-//   capstoneName: string;
-//   minMember: string | number;
-//   maxMember: string | number;
-//   reviewsCount: string;
-//   status: string;
-//   templateDocument: CapstoneTemplate[];
-// };
-export type Capstone =  {
+export type Capstone = {
   id: string;
   majorId: string;
   name: string;
@@ -34,15 +25,6 @@ export type Capstone =  {
   reviewCount: number;
   isDeleted: boolean;
   deletedAt: string | null;
-};
-
-
-export type CapstoneTemplate = {
-  id: string;
-  name: string;
-  createDate: string;
-  updatedDate: string;
-  url: string;
 };
 
 const ActionsCell = ({ capstone }: { capstone: Capstone }) => {
@@ -98,33 +80,33 @@ export const columns: ColumnDef<Capstone>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "capstoneName",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
   },
   {
-    accessorKey: "capstoneCode",
+    accessorKey: "majorId",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
+      <DataTableColumnHeader column={column} title="Major ID" />
     ),
   },
   {
     accessorKey: "minMember",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
+      <DataTableColumnHeader column={column} title="Min Members" />
     ),
   },
   {
     accessorKey: "maxMember",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
+      <DataTableColumnHeader column={column} title="Max Members" />
     ),
   },
   {
-    accessorKey: "reviewsCount",
+    accessorKey: "reviewCount",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
+      <DataTableColumnHeader column={column} title="Review Count" />
     ),
   },
   {

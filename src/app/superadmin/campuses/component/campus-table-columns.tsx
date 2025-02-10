@@ -23,35 +23,26 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-
-// export type Campus = {
-//   id: string;
-//   name: string;
-//   code: string;
-//   address: string;
-//   phone: string;
-//   email: string;
-//   isDeleted: boolean;
-//   createdDate: string;
-//   updatedDate: string | null;
-//   createdBy: string;
-//   updatedBy: string | null;
-//   deletedAt: string | null;
-// };
+import UpdateCampus from "./update-campus";
 
 export type Campus = {
   id: string;
   name: string;
-  code: string;
   address: string;
   phone: string;
   email: string;
-  status: string;
+  isDeleted: boolean;
+  createdDate: string;
+  updatedDate: string | null;
+  createdBy: string;
+  updatedBy: string | null;
+  deletedAt: string | null;
 };
 
 const ActionsCell = ({ campus }: { campus: Campus }) => {
   const { callApi } = useApi();
   const [open, setOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
 
   return (
     <div className="flex items-center justify-center">
@@ -69,7 +60,9 @@ const ActionsCell = ({ campus }: { campus: Campus }) => {
           >
             Copy Campus ID
           </DropdownMenuItem>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
+            Edit
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
             Remove
           </DropdownMenuItem>
@@ -92,7 +85,7 @@ const ActionsCell = ({ campus }: { campus: Campus }) => {
               variant="destructive"
               onClick={async () => {
                 try {
-                  await callApi(`fuc/AcademicManagement/major/${campus.id}`, {
+                  await callApi(`fuc/AcademicManagement/campus/${campus.id}`, {
                     method: "DELETE",
                   });
                   alert("Campus removed successfully");
@@ -107,6 +100,8 @@ const ActionsCell = ({ campus }: { campus: Campus }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <UpdateCampus campus={campus} open={updateOpen} setOpen={setUpdateOpen} />
     </div>
   );
 };
@@ -168,9 +163,7 @@ export const columns: ColumnDef<Campus>[] = [
     ),
     cell: ({ row }) => {
       const campus = row.original;
-      // const status = campus.isDeleted ? "Inactive" : "Active";
-      const status = campus.status;
-
+      const status = campus.isDeleted ? "Inactive" : "Active";
 
       return (
         <Badge
