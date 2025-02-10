@@ -1,8 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { majorData } from "@/app/superadmin/majorgroups/table-data";
 import { DataTable } from "@/components/ui/data-table";
 import { majorColumns } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
 import {
@@ -12,14 +12,52 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useMajorGroup, MajorGroupProvider } from "@/contexts/majorgroup-context";
 
-export default function MajorPage() {
+interface Major {
+  id: string;
+  majorGroupId: string;
+  name: string;
+  description: string;
+  isDeleted: boolean;
+  deletedAt: string | null;
+}
+
+function MajorPageContent() {
   const params = useParams();
-  const groupId = params.id;
-  const group = majorData.find((g) => g.id === groupId);
+  const groupId = params.id as string; 
+  const { getMajorsByMajorGroupId } = useMajorGroup();
+  const [majors, setMajors] = useState<Major[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  if (!group) {
-    return <p className="text-center mt-8">Major Group not found</p>;
+  useEffect(() => {
+    const fetchMajors = async () => {
+      setLoading(true);
+      try {
+        const data: Major[] = await getMajorsByMajorGroupId(groupId);
+        setMajors(data);
+      } catch (err) {
+        console.error('Error fetching majors:', err);
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMajors();
+  }, [getMajorsByMajorGroupId, groupId]);
+
+  if (loading) {
+    return <div>Loading majors...</div>;
+  }
+
+  if (error) {
+    return (
+      <strong>
+        Error loading majors: {error.message}
+      </strong>
+    );
   }
 
   return (
@@ -27,11 +65,8 @@ export default function MajorPage() {
       <div className="mb-4">
         <div className="p-4 rounded-lg bg-background">
           <h2 className="text-2xl font-semibold mb-4">
-            {group.name} - {group.code}
+            {groupId} - Majors
           </h2>
-          <p className="text-gray-500 text-sm leading-relaxed max-w-full">
-            {group.description}
-          </p>
         </div>
       </div>
 
@@ -40,21 +75,29 @@ export default function MajorPage() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="font-semibold tracking-tight text-xl">
-                Major Groups
+                Majors
               </CardTitle>
               <CardDescription>
-                List of FPT University Major Groups
+                List of majors in the selected major group
               </CardDescription>
             </div>
             <Button className="bg-primary hover:bg-primary/90">
-              Add Major Groups
+              Add Major
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          <DataTable columns={majorColumns} data={group.majors} />
+          <DataTable columns={majorColumns} data={majors} />
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function MajorPage() {
+  return (
+    <MajorGroupProvider>
+      <MajorPageContent />
+    </MajorGroupProvider>
   );
 }

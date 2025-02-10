@@ -5,11 +5,11 @@ import { CirclePlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useCampusApi } from "@/hooks/use-campus-api";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useCampus } from "@/contexts/campus-context";
 
 export default function AddCampus() {
-  const { addCampus } = useCampusApi();
+  const { addCampus } = useCampus();
   const [campusName, setCampusName] = useState("");
   const [campusCode, setCampusCode] = useState("");
   const [address, setAddress] = useState("");
@@ -53,7 +53,6 @@ export default function AddCampus() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add new campus</DialogTitle>
-          <DialogDescription>Add the details of the campus below.</DialogDescription>
         </DialogHeader>
         <div className="space-y-2">
           <div className="space-y-1">

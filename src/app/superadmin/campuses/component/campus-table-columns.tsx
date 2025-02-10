@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import { useApi } from "@/hooks/use-api";
 import { useState } from "react";
 import {
   Dialog,
@@ -24,6 +23,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import UpdateCampus from "./update-campus";
+import { useCampus } from "@/contexts/campus-context";
 
 export type Campus = {
   id: string;
@@ -40,7 +40,7 @@ export type Campus = {
 };
 
 const ActionsCell = ({ campus }: { campus: Campus }) => {
-  const { callApi } = useApi();
+  const { removeCampus } = useCampus();
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
 
@@ -85,10 +85,8 @@ const ActionsCell = ({ campus }: { campus: Campus }) => {
               variant="destructive"
               onClick={async () => {
                 try {
-                  await callApi(`fuc/AcademicManagement/campus/${campus.id}`, {
-                    method: "DELETE",
-                  });
-                  alert("Campus removed successfully");
+                  await removeCampus(campus.id);
+                  setOpen(false);
                 } catch (error) {
                   console.error("Error removing campus:", error);
                   alert("Failed to remove campus");

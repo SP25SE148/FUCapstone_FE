@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useCampusApi } from "@/hooks/use-campus-api";
+import { useCampus } from "@/contexts/campus-context";
 
 interface Campus {
   id: string;
@@ -22,7 +22,7 @@ interface Campus {
 }
 
 export default function UpdateCampus({ campus, open, setOpen }: { campus: Campus, open: boolean, setOpen: (open: boolean) => void }) {
-  const { updateCampus } = useCampusApi();
+  const { updateCampus } = useCampus();
   const [campusName, setCampusName] = useState(campus.name);
   const [campusCode, setCampusCode] = useState(campus.id);
   const [address, setAddress] = useState(campus.address);
@@ -49,11 +49,11 @@ export default function UpdateCampus({ campus, open, setOpen }: { campus: Campus
       createdDate: campus.createdDate,
       updatedDate: new Date().toISOString(),
       createdBy: campus.createdBy,
-      updatedBy: "admin",
+ updatedBy: "admin",
       deletedAt: campus.deletedAt,
     };
     await updateCampus(data);
-    setOpen(false);
+    setOpen(false); // Close the dialog after updating
   };
 
   return (
