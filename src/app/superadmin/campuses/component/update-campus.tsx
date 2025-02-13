@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useCampus } from "@/contexts/campus-context";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface Campus {
   id: string;
@@ -21,98 +24,121 @@ interface Campus {
   deletedAt: string | null;
 }
 
-export default function UpdateCampus({ campus, open, setOpen }: { campus: Campus, open: boolean, setOpen: (open: boolean) => void }) {
+const formSchema = z.object({
+  campusName: z.string().min(1, "Campus Name is required"),
+  address: z.string().min(1, "Address is required"),
+  phone: z.string().min(1, "Phone is required"),
+  email: z.string().email("Invalid email").min(1, "Email is required"),
+});
+
+export default function UpdateCampus({
+  campus,
+  open,
+  setOpen,
+}: {
+  campus: Campus;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) {
   const { updateCampus } = useCampus();
-  const [campusName, setCampusName] = useState(campus.name);
-  const [campusCode, setCampusCode] = useState(campus.id);
-  const [address, setAddress] = useState(campus.address);
-  const [phone, setPhone] = useState(campus.phone);
-  const [email, setEmail] = useState(campus.email);
-  const [isFormValid, setIsFormValid] = useState(false);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      campusName: campus.name,
+      address: campus.address,
+      phone: campus.phone,
+      email: campus.email,
+    },
+  });
 
-  useEffect(() => {
-    if (campusName && campusCode && address && phone && email) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
-    }
-  }, [campusName, campusCode, address, phone, email]);
-
-  const handleUpdateCampus = async () => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const data = {
-      id: campusCode,
-      name: campusName,
-      address,
-      phone,
-      email,
+      id: campus.id,
+      name: values.campusName,
+      address: values.address,
+      phone: values.phone,
+      email: values.email,
       isDeleted: campus.isDeleted,
       createdDate: campus.createdDate,
       updatedDate: new Date().toISOString(),
       createdBy: campus.createdBy,
- updatedBy: "admin",
+      updatedBy: null,
       deletedAt: campus.deletedAt,
     };
     await updateCampus(data);
-    setOpen(false); // Close the dialog after updating
-  };
+    setOpen(false); 
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Update campus</DialogTitle>
-          <DialogDescription>Update the details of the campus below.</DialogDescription>
+          <DialogDescription>
+            Update the details of the campus below.
+          </DialogDescription>
         </DialogHeader>
-        <div className="space-y-2">
-          <div className="space-y-1">
-            <Label htmlFor="campusName">Campus Name</Label>
-            <Input
-              id="campusName"
-              placeholder="Ex: FPT University Hanoi"
-              value={campusName}
-              onChange={(e) => setCampusName(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="campusCode">Campus Code</Label>
-            <Input
-              id="campusCode"
-              placeholder="Ex: FUH"
-              value={campusCode}
-              onChange={(e) => setCampusCode(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="address">Address</Label>
-            <Input
-              id="address"
-              placeholder="Ex: Hoa Lac, Hanoi"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="phone">Phone</Label>
-            <Input
-              id="phone"
-              placeholder="Ex: 0123456789"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              placeholder="Ex: contact@fpt.edu.vn"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button className="w-full mt-4" onClick={handleUpdateCampus} disabled={!isFormValid}>
-          Update
-        </Button>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="campusName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Campus Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: FPT University Hanoi" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: Hoa Lac, Hanoi" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: 0123456789" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: contact@fpt.edu.vn" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <Button className="w-full mt-4" type="submit">
+              Update
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
