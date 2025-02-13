@@ -9,14 +9,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 
 export default function AddStudent() {
     return (
-        <Dialog>
+        <Dialog> 
             <DialogTrigger asChild>
                 <Button className="m-6">
                     <CirclePlus />
                     Add
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-[800px]">
                 <DialogHeader>
                     <DialogTitle>Add new students</DialogTitle>
                     <DialogDescription>
