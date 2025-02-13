@@ -81,7 +81,7 @@ export const columns: ColumnDef<Student>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            const manager = row.original
+            const student = row.original
 
             return (
                 <div className="flex items-center justify-center">
@@ -94,14 +94,12 @@ export const columns: ColumnDef<Student>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(manager.id)}
-                            >
-                                Copy payment ID
-                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>View customer</DropdownMenuItem>
-                            <DropdownMenuItem>View payment details</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(student.id)}
+                            >
+                                Copy student ID
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

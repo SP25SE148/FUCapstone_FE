@@ -1,5 +1,6 @@
 "use client"
 
+import { toast } from 'sonner';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import React, { createContext, useState, useContext, useEffect } from 'react';
@@ -54,13 +55,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     setToken(null);
                     localStorage.removeItem('token');
                     router.push("/");
+                    toast.info("Session is expired.", {
+                        description: "Please sign in to continue"
+                    })
                 }
             } catch (error) {
-                console.error('Lỗi khi decode token:', error);
                 setUser(null);
                 setToken(null);
                 localStorage.removeItem('token');
                 router.push("/");
+                toast.error("Something wrong please try again later")
             }
         }
     }, []);

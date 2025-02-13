@@ -1,9 +1,13 @@
+"use client"
+
 import Overall from "@/app/admin/components/overall";
+import { useManager } from "@/contexts/manager-context";
 
 export default function ManagerOverall() {
+    const { managers } = useManager();
+
     const items = [
-        { title: "Total Manager(s)", value: 10 },
-        { title: "Active Manager(s)", value: 10 },
+        { title: "Total Manager(s)", value: managers.length },
     ];
 
     return (

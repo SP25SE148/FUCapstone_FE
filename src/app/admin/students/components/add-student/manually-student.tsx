@@ -5,12 +5,11 @@ import { useForm } from "react-hook-form"
 import { CirclePlus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { useApi } from "@/hooks/use-api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useStudent } from "@/contexts/student-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useStudent } from "@/contexts/student-context";
 
 const formSchema = z.object({
     studentCode: z.string()
@@ -30,10 +29,9 @@ const formSchema = z.object({
         .min(2, "Mã cơ sở phải có ít nhất 2 ký tự"),
 });
 
-export default function ManuallyStudent() {
+export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
     const { addStudent } = useStudent();
 
-    // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -46,12 +44,12 @@ export default function ManuallyStudent() {
         },
     })
 
-    // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        // console.log(values);
-        await addStudent(values);
+        const res: any = await addStudent(values);
+        if (res?.isSuccess) {
+            form.reset();
+            onClose();
+        }
     }
 
     return (

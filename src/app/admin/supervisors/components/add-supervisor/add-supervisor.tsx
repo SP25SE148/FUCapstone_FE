@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { CirclePlus } from "lucide-react"
 
 import ImportSupervisor from "./import-supervisor"
@@ -8,8 +11,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
 
 export default function AddSupervisor() {
+    const [open, setOpen] = useState(false);
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button className="m-6">
                     <CirclePlus />
@@ -28,10 +33,10 @@ export default function AddSupervisor() {
                             <TabsTrigger value="import">Import</TabsTrigger>
                         </TabsList>
                         <TabsContent value="manually">
-                            <ManuallySupervisor />
+                            <ManuallySupervisor onClose={() => setOpen(false)} />
                         </TabsContent>
                         <TabsContent value="import">
-                            <ImportSupervisor />
+                            <ImportSupervisor onClose={() => setOpen(false)} />
                         </TabsContent>
                     </Tabs>
                 </DialogHeader>

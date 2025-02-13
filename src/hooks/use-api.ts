@@ -14,7 +14,7 @@ export const useApi = () => {
     };
 
     const callApi = async (endpoint: string, options: ApiOptions = {}) => {
-        const { method = 'GET', body } = options;
+        const { method = "GET", body } = options;
         const currentToken = getToken(); // Lấy token đã cập nhật
 
         if (!currentToken) {
@@ -22,31 +22,37 @@ export const useApi = () => {
             throw new Error("Unauthorized - Token is missing");
         }
 
-        let contentType = "application/json";
+        let headers: HeadersInit = {
+            "Authorization": `Bearer ${currentToken}`,
+        };
+
+        let requestBody: BodyInit | undefined = undefined;
+
         if (body instanceof FormData) {
-            contentType = "multipart/form-data";
+            // Nếu là FormData, giữ nguyên body, không cần headers "Content-Type"
+            requestBody = body;
+        } else if (body && typeof body === "object") {
+            // Nếu là object, stringify thành JSON
+            headers["Content-Type"] = "application/json";
+            requestBody = JSON.stringify(body);
         }
 
         try {
-            const response: any = await fetch(`https://localhost:8000/${endpoint}`, {
+            const response = await fetch(`https://localhost:8000/${endpoint}`, {
                 method,
-                headers: {
-                    'Content-Type': contentType,
-                    'Authorization': `Bearer ${currentToken}`,
-                },
-                body: body ? JSON.stringify(body) : undefined,
+                headers,
+                body: requestBody,
             });
 
-            // Chỉ gọi response.json() một lần
             const data = await response.json();
-            
+
             if (data?.isSuccess !== true) {
-                toast.error(data?.detail);
-            } 
+                toast.error(data?.detail || "Something wrong please try again later");
+            }
 
             return data;
         } catch (error) {
-            console.error('API call error:', error);
+            console.error("API call error:", error);
             throw error;
         }
     };

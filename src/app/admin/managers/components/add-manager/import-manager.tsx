@@ -2,24 +2,12 @@
 
 import { Download, Upload } from "lucide-react";
 
-import { useApi } from "@/hooks/use-api";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ImportManager() {
-    const { callApi } = useApi();
-
-    const importManagerHandler = async () => {
-        try {
-            const data = await callApi('identity/Users/import/managers', { method: "POST" });
-            console.log(data);
-        } catch (error) {
-            console.error('Lỗi:', error);
-        }
-    };
-
     return (
         <Card>
             <CardHeader>
