@@ -14,14 +14,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
 
 export type Admin = {
-  id: string;
-  name: string;
+  userId: string;
+  userCode: string;
+  fullName: string;
   email: string;
-  campus: string;
-  status: string;
+  majorId: string;
+  campusId: string;
+  capstoneId: string;
+  userName: string;
 };
 
 export const columns: ColumnDef<Admin>[] = [
@@ -45,9 +47,15 @@ export const columns: ColumnDef<Admin>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "userCode",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="User Code" />
+    ),
+  },
+  {
+    accessorKey: "fullName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Full Name" />
     ),
   },
   {
@@ -57,32 +65,28 @@ export const columns: ColumnDef<Admin>[] = [
     ),
   },
   {
-    accessorKey: "campus",
+    accessorKey: "majorId",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Campus" />
+      <DataTableColumnHeader column={column} title="Major ID" />
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "campusId",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Campus ID" />
     ),
-    cell: ({ row }) => {
-      const admin = row.original;
-      const status = admin.status;
-
-      return (
-        <Badge
-          className={`${
-            status === "Active"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {admin.status}
-        </Badge>
-      );
-    },
+  },
+  {
+    accessorKey: "capstoneId",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Capstone ID" />
+    ),
+  },
+  {
+    accessorKey: "userName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="User Name" />
+    ),
   },
   {
     id: "actions",
@@ -101,7 +105,7 @@ export const columns: ColumnDef<Admin>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(admin.id)}
+                onClick={() => navigator.clipboard.writeText(admin.userId)}
               >
                 Copy Admin ID
               </DropdownMenuItem>

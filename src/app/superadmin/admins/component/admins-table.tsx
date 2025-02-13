@@ -1,6 +1,5 @@
 "use client";
 
-import { data } from "@/app/superadmin/admins/table-data";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/superadmin/admins/component/admins-table-columns";
 import {
@@ -11,8 +10,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddAdmin from "@/app/superadmin/admins/component/add-admin";
+import { useAdmin } from "@/contexts/admin-management-context";
 
 export default function AdminsTable() {
+  const { admins } = useAdmin();
+
   return (
     <Card>
       <div className="flex items-center justify-between">
@@ -25,7 +27,7 @@ export default function AdminsTable() {
         <AddAdmin />
       </div>
       <CardContent>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={admins} />
       </CardContent>
     </Card>
   );

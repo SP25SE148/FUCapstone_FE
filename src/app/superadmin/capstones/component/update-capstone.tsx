@@ -1,17 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useCapstone } from "@/contexts/capstone-context";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface Capstone {
   id: string;
@@ -24,6 +21,14 @@ interface Capstone {
   deletedAt: string | null;
 }
 
+const formSchema = z.object({
+  capstoneName: z.string().min(1, "Capstone Name is required"),
+  majorId: z.string().min(1, "Major ID is required"),
+  minMember: z.number().min(1, "Min Member must be greater than 0"),
+  maxMember: z.number().min(1, "Max Member must be greater than 0"),
+  reviewCount: z.number().min(1, "Review Count must be greater than 0"),
+});
+
 export default function UpdateCapstone({
   capstone,
   open,
@@ -34,41 +39,31 @@ export default function UpdateCapstone({
   setOpen: (open: boolean) => void;
 }) {
   const { updateCapstone } = useCapstone();
-  const [capstoneName, setCapstoneName] = useState(capstone.name);
-  const [majorId, setMajorId] = useState(capstone.majorId);
-  const [minMember, setMinMember] = useState(capstone.minMember);
-  const [maxMember, setMaxMember] = useState(capstone.maxMember);
-  const [reviewCount, setReviewCount] = useState(capstone.reviewCount);
-  const [isFormValid, setIsFormValid] = useState(false);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      capstoneName: capstone.name,
+      majorId: capstone.majorId,
+      minMember: capstone.minMember,
+      maxMember: capstone.maxMember,
+      reviewCount: capstone.reviewCount,
+    },
+  });
 
-  useEffect(() => {
-    if (
-      capstoneName &&
-      majorId &&
-      minMember > 0 &&
-      maxMember > 0 &&
-      reviewCount > 0
-    ) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
-    }
-  }, [capstoneName, majorId, minMember, maxMember, reviewCount]);
-
-  const handleUpdateCapstone = async () => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const data = {
       id: capstone.id,
-      majorId,
-      name: capstoneName,
-      minMember,
-      maxMember,
-      reviewCount,
+      majorId: values.majorId,
+      name: values.capstoneName,
+      minMember: values.minMember,
+      maxMember: values.maxMember,
+      reviewCount: values.reviewCount,
       isDeleted: capstone.isDeleted,
       deletedAt: capstone.deletedAt,
     };
     await updateCapstone(data);
-    setOpen(false); 
-  };
+    setOpen(false); // Close the dialog after updating
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -79,63 +74,80 @@ export default function UpdateCapstone({
             Update the details of the capstone below.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-2">
-          <div className="space-y-1">
-            <Label htmlFor="capstoneName">Capstone Name</Label>
-            <Input
-              id="capstoneName"
-              placeholder="Ex: Capstone Project"
-              value={capstoneName}
-              onChange={(e) => setCapstoneName(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="majorId">Major ID</Label>
-            <Input
-              id="majorId"
-              placeholder="Ex: CS"
-              value={majorId}
-              onChange={(e) => setMajorId(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="minMember">Min Member</Label>
-            <Input
-              id="minMember"
-              type="number"
-              placeholder="Ex: 3"
-              value={minMember}
-              onChange={(e) => setMinMember(Number(e.target.value))}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="maxMember">Max Member</Label>
-            <Input
-              id="maxMember"
-              type="number"
-              placeholder="Ex: 5"
-              value={maxMember}
-              onChange={(e) => setMaxMember(Number(e.target.value))}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="reviewCount">Review Count</Label>
-            <Input
-              id="reviewCount"
-              type="number"
-              placeholder="Ex: 2"
-              value={reviewCount}
-              onChange={(e) => setReviewCount(Number(e.target.value))}
-            />
-          </div>
-        </div>
-        <Button
-          className="w-full mt-4"
-          onClick={handleUpdateCapstone}
-          disabled={!isFormValid}
-        >
-          Update
-        </Button>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="capstoneName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Capstone Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: Capstone Project" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="majorId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Major ID</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: CS" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="minMember"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Min Member</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Ex: 3" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="maxMember"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Max Member</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Ex: 5" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="reviewCount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Review Count</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Ex: 2" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <Button type="submit" className="mt-4">
+              Update
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useApi } from '@/hooks/use-api';
+import { toast } from 'sonner';
 
 interface Capstone {
   id: string;
@@ -43,7 +44,7 @@ export const CapstoneProvider = ({ children }: { children: React.ReactNode }) =>
       console.error("Error fetching capstone data:", error);
     }
   };
-
+ 
   const addCapstone = async (data: Capstone) => {
     try {
       await callApi("fuc/AcademicManagement/capstone", {
@@ -51,10 +52,9 @@ export const CapstoneProvider = ({ children }: { children: React.ReactNode }) =>
         body: data,
       });
       setCapstones((prev) => [...prev, data]);
-      alert("Capstone added successfully");
+      toast.success("Capstone added successfully");
     } catch (error) {
       console.error("Error adding capstone:", error);
-      alert("Failed to add capstone");
     }
   };
 
@@ -67,10 +67,9 @@ export const CapstoneProvider = ({ children }: { children: React.ReactNode }) =>
       setCapstones((prev) =>
         prev.map((capstone) => (capstone.id === data.id ? data : capstone))
       );
-      alert("Capstone updated successfully");
+      toast.success("Capstone updated successfully");
     } catch (error) {
       console.error("Error updating capstone:", error);
-      alert("Failed to update capstone");
     }
   };
 
@@ -80,10 +79,9 @@ export const CapstoneProvider = ({ children }: { children: React.ReactNode }) =>
         method: "DELETE",
       });
       setCapstones((prev) => prev.filter((capstone) => capstone.id !== id));
-      alert("Capstone removed successfully");
+      toast.success("Capstone removed successfully");
     } catch (error) {
       console.error("Error removing capstone:", error);
-      alert("Failed to remove capstone");
     }
   };
 

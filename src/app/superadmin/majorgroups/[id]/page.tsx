@@ -13,6 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useMajorGroup, MajorGroupProvider } from "@/contexts/majorgroup-context";
+import { Loader2 } from "lucide-react";
+import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 interface Major {
   id: string;
@@ -49,7 +51,13 @@ function MajorPageContent() {
   }, [getMajorsByMajorGroupId, groupId]);
 
   if (loading) {
-    return <div>Loading majors...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-[50vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="mt-2 text-sm text-muted-foreground">Loading majors...</p>
+        <SkeletonLoader />
+      </div>
+    )
   }
 
   if (error) {

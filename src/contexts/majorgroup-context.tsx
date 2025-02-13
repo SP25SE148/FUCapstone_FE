@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useApi } from '@/hooks/use-api';
+import { toast } from 'sonner';
 
 interface MajorGroup {
   id: string;
@@ -9,7 +10,7 @@ interface MajorGroup {
   description: string;
   isDeleted: boolean;
   deletedAt: string | null;
-}
+} 
 
 interface Major {
   id: string;
@@ -19,7 +20,7 @@ interface Major {
   isDeleted: boolean;
   deletedAt: string | null;
 }
-
+ 
 interface MajorGroupContextProps {
   majorGroups: MajorGroup[];
   fetchMajorGroupList: () => Promise<void>;
@@ -58,10 +59,9 @@ export const MajorGroupProvider = ({ children }: { children: React.ReactNode }) 
         body: data,
       });
       setMajorGroups((prev) => [...prev, data]);
-      alert("Major group added successfully");
+      toast.success("Major group added successfully");
     } catch (error) {
       console.error("Error adding major group:", error);
-      alert("Failed to add major group");
     }
   };
 
@@ -74,10 +74,9 @@ export const MajorGroupProvider = ({ children }: { children: React.ReactNode }) 
       setMajorGroups((prev) =>
         prev.map((majorGroup) => (majorGroup.id === data.id ? data : majorGroup))
       );
-      alert("Major group updated successfully");
+      toast.success("Major group updated successfully");
     } catch (error) {
       console.error("Error updating major group:", error);
-      alert("Failed to update major group");
     }
   };
 
@@ -87,10 +86,9 @@ export const MajorGroupProvider = ({ children }: { children: React.ReactNode }) 
         method: "DELETE",
       });
       setMajorGroups((prev) => prev.filter((majorGroup) => majorGroup.id !== id));
-      alert("Major group removed successfully");
+      toast.success("Major group removed successfully");
     } catch (error) {
       console.error("Error removing major group:", error);
-      alert("Failed to remove major group");
     }
   };
 
