@@ -5,12 +5,14 @@ import { useApi } from '@/hooks/use-api';
 import { toast } from 'sonner';
 
 interface Manager {
-  ManagerCode: string,
-  email: string,
-  userName: string,
-  majorId: string,
-  capstoneId: string,
-  campusId: string,
+  campusId: string
+  capstoneId: string
+  email: string
+  fullName: string
+  majorId: string
+  userCode: string
+  userId: string
+  userName: string
 }
 
 interface ManagerContextProps {
@@ -33,11 +35,13 @@ export const ManagerProvider = ({ children }: { children: React.ReactNode }) => 
         method: "GET",
       });
 
-      if (!Array.isArray(response)) {
-        throw new Error("Invalid response format");
-      }
+      console.log(response?.value);
 
-      setManagers(response);
+      // if (!Array.isArray(response)) {
+      //   throw new Error("Invalid response format");
+      // }
+
+      setManagers(response?.value);
     } catch (error) {
       console.error("Error fetching campus data:", error);
     }

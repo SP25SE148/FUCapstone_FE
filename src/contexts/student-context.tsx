@@ -44,24 +44,22 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
   // };
 
   const addStudent = async (data: Student) => {
-    try {
-      const response = await callApi("identity/Users/students", {
+    // try {
+      const response: any = await callApi("identity/Users/students", {
         method: "POST",
         body: data,
       });
 
-      if (response.status == 200) {
+      if (response?.isSuccess === true) {
         // setCampuses((prev) => [...prev, response]);
         // alert("Campus added successfully");
-        toast.success(response.detail)
-      } else {
-        // alert("Failed to add campus");
-        toast.error(response.detail)
+        toast.success("Add student successfully")
       }
-    } catch (error) {
-      console.error("Error adding campus:", error);
-      alert("Failed to add campus");
-    }
+      
+    // } catch (error) {
+    //   console.error("Error adding campus:", error);
+    //   alert("Failed to add campus");
+    // }
   };
 
   // const updateCampus = async (data: Campus) => {
