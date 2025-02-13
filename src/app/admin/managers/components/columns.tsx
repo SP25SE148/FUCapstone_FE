@@ -11,11 +11,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Manager = {
-    id: string
-    name: string
+    campusId: string
+    capstoneId: string
     email: string
-    capstone: string
-    status: "Active" | "Inactive"
+    fullName: string
+    majorId: string
+    userCode: string
+    userId: string
+    userName: string
 }
 
 export const columns: ColumnDef<Manager>[] = [
@@ -42,9 +45,9 @@ export const columns: ColumnDef<Manager>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "name",
+        accessorKey: "fullName",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Name" />
+            <DataTableColumnHeader column={column} title="Full Name" />
         ),
     },
     {
@@ -54,15 +57,15 @@ export const columns: ColumnDef<Manager>[] = [
         ),
     },
     {
-        accessorKey: "capstone",
+        accessorKey: "majorId",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Capstone" />
+            <DataTableColumnHeader column={column} title="Major" />
         ),
     },
     {
-        accessorKey: "status",
+        accessorKey: "capstoneId",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Status" />
+            <DataTableColumnHeader column={column} title="Capstone" />
         ),
     },
     {

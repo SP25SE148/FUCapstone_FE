@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useAuth } from '../contexts/auth-context';
 
 interface ApiOptions {
@@ -27,7 +28,7 @@ export const useApi = () => {
         }
 
         try {
-            const response = await fetch(`https://localhost:8000/${endpoint}`, {
+            const response: any = await fetch(`https://localhost:8000/${endpoint}`, {
                 method,
                 headers: {
                     'Content-Type': contentType,
@@ -36,11 +37,14 @@ export const useApi = () => {
                 body: body ? JSON.stringify(body) : undefined,
             });
 
-            if (!response.ok) {
-                throw new Error('API call failed');
-            }
+            // Chỉ gọi response.json() một lần
+            const data = await response.json();
+            
+            if (data?.isSuccess !== true) {
+                toast.error(data?.detail);
+            } 
 
-            return await response.json();
+            return data;
         } catch (error) {
             console.error('API call error:', error);
             throw error;
