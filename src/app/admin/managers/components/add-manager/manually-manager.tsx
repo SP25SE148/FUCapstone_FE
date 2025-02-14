@@ -18,6 +18,8 @@ const formSchema = z.object({
     fullName: z.string()
         .min(2, "Tên người dùng phải có ít nhất 2 ký tự")
         .max(50, "Tên người dùng không được quá 50 ký tự"),
+    capstoneId: z.string()
+        .min(2, "Mã đồ án phải có ít nhất 2 ký tự"),
 });
 
 export default function ManuallyManager({ onClose }: { onClose: () => void }) {
@@ -28,6 +30,7 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
         defaultValues: {
             email: "",
             fullName: "",
+            capstoneId: "",
         },
     })
 
@@ -71,6 +74,19 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
                                     <FormLabel>User name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Ex: Lê Nguyễn Sơn Vũ" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="capstoneId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Capstone</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Ex: SEP490" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
