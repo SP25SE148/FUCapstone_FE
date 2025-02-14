@@ -7,6 +7,9 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 
 interface User {
     name: string;
+    MajorId: string;
+    CampusId: string;
+    CapstoneId: string;
     "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": string;
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
@@ -40,14 +43,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             try {
                 const decodedToken = jwtDecode<DecodedToken>(storedToken);
                 // Kiểm tra xem token đã hết hạn chưa
-                if (decodedToken.exp * 1000 > Date.now()) {
+                if (decodedToken?.exp * 1000 > Date.now()) {
                     setToken(storedToken);
                     setUser({
-                        name: decodedToken.name,
-                        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
-                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
-                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+                        name: decodedToken?.name,
+                        MajorId: decodedToken?.MajorId,
+                        CampusId: decodedToken?.CampusId,
+                        CapstoneId: decodedToken?.CapstoneId,
+                        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": decodedToken?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
+                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
                     });
                 } else {
                     // Token đã hết hạn, xóa khỏi localStorage
@@ -70,31 +76,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     const login = async (email: string, password: string) => {
-        try {
-            const response = await fetch('https://localhost:8000/identity/Auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Email or Password invalid`);
-            }
-
-            const data = await response.json();
-            const decodedToken = jwtDecode<DecodedToken>(data.accessToken);
-
-            setToken(data.accessToken);
+        const response = await fetch('https://localhost:8000/identity/Auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+        });
+        const data = await response.json();
+        if (data?.isSuccess) {
+            const decodedToken = jwtDecode<DecodedToken>(data?.value?.accessToken);
+            setToken(data?.value?.accessToken);
             setUser({
-                name: decodedToken.name,
-                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
-                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
-                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+                name: decodedToken?.name,
+                MajorId: decodedToken?.MajorId,
+                CampusId: decodedToken?.CampusId,
+                CapstoneId: decodedToken?.CapstoneId,
+                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": decodedToken?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
             });
-
             // Lưu thông tin vào localStorage
-            localStorage.setItem('token', data.accessToken);
+            localStorage.setItem('token', data?.value?.accessToken);
             // Điều hướng sau khi đăng nhập thành công
             switch (decodedToken?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]) {
                 case "SuperAdmin":
@@ -115,30 +117,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 default:
                     break;
             }
-        } catch (error) {
-            throw error;
+            toast.success("Login successfully", { description: "Welcome to FUC" })
+        } else {
+            toast.error(data?.error?.message || "Something wrong please try again later")
         }
     };
 
     const logout = async () => {
         const accessToken = localStorage.getItem('token');
-        try {
-            const response = await fetch('https://localhost:8000/identity/Auth/token/revoke', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessToken }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Invoke token fail.`);
-            }
-        } catch (error) {
-            throw error;
+        const response = await fetch('https://localhost:8000/identity/Auth/token/revoke', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ accessToken }),
+        });
+        const data = await response.json();
+        if (data?.isSuccess) {
+            setUser(null);
+            setToken(null);
+            localStorage.removeItem('token');
+            router.push("/");
+            toast.success("Sign Out successfully", { description: "See you again" })
+        } else {
+            toast.error(data?.detail || "Something wrong please try again later")
         }
-        setUser(null);
-        setToken(null);
-        localStorage.removeItem('token');
-        router.push("/");
     };
 
     return (

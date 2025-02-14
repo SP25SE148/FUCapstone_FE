@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { toast } from "sonner";
 import { ChevronsUpDown, LucideIcon } from "lucide-react";
 
 import { useAuth } from "@/contexts/auth-context";
@@ -22,7 +21,6 @@ export function AppSidebar({
 
   const signOutHandler = () => {
     logout()
-    toast.success("Sign Out successfully", { description: "See you again" })
   }
 
   return (
