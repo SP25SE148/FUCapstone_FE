@@ -1,21 +1,28 @@
 "use client"
 
 import { toast } from 'sonner';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@/hooks/use-api';
 
 interface Student {
-  studentCode: string,
-  email: string,
-  userName: string,
+  id: string,
+  fullName: string,
   majorId: string,
+  majorName: string,
   capstoneId: string,
+  capstoneName: string,
   campusId: string,
+  campusName: string,
+  email: string,
+  isEligible: boolean,
+  status: string
 }
 
 interface StudentContextProps {
-  addStudent: (data: Student) => Promise<void>;
+  students: Student[]
+  fetchStudentList: () => Promise<void>;
+  addStudent: (data: any) => Promise<void>;
   importStudent: (data: any) => Promise<void>;
 }
 
@@ -23,15 +30,30 @@ const StudentContext = createContext<StudentContextProps | undefined>(undefined)
 
 export const StudentProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
+  const [students, setStudents] = useState<Student[]>([]);
 
-  const addStudent = async (data: Student) => {
+  const fetchStudentList = async () => {
+    try {
+      const response = await callApi("fuc/User/get-all-student", {
+        method: "GET",
+      });
+      setStudents(response?.value);
+    } catch (error) {
+      toast.error("Error fetching student data", {
+        description: `${error}`
+      });
+    }
+  };
+
+  const addStudent = async (data: any) => {
     const response: any = await callApi("identity/Users/students", {
       method: "POST",
       body: data,
     });
 
     if (response?.isSuccess === true) {
-      toast.success("Add student successfully")
+      toast.success("Add student successfully");
+      fetchStudentList();
     }
     return response
   };
@@ -43,14 +65,19 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
     });
 
     if (response?.isSuccess === true) {
-      toast.success("Import student successfully")
+      toast.success("Import student successfully");
+      fetchStudentList();
     }
     return response
   };
 
+  useEffect(() => {
+    fetchStudentList();
+  }, []);
+
   return (
     <StudentContext.Provider
-      value={{ addStudent, importStudent }}
+      value={{ students, fetchStudentList, addStudent, importStudent }}
     >
       {children}
     </StudentContext.Provider>

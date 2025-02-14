@@ -1,19 +1,24 @@
 "use client"
 
 import { toast } from 'sonner';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@/hooks/use-api';
 
 interface Supervisor {
-  email: string,
-  userName: string,
-  majorId: string,
-  campusId: string,
+  id: string
+  fullName: string
+  email: string
+  majorId: string
+  majorName: string
+  campusId: string
+  campusName: string
 }
 
 interface SupervisorContextProps {
-  addSupervisor: (data: Supervisor) => Promise<void>;
+  supervisors: Supervisor[]
+  fetchSupervisorList: () => Promise<void>;
+  addSupervisor: (data: any) => Promise<void>;
   importSupervisor: (data: any) => Promise<void>;
 }
 
@@ -21,6 +26,20 @@ const SupervisorContext = createContext<SupervisorContextProps | undefined>(unde
 
 export const SupervisorProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
+  const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
+
+  const fetchSupervisorList = async () => {
+    try {
+      const response = await callApi("fuc/User/get-all-supervisor", {
+        method: "GET",
+      });
+      setSupervisors(response?.value);
+    } catch (error) {
+      toast.error("Error fetching supervisor data", {
+        description: `${error}`
+      });
+    }
+  };
 
   const addSupervisor = async (data: Supervisor) => {
     const response: any = await callApi("identity/Users/supervisors", {
@@ -29,7 +48,8 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
     });
 
     if (response?.isSuccess === true) {
-      toast.success("Add supervisor successfully")
+      toast.success("Add supervisor successfully");
+      fetchSupervisorList();
     }
     return response
   };
@@ -41,14 +61,19 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
     });
 
     if (response?.isSuccess === true) {
-      toast.success("Import supervisor successfully")
+      toast.success("Import supervisor successfully");
+      fetchSupervisorList();
     }
     return response
   };
 
+  useEffect(() => {
+    fetchSupervisorList();
+  }, []);
+
   return (
     <SupervisorContext.Provider
-      value={{ addSupervisor, importSupervisor }}
+      value={{ supervisors, fetchSupervisorList, addSupervisor, importSupervisor }}
     >
       {children}
     </SupervisorContext.Provider>

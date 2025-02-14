@@ -1,3 +1,6 @@
+"use client"
+
+import { useAuth } from "@/contexts/auth-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Overall({
@@ -8,11 +11,13 @@ export default function Overall({
         value: string | number;
     }[];
 }) {
+    const { user } = useAuth();
+
     return (
         <Card>
             <CardHeader>
                 <CardTitle className="font-semibold tracking-tight text-xl">Overall</CardTitle>
-                <CardDescription>Campus Hồ Chí Minh</CardDescription>
+                <CardDescription>Campus {user?.CampusId}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {items?.map((item, index) => (

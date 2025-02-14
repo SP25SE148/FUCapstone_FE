@@ -7,7 +7,7 @@ export default function ManagerOverall() {
     const { managers } = useManager();
 
     const items = [
-        { title: "Total Manager(s)", value: managers.length },
+        { title: "Total Manager(s)", value: managers.length || 0 },
     ];
 
     return (

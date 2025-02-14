@@ -11,12 +11,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Student = {
-    id: string
-    name: string
-    email: string
-    major: string
-    capstone: string
-    status: "Active" | "Inactive"
+    id: string,
+    fullName: string,
+    majorId: string,
+    majorName: string,
+    capstoneId: string,
+    capstoneName: string,
+    campusId: string,
+    campusName: string,
+    email: string,
+    isEligible: boolean,
+    status: string
 }
 
 export const columns: ColumnDef<Student>[] = [
@@ -45,13 +50,13 @@ export const columns: ColumnDef<Student>[] = [
     {
         accessorKey: "id",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Id" />
+            <DataTableColumnHeader column={column} title="Student code" />
         ),
     },
     {
-        accessorKey: "name",
+        accessorKey: "fullName",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Name" />
+            <DataTableColumnHeader column={column} title="Full name" />
         ),
     },
     {
@@ -61,15 +66,21 @@ export const columns: ColumnDef<Student>[] = [
         ),
     },
     {
-        accessorKey: "major",
+        accessorKey: "majorId",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Major" />
         ),
     },
     {
-        accessorKey: "capstone",
+        accessorKey: "capstoneId",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Capstone" />
+        ),
+    },
+    {
+        accessorKey: "isEligible",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Eligible" />
         ),
     },
     {
