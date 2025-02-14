@@ -25,11 +25,9 @@ export default function Loginform() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your login logic here
     try {
       setIsLoading(true)
       await login(email, password);
-      toast.success("Login successfully", { description: "Welcome to FUC" })
     } catch (error) {
       toast.error(`${error}`)
     } finally {
