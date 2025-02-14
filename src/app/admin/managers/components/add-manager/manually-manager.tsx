@@ -15,11 +15,9 @@ const formSchema = z.object({
     email: z.string()
         .email("Email không hợp lệ")
         .max(100, "Email không được quá 100 ký tự"),
-    userName: z.string()
+    fullName: z.string()
         .min(2, "Tên người dùng phải có ít nhất 2 ký tự")
         .max(50, "Tên người dùng không được quá 50 ký tự"),
-    campusId: z.string()
-        .min(2, "Mã cơ sở phải có ít nhất 2 ký tự"),
 });
 
 export default function ManuallyManager({ onClose }: { onClose: () => void }) {
@@ -29,8 +27,7 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
-            userName: "",
-            campusId: "",
+            fullName: "",
         },
     })
 
@@ -68,25 +65,12 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
                         />
                         <FormField
                             control={form.control}
-                            name="userName"
+                            name="fullName"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>User name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Ex: Lê Nguyễn Sơn Vũ" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="campusId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Campus Id</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ex: HCM" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

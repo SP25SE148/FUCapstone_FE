@@ -12,11 +12,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 // You can use a Zod schema here if you want.
 export type Supervisor = {
     id: string
-    name: string
-    code: string
+    fullName: string
     email: string
-    major: string
-    status: "Active" | "Inactive"
+    majorId: string
+    majorName: string
+    campusId: string
+    campusName: string
 }
 
 export const columns: ColumnDef<Supervisor>[] = [
@@ -43,15 +44,15 @@ export const columns: ColumnDef<Supervisor>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "name",
+        accessorKey: "fullName",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Name" />
+            <DataTableColumnHeader column={column} title="Full name" />
         ),
     },
     {
-        accessorKey: "code",
+        accessorKey: "id",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Code" />
+            <DataTableColumnHeader column={column} title="User code" />
         ),
     },
     {
@@ -61,15 +62,9 @@ export const columns: ColumnDef<Supervisor>[] = [
         ),
     },
     {
-        accessorKey: "major",
+        accessorKey: "majorId",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Major" />
-        ),
-    },
-    {
-        accessorKey: "status",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Status" />
         ),
     },
     {

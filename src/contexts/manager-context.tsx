@@ -6,14 +6,13 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useApi } from '@/hooks/use-api';
 
 interface Manager {
-  campusId: string
-  capstoneId: string
-  email: string
-  fullName: string
-  majorId: string
-  userCode: string
   userId: string
-  userName: string
+  fullName: string
+  userCode: string
+  email: string
+  campusId: string
+  majorId: string
+  capstoneId: string
 }
 
 interface ManagerContextProps {
@@ -35,7 +34,9 @@ export const ManagerProvider = ({ children }: { children: React.ReactNode }) => 
       });
       setManagers(response?.value);
     } catch (error) {
-      console.error("Error fetching campus data:", error);
+      toast.error("Error fetching manager data", {
+        description: `${error}`
+      });
     }
   };
 

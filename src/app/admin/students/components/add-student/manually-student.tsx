@@ -15,18 +15,16 @@ const formSchema = z.object({
     studentCode: z.string()
         .min(2, "Mã sinh viên phải có ít nhất 2 ký tự")
         .max(20, "Mã sinh viên không được quá 20 ký tự"),
+    fullName: z.string()
+        .min(2, "Tên người dùng phải có ít nhất 2 ký tự")
+        .max(50, "Tên người dùng không được quá 50 ký tự"),
     email: z.string()
         .email("Email không hợp lệ")
         .max(100, "Email không được quá 100 ký tự"),
-    userName: z.string()
-        .min(2, "Tên người dùng phải có ít nhất 2 ký tự")
-        .max(50, "Tên người dùng không được quá 50 ký tự"),
     majorId: z.string()
         .min(2, "Mã ngành phải có ít nhất 2 ký tự"),
     capstoneId: z.string()
         .min(2, "Mã đồ án phải có ít nhất 2 ký tự"),
-    campusId: z.string()
-        .min(2, "Mã cơ sở phải có ít nhất 2 ký tự"),
 });
 
 export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
@@ -36,11 +34,10 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             studentCode: "",
+            fullName: "",
             email: "",
-            userName: "",
             majorId: "",
             capstoneId: "",
-            campusId: "",
         },
     })
 
@@ -78,12 +75,12 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                         />
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="fullName"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>Full name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: thangndse173512@fpt.edu.vn" {...field} />
+                                        <Input placeholder="Ex: Nguyễn Đức Thắng" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -91,12 +88,12 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                         />
                         <FormField
                             control={form.control}
-                            name="userName"
+                            name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>User Name</FormLabel>
+                                    <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: Nguyễn Đức Thắng" {...field} />
+                                        <Input placeholder="Ex: thangndse173512@fpt.edu.vn" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -123,19 +120,6 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                                     <FormLabel>Capstone</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Ex: SEP490" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="campusId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Campus</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ex: HCM" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

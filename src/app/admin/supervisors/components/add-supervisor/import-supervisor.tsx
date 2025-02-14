@@ -34,12 +34,8 @@ export default function ImportSupervisor({ onClose }: { onClose: () => void }) {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const file = values.file[0]; // Lấy file đầu tiên
-        console.log(file);
-
         const formData = new FormData();
         formData.append("file", file);
-        console.log(formData);
-
         const res: any = await importSupervisor(formData);
         if (res?.isSuccess) {
             form.reset();
