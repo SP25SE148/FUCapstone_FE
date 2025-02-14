@@ -1,7 +1,8 @@
-"use client"
+"use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useApi } from '@/hooks/use-api';
+import { toast } from 'sonner';
 
 interface Campus {
   id: string;
@@ -56,13 +57,12 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (response && response.id) {
         setCampuses((prev) => [...prev, response]);
-        alert("Campus added successfully");
+        toast.success("Campus added successfully");
       } else {
         throw new Error("Failed to add campus");
       }
     } catch (error) {
       console.error("Error adding campus:", error);
-      alert("Failed to add campus");
     }
   };
 
@@ -77,13 +77,12 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
         setCampuses((prev) =>
           prev.map((campus) => (campus.id === data.id ? response : campus))
         );
-        alert("Campus updated successfully");
+        toast.success("Campus updated successfully");
       } else {
         throw new Error("Failed to update campus");
       }
     } catch (error) {
       console.error("Error updating campus:", error);
-      alert("Failed to update campus");
     }
   };
 
@@ -93,10 +92,9 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
         method: "DELETE",
       });
       setCampuses((prev) => prev.filter((campus) => campus.id !== id));
-      alert("Campus removed successfully");
+      toast.success("Campus removed successfully");
     } catch (error) {
       console.error("Error removing campus:", error);
-      alert("Failed to remove campus");
     }
   };
 
