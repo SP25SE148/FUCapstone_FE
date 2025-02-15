@@ -31,7 +31,7 @@ export default function AddAdmin() {
               <ManuallyAdmin />
             </TabsContent>
             <TabsContent value="import">
-              <ImportAdmin />
+              <ImportAdmin /> 
             </TabsContent>
           </Tabs>
         </DialogHeader>

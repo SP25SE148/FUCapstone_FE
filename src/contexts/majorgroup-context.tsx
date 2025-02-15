@@ -1,8 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useApi } from '@/hooks/use-api';
-import { toast } from 'sonner';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useApi } from "@/hooks/use-api";
+import { toast } from "sonner";
 
 interface MajorGroup {
   id: string;
@@ -10,7 +10,7 @@ interface MajorGroup {
   description: string;
   isDeleted: boolean;
   deletedAt: string | null;
-} 
+}
 
 interface Major {
   id: string;
@@ -20,7 +20,7 @@ interface Major {
   isDeleted: boolean;
   deletedAt: string | null;
 }
- 
+
 interface MajorGroupContextProps {
   majorGroups: MajorGroup[];
   fetchMajorGroupList: () => Promise<void>;
@@ -30,9 +30,15 @@ interface MajorGroupContextProps {
   getMajorsByMajorGroupId: (majorGroupId: string) => Promise<Major[]>;
 }
 
-const MajorGroupContext = createContext<MajorGroupContextProps | undefined>(undefined);
+const MajorGroupContext = createContext<MajorGroupContextProps | undefined>(
+  undefined
+);
 
-export const MajorGroupProvider = ({ children }: { children: React.ReactNode }) => {
+export const MajorGroupProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const { callApi } = useApi();
   const [majorGroups, setMajorGroups] = useState<MajorGroup[]>([]);
 
@@ -41,68 +47,61 @@ export const MajorGroupProvider = ({ children }: { children: React.ReactNode }) 
       const response = await callApi("fuc/AcademicManagement/majorgroup", {
         method: "GET",
       });
-
-      if (!Array.isArray(response)) {
-        throw new Error("Invalid response format");
-      }
-
-      setMajorGroups(response);
+      setMajorGroups(response?.value);
     } catch (error) {
       console.error("Error fetching major group data:", error);
     }
   };
 
   const addMajorGroup = async (data: MajorGroup) => {
-    try {
-      await callApi("fuc/AcademicManagement/majorgroup", {
-        method: "POST",
-        body: data,
-      });
-      setMajorGroups((prev) => [...prev, data]);
+    const response = await callApi("fuc/AcademicManagement/majorgroup", {
+      method: "POST",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      // setMajorGroups((prev) => [...prev, data]);
       toast.success("Major group added successfully");
-    } catch (error) {
-      console.error("Error adding major group:", error);
+      fetchMajorGroupList();
     }
+    return response;
   };
 
   const updateMajorGroup = async (data: MajorGroup) => {
-    try {
-      await callApi("fuc/AcademicManagement/majorgroup", {
-        method: "PUT",
-        body: data,
-      });
-      setMajorGroups((prev) =>
-        prev.map((majorGroup) => (majorGroup.id === data.id ? data : majorGroup))
-      );
+    const response = await callApi("fuc/AcademicManagement/majorgroup", {
+      method: "PUT",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
       toast.success("Major group updated successfully");
-    } catch (error) {
-      console.error("Error updating major group:", error);
+      fetchMajorGroupList();
     }
+    return response;
   };
 
   const removeMajorGroup = async (id: string) => {
-    try {
-      await callApi(`fuc/AcademicManagement/majorgroup/${id}`, {
-        method: "DELETE",
-      });
-      setMajorGroups((prev) => prev.filter((majorGroup) => majorGroup.id !== id));
+    const response = await callApi(`fuc/AcademicManagement/majorgroup/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response?.isSuccess === true) {
       toast.success("Major group removed successfully");
-    } catch (error) {
-      console.error("Error removing major group:", error);
+      fetchMajorGroupList();
     }
+    return response;
   };
 
   const getMajorsByMajorGroupId = async (majorGroupId: string) => {
     try {
-      const response = await callApi(`fuc/AcademicManagement/major/by-major-group/${majorGroupId}`, {
-        method: "GET",
-      });
+      const response = await callApi(
+        `fuc/AcademicManagement/major/by-major-group/${majorGroupId}`,
+        {
+          method: "GET",
+        }
+      );
 
-      if (!Array.isArray(response)) {
-        throw new Error("Invalid response format");
-      }
-
-      return response;
+      return response?.value;
     } catch (error) {
       console.error("Error fetching majors by major group ID:", error);
       throw error;
@@ -115,7 +114,14 @@ export const MajorGroupProvider = ({ children }: { children: React.ReactNode }) 
 
   return (
     <MajorGroupContext.Provider
-      value={{ majorGroups, fetchMajorGroupList, addMajorGroup, updateMajorGroup, removeMajorGroup, getMajorsByMajorGroupId }}
+      value={{
+        majorGroups,
+        fetchMajorGroupList,
+        addMajorGroup,
+        updateMajorGroup,
+        removeMajorGroup,
+        getMajorsByMajorGroupId,
+      }}
     >
       {children}
     </MajorGroupContext.Provider>

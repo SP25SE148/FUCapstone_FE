@@ -15,7 +15,7 @@ const formSchema = z.object({
   email: z.string()
     .email("Invalid email")
     .max(100, "Email cannot exceed 100 characters"),
-  userName: z.string()
+  fullName: z.string()
     .min(2, "User Name must have at least 2 characters"),
   campusId: z.string()
     .min(2, "Campus ID must have at least 2 characters"),
@@ -28,7 +28,7 @@ export default function ManuallyAdmin() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      userName: "",
+      fullName: "",
       campusId: "",
     },
   });
@@ -64,7 +64,7 @@ export default function ManuallyAdmin() {
             />
             <FormField
               control={form.control}
-              name="userName"
+              name="fullName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>User Name</FormLabel>
@@ -88,7 +88,7 @@ export default function ManuallyAdmin() {
                 </FormItem>
               )}
             />
-          </CardContent>
+          </CardContent> 
           <CardFooter>
             <Button className="w-full" type="submit">
               <CirclePlus />

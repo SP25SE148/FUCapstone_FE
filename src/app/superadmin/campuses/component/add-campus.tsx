@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CirclePlus } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -15,12 +16,13 @@ const formSchema = z.object({
   campusName: z.string().min(1, "Campus Name is required"),
   campusCode: z.string().min(1, "Campus Code is required"),
   address: z.string().min(1, "Address is required"),
-  phone: z.string().min(1, "Phone is required"),
+  phone: z.string().min(10, "Phone must be 10-12 characters").max(12, "Phone must be 10-12 characters"),
   email: z.string().email("Invalid email").min(1, "Email is required"),
 });
 
 export default function AddCampus() {
   const { addCampus } = useCampus();
+  const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,10 +49,30 @@ export default function AddCampus() {
       deletedAt: null,
     };
     await addCampus(data);
+    setOpen(false); // Close the dialog after adding campus
+    form.reset(); // Reset the form fields
+  }
+
+  function handleDialogClose() {
+    if (form.formState.isDirty) {
+      const confirmClose = window.confirm("You have unsaved changes. Are you sure you want to close?");
+      if (confirmClose) {
+        setOpen(false);
+        form.reset();
+      }
+    } else {
+      setOpen(false);
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      if (!isOpen) {
+        handleDialogClose();
+      } else {
+        setOpen(true);
+      }
+    }}>
       <DialogTrigger asChild>
         <Button className="bg-primary hover:bg-primary/90">
           <CirclePlus />

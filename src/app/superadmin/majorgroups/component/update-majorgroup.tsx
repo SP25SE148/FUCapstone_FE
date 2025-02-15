@@ -12,7 +12,7 @@ interface MajorGroup {
   name: string;
   description: string;
   isDeleted: boolean;
-  deletedAt: string | null;
+  deletedAt: string | null; 
 }
 
 export default function UpdateMajorGroup({ majorGroup, open, setOpen }: { majorGroup: MajorGroup, open: boolean, setOpen: (open: boolean) => void }) {
