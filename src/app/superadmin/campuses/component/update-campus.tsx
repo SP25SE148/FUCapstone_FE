@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from 'sonner';
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -52,6 +54,16 @@ export default function UpdateCampus({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (
+      values.campusName === campus.name &&
+      values.address === campus.address &&
+      values.phone === campus.phone &&
+      values.email === campus.email
+    ) {
+      toast("No changes detected");
+      return;
+    }
+
     const data = {
       id: campus.id,
       name: values.campusName,
@@ -66,11 +78,29 @@ export default function UpdateCampus({
       deletedAt: campus.deletedAt,
     };
     await updateCampus(data);
-    setOpen(false); 
+    setOpen(false);
+  }
+
+  function handleDialogClose() {
+    if (form.formState.isDirty) {
+      const confirmClose = window.confirm("You have unsaved changes. Are you sure you want to close?");
+      if (confirmClose) {
+        setOpen(false);
+        form.reset();
+      }
+    } else {
+      setOpen(false);
+    }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      if (!isOpen) {
+        handleDialogClose();
+      } else {
+        setOpen(true);
+      }
+    }}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Update campus</DialogTitle>

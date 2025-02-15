@@ -1,8 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useApi } from '@/hooks/use-api';
-import { toast } from 'sonner';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useApi } from "@/hooks/use-api";
+import { toast } from "sonner";
 
 interface Campus {
   id: string;
@@ -38,64 +38,56 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
         method: "GET",
       });
 
-      if (!Array.isArray(response)) {
-        throw new Error("Invalid response format");
-      }
-
-      setCampuses(response);
+      setCampuses(response?.value || []);
     } catch (error) {
+      toast.error("Error fetching supervisor data", {
+        description: `${error}`,
+      });
       console.error("Error fetching campus data:", error);
     }
   };
 
   const addCampus = async (data: Campus) => {
-    try {
-      const response = await callApi("fuc/AcademicManagement/campus", {
-        method: "POST",
-        body: data,
-      });
+    const response = await callApi("fuc/AcademicManagement/campus", {
+      method: "POST",
+      body: data,
+    });
 
-      if (response && response.id) {
-        setCampuses((prev) => [...prev, response]);
-        toast.success("Campus added successfully");
-      } else {
-        throw new Error("Failed to add campus");
-      }
-    } catch (error) {
-      console.error("Error adding campus:", error);
+    if (response?.isSuccess === true) {
+      // setCampuses((prev) => [...prev, response]);
+      toast.success("Campus added successfully");
+      fetchCampusList();
     }
+    return response;
   };
 
   const updateCampus = async (data: Campus) => {
-    try {
-      const response = await callApi("fuc/AcademicManagement/campus", {
-        method: "PUT",
-        body: data,
-      });
+    const response = await callApi("fuc/AcademicManagement/campus", {
+      method: "PUT",
+      body: data,
+    });
 
-      if (response && response.id) {
-        setCampuses((prev) =>
-          prev.map((campus) => (campus.id === data.id ? response : campus))
-        );
-        toast.success("Campus updated successfully");
-      } else {
-        throw new Error("Failed to update campus");
-      }
-    } catch (error) {
-      console.error("Error updating campus:", error);
+    if (response?.isSuccess === true) {
+      // setCampuses((prev) =>
+      //   prev.map((campus) => (campus.id === data.id ? response : campus))
+      // );
+      toast.success("Campus updated successfully");
+      fetchCampusList();
     }
+    return response;
   };
 
   const removeCampus = async (id: string) => {
-    try {
-      await callApi(`fuc/AcademicManagement/campus/${id}`, {
-        method: "DELETE",
-      });
-      setCampuses((prev) => prev.filter((campus) => campus.id !== id));
+    const respone = await callApi(`fuc/AcademicManagement/campus/${id}`, {
+      method: "DELETE",
+    });
+
+    if (respone?.isSuccess === true) {
+      // setCampuses((prev) => prev.filter((campus) => campus.id !== id));
       toast.success("Campus removed successfully");
-    } catch (error) {
-      console.error("Error removing campus:", error);
+      fetchCampusList();
     }
+    return respone;
   };
 
   useEffect(() => {
@@ -104,7 +96,13 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <CampusContext.Provider
-      value={{ campuses, fetchCampusList, addCampus, updateCampus, removeCampus }}
+      value={{
+        campuses,
+        fetchCampusList,
+        addCampus,
+        updateCampus,
+        removeCampus,
+      }}
     >
       {children}
     </CampusContext.Provider>

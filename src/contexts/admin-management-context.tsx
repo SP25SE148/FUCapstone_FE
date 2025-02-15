@@ -12,13 +12,13 @@ interface Admin {
   majorId: string;
   campusId: string;
   capstoneId: string;
-  userName: string;
+  fullName: string;
 }
 
 interface AdminContextProps {
   admins: Admin[];
   fetchAdminList: () => Promise<void>;
-  addAdmin: (data: { email: string; userName: string; campusId: string }) => Promise<void>;
+  addAdmin: (data: { email: string; fullName: string; campusId: string }) => Promise<void>;
 }
 
 const AdminContext = createContext<AdminContextProps | undefined>(undefined);
@@ -34,16 +34,16 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (!response.isSuccess) {
-        throw new Error(response.error.message || "Failed to fetch admins");
+        toast.error("Error fetching admin data", { description: response.error.message });
       }
 
-      setAdmins(response.value);
+      setAdmins(response?.value);
     } catch (error) {
       console.error("Error fetching admin data:", error);
     }
   };
 
-  const addAdmin = async (data: { email: string; userName: string; campusId: string }) => {
+  const addAdmin = async (data: { email: string; fullName: string; campusId: string }) => {
     try {
       const response = await callApi("identity/Users/admins", {
         method: "POST",

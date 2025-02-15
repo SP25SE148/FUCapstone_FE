@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useMajorGroup } from "@/contexts/majorgroup-context";
 
 export default function AddMajorGroup() {
-  const { addMajorGroup } = useMajorGroup();
+  const { addMajorGroup } = useMajorGroup(); 
   const [majorGroupId, setMajorGroupId] = useState("");
   const [majorGroupName, setMajorGroupName] = useState("");
   const [description, setDescription] = useState("");

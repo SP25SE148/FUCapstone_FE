@@ -83,12 +83,6 @@ export const columns: ColumnDef<Admin>[] = [
     ),
   },
   {
-    accessorKey: "userName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="User Name" />
-    ),
-  },
-  {
     id: "actions",
     cell: ({ row }) => {
       const admin = row.original;

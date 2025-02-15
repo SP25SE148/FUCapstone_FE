@@ -35,54 +35,51 @@ export const CapstoneProvider = ({ children }: { children: React.ReactNode }) =>
         method: "GET",
       });
 
-      if (!Array.isArray(response?.value)) {
-        throw new Error("Invalid response format");
-      }
-
-      setCapstones(response.value);
+      setCapstones(response?.value || []);
     } catch (error) {
+      toast.error("Error fetching capstone data", {
+        description: `${error}`,
+      });
       console.error("Error fetching capstone data:", error);
     }
   };
- 
+
   const addCapstone = async (data: Capstone) => {
-    try {
-      await callApi("fuc/AcademicManagement/capstone", {
-        method: "POST",
-        body: data,
-      });
-      setCapstones((prev) => [...prev, data]);
+    const response = await callApi("fuc/AcademicManagement/capstone", {
+      method: "POST",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
       toast.success("Capstone added successfully");
-    } catch (error) {
-      console.error("Error adding capstone:", error);
+      fetchCapstoneList();
     }
+    return response;
   };
 
   const updateCapstone = async (data: Capstone) => {
-    try {
-      await callApi("fuc/AcademicManagement/capstone", {
-        method: "PUT",
-        body: data,
-      });
-      setCapstones((prev) =>
-        prev.map((capstone) => (capstone.id === data.id ? data : capstone))
-      );
+    const response = await callApi("fuc/AcademicManagement/capstone", {
+      method: "PUT",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
       toast.success("Capstone updated successfully");
-    } catch (error) {
-      console.error("Error updating capstone:", error);
+      fetchCapstoneList();
     }
+    return response;
   };
 
   const removeCapstone = async (id: string) => {
-    try {
-      await callApi(`fuc/AcademicManagement/capstone/${id}`, {
-        method: "DELETE",
-      });
-      setCapstones((prev) => prev.filter((capstone) => capstone.id !== id));
+    const response = await callApi(`fuc/AcademicManagement/capstone/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response?.isSuccess === true) {
       toast.success("Capstone removed successfully");
-    } catch (error) {
-      console.error("Error removing capstone:", error);
+      fetchCapstoneList();
     }
+    return response;
   };
 
   useEffect(() => {
