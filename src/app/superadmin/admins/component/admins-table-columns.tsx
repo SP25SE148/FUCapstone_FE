@@ -23,7 +23,6 @@ export type Admin = {
   majorId: string;
   campusId: string;
   capstoneId: string;
-  userName: string;
 };
 
 export const columns: ColumnDef<Admin>[] = [

@@ -17,6 +17,7 @@ interface Capstone {
 
 interface CapstoneContextProps {
   capstones: Capstone[];
+  loading: boolean;
   fetchCapstoneList: () => Promise<void>;
   addCapstone: (data: Capstone) => Promise<void>;
   updateCapstone: (data: Capstone) => Promise<void>;
@@ -28,19 +29,25 @@ const CapstoneContext = createContext<CapstoneContextProps | undefined>(undefine
 export const CapstoneProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [capstones, setCapstones] = useState<Capstone[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchCapstoneList = async () => {
+    setLoading(true);
     try {
       const response = await callApi("fuc/AcademicManagement/capstone", {
         method: "GET",
       });
 
-      setCapstones(response?.value || []);
+      setTimeout(() => {
+        setCapstones(response?.value || []);
+        setLoading(false);
+      }, 1000); 
     } catch (error) {
       toast.error("Error fetching capstone data", {
         description: `${error}`,
       });
       console.error("Error fetching capstone data:", error);
+      setLoading(false);
     }
   };
 
@@ -88,7 +95,7 @@ export const CapstoneProvider = ({ children }: { children: React.ReactNode }) =>
 
   return (
     <CapstoneContext.Provider
-      value={{ capstones, fetchCapstoneList, addCapstone, updateCapstone, removeCapstone }}
+      value={{ capstones, loading, fetchCapstoneList, addCapstone, updateCapstone, removeCapstone }}
     >
       {children}
     </CapstoneContext.Provider>

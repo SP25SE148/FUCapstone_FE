@@ -21,7 +21,7 @@ const formSchema = z.object({
     .min(2, "Campus ID must have at least 2 characters"),
 });
 
-export default function ManuallyAdmin() {
+export default function ManuallyAdmin({ setOpen }: { setOpen: (open: boolean) => void }) {
   const { addAdmin } = useAdmin();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,7 +35,16 @@ export default function ManuallyAdmin() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    await addAdmin(values);
+    const adminData = {
+      ...values,
+      userId: "", 
+      userCode: "", 
+      majorId: "", 
+      capstoneId: "" 
+    };
+    await addAdmin(adminData);
+    setOpen(false);
+    form.reset();
   }
 
   return (

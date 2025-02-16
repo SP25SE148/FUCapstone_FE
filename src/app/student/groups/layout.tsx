@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
       <Tabs items={items} />
-      <div className="w-full min-h-[705px] bg-background border-2 rounded-lg shadow-lg flex justify-center overflow-y-auto">
+      <div className="w-full bg-background border-2 rounded-lg shadow-lg flex justify-center overflow-y-auto">
         {children}
       </div>
       <Toaster />

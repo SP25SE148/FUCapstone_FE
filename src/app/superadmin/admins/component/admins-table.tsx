@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/card";
 import AddAdmin from "@/app/superadmin/admins/component/add-admin";
 import { useAdmin } from "@/contexts/admin-management-context";
+import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 export default function AdminsTable() {
-  const { admins } = useAdmin();
+  const { admins, loading } = useAdmin();
 
   return (
     <Card>
@@ -27,18 +28,12 @@ export default function AdminsTable() {
         <AddAdmin />
       </div>
       <CardContent>
-        <DataTable columns={columns} data={admins} />
+        {loading ? (
+          <SkeletonLoader />
+        ) : (
+          <DataTable columns={columns} data={admins} />
+        )}
       </CardContent>
     </Card>
   );
-}
-
-{
-  /* <div className="flex items-center justify-between">
-                <CardHeader>
-                    <CardTitle className="font-semibold tracking-tight text-xl">Students</CardTitle>
-                    <CardDescription>Campus Hồ Chí Minh</CardDescription>
-                </CardHeader>
-                <AddStudent />
-            </div> */
 }

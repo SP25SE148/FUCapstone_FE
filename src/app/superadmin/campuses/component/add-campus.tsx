@@ -44,13 +44,13 @@ export default function AddCampus() {
       isDeleted: false,
       createdDate: new Date().toISOString(),
       updatedDate: null,
-      createdBy: "admin",
+      createdBy: "Super Admin",
       updatedBy: null,
       deletedAt: null,
     };
     await addCampus(data);
-    setOpen(false); // Close the dialog after adding campus
-    form.reset(); // Reset the form fields
+    setOpen(false); 
+    form.reset(); 
   }
 
   function handleDialogClose() {

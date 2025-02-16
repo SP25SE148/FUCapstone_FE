@@ -11,9 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddMajorGroup from "@/app/superadmin/majorgroups/component/add-majorgroup";
+import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 export default function MajorGroupTable() {
-  const { majorGroups } = useMajorGroup();
+  const { majorGroups, loading } = useMajorGroup();
 
   return (
     <Card>
@@ -29,7 +30,11 @@ export default function MajorGroupTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={majorGroups} />
+        {loading ? (
+          <SkeletonLoader />
+        ) : (
+          <DataTable columns={columns} data={majorGroups} />
+        )}
       </CardContent>
     </Card>
   );

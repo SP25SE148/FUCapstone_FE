@@ -23,6 +23,7 @@ interface Major {
 
 interface MajorGroupContextProps {
   majorGroups: MajorGroup[];
+  loading: boolean;
   fetchMajorGroupList: () => Promise<void>;
   addMajorGroup: (data: MajorGroup) => Promise<void>;
   updateMajorGroup: (data: MajorGroup) => Promise<void>;
@@ -41,15 +42,21 @@ export const MajorGroupProvider = ({
 }) => {
   const { callApi } = useApi();
   const [majorGroups, setMajorGroups] = useState<MajorGroup[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchMajorGroupList = async () => {
+    setLoading(true);
     try {
       const response = await callApi("fuc/AcademicManagement/majorgroup", {
         method: "GET",
       });
-      setMajorGroups(response?.value);
+      setTimeout(() => {
+        setMajorGroups(response?.value || []);
+        setLoading(false);
+      }, 1000); 
     } catch (error) {
       console.error("Error fetching major group data:", error);
+      setLoading(false);
     }
   };
 
@@ -60,7 +67,6 @@ export const MajorGroupProvider = ({
     });
 
     if (response?.isSuccess === true) {
-      // setMajorGroups((prev) => [...prev, data]);
       toast.success("Major group added successfully");
       fetchMajorGroupList();
     }
@@ -116,6 +122,7 @@ export const MajorGroupProvider = ({
     <MajorGroupContext.Provider
       value={{
         majorGroups,
+        loading,
         fetchMajorGroupList,
         addMajorGroup,
         updateMajorGroup,
