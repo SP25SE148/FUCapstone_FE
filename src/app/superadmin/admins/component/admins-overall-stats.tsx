@@ -1,11 +1,13 @@
 "use client";
 
-import { data } from "@/app/superadmin/admins/table-data"; 
 import OverallStats from "@/components/layout/overall-stats";
+import { useAdmin } from "@/contexts/admin-management-context";
 
 export default function AdminsOverallStats() {
+  const { admins } = useAdmin();
+
   const items = [
-    { title: "Total Admins", stat: data.length }
+    { title: "Total Admins", stat: admins.length }
   ];
 
   return (

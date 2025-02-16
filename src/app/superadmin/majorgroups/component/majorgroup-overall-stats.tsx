@@ -1,11 +1,17 @@
 "use client";
 
-import { majorData } from "@/app/superadmin/majorgroups/table-data"; 
+import { useMajorGroup } from "@/contexts/majorgroup-context";
 import OverallStats from "@/components/layout/overall-stats";
 
 export default function MajorGroupOverallStats() {
+  const { majorGroups } = useMajorGroup();
+  const activeMajorGroups = majorGroups.filter(majorGroups => !majorGroups.isDeleted);
+  const inactiveMajorGroups= majorGroups.filter(majorGroups => majorGroups.isDeleted);
+  
   const items = [
-    { title: "Total Major Groups", stat: majorData.length }
+    { title: "Total Major Groups", stat: majorGroups.length },
+    { title: "Active Major Groups", stat: activeMajorGroups.length },
+    { title: "Inactive Major Groups", stat: inactiveMajorGroups.length }
   ];
 
   return (

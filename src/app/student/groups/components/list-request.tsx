@@ -1,16 +1,19 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { CardContent, CardHeader } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { UserPlus, Users, Clock, Check, X } from "lucide-react";
 
 interface Request {
-  id: string
-  type: "sent" | "received"
-  from: string
-  to: string
-  status: "processing" | "accepted" | "rejected"
-  date: string
+  id: string;
+  type: "sent" | "received";
+  from: string;
+  to: string;
+  status: "processing" | "accepted" | "rejected";
+  date: string;
 }
 
 const requests: Request[] = [
@@ -46,86 +49,118 @@ const requests: Request[] = [
     status: "processing",
     date: "16/01/2025 - 23:01:20",
   },
-]
+];
 
 export function ListRequest() {
-  const sentRequests = requests.filter((r) => r.type === "sent")
-  const receivedRequests = requests.filter((r) => r.type === "received")
+  const sentRequests = requests.filter((r) => r.type === "sent");
+  const receivedRequests = requests.filter((r) => r.type === "received");
 
-  const getStatusColor = (status: Request["status"]) => {
+  const getStatusBadge = (status: Request["status"]) => {
     switch (status) {
       case "processing":
-        return "text-blue-500"
+        return (
+          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+            Processing
+          </Badge>
+        );
       case "accepted":
-        return "text-green-500"
+        return (
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            Accepted
+          </Badge>
+        );
       case "rejected":
-        return "text-red-500"
+        return (
+          <Badge variant="secondary" className="bg-red-100 text-red-800">
+            Rejected
+          </Badge>
+        );
       default:
-        return ""
+        return null;
     }
-  }
+  };
 
   return (
-    <div>
-      <CardHeader>
-        <h2 className="text-2xl font-semibold">List Request</h2>
+    <Card className="w-full shadow-lg">
+      <CardHeader className="border-b">
+        <h2 className="text-3xl font-bold text-primary">List Request</h2>
       </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="my-request">
+      <CardContent className="p-6">
+        <Tabs defaultValue="my-request" className="w-full">
           <TabsList className="mb-4">
             <TabsTrigger value="my-request">My Request</TabsTrigger>
-            <TabsTrigger value="group-request">Groups I&apos;ve Request</TabsTrigger>
+            <TabsTrigger value="group-request">
+              Groups I&apos;ve Request
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="my-request">
-            <div className="rounded-lg border">
-              <div className="grid grid-cols-[1fr,100px] gap-4 p-4 font-medium border-b">
-                <div>Request</div>
-                <div>Status</div>
-              </div>
-              <div className="overflow-y-auto max-h-[440px]">
-                {sentRequests.map((request) => (
-                  <div key={request.id} className="grid grid-cols-[1fr,100px] gap-4 p-4 items-center">
-                    <div>
-                      <p>Request to join the group to {request.to}</p>
-                      <p className="text-sm text-muted-foreground">{request.date}</p>
-                    </div>
-                    <div className={getStatusColor(request.status)}>
-                      {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="h-[440px] w-full rounded-md border p-4 overflow-y-auto">
+              {sentRequests.map((request) => (
+                <div key={request.id} className="mb-4 last:mb-0">
+                  <Card>
+                    <CardContent className="flex items-center justify-between p-4">
+                      <div className="flex items-center space-x-4">
+                        <Avatar>
+                          <AvatarFallback>{request.to[0]}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium">
+                            Request to join {request.to}'s group
+                          </p>
+                          <p className="text-xs text-muted-foreground flex items-center mt-1">
+                            <Clock className="mr-1 h-3 w-3" /> {request.date}
+                          </p>
+                        </div>
+                      </div>
+                      {getStatusBadge(request.status)}
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
             </div>
           </TabsContent>
           <TabsContent value="group-request">
-            <div className="rounded-lg border">
-              <div className="grid grid-cols-[1fr,200px] gap-4 p-4 font-medium border-b">
-                <div>Request</div>
-                <div>Actions</div>
-              </div>
-              <div className="overflow-y-auto max-h-[440px]">
-                {receivedRequests.map((request) => (
-                  <div key={request.id} className="grid grid-cols-[1fr,200px] gap-4 p-4 items-center">
-                    <div>
-                      <p>{request.from} invited you to join their group</p>
-                      <p className="text-sm text-muted-foreground">{request.date}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="default">
-                        Accept
-                      </Button>
-                      <Button variant="outline" className="border border-primary text-primary">
-                        Reject
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="h-[440px] w-full rounded-md border p-4 overflow-y-auto">
+              {receivedRequests.map((request) => (
+                <div key={request.id} className="mb-4 last:mb-0">
+                  <Card>
+                    <CardContent className="flex items-center justify-between p-4">
+                      <div className="flex items-center space-x-4">
+                        <Avatar>
+                          <AvatarFallback>{request.from[0]}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium">
+                            {request.from} invited you to join their group
+                          </p>
+                          <p className="text-xs text-muted-foreground flex items-center mt-1">
+                            <Clock className="mr-1 h-3 w-3" /> {request.date}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button
+                          size="sm"
+                          className="bg-primary text-white hover:bg-primary/90"
+                        >
+                          <Check className="mr-1 h-4 w-4" /> Accept
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-primary text-primary hover:bg-primary/10"
+                        >
+                          <X className="mr-1 h-4 w-4" /> Reject
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
             </div>
           </TabsContent>
         </Tabs>
       </CardContent>
-    </div>
-  )
+    </Card>
+  );
 }
-

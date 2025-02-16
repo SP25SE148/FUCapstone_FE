@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { CirclePlus } from "lucide-react";
-
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,8 +8,10 @@ import ManuallyAdmin from "@/app/superadmin/admins/component/add-admin/manually-
 import ImportAdmin from "@/app/superadmin/admins/component/add-admin/import-admin";
 
 export default function AddAdmin() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="m-6">
           <CirclePlus />
@@ -28,10 +30,10 @@ export default function AddAdmin() {
               <TabsTrigger value="import">Import</TabsTrigger>
             </TabsList>
             <TabsContent value="manually">
-              <ManuallyAdmin />
+              <ManuallyAdmin setOpen={setOpen} />
             </TabsContent>
             <TabsContent value="import">
-              <ImportAdmin /> 
+              <ImportAdmin />
             </TabsContent>
           </Tabs>
         </DialogHeader>

@@ -20,6 +20,7 @@ interface Campus {
 
 interface CampusContextProps {
   campuses: Campus[];
+  loading: boolean;
   fetchCampusList: () => Promise<void>;
   addCampus: (data: Campus) => Promise<void>;
   updateCampus: (data: Campus) => Promise<void>;
@@ -31,19 +32,25 @@ const CampusContext = createContext<CampusContextProps | undefined>(undefined);
 export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [campuses, setCampuses] = useState<Campus[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchCampusList = async () => {
+    setLoading(true);
     try {
       const response = await callApi("fuc/AcademicManagement/campus", {
         method: "GET",
       });
 
-      setCampuses(response?.value || []);
+      setTimeout(() => {
+        setCampuses(response?.value || []);
+        setLoading(false);
+      }, 1000);
     } catch (error) {
-      toast.error("Error fetching supervisor data", {
+      toast.error("Error fetching campus data", {
         description: `${error}`,
       });
       console.error("Error fetching campus data:", error);
+      setLoading(false);
     }
   };
 
@@ -54,7 +61,6 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     if (response?.isSuccess === true) {
-      // setCampuses((prev) => [...prev, response]);
       toast.success("Campus added successfully");
       fetchCampusList();
     }
@@ -68,9 +74,6 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     if (response?.isSuccess === true) {
-      // setCampuses((prev) =>
-      //   prev.map((campus) => (campus.id === data.id ? response : campus))
-      // );
       toast.success("Campus updated successfully");
       fetchCampusList();
     }
@@ -78,16 +81,15 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const removeCampus = async (id: string) => {
-    const respone = await callApi(`fuc/AcademicManagement/campus/${id}`, {
+    const response = await callApi(`fuc/AcademicManagement/campus/${id}`, {
       method: "DELETE",
     });
 
-    if (respone?.isSuccess === true) {
-      // setCampuses((prev) => prev.filter((campus) => campus.id !== id));
+    if (response?.isSuccess === true) {
       toast.success("Campus removed successfully");
       fetchCampusList();
     }
-    return respone;
+    return response;
   };
 
   useEffect(() => {
@@ -98,6 +100,7 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
     <CampusContext.Provider
       value={{
         campuses,
+        loading,
         fetchCampusList,
         addCampus,
         updateCampus,

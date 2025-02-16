@@ -1,8 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useApi } from '@/hooks/use-api';
-import { toast } from 'sonner';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useApi } from "@/hooks/use-api";
+import { toast } from "sonner";
 
 interface Admin {
   userId: string;
@@ -12,13 +12,13 @@ interface Admin {
   majorId: string;
   campusId: string;
   capstoneId: string;
-  fullName: string;
 }
 
 interface AdminContextProps {
   admins: Admin[];
+  loading: boolean;
   fetchAdminList: () => Promise<void>;
-  addAdmin: (data: { email: string; fullName: string; campusId: string }) => Promise<void>;
+  addAdmin: (data: Admin) => Promise<void>;
 }
 
 const AdminContext = createContext<AdminContextProps | undefined>(undefined);
@@ -26,39 +26,37 @@ const AdminContext = createContext<AdminContextProps | undefined>(undefined);
 export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [admins, setAdmins] = useState<Admin[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchAdminList = async () => {
+    setLoading(true);
     try {
       const response = await callApi("identity/Users/get-all-admin", {
         method: "GET",
       });
-
-      if (!response.isSuccess) {
-        toast.error("Error fetching admin data", { description: response.error.message });
-      }
-
-      setAdmins(response?.value);
+      setTimeout(() => {
+        setAdmins(response?.value || []);
+        setLoading(false);
+      }, 4000);
     } catch (error) {
-      console.error("Error fetching admin data:", error);
+      toast.error("Error fetching admin data", {
+        description: `${error}`,
+      });
+      setLoading(false);
     }
   };
 
-  const addAdmin = async (data: { email: string; fullName: string; campusId: string }) => {
-    try {
-      const response = await callApi("identity/Users/admins", {
-        method: "POST",
-        body: data,
-      });
+  const addAdmin = async (data: Admin) => {
+    const response = await callApi("identity/Users/admins", {
+      method: "POST",
+      body: data,
+    });
 
-      if (!response.isSuccess) {
-        throw new Error(response.error.message || "Failed to add admin");
-      }
-
-      setAdmins((prev) => [...prev, response.value]);
+    if (response?.isSuccess === true) {
       toast.success("Admin added successfully");
-    } catch (error) {
-      console.error("Error adding admin:", error);
+      fetchAdminList();
     }
+    return response;
   };
 
   useEffect(() => {
@@ -66,7 +64,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AdminContext.Provider value={{ admins, fetchAdminList, addAdmin }}>
+    <AdminContext.Provider value={{ admins, loading, fetchAdminList, addAdmin }}>
       {children}
     </AdminContext.Provider>
   );

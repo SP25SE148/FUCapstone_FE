@@ -1,22 +1,11 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { useState } from "react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,123 +15,115 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
-import { students } from "@/app/student/groups/types/student";
-import { Check, ChevronsUpDown, User2, X } from "lucide-react";
+} from "@/components/ui/alert-dialog"
+import { toast } from "sonner"
+import { students } from "@/app/student/groups/types/student"
+import { Check, ChevronsUpDown, User2, X, Users } from "lucide-react"
 
 export function CreateGroup() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  const [invitedStudents, setInvitedStudents] = useState<string[]>([]);
-  const [deleteDialog, setDeleteDialog] = useState<string | null>(null);
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
+  const [invitedStudents, setInvitedStudents] = useState<string[]>([])
+  const [deleteDialog, setDeleteDialog] = useState<string | null>(null)
 
   const currentUser = {
     name: "Nguyen Duc Thang",
-    major: "Software EngineEngineering",
+    major: "Software Engineering",
     campus: "Ho Chi Minh",
     semester: "Spring 25",
     capstone: "SEP490",
     groupCode: "FFFFFF",
-  };
+  }
 
   const filteredStudents = students.filter(
     (student) =>
       student.semester === currentUser.semester &&
       student.capstone === currentUser.capstone &&
       student.campus === currentUser.campus &&
-      !invitedStudents.includes(student.email)
-  );
+      !invitedStudents.includes(student.email),
+  )
 
   const handleInvite = () => {
     if (value && !invitedStudents.includes(value)) {
-      setInvitedStudents([...invitedStudents, value]);
-      setValue("");
-      setOpen(false);
-      toast.success("Invitation sent successfully!");
+      setInvitedStudents([...invitedStudents, value])
+      setValue("")
+      setOpen(false)
+      toast.success("Invitation sent successfully!")
     }
-  };
+  }
 
   const handleDelete = (email: string) => {
-    setInvitedStudents(invitedStudents.filter((e) => e !== email));
-    setDeleteDialog(null);
-    toast.success("Member removed successfully!");
-  };
+    setInvitedStudents(invitedStudents.filter((e) => e !== email))
+    setDeleteDialog(null)
+    toast.success("Member removed successfully!")
+  }
 
   return (
-    <div>
-      <CardHeader>
-        <h2 className="text-2xl font-semibold">Create Group</h2>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <Card className="border-primary">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarFallback>
-                    <User2 className="h-6 w-6" />
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-bold text-md">
-                    {currentUser.name} - Leader
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <p className="text-md font-bold">
-                  Group Code:{" "}
-                  <span className="font-medium ">{currentUser.groupCode}</span>
-                </p>
-              </div>
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-4 text-md">
-              <div>
-                <p className="font-bold">
-                  Major:{" "}
-                  <span className="font-normal ">{currentUser.major}</span>
-                </p>
-                <p className="font-bold">
-                  Campus:{" "}
-                  <span className="font-normal ">{currentUser.campus}</span>
-                </p>
-              </div>
-              <div>
-                <p className="font-bold">
-                  Semester:{" "}
-                  <span className="font-normal ">{currentUser.semester}</span>
-                </p>
-                <p className="font-bold">
-                  Capstone:{" "}
-                  <span className="font-normal ">{currentUser.capstone}</span>
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+    <div className="w-full bg-gradient-to-b from-primary/5 to-background p-6">
+      <Card className="w-full shadow-lg">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-primary">Create Group</h2>
+            <Button className="bg-primary text-white hover:bg-primary/90">Create Group</Button>
+          </div>
 
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-medium my-2">Invite Member</h3>
-            <div className="flex gap-2 w-full justify-between">
-              <div className="flex gap-2 w-3/5">
+          <div className="space-y-8">
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between border-b border-primary/20 pb-4 mb-4">
+                  <div className="flex items-center gap-4">
+                    <Avatar className="h-16 w-16 border-2 border-primary">
+                      <AvatarFallback className="bg-primary/10">
+                        <User2 className="h-8 w-8 text-primary" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-bold text-xl text-primary">{currentUser.name}</p>
+                      <p className="text-sm text-muted-foreground">Leader</p>
+                    </div>
+                  </div>
+                  <div className="bg-primary/10 px-4 py-2 rounded-full">
+                    <p className="text-sm font-medium text-primary">
+                      Group Code: <span className="font-bold">{currentUser.groupCode}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-6 text-sm">
+                  <div>
+                    <p className="font-medium text-muted-foreground">Major</p>
+                    <p className="font-semibold">{currentUser.major}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-muted-foreground">Campus</p>
+                    <p className="font-semibold">{currentUser.campus}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-muted-foreground">Semester</p>
+                    <p className="font-semibold">{currentUser.semester}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-muted-foreground">Capstone</p>
+                    <p className="font-semibold">{currentUser.capstone}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold flex items-center gap-2">
+                <Users className="h-5 w-5 text-primary" />
+                Invite Members
+              </h3>
+              <div className="flex gap-2 w-full">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="w-full justify-between"
-                    >
-                      {value
-                        ? value
-                        : "Enter the email of the student you want to invite"}
+                    <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
+                      {value ? value : "Enter the email of the student you want to invite"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent>
-                    <Command className="w-full">
+                  <PopoverContent className="w-full p-0">
+                    <Command>
                       <CommandInput placeholder="Search student email..." />
                       <CommandList>
                         <CommandEmpty>No student found.</CommandEmpty>
@@ -152,16 +133,12 @@ export function CreateGroup() {
                               key={student.email}
                               value={student.email}
                               onSelect={(currentValue) => {
-                                setValue(currentValue);
-                                setOpen(false);
+                                setValue(currentValue)
+                                setOpen(false)
                               }}
                             >
                               <Check
-                                className={`mr-2 h-4 w-4 ${
-                                  value === student.email
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                }`}
+                                className={`mr-2 h-4 w-4 ${value === student.email ? "opacity-100" : "opacity-0"}`}
                               />
                               {student.email}
                             </CommandItem>
@@ -171,66 +148,68 @@ export function CreateGroup() {
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <Button className="border border-primary bg-background text-primary hover:bg-muted" onClick={handleInvite}>Send request</Button>
+                <Button className="bg-primary text-white hover:bg-primary/90" onClick={handleInvite}>
+                  Send Invite
+                </Button>
               </div>
-              <Button className="bg-primary text-white">Create Group</Button>
             </div>
-          </div>
-        </div>
 
-        {invitedStudents.length > 0 && (
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">Students invited</h3>
-            <div className="space-y-2 overflow-y-auto max-h-64">
-              {invitedStudents.map((email) => (
-                <div
-                  key={email}
-                  className="flex items-center justify-between rounded-lg border p-4"
-                >
-                  <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarFallback>
-                        <User2 className="h-4 w-4" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <span>{email}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setDeleteDialog(email)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+            {invitedStudents.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold flex items-center gap-2">
+                  <Users className="h-5 w-5 text-primary" />
+                  Invited Students
+                </h3>
+                <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
+                  {invitedStudents.map((email) => (
+                    <Card key={email} className="bg-primary/5">
+                      <CardContent className="p-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback className="bg-primary/10">
+                              <User2 className="h-5 w-5 text-primary" />
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium">{email}</span>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setDeleteDialog(email)}
+                          className="text-destructive hover:text-destructive/90"
+                        >
+                          <X className="h-5 w-5" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
-        )}
+        </CardContent>
+      </Card>
 
-        <AlertDialog
-          open={!!deleteDialog}
-          onOpenChange={() => setDeleteDialog(null)}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This will remove the member from your group. This action cannot
-                be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => deleteDialog && handleDelete(deleteDialog)}
-              >
-                Remove
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </CardContent>
+      <AlertDialog open={!!deleteDialog} onOpenChange={() => setDeleteDialog(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove Member</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove this member from your group? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteDialog && handleDelete(deleteDialog)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
-  );
+  )
 }
+

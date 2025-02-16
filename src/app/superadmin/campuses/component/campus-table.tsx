@@ -11,9 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddCampus from "./add-campus";
+import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 export default function CampusTable() {
-  const { campuses } = useCampus();
+  const { campuses, loading } = useCampus();
 
   return (
     <Card>
@@ -29,7 +30,11 @@ export default function CampusTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={campuses} />
+        {loading ? (
+          <SkeletonLoader />
+        ) : (
+          <DataTable columns={columns} data={campuses} />
+        )}
       </CardContent>
     </Card>
   );

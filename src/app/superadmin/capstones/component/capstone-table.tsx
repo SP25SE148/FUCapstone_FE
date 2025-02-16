@@ -11,9 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddCapstone from "@/app/superadmin/capstones/component/add-capstone";
+import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 export default function CapstoneTable() {
-  const { capstones } = useCapstone();
+  const { capstones, loading } = useCapstone();
 
   return (
     <Card>
@@ -29,7 +30,11 @@ export default function CapstoneTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={capstones} />
+        {loading ? (
+          <SkeletonLoader />
+        ) : (
+          <DataTable columns={columns} data={capstones} />
+        )}
       </CardContent>
     </Card>
   );
