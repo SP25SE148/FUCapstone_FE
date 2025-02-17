@@ -32,7 +32,7 @@ export function CreateGroup() {
     campus: "Ho Chi Minh",
     semester: "Spring 25",
     capstone: "SEP490",
-    groupCode: "FFFFFF",
+    // groupCode: "FFFFFF",
   }
 
   const filteredStudents = students.filter(
@@ -82,11 +82,11 @@ export function CreateGroup() {
                       <p className="text-sm text-muted-foreground">Leader</p>
                     </div>
                   </div>
-                  <div className="bg-primary/10 px-4 py-2 rounded-full">
+                  {/* <div className="bg-primary/10 px-4 py-2 rounded-full">
                     <p className="text-sm font-medium text-primary">
                       Group Code: <span className="font-bold">{currentUser.groupCode}</span>
                     </p>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="grid grid-cols-2 gap-6 text-sm">
                   <div>
