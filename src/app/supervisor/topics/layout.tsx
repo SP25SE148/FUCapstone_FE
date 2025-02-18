@@ -7,6 +7,7 @@ import { Tabs } from "@/components/layout/app-tabs";
 const items = [
     { label: "Topics", href: "/supervisor/topics", },
     { label: "Register new topic", href: "/supervisor/topics/register-new-topic", },
+    { label: "Topic registration request", href: "/supervisor/topics/topic-registration-request", },
 ];
 
 export default function Layout({
