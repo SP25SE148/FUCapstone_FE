@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Check, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 
 interface Request {
   id: string;
@@ -52,6 +54,11 @@ const requests: Request[] = [
 ];
 
 export function ListRequest() {
+  const [openCancelDialog, setOpenCancelDialog] = useState(false);
+  const [openActionDialog, setOpenActionDialog] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+  const [actionType, setActionType] = useState<"accept" | "reject">("accept");
+
   const sentRequests = requests.filter((r) => r.type === "sent");
   const receivedRequests = requests.filter((r) => r.type === "received");
 
@@ -78,6 +85,29 @@ export function ListRequest() {
       default:
         return null;
     }
+  };
+
+  const handleCancelClick = (request: Request) => {
+    setSelectedRequest(request);
+    setOpenCancelDialog(true);
+  };
+
+  const handleActionClick = (request: Request, action: "accept" | "reject") => {
+    setSelectedRequest(request);
+    setActionType(action);
+    setOpenActionDialog(true);
+  };
+
+  const handleCancelConfirm = () => {
+    // Handle cancel request logic here
+    console.log("Request cancelled:", selectedRequest);
+    setOpenCancelDialog(false);
+  };
+
+  const handleActionConfirm = () => {
+    // Handle accept/reject request logic here
+    console.log(`${actionType === "accept" ? "Accepted" : "Rejected"} request:`, selectedRequest);
+    setOpenActionDialog(false);
   };
 
   return (
@@ -112,7 +142,19 @@ export function ListRequest() {
                           </p>
                         </div>
                       </div>
-                      {getStatusBadge(request.status)}
+                      <div className="flex items-center space-x-2">
+                        {getStatusBadge(request.status)}
+                        {request.status === "processing" && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="border-red-500 text-red-500 hover:bg-red-100"
+                            onClick={() => handleCancelClick(request)}
+                          >
+                            Cancel
+                          </Button>
+                        )}
+                      </div>
                     </CardContent>
                   </Card>
                 </div>
@@ -142,6 +184,7 @@ export function ListRequest() {
                         <Button
                           size="sm"
                           className="bg-primary text-white hover:bg-primary/90"
+                          onClick={() => handleActionClick(request, "accept")}
                         >
                           <Check className="mr-1 h-4 w-4" /> Accept
                         </Button>
@@ -149,6 +192,7 @@ export function ListRequest() {
                           size="sm"
                           variant="outline"
                           className="border-primary text-primary hover:bg-primary/10"
+                          onClick={() => handleActionClick(request, "reject")}
                         >
                           <X className="mr-1 h-4 w-4" /> Reject
                         </Button>
@@ -161,6 +205,46 @@ export function ListRequest() {
           </TabsContent>
         </Tabs>
       </CardContent>
+
+      {/* Cancel Confirmation Dialog */}
+      <Dialog open={openCancelDialog} onOpenChange={setOpenCancelDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancel Request</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to cancel this request?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenCancelDialog(false)}>
+              No
+            </Button>
+            <Button variant="destructive" onClick={handleCancelConfirm}>
+              Yes, Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Accept/Reject Confirmation Dialog */}
+      <Dialog open={openActionDialog} onOpenChange={setOpenActionDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{actionType === "accept" ? "Accept" : "Reject"} Request</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to {actionType} this request?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenActionDialog(false)}>
+              No
+            </Button>
+            <Button variant="default" onClick={handleActionConfirm}>
+              Yes, {actionType === "accept" ? "Accept" : "Reject"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }

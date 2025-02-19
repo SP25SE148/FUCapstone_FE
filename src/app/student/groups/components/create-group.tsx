@@ -1,11 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useState } from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,16 +26,22 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { toast } from "sonner"
-import { students } from "@/app/student/groups/types/student"
-import { Check, ChevronsUpDown, User2, X, Users } from "lucide-react"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { students } from "@/app/student/groups/types/student";
+import { Check, ChevronsUpDown, User2, X, Users } from "lucide-react";
+
+interface InvitedStudent {
+  email: string;
+  status: "processing" | "accepted" | "rejected";
+}
 
 export function CreateGroup() {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
-  const [invitedStudents, setInvitedStudents] = useState<string[]>([])
-  const [deleteDialog, setDeleteDialog] = useState<string | null>(null)
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const [invitedStudents, setInvitedStudents] = useState<InvitedStudent[]>([]);
+  const [deleteDialog, setDeleteDialog] = useState<string | null>(null);
 
   const currentUser = {
     name: "Nguyen Duc Thang",
@@ -33,30 +50,60 @@ export function CreateGroup() {
     semester: "Spring 25",
     capstone: "SEP490",
     // groupCode: "FFFFFF",
-  }
+  };
 
   const filteredStudents = students.filter(
     (student) =>
       student.semester === currentUser.semester &&
       student.capstone === currentUser.capstone &&
       student.campus === currentUser.campus &&
-      !invitedStudents.includes(student.email),
-  )
+      !invitedStudents.some((invited) => invited.email === student.email)
+  );
 
   const handleInvite = () => {
-    if (value && !invitedStudents.includes(value)) {
-      setInvitedStudents([...invitedStudents, value])
-      setValue("")
-      setOpen(false)
-      toast.success("Invitation sent successfully!")
+    if (value && !invitedStudents.some((invited) => invited.email === value)) {
+      setInvitedStudents([
+        ...invitedStudents,
+        { email: value, status: "processing" },
+      ]);
+      setValue("");
+      setOpen(false);
+      toast.success("Invitation sent successfully!");
     }
-  }
+  };
 
   const handleDelete = (email: string) => {
-    setInvitedStudents(invitedStudents.filter((e) => e !== email))
-    setDeleteDialog(null)
-    toast.success("Member removed successfully!")
-  }
+    setInvitedStudents(
+      invitedStudents.filter((invited) => invited.email !== email)
+    );
+    setDeleteDialog(null);
+    toast.success("Member removed successfully!");
+  };
+
+  const getStatusBadge = (status: InvitedStudent["status"]) => {
+    switch (status) {
+      case "processing":
+        return (
+          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+            Processing
+          </Badge>
+        );
+      case "accepted":
+        return (
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            Accepted
+          </Badge>
+        );
+      case "rejected":
+        return (
+          <Badge variant="secondary" className="bg-red-100 text-red-800">
+            Rejected
+          </Badge>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="w-full bg-gradient-to-b from-primary/5 to-background p-6">
@@ -64,7 +111,9 @@ export function CreateGroup() {
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-primary">Create Group</h2>
-            <Button className="bg-primary text-white hover:bg-primary/90">Create Group</Button>
+            <Button className="bg-primary text-white hover:bg-primary/90">
+              Create Group
+            </Button>
           </div>
 
           <div className="space-y-8">
@@ -78,7 +127,9 @@ export function CreateGroup() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-bold text-xl text-primary">{currentUser.name}</p>
+                      <p className="font-bold text-xl text-primary">
+                        {currentUser.name}
+                      </p>
                       <p className="text-sm text-muted-foreground">Leader</p>
                     </div>
                   </div>
@@ -98,11 +149,15 @@ export function CreateGroup() {
                     <p className="font-semibold">{currentUser.campus}</p>
                   </div>
                   <div>
-                    <p className="font-medium text-muted-foreground">Semester</p>
+                    <p className="font-medium text-muted-foreground">
+                      Semester
+                    </p>
                     <p className="font-semibold">{currentUser.semester}</p>
                   </div>
                   <div>
-                    <p className="font-medium text-muted-foreground">Capstone</p>
+                    <p className="font-medium text-muted-foreground">
+                      Capstone
+                    </p>
                     <p className="font-semibold">{currentUser.capstone}</p>
                   </div>
                 </div>
@@ -117,8 +172,15 @@ export function CreateGroup() {
               <div className="flex gap-2 w-full">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-                      {value ? value : "Enter the email of the student you want to invite"}
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full justify-between"
+                    >
+                      {value
+                        ? value
+                        : "Enter the email of the student you want to invite"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -133,12 +195,16 @@ export function CreateGroup() {
                               key={student.email}
                               value={student.email}
                               onSelect={(currentValue) => {
-                                setValue(currentValue)
-                                setOpen(false)
+                                setValue(currentValue);
+                                setOpen(false);
                               }}
                             >
                               <Check
-                                className={`mr-2 h-4 w-4 ${value === student.email ? "opacity-100" : "opacity-0"}`}
+                                className={`mr-2 h-4 w-4 ${
+                                  value === student.email
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                }`}
                               />
                               {student.email}
                             </CommandItem>
@@ -148,7 +214,10 @@ export function CreateGroup() {
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <Button className="bg-primary text-white hover:bg-primary/90" onClick={handleInvite}>
+                <Button
+                  className="bg-primary text-white hover:bg-primary/90"
+                  onClick={handleInvite}
+                >
                   Send Invite
                 </Button>
               </div>
@@ -161,7 +230,7 @@ export function CreateGroup() {
                   Invited Students
                 </h3>
                 <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
-                  {invitedStudents.map((email) => (
+                  {invitedStudents.map(({ email, status }) => (
                     <Card key={email} className="bg-primary/5">
                       <CardContent className="p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -172,14 +241,18 @@ export function CreateGroup() {
                           </Avatar>
                           <span className="font-medium">{email}</span>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setDeleteDialog(email)}
-                          className="text-destructive hover:text-destructive/90"
-                        >
-                          <X className="h-5 w-5" />
-                        </Button>
+
+                        <div className="flex items-center gap-2">
+                          {getStatusBadge(status)}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setDeleteDialog(email)}
+                            className="text-destructive hover:text-destructive/90"
+                          >
+                            <X className="h-5 w-5" />
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
@@ -190,12 +263,16 @@ export function CreateGroup() {
         </CardContent>
       </Card>
 
-      <AlertDialog open={!!deleteDialog} onOpenChange={() => setDeleteDialog(null)}>
+      <AlertDialog
+        open={!!deleteDialog}
+        onOpenChange={() => setDeleteDialog(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Member</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove this member from your group? This action cannot be undone.
+              Are you sure you want to remove this member from your group? This
+              action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -210,6 +287,5 @@ export function CreateGroup() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }
-
