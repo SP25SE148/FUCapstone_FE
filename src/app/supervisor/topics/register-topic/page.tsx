@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card"
 
-export default function RegisterNewTopicPage() {
+export default function RegisterTopicPage() {
     return (
         <Card className="min-h-[calc(100vh-60px)]">
             <CardHeader>
