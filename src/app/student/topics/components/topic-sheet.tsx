@@ -14,7 +14,7 @@ interface TopicSheetProps {
 export default function TopicSheet({ topic, open, onClose }: TopicSheetProps) {
   return (
     <Sheet open={open} onOpenChange={onClose}>
-      <SheetContent className="w-1/2 sm:max-w-[50%]">
+      <SheetContent className="w-1/2 sm:max-w-[50%] overflow-y-auto">
         <SheetHeader className="mb-6">
           <SheetTitle>{topic.enName}</SheetTitle>
           <SheetDescription>View detailed information about the selected topic</SheetDescription>
