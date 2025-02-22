@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Tabs } from "@/components/layout/app-tabs";
+import { StudentGroupProvider } from "@/contexts/student-group-context";
 
 const items = [
   { label: "My Group", href: "/student/groups" },
@@ -11,9 +12,11 @@ const items = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-2">
-      <Tabs items={items} />
-      {children}
-    </div>
+    <StudentGroupProvider>
+      <div className="flex flex-col gap-2">
+        <Tabs items={items} />
+        {children}
+      </div>
+    </StudentGroupProvider>
   );
 }

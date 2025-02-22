@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User2, X, Users, CirclePlus, Send, MailPlus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog";
+import { useStudentProfile } from "@/contexts/student-profile-context";
 
 interface InvitedStudent {
   email: string;
@@ -24,7 +25,7 @@ export function CreateGroup() {
   const [deleteDialog, setDeleteDialog] = useState<string | null>(null);
 
   const [isInGroup, setIsInGroup] = useState(false);
-
+  const { studentProfile } = useStudentProfile();
   const currentUser = {
     name: "Nguyen Duc Thang",
     major: "Software Engineering",
@@ -33,6 +34,8 @@ export function CreateGroup() {
     capstone: "SEP490",
     // groupCode: "FFFFFF",
   };
+
+  console.log(studentProfile);
 
   const filteredStudents = students.filter(
     (student) =>
@@ -86,7 +89,7 @@ export function CreateGroup() {
     }
   };
 
-  if (!isInGroup) {
+  if (!studentProfile?.isHaveBeenJoinGroup) {
     return (
       <Card className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-gradient-to-tr from-primary/20 to-background">
         <div className="flex flex-col items-center justify-center gap-8">
