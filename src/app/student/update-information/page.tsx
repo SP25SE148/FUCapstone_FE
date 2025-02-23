@@ -8,22 +8,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { useStudentProfile } from "@/contexts/student-profile-context";
 
-const businessAreas = ["Finance", "IT", "Healthcare", "Education", "Marketing"];
-const technicalAreas = ["NodeJS", ".Net", "Java", "Python", "React"];
-
 export default function StudentUpdateForm() {
-  const { studentProfile, updateStudentProfile } = useStudentProfile();
-  const [overall, setOverall] = useState("");
+  const { studentProfile, businessAreas, fetchBusinessArea, updateStudentProfile } = useStudentProfile();
   const [businessArea, setBusinessArea] = useState("");
-  const [technicalArea, setTechnicalArea] = useState<string[]>([]);
+  const [mark, setMark] = useState<number>(0);
   const [fullName, setFullName] = useState("");
   const [campusName, setCampusName] = useState("");
   const [email, setEmail] = useState("");
-  const router = useRouter();
 
   useEffect(() => {
     if (studentProfile) {
@@ -31,23 +25,23 @@ export default function StudentUpdateForm() {
       setCampusName(studentProfile.campusName);
       setEmail(studentProfile.email);
       setBusinessArea(studentProfile.businessArea);
-      setTechnicalArea(studentProfile.studentExpertises);
+      setMark(studentProfile.mark);
     }
   }, [studentProfile]);
 
-  const handleTechnicalAreaChange = (area: string) => {
-    setTechnicalArea((prev) =>
-      prev.includes(area) ? prev.filter((item) => item !== area) : [...prev, area]
-    );
-  };
+  useEffect(() => {
+    fetchBusinessArea();
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateStudentProfile({ businessArea, studentExpertises: technicalArea });
-    router.push("/student/home");
+    const selectedBusinessArea = businessAreas.find(area => area.name === businessArea);
+    if (selectedBusinessArea) {
+      await updateStudentProfile({ businessAreaId: selectedBusinessArea.id, mark });
+    }
   };
 
-  const isFormValid = businessArea && technicalArea.length > 0;
+  const isFormValid = businessArea && mark >= 0 && mark <= 10;
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
@@ -89,16 +83,6 @@ export default function StudentUpdateForm() {
                 <Input id="email" value={email} readOnly />
               </div>
             </div>
-            {/* <div className="space-y-2">
-              <Label htmlFor="overall">Overall Score</Label>
-              <Input
-                id="overall"
-                value={overall}
-                onChange={(e) => setOverall(e.target.value)}
-                maxLength={10}
-                placeholder="Enter your overall score"
-              />
-            </div> */}
             <div className="space-y-2">
               <Label htmlFor="businessArea">
                 Business Area <span className="text-red-500">*</span>
@@ -109,29 +93,27 @@ export default function StudentUpdateForm() {
                 </SelectTrigger>
                 <SelectContent>
                   {businessAreas.map((area) => (
-                    <SelectItem key={area} value={area}>
-                      {area}
+                    <SelectItem key={area.id} value={area.name}>
+                      {area.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="technicalArea">
-                Technical Area <span className="text-red-500">*</span>
+              <Label htmlFor="mark">
+                Mark <span className="text-red-500">*</span>
               </Label>
-              <div className="grid grid-cols-2 gap-4">
-                {technicalAreas.map((area) => (
-                  <div key={area} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={area}
-                      checked={technicalArea.includes(area)}
-                      onCheckedChange={() => handleTechnicalAreaChange(area)}
-                    />
-                    <Label htmlFor={area}>{area}</Label>
-                  </div>
-                ))}
-              </div>
+              <Input
+                id="mark"
+                type="number"
+                value={mark}
+                onChange={(e) => setMark(Number(e.target.value))}
+                min={0}
+                max={10}
+                step={0.1}
+                className="w-full"
+              />
             </div>
             <Button type="submit" className="w-full" disabled={!isFormValid}>
               Update Information
