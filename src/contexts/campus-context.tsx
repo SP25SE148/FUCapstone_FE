@@ -73,7 +73,7 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
       body: data,
     });
 
-    if (response?.isSuccess === true) {
+    if (response?.isSuccess === true) { 
       toast.success("Campus updated successfully");
       fetchCampusList();
     }
