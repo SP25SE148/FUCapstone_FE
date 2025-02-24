@@ -3,16 +3,17 @@
 import Link from "next/link";
 import { toast } from "sonner";
 import { useState } from "react";
+import { User2, X, Users, CirclePlus, Send } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { students } from "@/app/student/groups/types/student";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User2, X, Users, CirclePlus, Send, MailPlus } from "lucide-react";
+import InviteMember from "../(my-group)/components/invite-member";
+import { useStudentGroup } from "@/contexts/student-group-context";
+import { useStudentProfile } from "@/contexts/student-profile-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog";
-import { useStudentProfile } from "@/contexts/student-profile-context";
 
 interface InvitedStudent {
   email: string;
@@ -35,6 +36,7 @@ export function CreateGroup() {
     // groupCode: "FFFFFF",
   };
 
+  const { createGroup, inviteMember, getGroupMemberReq } = useStudentGroup();
   console.log(studentProfile);
 
   const filteredStudents = students.filter(
@@ -89,6 +91,13 @@ export function CreateGroup() {
     }
   };
 
+  const handleCreateGroup = () => {
+    createGroup();
+  };
+
+  const res: any = getGroupMemberReq();
+  console.log(res);
+
   if (!studentProfile?.isHaveBeenJoinGroup) {
     return (
       <Card className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-gradient-to-tr from-primary/20 to-background">
@@ -104,7 +113,7 @@ export function CreateGroup() {
           </div>
           <Button
             className="transition-all hover:scale-105"
-            onClick={() => { setIsInGroup(true) }}
+            onClick={handleCreateGroup}
           >
             <CirclePlus />
             CREATE GROUP
@@ -180,23 +189,7 @@ export function CreateGroup() {
               </Card>
 
               {/* Invite member */}
-              <div className="space-y-4">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <MailPlus className="size-4 text-primary" />
-                  Invite Member(s)
-                </h3>
-                <div className="flex w-full items-center space-x-2">
-                  <Input
-                    className="flex-1"
-                    type="email"
-                    placeholder="Enter the email of the student you want to invite"
-                  />
-                  <Button type="submit" variant={"outline"} className="border-primary text-primary hover:bg-primary hover:text-background">
-                    <MailPlus className="size-4" />
-                    Invite
-                  </Button>
-                </div>
-              </div>
+              <InviteMember />
 
               {/* List invited */}
               {invitedStudents.length > 0 && (

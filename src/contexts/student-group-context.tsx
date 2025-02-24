@@ -26,7 +26,9 @@ interface Group {
 interface StudentGroupContextType {
   groupInfo: Group | null;
   fetchGroupInfo: () => Promise<void>;
-  createGroup: (data: any) => Promise<void>;
+  getGroupMemberReq: () => Promise<void>;
+  createGroup: () => Promise<void>;
+  inviteMember: (data: any) => Promise<void>;
 }
 
 const StudentGroupContext = createContext<StudentGroupContextType | undefined>(undefined);
@@ -48,20 +50,42 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
-  const createGroup = async (data: any) => {
+  const createGroup = async () => {
     const response = await callApi("fuc/Group", {
       method: "POST",
-      body: data,
     });
     if (response?.isSuccess === true) {
       toast.success("Create group successfully")
-      fetchGroupInfo();
+      // fetchGroupInfo();
     }
     return response;
   };
 
+  const inviteMember = async (data: any) => {
+    const response = await callApi("fuc/Group/add-member", {
+      method: "POST",
+      body: data
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Send invitation successfully")
+      // fetchGroupInfo();
+    }
+    return response;
+  };
+
+  const getGroupMemberReq = async () => {
+    const response = await callApi("fuc/Group/student/get-group-member-request", {
+      method: "GET",
+    });
+    if (response?.isSuccess === true) {
+      toast.success("getGroupMemberReq successfully")
+      // fetchGroupInfo();
+    }
+    return response.value;
+  };
+
   return (
-    <StudentGroupContext.Provider value={{ groupInfo, fetchGroupInfo, createGroup }}>
+    <StudentGroupContext.Provider value={{ groupInfo, fetchGroupInfo, createGroup, inviteMember, getGroupMemberReq }}>
       {children}
     </StudentGroupContext.Provider>
   );
