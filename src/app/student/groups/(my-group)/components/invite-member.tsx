@@ -10,9 +10,8 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 
 const formSchema = z.object({
     email: z.string()
-        .email("Email không hợp lệ")
-        .max(100, "Email không được quá 100 ký tự"),
-
+        .email("Email is not in correct format.")
+        .max(100, "Email is too long."),
 });
 
 export default function InviteMember() {
