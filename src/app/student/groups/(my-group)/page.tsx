@@ -1,7 +1,7 @@
-import { CreateGroup } from "@/app/student/groups/components/create-group"
+import MyGroup from "./components/my-group"
 
 export default function MyGroupPage() {
   return (
-    <CreateGroup />
+    <MyGroup />
   )
 }

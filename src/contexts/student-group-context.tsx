@@ -1,32 +1,40 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "./auth-context";
-import { useApi } from "../hooks/use-api";
 import { toast } from "sonner";
+import React, { createContext, useContext, useEffect, useState } from "react";
+
+import { useApi } from "../hooks/use-api";
+
+interface Member {
+  id: string;
+  groupId: string;
+  studentId: string;
+  studentFullName: string;
+  studentEmail: string;
+  isLeader: boolean;
+  status: string;
+}
 
 interface Group {
   id: string;
-  fullName: string;
-  majorId: string;
-  majorName: string;
-  capstoneId: string;
-  capstoneName: string;
-  campusId: string;
   campusName: string;
-  email: string;
-  isEligible: boolean;
+  semesterName: string;
+  majorName: string;
+  capstoneName: string;
+  groupCode: string;
+  topicCode: string;
+  groupMemberList: Member[];
   status: string;
-  businessArea: string;
-  studentExpertises: string[];
-  isHaveBeenJoinGroup: boolean;
 }
 
 interface StudentGroupContextType {
   groupInfo: Group | null;
+  createGroup: () => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
-  createGroup: (data: any) => Promise<void>;
+  getGroupMemberReq: () => Promise<void>;
+  inviteMember: (data: any) => Promise<void>;
+  registerGroup: (groupId: string) => Promise<void>;
+  updateStatusInvitation: (data: any) => Promise<void>;
 }
 
 const StudentGroupContext = createContext<StudentGroupContextType | undefined>(undefined);
@@ -37,7 +45,7 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const fetchGroupInfo = async () => {
     try {
-      const response = await callApi("fuc/Group", {
+      const response = await callApi("fuc/Group/get-by-student-id", {
         method: "GET",
       });
       setGroupInfo(response?.value);
@@ -48,10 +56,9 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
-  const createGroup = async (data: any) => {
+  const createGroup = async () => {
     const response = await callApi("fuc/Group", {
       method: "POST",
-      body: data,
     });
     if (response?.isSuccess === true) {
       toast.success("Create group successfully")
@@ -60,8 +67,66 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return response;
   };
 
+  const inviteMember = async (data: any) => {
+    const response = await callApi("fuc/Group/add-member", {
+      method: "POST",
+      body: data
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Send invitation successfully")
+      fetchGroupInfo();
+    }
+    return response;
+  };
+
+  const updateStatusInvitation = async (data: any) => {
+    const response = await callApi("fuc/Group/update-group-member-status", {
+      method: "PUT",
+      body: data
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Update status invitation successfully")
+      fetchGroupInfo();
+    }
+    return response;
+  };
+
+  const registerGroup = async (groupId: string) => {
+    const response = await callApi(`fuc/Group/${groupId}`, {
+      method: "PUT",
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Register group successfully")
+      fetchGroupInfo();
+    }
+    return response;
+  };
+
+  const getGroupMemberReq = async () => {
+    try {
+      const response = await callApi("fuc/Group/student/get-group-member-request", {
+        method: "GET",
+      });
+      setGroupInfo(response?.value);
+    } catch (error) {
+      toast.error("Error fetching group info", {
+        description: `${error}`
+      });
+    }
+    const response = await callApi("fuc/Group/student/get-group-member-request", {
+      method: "GET",
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Get re successfully")
+    }
+    return response.value;
+  };
+  useEffect(() => {
+    fetchGroupInfo();
+  }, []);
+
   return (
-    <StudentGroupContext.Provider value={{ groupInfo, fetchGroupInfo, createGroup }}>
+    <StudentGroupContext.Provider value={{ groupInfo, fetchGroupInfo, createGroup, inviteMember, getGroupMemberReq, updateStatusInvitation, registerGroup }}>
       {children}
     </StudentGroupContext.Provider>
   );
