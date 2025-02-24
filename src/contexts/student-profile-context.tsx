@@ -124,11 +124,6 @@ export const StudentProfileProvider: React.FC<{
       await fetchStudentProfile();
     };
     loadProfile();
-    if (studentProfile) {
-      if (studentProfile.businessArea === "" && studentProfile.mark === 0) {
-        router.push("/student/update-information");
-      }
-    }
   }, [user]);
 
   useEffect(() => {
