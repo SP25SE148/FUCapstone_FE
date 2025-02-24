@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "./auth-context";
 import { useApi } from "../hooks/use-api";
 import { toast } from "sonner";
@@ -50,6 +50,7 @@ export const StudentProfileProvider: React.FC<{
   const { user } = useAuth();
   const { callApi } = useApi();
   const router = useRouter();
+  const pathname = usePathname();
   const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(
     null
   );
@@ -66,11 +67,6 @@ export const StudentProfileProvider: React.FC<{
 
         if (response?.isSuccess) {
           setStudentProfile(response.value);
-          if (!response.value.businessArea) {
-            router.push("/student/update-information");
-          } else {
-            router.push("/student/home");
-          }
         } else {
           throw new Error(
             response?.error?.message || "Failed to fetch student profile"
@@ -118,13 +114,25 @@ export const StudentProfileProvider: React.FC<{
     if (response?.isSuccess) {
       toast.success("Profile updated successfully");
       router.push("/student/home");
+      fetchStudentProfile();
     }
     return response;
   };
 
   useEffect(() => {
-    fetchStudentProfile();
+    const loadProfile = async () => {
+      await fetchStudentProfile();
+    };
+    loadProfile();
   }, [user]);
+
+  useEffect(() => {
+    if (studentProfile) {
+      if (studentProfile.businessArea === "" && studentProfile.mark === 0) {
+        router.push("/student/update-information");
+      }
+    }
+  }, [studentProfile, router, pathname]);
 
   return (
     <StudentProfileContext.Provider
