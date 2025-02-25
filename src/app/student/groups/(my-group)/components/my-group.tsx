@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
 import { useState } from "react";
 import { User2, X, Users, Send, BookUser } from "lucide-react";
 
@@ -16,10 +15,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog";
 
 export default function MyGroup() {
-    const { studentProfile } = useStudentProfile();
+    const { studentProfile, loading } = useStudentProfile();
     const [openDelete, setOpenDelete] = useState<boolean>(false);
     const [deleteInfo, setDeleteInfo] = useState<{} | null>({});
-    const { groupInfo, updateStatusInvitation } = useStudentGroup();
+    const { groupInfo, updateStatusInvitation, registerGroup } = useStudentGroup();
     const leaderInfo = groupInfo?.groupMemberList?.find((x) => x.isLeader == true)
     const memberList = groupInfo?.groupMemberList?.filter((x) => x.isLeader == false)
 
@@ -27,7 +26,6 @@ export default function MyGroup() {
         const res: any = await updateStatusInvitation(deleteInfo);
         if (res?.isSuccess) {
             setDeleteInfo(null);
-            toast.success("Member removed successfully!");
         }
     };
 
@@ -35,25 +33,25 @@ export default function MyGroup() {
         switch (status) {
             case "Pending":
                 return (
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                    <Badge variant="secondary" className="m-6 p-2 text-sm select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
                         Pending
                     </Badge>
                 );
             case "Rejected":
                 return (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge variant="secondary" className="m-6 p-2 text-sm select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
                         Rejected
                     </Badge>
                 );
             case "InProgress":
                 return (
-                    <Badge variant="secondary" className="bg-red-100 text-red-800">
+                    <Badge variant="secondary" className="m-6 p-2 text-sm select-none bg-sky-200 text-sky-800 hover:bg-sky-200">
                         In Progress
                     </Badge>
                 );
             case "Deleted":
                 return (
-                    <Badge variant="secondary" className="bg-red-100 text-red-800">
+                    <Badge variant="secondary" className="m-6 p-2 text-sm select-none bg-red-200 text-red-800 hover:bg-red-200">
                         Deleted
                     </Badge>
                 );
@@ -66,31 +64,31 @@ export default function MyGroup() {
         switch (status) {
             case "UnderReview":
                 return (
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                    <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
                         Under Review
                     </Badge>
                 );
             case "Accepted":
                 return (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
                         Accepted
                     </Badge>
                 );
             case "Rejected":
                 return (
-                    <Badge variant="secondary" className="bg-red-100 text-red-800">
+                    <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
                         Rejected
                     </Badge>
                 );
             case "LeftGroup":
                 return (
-                    <Badge variant="secondary" className="bg-red-100 text-red-800">
+                    <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
                         Left Group
                     </Badge>
                 );
             case "Cancelled":
                 return (
-                    <Badge variant="secondary" className="bg-red-100 text-red-800">
+                    <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
                         Cancelled
                     </Badge>
                 );
@@ -100,13 +98,16 @@ export default function MyGroup() {
     };
 
     const handleRegisterGroup = () => {
-
+        registerGroup(groupInfo?.id || "");
     };
 
-    if (!studentProfile?.isHaveBeenJoinGroup) {
-        return <CreateGroup />
+    if (loading) {
+        return <MyGroup.Loading />
     } else {
-        return (
+        return !studentProfile?.isHaveBeenJoinGroup
+            ?
+            <CreateGroup />
+            :
             <>
                 <Card className="min-h-[calc(100vh-60px)] bg-gradient-to-tr from-primary/5 to-background">
                     {/* Header */}
@@ -115,13 +116,16 @@ export default function MyGroup() {
                             <CardTitle className="font-semibold tracking-tight text-xl text-primary">My group</CardTitle>
                             <CardDescription>Information about my group</CardDescription>
                         </CardHeader>
-                        <Button
-                            className="m-6 transition-all hover:scale-105"
-                            onClick={handleRegisterGroup}
-                        >
-                            <Send />
-                            REGISTER GROUP
-                        </Button>
+                        {getGroupStatusBadge(groupInfo?.status || "")}
+                        {studentProfile?.id == leaderInfo?.studentId && groupInfo?.status == "Pending" &&
+                            <Button
+                                className="m-6 transition-all hover:scale-105"
+                                onClick={handleRegisterGroup}
+                            >
+                                <Send />
+                                REGISTER GROUP
+                            </Button>
+                        }
                     </div>
 
                     {/* Body */}
@@ -150,11 +154,7 @@ export default function MyGroup() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-4 gap-6 text-sm">
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-muted-foreground">Group Status</p>
-                                                {getGroupStatusBadge(groupInfo?.status || "")}
-                                            </div>
+                                        <div className="grid grid-cols-3 gap-6 text-sm">
                                             <div className="space-y-2">
                                                 <p className="font-medium text-muted-foreground">Group Code</p>
                                                 <p className="pl-2 font-semibold">{groupInfo?.groupCode}</p>
@@ -185,7 +185,7 @@ export default function MyGroup() {
                             </div>
 
                             {/* Invite member */}
-                            <InviteMember />
+                            {studentProfile?.id == leaderInfo?.studentId && groupInfo?.status == "Pending" && <InviteMember />}
 
                             {/* List invited */}
                             {groupInfo?.groupMemberList && groupInfo?.groupMemberList?.length > 0 && (
@@ -226,7 +226,7 @@ export default function MyGroup() {
                                                     </div>
                                                     <div className="flex items-center gap-2">
                                                         {getMemberStatusBadge(member?.status)}
-                                                        {member?.status == "UnderReview" && <Button
+                                                        {studentProfile?.id == leaderInfo?.studentId && member?.status == "UnderReview" && <Button
                                                             variant="ghost"
                                                             size="icon"
                                                             onClick={() => {
@@ -278,6 +278,14 @@ export default function MyGroup() {
                     </AlertDialogContent>
                 </AlertDialog>
             </>
-        );
+            ;
     }
+}
+
+MyGroup.Loading = () => {
+    return (
+        <Card className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-gradient-to-tr from-primary/20 to-background">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
+        </Card>
+    )
 }

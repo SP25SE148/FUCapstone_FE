@@ -1,10 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { toast } from "sonner";
 import { useAuth } from "./auth-context";
 import { useApi } from "../hooks/use-api";
-import { toast } from "sonner";
+import { useRouter, usePathname } from "next/navigation";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface StudentProfile {
   id: string;
@@ -48,15 +48,13 @@ const StudentProfileContext = createContext<
 export const StudentProfileProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const router = useRouter();
   const { user } = useAuth();
   const { callApi } = useApi();
-  const router = useRouter();
   const pathname = usePathname();
-  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(
-    null
-  );
+  const [loading, setLoading] = useState<boolean>(true);
   const [businessAreas, setBusinessAreas] = useState<BusinessArea[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null);
 
   const fetchStudentProfile = async () => {
     setLoading(true);
@@ -139,10 +137,10 @@ export const StudentProfileProvider: React.FC<{
     <StudentProfileContext.Provider
       value={{
         loading,
-        studentProfile,
         businessAreas,
-        fetchStudentProfile,
+        studentProfile,
         fetchBusinessArea,
+        fetchStudentProfile,
         updateStudentProfile,
       }}
     >
