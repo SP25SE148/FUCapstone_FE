@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { LogOut, LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/auth-context";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/components/ui/tooltip"
 
 export function Taskbar({
@@ -16,7 +17,12 @@ export function Taskbar({
     icon: LucideIcon;
   }[];
 }) {
+  const { logout } = useAuth();
   const pathname = usePathname();
+
+  const signOutHandler = () => {
+    logout();
+  };
 
   return (
     <nav
@@ -49,6 +55,23 @@ export function Taskbar({
           </TooltipProvider>
         );
       })}
+      <TooltipProvider
+        delayDuration={200}
+      >
+        <Tooltip>
+          <TooltipTrigger>
+            <div
+              className="flex flex-col items-center p-2 mx-2 rounded-md text-white hover:bg-white/20"
+              onClick={signOutHandler}
+            >
+              <LogOut className="h-6 w-6" />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <span className="text-xs font-normal ">Log out</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </nav>
   );
 }
