@@ -12,8 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useMajorGroup, MajorGroupProvider } from "@/contexts/majorgroup-context";
-import { Loader2 } from "lucide-react";
+import {
+  useMajorGroup,
+  MajorGroupProvider,
+} from "@/contexts/majorgroup-context";
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 interface Major {
@@ -27,54 +29,32 @@ interface Major {
 
 function MajorPageContent() {
   const params = useParams();
-  const groupId = params.id as string; 
-  const { getMajorsByMajorGroupId } = useMajorGroup();
+  const groupId = params.id as string;
+  const { getMajorsByMajorGroupId, addMajor, updateMajor, removeMajor } = useMajorGroup();
   const [majors, setMajors] = useState<Major[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+
+  const fetchMajors = async () => {
+    setLoading(true);
+    try {
+      const data: Major[] = await getMajorsByMajorGroupId(groupId);
+      setMajors(data);
+    } catch (err) {
+      console.error("Error fetching majors:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchMajors = async () => {
-      setLoading(true);
-      try {
-        const data: Major[] = await getMajorsByMajorGroupId(groupId);
-        setMajors(data);
-      } catch (err) {
-        console.error('Error fetching majors:', err);
-        setError(err as Error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchMajors();
-  }, [getMajorsByMajorGroupId, groupId]);
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[50vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="mt-2 text-sm text-muted-foreground">Loading majors...</p>
-        <SkeletonLoader />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <strong>
-        Error loading majors: {error.message}
-      </strong>
-    );
-  }
+  }, [getMajorsByMajorGroupId, groupId, updateMajor, addMajor, removeMajor]);
 
   return (
     <div>
       <div className="mb-4">
         <div className="p-4 rounded-lg bg-background">
-          <h2 className="text-2xl font-semibold mb-4">
-            {groupId} - Majors
-          </h2>
+          <h2 className="text-2xl font-semibold mb-4">{groupId} - Majors</h2>
         </div>
       </div>
 
@@ -95,7 +75,12 @@ function MajorPageContent() {
           </div>
         </CardHeader>
         <CardContent>
-          <DataTable columns={majorColumns} data={majors} />
+          {loading ? (
+            <SkeletonLoader />
+          ) : (
+            <DataTable columns={majorColumns} data={majors} />
+          )}
+          {/* <DataTable columns={majorColumns} data={majors} /> */}
         </CardContent>
       </Card>
     </div>

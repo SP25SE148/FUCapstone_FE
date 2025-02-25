@@ -15,6 +15,11 @@ interface Member {
   status: string;
 }
 
+interface Request {
+  groupMemberRequestSentByLeader: Member[];
+  groupMemberRequested: Member[] ;
+}
+
 interface Group {
   id: string;
   campusName: string;
@@ -29,19 +34,26 @@ interface Group {
 
 interface StudentGroupContextType {
   groupInfo: Group | null;
+  listrequest: Request | null;
   createGroup: () => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
   getGroupMemberReq: () => Promise<void>;
   inviteMember: (data: any) => Promise<void>;
   registerGroup: (groupId: string) => Promise<void>;
   updateStatusInvitation: (data: any) => Promise<void>;
+  updateStatusReq: (data: any) => Promise<void>;
 }
 
-const StudentGroupContext = createContext<StudentGroupContextType | undefined>(undefined);
+const StudentGroupContext = createContext<StudentGroupContextType | undefined>(
+  undefined
+);
 
-export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { callApi } = useApi();
   const [groupInfo, setGroupInfo] = useState<Group | null>(null);
+  const [listrequest, setListRequest] = useState<Request | null>(null);
 
   const fetchGroupInfo = async () => {
     try {
@@ -51,9 +63,35 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setGroupInfo(response?.value);
     } catch (error) {
       toast.error("Error fetching group info", {
-        description: `${error}`
+        description: `${error}`,
       });
     }
+  };
+
+  const getGroupMemberReq = async () => {
+    try {
+      const response = await callApi(
+        "fuc/Group/student/get-group-member-request",
+        {
+          method: "GET",
+        }
+      );
+      setListRequest(response?.value);
+    } catch (error) {
+      toast.error("Error fetching group info", {
+        description: `${error}`,
+      });
+    }
+    // const response = await callApi(
+    //   "fuc/Group/student/get-group-member-request",
+    //   {
+    //     method: "GET",
+    //   }
+    // );
+    // if (response?.isSuccess === true) {
+    //   toast.success("Get re successfully");
+    // }
+    // return response.value;
   };
 
   const createGroup = async () => {
@@ -61,7 +99,7 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
       method: "POST",
     });
     if (response?.isSuccess === true) {
-      toast.success("Create group successfully")
+      toast.success("Create group successfully");
       fetchGroupInfo();
     }
     return response;
@@ -70,11 +108,12 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const inviteMember = async (data: any) => {
     const response = await callApi("fuc/Group/add-member", {
       method: "POST",
-      body: data
+      body: data,
     });
     if (response?.isSuccess === true) {
-      toast.success("Send invitation successfully")
+      toast.success("Send invitation successfully");
       fetchGroupInfo();
+      getGroupMemberReq();
     }
     return response;
   };
@@ -82,11 +121,12 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const updateStatusInvitation = async (data: any) => {
     const response = await callApi("fuc/Group/update-group-member-status", {
       method: "PUT",
-      body: data
+      body: data,
     });
     if (response?.isSuccess === true) {
-      toast.success("Update status invitation successfully")
+      toast.success("Update status invitation successfully");
       fetchGroupInfo();
+      getGroupMemberReq();
     }
     return response;
   };
@@ -96,37 +136,46 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
       method: "PUT",
     });
     if (response?.isSuccess === true) {
-      toast.success("Register group successfully")
+      toast.success("Register group successfully");
       fetchGroupInfo();
     }
     return response;
   };
 
-  const getGroupMemberReq = async () => {
-    try {
-      const response = await callApi("fuc/Group/student/get-group-member-request", {
-        method: "GET",
-      });
-      setGroupInfo(response?.value);
-    } catch (error) {
-      toast.error("Error fetching group info", {
-        description: `${error}`
-      });
-    }
-    const response = await callApi("fuc/Group/student/get-group-member-request", {
-      method: "GET",
+
+  const updateStatusReq = async (data: any) => {
+    const response = await callApi("fuc/Group/update-group-member-status", {
+      method: "PUT",
+      body: data,
     });
     if (response?.isSuccess === true) {
-      toast.success("Get re successfully")
+      toast.success("Update status invitation successfully");
+      getGroupMemberReq();
+      fetchGroupInfo();
     }
-    return response.value;
+    return response;
   };
+
   useEffect(() => {
     fetchGroupInfo();
+    getGroupMemberReq();
   }, []);
 
+
   return (
-    <StudentGroupContext.Provider value={{ groupInfo, fetchGroupInfo, createGroup, inviteMember, getGroupMemberReq, updateStatusInvitation, registerGroup }}>
+    <StudentGroupContext.Provider
+      value={{
+        groupInfo,
+        listrequest,
+        fetchGroupInfo,
+        createGroup,
+        inviteMember,
+        getGroupMemberReq,
+        updateStatusInvitation,
+        registerGroup,
+        updateStatusReq,
+      }}
+    >
       {children}
     </StudentGroupContext.Provider>
   );
@@ -135,7 +184,9 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({ 
 export const useStudentGroup = () => {
   const context = useContext(StudentGroupContext);
   if (context === undefined) {
-    throw new Error("useStudentGroup must be used within a StudentGroupProvider");
+    throw new Error(
+      "useStudentGroup must be used within a StudentGroupProvider"
+    );
   }
   return context;
 };

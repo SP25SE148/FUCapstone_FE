@@ -26,8 +26,11 @@ interface MajorGroupContextProps {
   loading: boolean;
   fetchMajorGroupList: () => Promise<void>;
   addMajorGroup: (data: MajorGroup) => Promise<void>;
+  addMajor: (data: Major) => Promise<void>;
   updateMajorGroup: (data: MajorGroup) => Promise<void>;
+  updateMajor: (data: Major) => Promise<void>;
   removeMajorGroup: (id: string) => Promise<void>;
+  removeMajor: (id: string) => Promise<void>;
   getMajorsByMajorGroupId: (majorGroupId: string) => Promise<Major[]>;
 }
 
@@ -73,6 +76,19 @@ export const MajorGroupProvider = ({
     return response;
   };
 
+  const addMajor = async (data: Major) => {
+    const response = await callApi("fuc/AcademicManagement/major", {
+      method: "POST",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Major added successfully");
+      getMajorsByMajorGroupId(data.majorGroupId);
+    }
+    return response;
+  };
+
   const updateMajorGroup = async (data: MajorGroup) => {
     const response = await callApi("fuc/AcademicManagement/majorgroup", {
       method: "PUT",
@@ -86,6 +102,19 @@ export const MajorGroupProvider = ({
     return response;
   };
 
+  const updateMajor = async (data: Major) => {
+    const response = await callApi("fuc/AcademicManagement/major", {
+      method: "PUT",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Major updated successfully");
+      getMajorsByMajorGroupId( data.majorGroupId);
+    }
+    return response;
+  };
+
   const removeMajorGroup = async (id: string) => {
     const response = await callApi(`fuc/AcademicManagement/majorgroup/${id}`, {
       method: "DELETE",
@@ -94,6 +123,18 @@ export const MajorGroupProvider = ({
     if (response?.isSuccess === true) {
       toast.success("Major group removed successfully");
       fetchMajorGroupList();
+    }
+    return response;
+  };
+
+  const removeMajor = async (id: string) => {
+    const response = await callApi(`fuc/AcademicManagement/major/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Major removed successfully");
+      getMajorsByMajorGroupId(response.value.majorGroupId);
     }
     return response;
   };
@@ -125,8 +166,11 @@ export const MajorGroupProvider = ({
         loading,
         fetchMajorGroupList,
         addMajorGroup,
+        addMajor,
         updateMajorGroup,
+        updateMajor,
         removeMajorGroup,
+        removeMajor,
         getMajorsByMajorGroupId,
       }}
     >
