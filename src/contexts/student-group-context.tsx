@@ -117,6 +117,7 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.success("Update status invitation successfully");
       fetchGroupInfo();
       getGroupMemberReq();
+      fetchStudentProfile();
     }
     return response;
   };
