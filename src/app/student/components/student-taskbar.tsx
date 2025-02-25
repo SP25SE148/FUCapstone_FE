@@ -1,4 +1,4 @@
-import { Home, Users, Monitor, LayoutGrid, Bell } from 'lucide-react'
+import { Home, Users, LayoutGrid, Bell, FileText } from 'lucide-react'
 
 import { Taskbar } from "@/components/layout/app-taskbar";
 
@@ -15,7 +15,7 @@ export default function StudentTaskbar() {
       href: "/student/groups",
     },
     {
-      icon: Monitor,
+      icon: FileText,
       label: "Topics",
       href: "/student/topics",
     },

@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import MyRequest from "@/app/student/groups/my-request/components/my-requests";
 import GroupRequest from "@/app/student/groups/my-request/components/group-request";
 import { useStudentGroup } from "@/contexts/student-group-context";
+import { useRouter } from "next/navigation";
 
 interface Request {
   id: string;
@@ -28,7 +29,8 @@ interface Request {
 }
 
 export function ListRequest() {
-  const { listrequest, getGroupMemberReq, updateStatusReq } = useStudentGroup();
+  const router = useRouter();
+  const { listrequest, getGroupMemberReq, updateStatusInvitation } = useStudentGroup();
   const [sentRequests, setSentRequests] = useState<Request[]>([]);
   const [receivedRequests, setReceivedRequests] = useState<Request[]>([]);
   const [openCancelDialog, setOpenCancelDialog] = useState(false);
@@ -98,7 +100,7 @@ export function ListRequest() {
         memberId: selectedRequest.studentId,
         status: 4,
       };
-      await updateStatusReq(data);
+      await updateStatusInvitation(data);
     }
     setOpenCancelDialog(false);
   };
@@ -111,10 +113,15 @@ export function ListRequest() {
         memberId: selectedRequest.studentId,
         status: actionType === "accept" ? 1 : 2,
       };
-      await updateStatusReq(data);
+      const response = await updateStatusInvitation(data);
+      if (response.isSuccess && actionType === "accept") {
+        router.push("/student/groups");
+      }
+      console.log("Request response: ", response);
     }
     setOpenActionDialog(false);
   };
+
 
   return (
     <Card className="w-full shadow-lg">
