@@ -20,7 +20,8 @@ interface Student {
 }
 
 interface StudentContextProps {
-  students: Student[]
+  isLoading: boolean;
+  students: Student[];
   fetchStudentList: () => Promise<void>;
   addStudent: (data: any) => Promise<void>;
   importStudent: (data: any) => Promise<void>;
@@ -31,8 +32,10 @@ const StudentContext = createContext<StudentContextProps | undefined>(undefined)
 export const StudentProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [students, setStudents] = useState<Student[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchStudentList = async () => {
+    setIsLoading(true);
     try {
       const response = await callApi("fuc/User/get-all-student", {
         method: "GET",
@@ -42,6 +45,8 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
       toast.error("Error fetching student data", {
         description: `${error}`
       });
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -77,7 +82,7 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
 
   return (
     <StudentContext.Provider
-      value={{ students, fetchStudentList, addStudent, importStudent }}
+      value={{ students, isLoading, fetchStudentList, addStudent, importStudent }}
     >
       {children}
     </StudentContext.Provider>

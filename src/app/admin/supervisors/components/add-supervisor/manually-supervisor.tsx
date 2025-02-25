@@ -1,8 +1,9 @@
 "use client"
 
 import { z } from "zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,7 @@ const formSchema = z.object({
 
 export default function ManuallySupervisor({ onClose }: { onClose: () => void }) {
     const { addSupervisor } = useSupervisor();
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -35,10 +37,15 @@ export default function ManuallySupervisor({ onClose }: { onClose: () => void })
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const res: any = await addSupervisor(values);
-        if (res?.isSuccess) {
-            form.reset();
-            onClose();
+        setIsLoading(true);
+        try {
+            const res: any = await addSupervisor(values);
+            if (res?.isSuccess) {
+                form.reset();
+                onClose();
+            }
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -60,7 +67,7 @@ export default function ManuallySupervisor({ onClose }: { onClose: () => void })
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: vulns@fpt.edu.vn" {...field} />
+                                        <Input placeholder="Ex: vulns@fpt.edu.vn" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -73,7 +80,7 @@ export default function ManuallySupervisor({ onClose }: { onClose: () => void })
                                 <FormItem>
                                     <FormLabel>Full name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: Lê Nguyễn Sơn Vũ" {...field} />
+                                        <Input placeholder="Ex: Lê Nguyễn Sơn Vũ" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -86,7 +93,7 @@ export default function ManuallySupervisor({ onClose }: { onClose: () => void })
                                 <FormItem>
                                     <FormLabel>Major Id</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: SE" {...field} />
+                                        <Input placeholder="Ex: SE" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -94,9 +101,18 @@ export default function ManuallySupervisor({ onClose }: { onClose: () => void })
                         />
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full" type="submit">
-                            <CirclePlus />
-                            Add
+                        <Button className="w-full" type="submit" disabled={isLoading}>
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="animate-spin" />
+                                    Adding...
+                                </>
+                            ) : (
+                                <>
+                                    <CirclePlus />
+                                    Add
+                                </>
+                            )}
                         </Button>
                     </CardFooter>
                 </form>

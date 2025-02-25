@@ -16,6 +16,7 @@ interface Manager {
 }
 
 interface ManagerContextProps {
+  isLoading: boolean;
   managers: Manager[];
   fetchManagerList: () => Promise<void>;
   addManager: (data: any) => Promise<void>;
@@ -26,8 +27,10 @@ const ManagerContext = createContext<ManagerContextProps | undefined>(undefined)
 export const ManagerProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [managers, setManagers] = useState<Manager[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchManagerList = async () => {
+    setIsLoading(true);
     try {
       const response = await callApi("identity/Users/get-all-manager", {
         method: "GET",
@@ -37,6 +40,8 @@ export const ManagerProvider = ({ children }: { children: React.ReactNode }) => 
       toast.error("Error fetching manager data", {
         description: `${error}`
       });
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -58,7 +63,7 @@ export const ManagerProvider = ({ children }: { children: React.ReactNode }) => 
 
   return (
     <ManagerContext.Provider
-      value={{ managers, fetchManagerList, addManager }}
+      value={{ managers, isLoading, fetchManagerList, addManager }}
     >
       {children}
     </ManagerContext.Provider>

@@ -1,14 +1,15 @@
-"use client"
+"use client";
 
-import { z } from "zod"
-import { useForm } from "react-hook-form"
-import { CirclePlus } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { CirclePlus, Loader2 } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useStudent } from "@/contexts/student-context";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 const formSchema = z.object({
@@ -29,6 +30,7 @@ const formSchema = z.object({
 
 export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
     const { addStudent } = useStudent();
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -39,13 +41,18 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
             majorId: "",
             capstoneId: "",
         },
-    })
+    });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const res: any = await addStudent(values);
-        if (res?.isSuccess) {
-            form.reset();
-            onClose();
+        setIsLoading(true);
+        try {
+            const res: any = await addStudent(values);
+            if (res?.isSuccess) {
+                form.reset();
+                onClose();
+            }
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -67,7 +74,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                                 <FormItem>
                                     <FormLabel>Student code</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: SE173512" {...field} />
+                                        <Input placeholder="Ex: SE173512" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -80,7 +87,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                                 <FormItem>
                                     <FormLabel>Full name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: Nguyễn Đức Thắng" {...field} />
+                                        <Input placeholder="Ex: Nguyễn Đức Thắng" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -93,7 +100,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: thangndse173512@fpt.edu.vn" {...field} />
+                                        <Input placeholder="Ex: thangndse173512@fpt.edu.vn" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -106,7 +113,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                                 <FormItem>
                                     <FormLabel>Major</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: SE" {...field} />
+                                        <Input placeholder="Ex: SE" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -119,7 +126,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                                 <FormItem>
                                     <FormLabel>Capstone</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: SEP490" {...field} />
+                                        <Input placeholder="Ex: SEP490" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -127,13 +134,22 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                         />
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full" type="submit">
-                            <CirclePlus />
-                            Add
+                        <Button className="w-full" type="submit" disabled={isLoading}>
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="animate-spin" />
+                                    Adding...
+                                </>
+                            ) : (
+                                <>
+                                    <CirclePlus />
+                                    Add
+                                </>
+                            )}
                         </Button>
                     </CardFooter>
                 </form>
             </Form>
         </Card>
-    )
+    );
 }
