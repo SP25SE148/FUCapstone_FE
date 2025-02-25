@@ -1,8 +1,9 @@
 "use client";
 
 import { z } from "zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Upload, Download } from "lucide-react";
+import { Upload, Download, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,7 @@ const formSchema = z.object({
 
 export default function ImportStudent({ onClose }: { onClose: () => void }) {
     const { importStudent } = useStudent();
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -33,13 +35,18 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const file = values.file[0]; // Lấy file đầu tiên
-        const formData = new FormData();
-        formData.append("file", file);
-        const res: any = await importStudent(formData);
-        if (res?.isSuccess) {
-            form.reset();
-            onClose();
+        setIsLoading(true);
+        try {
+            const file = values.file[0]; // Lấy file đầu tiên
+            const formData = new FormData();
+            formData.append("file", file);
+            const res: any = await importStudent(formData);
+            if (res?.isSuccess) {
+                form.reset();
+                onClose();
+            }
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -59,7 +66,7 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
                                 <FormItem>
                                     <FormLabel>File Excel</FormLabel>
                                     <FormControl>
-                                        <Input type="file" accept=".xlsx" onChange={(e) => field.onChange(e.target.files)} />
+                                        <Input type="file" accept=".xlsx" onChange={(e) => field.onChange(e.target.files)} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -71,9 +78,18 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
                             <Download />
                             Download template
                         </Button>
-                        <Button type="submit">
-                            <Upload />
-                            Upload
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="animate-spin" />
+                                    Uploading...
+                                </>
+                            ) : (
+                                <>
+                                    <Upload />
+                                    Upload
+                                </>
+                            )}
                         </Button>
                     </CardFooter>
                 </form>

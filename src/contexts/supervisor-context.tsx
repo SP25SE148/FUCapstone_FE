@@ -16,7 +16,8 @@ interface Supervisor {
 }
 
 interface SupervisorContextProps {
-  supervisors: Supervisor[]
+  isLoading: boolean;
+  supervisors: Supervisor[];
   fetchSupervisorList: () => Promise<void>;
   addSupervisor: (data: any) => Promise<void>;
   importSupervisor: (data: any) => Promise<void>;
@@ -26,9 +27,11 @@ const SupervisorContext = createContext<SupervisorContextProps | undefined>(unde
 
 export const SupervisorProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
 
   const fetchSupervisorList = async () => {
+    setIsLoading(true);
     try {
       const response = await callApi("fuc/User/get-all-supervisor", {
         method: "GET",
@@ -38,6 +41,8 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
       toast.error("Error fetching supervisor data", {
         description: `${error}`
       });
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -73,7 +78,7 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
 
   return (
     <SupervisorContext.Provider
-      value={{ supervisors, fetchSupervisorList, addSupervisor, importSupervisor }}
+      value={{ supervisors, isLoading, fetchSupervisorList, addSupervisor, importSupervisor }}
     >
       {children}
     </SupervisorContext.Provider>
