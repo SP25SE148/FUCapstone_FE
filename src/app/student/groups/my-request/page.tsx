@@ -1,4 +1,4 @@
-import { ListRequest } from "@/app/student/groups/components/list-request" 
+import { ListRequest } from "@/app/student/groups/my-request/components/list-request" 
 
 export default function MyRequestPage() {
   return (

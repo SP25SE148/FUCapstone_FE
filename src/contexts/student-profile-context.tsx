@@ -32,6 +32,7 @@ interface BusinessArea {
 interface StudentProfileContextType {
   studentProfile: StudentProfile | null;
   businessAreas: BusinessArea[];
+  loading: boolean;
   fetchStudentProfile: () => Promise<void>;
   fetchBusinessArea: () => Promise<void>;
   updateStudentProfile: (data: {
@@ -137,6 +138,7 @@ export const StudentProfileProvider: React.FC<{
   return (
     <StudentProfileContext.Provider
       value={{
+        loading,
         studentProfile,
         businessAreas,
         fetchStudentProfile,

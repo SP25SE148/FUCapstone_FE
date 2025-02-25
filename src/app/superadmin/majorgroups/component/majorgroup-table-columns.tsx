@@ -17,8 +17,16 @@ import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { Badge } from "@/components/ui/badge";
 import { useMajorGroup } from "@/contexts/majorgroup-context";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import UpdateMajorGroup from "@/app/superadmin/majorgroups/component/update-majorgroup";
+import UpdateMajor from "@/app/superadmin/majorgroups/component/update-major";
 
 export type MajorGroup = {
   id: string;
@@ -65,7 +73,11 @@ const ActionsCell = ({ majorGroup }: { majorGroup: MajorGroup }) => {
           <DropdownMenuItem onClick={() => setOpen(true)}>
             Remove
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`/superadmin/majorgroups/${majorGroup.id}`)}>
+          <DropdownMenuItem
+            onClick={() =>
+              router.push(`/superadmin/majorgroups/${majorGroup.id}`)
+            }
+          >
             View More
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -101,7 +113,79 @@ const ActionsCell = ({ majorGroup }: { majorGroup: MajorGroup }) => {
         </DialogContent>
       </Dialog>
 
-      <UpdateMajorGroup majorGroup={majorGroup} open={updateOpen} setOpen={setUpdateOpen} />
+      <UpdateMajorGroup
+        majorGroup={majorGroup}
+        open={updateOpen}
+        setOpen={setUpdateOpen}
+      />
+    </div>
+  );
+};
+
+const MajorActionsCell = ({ major }: { major: Major }) => {
+  const { removeMajorGroup } = useMajorGroup();
+  const [open, setOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  // const router = useRouter();
+
+  return (
+    <div className="flex items-center justify-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={() => navigator.clipboard.writeText(major.id)}
+          >
+            Copy Major Group ID
+          </DropdownMenuItem>
+          <DropdownMenuItem
+          onClick={() => setUpdateOpen(true)}
+          >
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            Remove
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Removal</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove the major {major.name}?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                try {
+                  await removeMajorGroup(major.id);
+                  setOpen(false);
+                } catch (error) {
+                  console.error("Error removing major :", error);
+                  alert("Failed to remove major ");
+                }
+              }}
+            >
+              Yes, Remove
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <UpdateMajor major={major} open={updateOpen} setOpen={setUpdateOpen} />
     </div>
   );
 };
@@ -234,6 +318,13 @@ export const majorColumns: ColumnDef<Major>[] = [
           {status}
         </Badge>
       );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const major = row.original;
+      return <MajorActionsCell major={major} />;
     },
   },
 ];

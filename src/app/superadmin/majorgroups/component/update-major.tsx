@@ -6,50 +6,52 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useMajorGroup } from "@/contexts/majorgroup-context";
-import { MajorGroup } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
+import { Major } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
 
 
-export default function UpdateMajorGroup({ majorGroup, open, setOpen }: { majorGroup: MajorGroup, open: boolean, setOpen: (open: boolean) => void }) {
-  const { updateMajorGroup } = useMajorGroup();
-  const [majorGroupName, setMajorGroupName] = useState(majorGroup.name);
-  const [description, setDescription] = useState(majorGroup.description);
+
+export default function UpdateMajor({ major, open, setOpen }: { major: Major, open: boolean, setOpen: (open: boolean) => void }) {
+  const { updateMajor } = useMajorGroup();
+  const [majorName, setMajorName] = useState(major.name);
+  const [description, setDescription] = useState(major.description);
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
-    if (majorGroupName && description) {
+    if (majorName && description) {
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
     }
-  }, [majorGroupName, description]);
+  }, [majorName, description]);
 
-  const handleUpdateMajorGroup = async () => {
+  const handleUpdateMajor = async () => {
     const data = {
-      id: majorGroup.id,
-      name: majorGroupName,
+      id: major.id,
+      majorGroupId: major.majorGroupId,
+      name: major.name,
       description,
-      isDeleted: majorGroup.isDeleted,
-      deletedAt: majorGroup.deletedAt,
+      isDeleted: major.isDeleted,
+      deletedAt: major.deletedAt,
     };
-    await updateMajorGroup(data);
-    setOpen(false); // Close the dialog after updating
+    await updateMajor(data);
+    setOpen(false); 
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Update major group</DialogTitle>
-          <DialogDescription>Update the details of the major group below.</DialogDescription>
+          <DialogTitle>Update major</DialogTitle>
+          <DialogDescription>Update the details of the major below.</DialogDescription>
         </DialogHeader>
         <div className="space-y-2">
           <div className="space-y-1">
-            <Label htmlFor="majorGroupName">Major Group Name</Label>
+            <Label htmlFor="majorName">Major Name</Label>
             <Input
-              id="majorGroupName"
+              id="majorName"
               placeholder="Ex: Business"
-              value={majorGroupName}
-              onChange={(e) => setMajorGroupName(e.target.value)}
+              value={majorName}
+              onChange={(e) => setMajorName(e.target.value)}
             />
           </div>
           <div className="space-y-1">
@@ -62,7 +64,7 @@ export default function UpdateMajorGroup({ majorGroup, open, setOpen }: { majorG
             />
           </div>
         </div>
-        <Button className="w-full mt-4" onClick={handleUpdateMajorGroup} disabled={!isFormValid}>
+        <Button className="w-full mt-4" onClick={handleUpdateMajor} disabled={!isFormValid}>
           Update
         </Button>
       </DialogContent>
