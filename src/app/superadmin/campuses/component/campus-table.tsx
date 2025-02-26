@@ -1,6 +1,6 @@
 "use client";
 
-import { useCampus } from "@/contexts/campus-context";
+import { useCampus } from "@/contexts/superadmin/superadmin-campus-management";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/superadmin/campuses/component/campus-table-columns";
 import {

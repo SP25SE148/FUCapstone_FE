@@ -3,8 +3,8 @@
 import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { useApi } from "../hooks/use-api";
-import { useStudentProfile } from "./student-profile-context";
+import { useApi } from "../../hooks/use-api";
+import { useStudentProfile } from "./student-profile-managment";
 
 interface Member {
   id: string;

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import { useMajorGroup } from "@/contexts/majorgroup-context";
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-management";
 import { useState } from "react";
 import {
   Dialog,

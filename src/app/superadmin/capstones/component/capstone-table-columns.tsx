@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import { useCapstone } from "@/contexts/capstone-context";
+import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-management";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import UpdateCapstone from "@/app/superadmin/capstones/component/update-capstone";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCampus } from "@/contexts/campus-context";
+import { useCampus } from "@/contexts/superadmin/superadmin-campus-management";
 import OverallStats from "@/components/layout/overall-stats";
 
 export default function CampusOverallStats() {

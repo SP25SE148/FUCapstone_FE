@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddAdmin from "@/app/superadmin/admins/component/add-admin";
-import { useAdmin } from "@/contexts/admin-management-context";
+import { useAdmin } from "@/contexts/superadmin/superadmin-admin-management";
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 export default function AdminsTable() {

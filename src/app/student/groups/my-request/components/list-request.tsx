@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useStudentGroup } from "@/contexts/student-group-context";
+import { useStudentGroup } from "@/contexts/student/student-group-managment";
 import MyRequest from "@/app/student/groups/my-request/components/my-requests";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GroupRequest from "@/app/student/groups/my-request/components/group-request";
