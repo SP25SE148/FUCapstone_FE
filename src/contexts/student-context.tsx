@@ -22,9 +22,11 @@ interface Student {
 interface StudentContextProps {
   isLoading: boolean;
   students: Student[];
+  fetchMajorList: () => Promise<[]>;
   fetchStudentList: () => Promise<void>;
   addStudent: (data: any) => Promise<void>;
   importStudent: (data: any) => Promise<void>;
+  fetchCapstoneListByMajor: (majorId: string) => Promise<[]>;
 }
 
 const StudentContext = createContext<StudentContextProps | undefined>(undefined);
@@ -41,10 +43,6 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
         method: "GET",
       });
       setStudents(response?.value);
-    } catch (error) {
-      toast.error("Error fetching student data", {
-        description: `${error}`
-      });
     } finally {
       setIsLoading(false)
     }
@@ -58,7 +56,9 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
 
     if (response?.isSuccess === true) {
       toast.success("Add student successfully");
-      fetchStudentList();
+      setTimeout(() => {
+        fetchStudentList();
+      }, 10000);
     }
     return response
   };
@@ -71,9 +71,25 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
 
     if (response?.isSuccess === true) {
       toast.success("Import student successfully");
-      fetchStudentList();
+      setTimeout(() => {
+        fetchStudentList();
+      }, 10000);
     }
     return response
+  };
+
+  const fetchMajorList = async () => {
+    const response = await callApi("fuc/AcademicManagement/major", {
+      method: "GET",
+    });
+    return (response?.value);
+  };
+
+  const fetchCapstoneListByMajor = async (majorId: string) => {
+    const response = await callApi(`fuc/AcademicManagement/capstone/by-major/${majorId}`, {
+      method: "GET",
+    });
+    return (response?.value);
   };
 
   useEffect(() => {
@@ -82,7 +98,7 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
 
   return (
     <StudentContext.Provider
-      value={{ students, isLoading, fetchStudentList, addStudent, importStudent }}
+      value={{ students, isLoading, fetchStudentList, addStudent, importStudent, fetchMajorList, fetchCapstoneListByMajor }}
     >
       {children}
     </StudentContext.Provider>

@@ -1,5 +1,6 @@
 import { columns, Topic } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const data: Topic[] = [
@@ -64,11 +65,22 @@ export default function TopicTable() {
     return (
         <Card className="min-h-[calc(100vh-60px)]">
             <CardHeader>
-                <CardTitle className="font-semibold tracking-tight text-xl">Topics</CardTitle>
-                <CardDescription>List information of topics</CardDescription>
+                <CardTitle className="font-semibold tracking-tight text-xl text-primary">Topics</CardTitle>
+                <CardDescription>Information of topics</CardDescription>
             </CardHeader>
             <CardContent>
-                <DataTable columns={columns} data={data} />
+                <Tabs defaultValue="myTopics">
+                    <TabsList className="grid grid-cols-2 max-w-xs">
+                        <TabsTrigger value="myTopics">My topics</TabsTrigger>
+                        <TabsTrigger value="allTopics">All Topics</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="myTopics">
+                        <DataTable columns={columns} data={data} />
+                    </TabsContent>
+                    <TabsContent value="allTopics">
+
+                    </TabsContent>
+                </Tabs>
             </CardContent>
         </Card>
     );

@@ -16,11 +16,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 const formSchema = z.object({
     file: z
         .any()
-        .refine((files) => files?.length === 1, "Vui lòng chọn một file.")
+        .refine((files) => files?.length === 1, "Please select a file.")
         .refine((files) => {
             const allowedType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; // MIME type của Excel
             return files && files[0]?.type === allowedType;
-        }, "Chỉ chấp nhận file Excel (.xlsx)"),
+        }, "Only accept Excel files (.xlsx)"),
 });
 
 export default function ImportStudent({ onClose }: { onClose: () => void }) {

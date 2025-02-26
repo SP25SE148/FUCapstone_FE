@@ -18,6 +18,7 @@ interface Supervisor {
 interface SupervisorContextProps {
   isLoading: boolean;
   supervisors: Supervisor[];
+  fetchMajorList: () => Promise<[]>;
   fetchSupervisorList: () => Promise<void>;
   addSupervisor: (data: any) => Promise<void>;
   importSupervisor: (data: any) => Promise<void>;
@@ -37,10 +38,6 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
         method: "GET",
       });
       setSupervisors(response?.value);
-    } catch (error) {
-      toast.error("Error fetching supervisor data", {
-        description: `${error}`
-      });
     } finally {
       setIsLoading(false)
     }
@@ -54,7 +51,9 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
 
     if (response?.isSuccess === true) {
       toast.success("Add supervisor successfully");
-      fetchSupervisorList();
+      setTimeout(() => {
+        fetchSupervisorList();
+      }, 10000);
     }
     return response
   };
@@ -67,9 +66,18 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
 
     if (response?.isSuccess === true) {
       toast.success("Import supervisor successfully");
-      fetchSupervisorList();
+      setTimeout(() => {
+        fetchSupervisorList();
+      }, 10000);
     }
     return response
+  };
+
+  const fetchMajorList = async () => {
+    const response = await callApi("fuc/AcademicManagement/major", {
+      method: "GET",
+    });
+    return (response?.value);
   };
 
   useEffect(() => {
@@ -78,7 +86,7 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
 
   return (
     <SupervisorContext.Provider
-      value={{ supervisors, isLoading, fetchSupervisorList, addSupervisor, importSupervisor }}
+      value={{ supervisors, isLoading, fetchSupervisorList, addSupervisor, importSupervisor, fetchMajorList }}
     >
       {children}
     </SupervisorContext.Provider>

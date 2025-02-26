@@ -1,8 +1,8 @@
 "use client"
 
 import { z } from "zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { CirclePlus, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -10,22 +10,24 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useManager } from "@/contexts/manager-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 const formSchema = z.object({
     email: z.string()
-        .email("Email không hợp lệ")
-        .max(100, "Email không được quá 100 ký tự"),
+        .email("Invalid email.")
+        .max(50, "Email must not exceed 50 characters."),
     fullName: z.string()
-        .min(2, "Tên người dùng phải có ít nhất 2 ký tự")
-        .max(50, "Tên người dùng không được quá 50 ký tự"),
+        .min(2, "Full name must have at least 2 characters.")
+        .max(50, "Full name must not exceed 50 characters."),
     capstoneId: z.string()
-        .min(2, "Mã đồ án phải có ít nhất 2 ký tự"),
+        .min(3, "Please select a capstone."),
 });
 
 export default function ManuallyManager({ onClose }: { onClose: () => void }) {
-    const { addManager } = useManager();
     const [isLoading, setIsLoading] = useState(false);
+    const [capstoneList, setCapstoneList] = useState([]);
+    const { addManager, fetchCapstoneList } = useManager();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -49,6 +51,13 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
         }
     }
 
+    useEffect(() => {
+        (async function getCapstones() {
+            const capstones: any = await fetchCapstoneList();
+            setCapstoneList(capstones)
+        })();
+    }, [])
+
     return (
         <Card>
             <Form {...form}>
@@ -67,7 +76,7 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: vulns@fe.edu.vn" {...field} disabled={isLoading} />
+                                        <Input placeholder="Ex: anv@fe.edu.vn" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -80,7 +89,7 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
                                 <FormItem>
                                     <FormLabel>User name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Ex: Lê Nguyễn Sơn Vũ" {...field} disabled={isLoading} />
+                                        <Input placeholder="Ex: Nguyễn Văn A" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -92,9 +101,18 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Capstone</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Ex: SEP490" {...field} disabled={isLoading} />
-                                    </FormControl>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a capstone" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {capstoneList?.map((capstone: any, index) => (
+                                                <SelectItem key={index} value={capstone?.id}><strong>{capstone?.id}</strong> - <span className="text-muted-foreground text-xs">{capstone?.name}</span></SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}
