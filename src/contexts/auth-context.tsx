@@ -36,111 +36,154 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
 
-    useEffect(() => {
-        // Kiểm tra localStorage khi component mount
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            try {
-                const decodedToken = jwtDecode<DecodedToken>(storedToken);
-                // Kiểm tra xem token đã hết hạn chưa
-                if (decodedToken?.exp * 1000 > Date.now()) {
-                    setToken(storedToken);
-                    setUser({
-                        name: decodedToken?.name,
-                        MajorId: decodedToken?.MajorId,
-                        CampusId: decodedToken?.CampusId,
-                        CapstoneId: decodedToken?.CapstoneId,
-                        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": decodedToken?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
-                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
-                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-                        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
-                    });
-                } else {
-                    // Token đã hết hạn, xóa khỏi localStorage
-                    setUser(null);
-                    setToken(null);
-                    localStorage.removeItem('token');
-                    router.push("/");
-                    toast.info("Session is expired.", {
-                        description: "Please sign in to continue"
-                    })
-                }
-            } catch (error) {
-                setUser(null);
-                setToken(null);
-                localStorage.removeItem('token');
+    const mapDecodedTokenToUser = (decodedToken: DecodedToken): User => ({
+        name: decodedToken.name,
+        MajorId: decodedToken.MajorId,
+        CampusId: decodedToken.CampusId,
+        CapstoneId: decodedToken.CapstoneId,
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"],
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],
+    });
+
+    const redirectToRole = (decodedToken: DecodedToken) => {
+        const role = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+        switch (role) {
+            case "SuperAdmin":
+                router.push("/superadmin");
+                break;
+            case "Admin":
+                router.push("/admin");
+                break;
+            case "Manager":
+                router.push("/manager");
+                break;
+            case "Supervisor":
+                router.push("/supervisor/home");
+                break;
+            case "Student":
+                router.push("/student/home");
+                break;
+            default:
                 router.push("/");
-                toast.error("Something wrong please try again later")
-            }
+                break;
         }
-    }, []);
+    };
+
+    const handleSessionExpired = () => {
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("refreshTokenExpiryTime");
+        router.push("/");
+        toast.info("Session expired", { description: "Please sign in again" });
+    };
 
     const login = async (email: string, password: string) => {
-        const response = await fetch('https://localhost:8000/identity/Auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("https://localhost:8000/identity/Auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
         });
+
         const data = await response.json();
         if (data?.isSuccess) {
-            const decodedToken = jwtDecode<DecodedToken>(data?.value?.accessToken);
-            setToken(data?.value?.accessToken);
-            setUser({
-                name: decodedToken?.name,
-                MajorId: decodedToken?.MajorId,
-                CampusId: decodedToken?.CampusId,
-                CapstoneId: decodedToken?.CapstoneId,
-                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": decodedToken?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
-                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
-                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": decodedToken?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
-            });
-            // Lưu thông tin vào localStorage
-            localStorage.setItem('token', data?.value?.accessToken);
-            // Điều hướng sau khi đăng nhập thành công
-            switch (decodedToken?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]) {
-                case "SuperAdmin":
-                    router.push("/superadmin");
-                    break;
-                case "Admin":
-                    router.push("/admin");
-                    break;
-                case "Manager":
-                    router.push("/manager");
-                    break;
-                case "Supervisor":
-                    router.push("/supervisor/home");
-                    break;
-                case "Student":
-                    router.push("/student/home");
-                    break;
-                default:
-                    break;
-            }
-            toast.success("Login successfully", { description: "Welcome to FUC" })
+            const decodedToken = jwtDecode<DecodedToken>(data.value.accessToken);
+            setToken(data.value.accessToken);
+            setUser(mapDecodedTokenToUser(decodedToken));
+
+            localStorage.setItem("token", data.value.accessToken);
+            localStorage.setItem("refreshToken", data.value.refreshToken);
+            localStorage.setItem("refreshTokenExpiryTime", data.value.refreshTokenExpiryTime);
+
+            redirectToRole(decodedToken);
+
+            toast.success("Login successful", { description: "Welcome to FUC" });
         } else {
-            toast.error(data?.error?.message || "Something wrong please try again later")
+            toast.error(data?.error?.message || "Login failed, please try again.");
+        }
+    };
+
+    const refreshAccessToken = async (accessToken: string, refreshToken: string) => {
+        try {
+            const response = await fetch("https://localhost:8000/identity/Auth/token/refresh", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ accessToken, refreshToken }),
+            });
+
+            const data = await response.json();
+
+            if (data?.isSuccess) {
+                const newAccessToken = data.value.accessToken;
+                const newRefreshToken = data.value.refreshToken;
+                const newRefreshTokenExpiryTime = data.value.refreshTokenExpiryTime;
+
+                const decodedToken = jwtDecode<DecodedToken>(newAccessToken);
+                setToken(newAccessToken);
+                setUser(mapDecodedTokenToUser(decodedToken));
+
+                localStorage.setItem("token", newAccessToken);
+                localStorage.setItem("refreshToken", newRefreshToken);
+                localStorage.setItem("refreshTokenExpiryTime", newRefreshTokenExpiryTime);
+            } else {
+                handleSessionExpired();
+            }
+        } catch (error) {
+            handleSessionExpired();
         }
     };
 
     const logout = async () => {
-        const accessToken = localStorage.getItem('token');
-        const response = await fetch('https://localhost:8000/identity/Auth/token/revoke', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        const accessToken = localStorage.getItem("token");
+
+        await fetch("https://localhost:8000/identity/Auth/token/revoke", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ accessToken }),
         });
-        const data = await response.json();
-        if (data?.isSuccess) {
-            setUser(null);
-            setToken(null);
-            localStorage.removeItem('token');
-            router.push("/");
-            toast.success("Sign Out successfully", { description: "See you again" })
-        } else {
-            toast.error(data?.detail || "Something wrong please try again later")
-        }
+
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("refreshTokenExpiryTime");
+
+        router.push("/");
+        toast.success("Sign Out successfully", { description: "See you again" });
     };
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        const storedRefreshToken = localStorage.getItem("refreshToken");
+        const refreshTokenExpiryTime = localStorage.getItem("refreshTokenExpiryTime");
+
+        if (storedToken) {
+            try {
+                const decodedToken = jwtDecode<DecodedToken>(storedToken);
+
+                // Kiểm tra refreshTokenExpiryTime có hết hạn chưa
+                if (refreshTokenExpiryTime && new Date(refreshTokenExpiryTime) <= new Date()) {
+                    handleSessionExpired(); // Xóa token và yêu cầu đăng nhập lại
+                    return;
+                }
+
+                if (decodedToken?.exp * 1000 > Date.now()) {
+                    setToken(storedToken);
+                    setUser(mapDecodedTokenToUser(decodedToken));
+                } else if (storedRefreshToken) {
+                    refreshAccessToken(storedToken, storedRefreshToken);
+                } else {
+                    handleSessionExpired();
+                }
+            } catch (error) {
+                handleSessionExpired();
+            }
+        }
+    }, []);
 
     return (
         <AuthContext.Provider value={{ user, token, login, logout }}>
