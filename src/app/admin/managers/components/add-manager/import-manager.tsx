@@ -19,15 +19,15 @@ export default function ImportManager() {
             <CardContent className="space-y-2">
                 <div className="space-y-1">
                     <Label htmlFor="file">File</Label>
-                    <Input id="file" type="file" />
+                    <Input id="file" type="file" disabled />
                 </div>
             </CardContent>
             <CardFooter className="grid w-full grid-cols-2 gap-4">
-                <Button variant={"outline"}>
+                <Button variant={"outline"} disabled>
                     <Download />
                     Download template
                 </Button>
-                <Button>
+                <Button disabled>
                     <Upload />
                     Upload
                 </Button>

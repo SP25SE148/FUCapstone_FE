@@ -18,6 +18,7 @@ interface Manager {
 interface ManagerContextProps {
   isLoading: boolean;
   managers: Manager[];
+  fetchCapstoneList: () => Promise<[]>;
   fetchManagerList: () => Promise<void>;
   addManager: (data: any) => Promise<void>;
 }
@@ -36,10 +37,6 @@ export const ManagerProvider = ({ children }: { children: React.ReactNode }) => 
         method: "GET",
       });
       setManagers(response?.value);
-    } catch (error) {
-      toast.error("Error fetching manager data", {
-        description: `${error}`
-      });
     } finally {
       setIsLoading(false)
     }
@@ -57,13 +54,20 @@ export const ManagerProvider = ({ children }: { children: React.ReactNode }) => 
     return response;
   };
 
+  const fetchCapstoneList = async () => {
+    const response = await callApi("fuc/AcademicManagement/capstone", {
+      method: "GET",
+    });
+    return (response?.value);
+  };
+
   useEffect(() => {
     fetchManagerList();
   }, []);
 
   return (
     <ManagerContext.Provider
-      value={{ managers, isLoading, fetchManagerList, addManager }}
+      value={{ managers, isLoading, fetchManagerList, addManager, fetchCapstoneList }}
     >
       {children}
     </ManagerContext.Provider>
