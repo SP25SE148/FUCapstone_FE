@@ -1,10 +1,11 @@
 "use client";
 
 import { toast } from "sonner";
-import { useAuth } from "./auth-context";
-import { useApi } from "../hooks/use-api";
+
 import { useRouter, usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "@/contexts/auth-context";
+import { useApi } from "@/hooks/use-api";
 
 interface StudentProfile {
   id: string;

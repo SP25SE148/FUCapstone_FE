@@ -15,7 +15,7 @@ import {
 import {
   useMajorGroup,
   MajorGroupProvider,
-} from "@/contexts/majorgroup-context";
+} from "@/contexts/superadmin/superadmin-majorgroup-management";
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 interface Major {

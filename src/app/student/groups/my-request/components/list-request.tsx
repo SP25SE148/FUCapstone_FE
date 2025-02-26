@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
@@ -15,7 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import MyRequest from "@/app/student/groups/my-request/components/my-requests";
 import GroupRequest from "@/app/student/groups/my-request/components/group-request";
-import { useStudentGroup } from "@/contexts/student-group-context";
+import { useStudentGroup } from "@/contexts/student/student-group-management";
 import { useRouter } from "next/navigation";
 
 interface Request {
@@ -126,7 +126,8 @@ export function ListRequest() {
   return (
     <Card className="w-full shadow-lg">
       <CardHeader className="border-b">
-        <h2 className="text-3xl font-bold text-primary">List Request</h2>
+      <CardTitle className="font-semibold tracking-tight text-xl text-primary">List Request</CardTitle>
+      <CardDescription>List of requests from students</CardDescription>
       </CardHeader>
       <CardContent className="p-6">
         <Tabs defaultValue="my-request" className="w-full">
