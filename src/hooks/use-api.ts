@@ -1,4 +1,3 @@
-import { toast } from 'sonner';
 import { useAuth } from '../contexts/auth-context';
 
 interface ApiOptions {
@@ -47,7 +46,7 @@ export const useApi = () => {
             const data = await response.json();
 
             if (data?.isSuccess !== true) {
-                toast.error(data?.detail || "Something wrong please try again later");
+                console.log(data?.detail || "Something wrong please try again later");
             }
 
             return data;

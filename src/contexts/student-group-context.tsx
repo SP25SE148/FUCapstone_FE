@@ -58,29 +58,17 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
   const [listrequest, setListRequest] = useState<Request | null>(null);
 
   const fetchGroupInfo = async () => {
-    try {
-      const response = await callApi("fuc/Group/get-by-student-id", {
-        method: "GET",
-      });
-      setGroupInfo(response?.value);
-    } catch (error) {
-      toast.error("Error fetching group info", {
-        description: `${error}`,
-      });
-    }
+    const response = await callApi("fuc/Group/get-by-student-id", {
+      method: "GET",
+    });
+    setGroupInfo(response?.value);
   };
 
   const getGroupMemberReq = async () => {
-    try {
-      const response = await callApi("fuc/Group/student/get-group-member-request", {
-        method: "GET",
-      });
-      setListRequest(response?.value);
-    } catch (error) {
-      toast.error("Error fetching group info", {
-        description: `${error}`,
-      });
-    }
+    const response = await callApi("fuc/Group/student/get-group-member-request", {
+      method: "GET",
+    });
+    setListRequest(response?.value);
   };
 
   const createGroup = async () => {
@@ -137,7 +125,6 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchGroupInfo();
     getGroupMemberReq();
   }, []);
-
 
   return (
     <StudentGroupContext.Provider

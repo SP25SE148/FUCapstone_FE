@@ -33,25 +33,25 @@ export default function MyGroup() {
         switch (status) {
             case "Pending":
                 return (
-                    <Badge variant="secondary" className="m-6 p-2 text-sm select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                    <Badge variant="secondary" className="text-sm select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
                         Pending
                     </Badge>
                 );
             case "Rejected":
                 return (
-                    <Badge variant="secondary" className="m-6 p-2 text-sm select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
+                    <Badge variant="secondary" className="text-sm select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
                         Rejected
                     </Badge>
                 );
             case "InProgress":
                 return (
-                    <Badge variant="secondary" className="m-6 p-2 text-sm select-none bg-sky-200 text-sky-800 hover:bg-sky-200">
+                    <Badge variant="secondary" className="text-sm select-none bg-sky-200 text-sky-800 hover:bg-sky-200">
                         In Progress
                     </Badge>
                 );
             case "Deleted":
                 return (
-                    <Badge variant="secondary" className="m-6 p-2 text-sm select-none bg-red-200 text-red-800 hover:bg-red-200">
+                    <Badge variant="secondary" className="text-sm select-none bg-red-200 text-red-800 hover:bg-red-200">
                         Deleted
                     </Badge>
                 );
@@ -113,10 +113,12 @@ export default function MyGroup() {
                     {/* Header */}
                     <div className="flex items-center justify-between">
                         <CardHeader>
-                            <CardTitle className="font-semibold tracking-tight text-xl text-primary">My group</CardTitle>
+                            <div className="flex items-center gap-4">
+                                <CardTitle className="font-semibold tracking-tight text-xl text-primary">My group</CardTitle>
+                                {getGroupStatusBadge(groupInfo?.status || "")}
+                            </div>
                             <CardDescription>Information about my group</CardDescription>
                         </CardHeader>
-                        {getGroupStatusBadge(groupInfo?.status || "")}
                         {studentProfile?.id == leaderInfo?.studentId && groupInfo?.status == "Pending" &&
                             <Button
                                 className="m-6 transition-all hover:scale-105"

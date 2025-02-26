@@ -1,22 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import MyRequest from "@/app/student/groups/my-request/components/my-requests";
-import GroupRequest from "@/app/student/groups/my-request/components/group-request";
-import { useStudentGroup } from "@/contexts/student-group-context";
 import { useRouter } from "next/navigation";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useStudentGroup } from "@/contexts/student-group-context";
+import MyRequest from "@/app/student/groups/my-request/components/my-requests";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import GroupRequest from "@/app/student/groups/my-request/components/group-request";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, } from "@/components/ui/dialog";
 
 interface Request {
   id: string;
@@ -30,23 +24,21 @@ interface Request {
 
 export function ListRequest() {
   const router = useRouter();
-  const { listrequest, getGroupMemberReq, updateStatusInvitation } = useStudentGroup();
-  const [sentRequests, setSentRequests] = useState<Request[]>([]);
-  const [receivedRequests, setReceivedRequests] = useState<Request[]>([]);
   const [openCancelDialog, setOpenCancelDialog] = useState(false);
   const [openActionDialog, setOpenActionDialog] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+  const [sentRequests, setSentRequests] = useState<Request[]>([]);
+  const [receivedRequests, setReceivedRequests] = useState<Request[]>([]);
   const [actionType, setActionType] = useState<"accept" | "reject">("accept");
+  const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+  const { listrequest, getGroupMemberReq, updateStatusInvitation } = useStudentGroup();
 
   useEffect(() => {
     const fetchRequests = async () => {
-      // await getGroupMemberReq();
       if (listrequest) {
         setSentRequests(listrequest.groupMemberRequestSentByLeader);
         setReceivedRequests(listrequest.groupMemberRequested);
       }
     };
-
     fetchRequests();
   }, [listrequest, getGroupMemberReq]);
 
@@ -113,8 +105,8 @@ export function ListRequest() {
         memberId: selectedRequest.studentId,
         status: actionType === "accept" ? 1 : 2,
       };
-      const response = await updateStatusInvitation(data);
-      if (response.isSuccess && actionType === "accept") {
+      const response: any = await updateStatusInvitation(data);
+      if (response?.isSuccess && actionType === "accept") {
         router.push("/student/groups");
       }
       console.log("Request response: ", response);
@@ -122,13 +114,13 @@ export function ListRequest() {
     setOpenActionDialog(false);
   };
 
-
   return (
-    <Card className="w-full shadow-lg">
-      <CardHeader className="border-b">
-        <h2 className="text-3xl font-bold text-primary">List Request</h2>
+    <Card className="min-h-[calc(100vh-60px)] bg-gradient-to-tr from-primary/5 to-background">
+      <CardHeader>
+        <CardTitle className="font-semibold tracking-tight text-xl text-primary">List Request</CardTitle>
+        <CardDescription>Information about your request</CardDescription>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent>
         <Tabs defaultValue="my-request" className="w-full">
           <TabsList className="mb-4">
             <TabsTrigger value="my-request">My Request</TabsTrigger>

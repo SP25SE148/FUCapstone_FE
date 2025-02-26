@@ -1,9 +1,9 @@
 import React from "react";
+import { Clock, Inbox } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Clock, Inbox } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface Request {
   id: string;
@@ -27,9 +27,9 @@ const MyRequest: React.FC<MyRequestProps> = ({
   handleCancelClick,
 }) => {
   return (
-    <div className="h-[440px] w-full rounded-md border p-4 overflow-y-auto">
+    <div className="rounded-md border p-4 space-y-2 bg-muted">
       {requests === null || requests?.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full">
+        <div className="flex flex-col items-center justify-center">
           <Inbox className="h-16 w-16 text-muted-foreground" />
           <p className="mt-4 text-lg font-medium text-muted-foreground">
             No Request
@@ -41,7 +41,7 @@ const MyRequest: React.FC<MyRequestProps> = ({
           ?.slice()
           .reverse()
           .map((request) => (
-            <div key={request.id} className="mb-4 last:mb-0">
+            <div key={request.id}>
               <Card>
                 <CardContent className="flex items-center justify-between p-4">
                   <div className="flex items-center space-x-4">
