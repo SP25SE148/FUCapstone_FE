@@ -1,6 +1,6 @@
 import AdminsOverallStats from "@/app/superadmin/admins/component/admins-overall-stats";
 import AdminsTable from "@/app/superadmin/admins/component/admins-table";
-import { AdminProvider } from "@/contexts/admin-management-context";
+import { AdminProvider } from "@/contexts/superadmin/superadmin-admin-management";
 
 export default function AdminAccountdPage() {
   return (

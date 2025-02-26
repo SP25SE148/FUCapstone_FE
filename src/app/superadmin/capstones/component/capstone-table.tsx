@@ -1,6 +1,6 @@
 "use client";
 
-import { useCapstone } from "@/contexts/capstone-context";
+import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-management";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/superadmin/capstones/component/capstone-table-columns";
 import {
