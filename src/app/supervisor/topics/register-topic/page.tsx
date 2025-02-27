@@ -1,7 +1,5 @@
-import { Download, Send } from "lucide-react";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import RegisterTopicForm from "@/app/supervisor/topics/register-topic/components/register-topic-form";
-import { Button } from "@/components/ui/button";
 
 export default function RegisterTopicPage() {
   return (
@@ -15,19 +13,6 @@ export default function RegisterTopicPage() {
         </CardDescription>
       </CardHeader>
       <RegisterTopicForm />
-      <CardFooter className="justify-between">
-        <Button
-          variant={"outline"}
-          className="h-12 border-primary text-primary hover:bg-primary hover:text-white"
-        >
-          <Download />
-          Template
-        </Button>
-        <Button className="h-12">
-          <Send />
-          Register
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

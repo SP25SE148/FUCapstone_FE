@@ -13,11 +13,12 @@ interface BusinessArea {
 interface SupervisorTopicContextType {
   fetchBusinessArea: () => Promise<void>;
   businessAreas: BusinessArea[];
+  registerTopic: (data: FormData) => Promise<void>;
 }
 
-const SupervisorTopicContext = createContext<SupervisorTopicContextType | undefined>(
-  undefined
-);
+const SupervisorTopicContext = createContext<
+  SupervisorTopicContextType | undefined
+>(undefined);
 
 export const SupervisorTopicProvider: React.FC<{
   children: React.ReactNode;
@@ -43,6 +44,18 @@ export const SupervisorTopicProvider: React.FC<{
     }
   };
 
+  const registerTopic = async (data: FormData) => {
+    const response = await callApi(`fuc/topics`, {
+      method: "POST",
+      body: data,
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Topic registered successfully");
+      // fetchCTopicList();
+    }
+    return response;
+  };
+
   useEffect(() => {
     fetchBusinessArea();
   }, []);
@@ -52,6 +65,7 @@ export const SupervisorTopicProvider: React.FC<{
       value={{
         fetchBusinessArea,
         businessAreas,
+        registerTopic,
       }}
     >
       {children}
