@@ -1,14 +1,14 @@
 import SupervisorTable from "./components/supervisor-table";
 import SupervisorOverall from "./components/supervisor-overall";
-import { SupervisorProvider } from "@/contexts/supervisor-context";
+import { AdminSupervisorProvider } from "@/contexts/admin/admin-supervisor-context";
 
 export default function AdminManageSupervisorsPage() {
     return (
-        <SupervisorProvider>
+        <AdminSupervisorProvider>
             <div className="flex flex-col gap-4">
                 <SupervisorOverall />
                 <SupervisorTable />
             </div>
-        </SupervisorProvider>
+        </AdminSupervisorProvider>
     )
 }

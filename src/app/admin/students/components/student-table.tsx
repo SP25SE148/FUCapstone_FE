@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuth } from "@/contexts/auth-context";
-import { useStudent } from "@/contexts/student-context";
+import { useAdminStudent } from "@/contexts/admin/admin-student-context";
 
 import { columns } from "./columns";
 import AddStudent from "./add-student/add-student";
@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function StudentTable() {
     const { user } = useAuth();
-    const { students, isLoading } = useStudent();
+    const { students, isLoading } = useAdminStudent();
 
     return isLoading
         ?

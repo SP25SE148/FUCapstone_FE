@@ -19,7 +19,7 @@ interface Student {
   status: string
 }
 
-interface StudentContextProps {
+interface AdminStudentContextProps {
   isLoading: boolean;
   students: Student[];
   fetchMajorList: () => Promise<[]>;
@@ -29,9 +29,9 @@ interface StudentContextProps {
   fetchCapstoneListByMajor: (majorId: string) => Promise<[]>;
 }
 
-const StudentContext = createContext<StudentContextProps | undefined>(undefined);
+const AdminStudentContext = createContext<AdminStudentContextProps | undefined>(undefined);
 
-export const StudentProvider = ({ children }: { children: React.ReactNode }) => {
+export const AdminStudentProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [students, setStudents] = useState<Student[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -97,18 +97,18 @@ export const StudentProvider = ({ children }: { children: React.ReactNode }) => 
   }, []);
 
   return (
-    <StudentContext.Provider
+    <AdminStudentContext.Provider
       value={{ students, isLoading, fetchStudentList, addStudent, importStudent, fetchMajorList, fetchCapstoneListByMajor }}
     >
       {children}
-    </StudentContext.Provider>
+    </AdminStudentContext.Provider>
   );
 };
 
-export const useStudent = () => {
-  const context = useContext(StudentContext);
+export const useAdminStudent = () => {
+  const context = useContext(AdminStudentContext);
   if (!context) {
-    throw new Error("useStudent must be used within a StudentProvider");
+    throw new Error("useAdminStudent must be used within a AdminStudentProvider");
   }
   return context;
 };

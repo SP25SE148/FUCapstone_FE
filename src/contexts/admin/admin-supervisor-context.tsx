@@ -15,7 +15,7 @@ interface Supervisor {
   campusName: string
 }
 
-interface SupervisorContextProps {
+interface AdminSupervisorContextProps {
   isLoading: boolean;
   supervisors: Supervisor[];
   fetchMajorList: () => Promise<[]>;
@@ -24,9 +24,9 @@ interface SupervisorContextProps {
   importSupervisor: (data: any) => Promise<void>;
 }
 
-const SupervisorContext = createContext<SupervisorContextProps | undefined>(undefined);
+const AdminSupervisorContext = createContext<AdminSupervisorContextProps | undefined>(undefined);
 
-export const SupervisorProvider = ({ children }: { children: React.ReactNode }) => {
+export const AdminSupervisorProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
@@ -85,18 +85,18 @@ export const SupervisorProvider = ({ children }: { children: React.ReactNode }) 
   }, []);
 
   return (
-    <SupervisorContext.Provider
+    <AdminSupervisorContext.Provider
       value={{ supervisors, isLoading, fetchSupervisorList, addSupervisor, importSupervisor, fetchMajorList }}
     >
       {children}
-    </SupervisorContext.Provider>
+    </AdminSupervisorContext.Provider>
   );
 };
 
-export const useSupervisor = () => {
-  const context = useContext(SupervisorContext);
+export const useAdminSupervisor = () => {
+  const context = useContext(AdminSupervisorContext);
   if (!context) {
-    throw new Error("useSupervisor must be used within a SupervisorProvider");
+    throw new Error("useAdminSupervisor must be used within a AdminSupervisorProvider");
   }
   return context;
 };

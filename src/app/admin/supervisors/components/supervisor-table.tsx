@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuth } from "@/contexts/auth-context";
-import { useSupervisor } from "@/contexts/supervisor-context";
+import { useAdminSupervisor } from "@/contexts/admin/admin-supervisor-context";
 
 import { columns } from "./columns";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function SupervisorTable() {
     const { user } = useAuth();
-    const { supervisors, isLoading } = useSupervisor();
+    const { supervisors, isLoading } = useAdminSupervisor();
 
     return isLoading
         ?
