@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useStudent } from "@/contexts/student-context";
+import { useAdminStudent } from "@/contexts/admin/admin-student-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,7 +33,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
     const [majorList, setMajorList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [capstoneList, setCapstoneList] = useState([]);
-    const { addStudent, fetchMajorList, fetchCapstoneListByMajor } = useStudent();
+    const { addStudent, fetchMajorList, fetchCapstoneListByMajor } = useAdminStudent();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

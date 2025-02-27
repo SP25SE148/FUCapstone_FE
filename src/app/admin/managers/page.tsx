@@ -1,14 +1,14 @@
 import ManagerTable from "./components/manager-table";
 import ManagerOverall from "./components/manager-overall";
-import { ManagerProvider } from "@/contexts/manager-context";
+import { AdminManagerProvider } from "@/contexts/admin/admin-manager-context";
 
 export default function AdminManageManagersPage() {
     return (
-        <ManagerProvider>
+        <AdminManagerProvider>
             <div className="flex flex-col gap-4">
                 <ManagerOverall />
                 <ManagerTable />
             </div>
-        </ManagerProvider>
+        </AdminManagerProvider>
     )
 }

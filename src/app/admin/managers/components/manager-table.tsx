@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/contexts/auth-context";
-import { useManager } from "@/contexts/manager-context";
+import { useAdminManager } from "@/contexts/admin/admin-manager-context";
 
 import { columns } from "./columns";
 import AddManager from "./add-manager/add-manager";
@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function ManagerTable() {
     const { user } = useAuth();
-    const { managers, isLoading } = useManager();
+    const { managers, isLoading } = useAdminManager();
 
     return isLoading
         ?

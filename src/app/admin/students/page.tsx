@@ -1,14 +1,14 @@
 import StudentTable from "./components/student-table";
 import StudentOverall from "./components/student-overall";
-import { StudentProvider } from "@/contexts/student-context";
+import { AdminStudentProvider } from "@/contexts/admin/admin-student-context";
 
 export default function AdminManageStudentsPage() {
     return (
-        <StudentProvider>
+        <AdminStudentProvider>
             <div className="flex flex-col gap-4">
                 <StudentOverall />
                 <StudentTable />
             </div>
-        </StudentProvider>
+        </AdminStudentProvider>
     )
 }

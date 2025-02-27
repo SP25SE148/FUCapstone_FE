@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSupervisor } from "@/contexts/supervisor-context";
+import { useAdminSupervisor } from "@/contexts/admin/admin-supervisor-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,7 +27,7 @@ const formSchema = z.object({
 export default function ManuallySupervisor({ onClose }: { onClose: () => void }) {
     const [majorList, setMajorList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const { addSupervisor, fetchMajorList } = useSupervisor();
+    const { addSupervisor, fetchMajorList } = useAdminSupervisor();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

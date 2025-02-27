@@ -15,7 +15,7 @@ interface Manager {
   capstoneId: string
 }
 
-interface ManagerContextProps {
+interface AdminManagerContextProps {
   isLoading: boolean;
   managers: Manager[];
   fetchCapstoneList: () => Promise<[]>;
@@ -23,9 +23,9 @@ interface ManagerContextProps {
   addManager: (data: any) => Promise<void>;
 }
 
-const ManagerContext = createContext<ManagerContextProps | undefined>(undefined);
+const AdminManagerContext = createContext<AdminManagerContextProps | undefined>(undefined);
 
-export const ManagerProvider = ({ children }: { children: React.ReactNode }) => {
+export const AdminManagerProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [managers, setManagers] = useState<Manager[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -66,18 +66,18 @@ export const ManagerProvider = ({ children }: { children: React.ReactNode }) => 
   }, []);
 
   return (
-    <ManagerContext.Provider
+    <AdminManagerContext.Provider
       value={{ managers, isLoading, fetchManagerList, addManager, fetchCapstoneList }}
     >
       {children}
-    </ManagerContext.Provider>
+    </AdminManagerContext.Provider>
   );
 };
 
-export const useManager = () => {
-  const context = useContext(ManagerContext);
+export const useAdminManager = () => {
+  const context = useContext(AdminManagerContext);
   if (!context) {
-    throw new Error("useManager must be used within a ManagerProvider");
+    throw new Error("useAdminManager must be used within a AdminManagerProvider");
   }
   return context;
 };
