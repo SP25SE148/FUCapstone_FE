@@ -1,6 +1,6 @@
 "use client";
 
-import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-management";
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
 import OverallStats from "@/components/layout/overall-stats";
 
 export default function MajorGroupOverallStats() {

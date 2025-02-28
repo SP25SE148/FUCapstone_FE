@@ -1,14 +1,14 @@
 import CampusTable from "@/app/superadmin/campuses/component/campus-table";
 import CampusOverallStats from "@/app/superadmin/campuses/component/campus-overall-stats";
-import { CampusProvider } from "@/contexts/superadmin/superadmin-campus-management";
+import { SuperadminCampusProvider } from "@/contexts/superadmin/superadmin-campus-context";
 
 export default function CampusPage() {
   return (
-    <CampusProvider>
+    <SuperadminCampusProvider>
       <div className="flex flex-col gap-4">
         <CampusOverallStats />
         <CampusTable />
       </div>
-    </CampusProvider>
+    </SuperadminCampusProvider>
   );
 }

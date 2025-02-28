@@ -1,7 +1,7 @@
 "use client";
 
 import OverallStats from "@/components/layout/overall-stats";
-import { useAdmin } from "@/contexts/superadmin/superadmin-admin-management";
+import { useAdmin } from "@/contexts/superadmin/superadmin-admin-context";
 
 export default function AdminsOverallStats() {
   const { admins } = useAdmin();

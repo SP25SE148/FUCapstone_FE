@@ -34,11 +34,11 @@ interface MajorGroupContextProps {
   getMajorsByMajorGroupId: (majorGroupId: string) => Promise<Major[]>;
 }
 
-const MajorGroupContext = createContext<MajorGroupContextProps | undefined>(
+const SuperadminMajorGroupContext = createContext<MajorGroupContextProps | undefined>(
   undefined
 );
 
-export const MajorGroupProvider = ({
+export const SuperadminMajorGroupProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -160,7 +160,7 @@ export const MajorGroupProvider = ({
   }, []);
 
   return (
-    <MajorGroupContext.Provider
+    <SuperadminMajorGroupContext.Provider
       value={{
         majorGroups,
         loading,
@@ -175,12 +175,12 @@ export const MajorGroupProvider = ({
       }}
     >
       {children}
-    </MajorGroupContext.Provider>
+    </SuperadminMajorGroupContext.Provider>
   );
 };
 
 export const useMajorGroup = () => {
-  const context = useContext(MajorGroupContext);
+  const context = useContext(SuperadminMajorGroupContext);
   if (!context) {
     throw new Error("useMajorGroup must be used within a MajorGroupProvider");
   }

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAdmin } from "@/contexts/superadmin/superadmin-admin-management";
+import { useAdmin } from "@/contexts/superadmin/superadmin-admin-context";
 
 const formSchema = z.object({
   email: z.string()

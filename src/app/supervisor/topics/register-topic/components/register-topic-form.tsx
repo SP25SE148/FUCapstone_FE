@@ -16,8 +16,9 @@ import {
 } from "@/components/ui/select";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Send, Loader2, ArrowRight } from "lucide-react";
-import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-management";
+import { Download, Send, Loader2 } from "lucide-react";
+import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const difficulties = ["Easy", "Medium", "Hard"];
 
@@ -35,7 +36,7 @@ const formSchema = z.object({
 
 const RegisterTopicForm: React.FC = () => {
   const { businessAreas, registerTopic } = useSupervisorTopic();
-  const { handleSubmit, control, reset } = useForm<z.infer<typeof formSchema>>({
+  const { handleSubmit, control, reset, trigger } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       capstoneId: "",
@@ -51,6 +52,7 @@ const RegisterTopicForm: React.FC = () => {
   });
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
@@ -71,9 +73,18 @@ const RegisterTopicForm: React.FC = () => {
     reset();
     setFile(null);
     setIsLoading(false);
+    setIsConfirmOpen(false);
+  };
+
+  const handleConfirm = async () => {
+    const isvalid = await trigger();
+    if (isvalid) {
+    setIsConfirmOpen(true);
+   }
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)}>
       <CardContent className="p-8 pt-0">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -88,7 +99,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Input
                     id="capstone"
-                    placeholder="Ex: SEP490"
+                    placeholder="Capstone ID..."
                     {...field}
                   />
                   {fieldState.error && (
@@ -109,7 +120,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Input
                     id="englishName"
-                    placeholder="Ex: Capstone management system for FPT university teachers and students"
+                    placeholder="English Name..."
                     {...field}
                   />
                   {fieldState.error && (
@@ -130,7 +141,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Input
                     id="vietnameseName"
-                    placeholder="Ex: Hệ thống quản lý đồ án cho giảng viên và sinh viên của trường đại học FPT"
+                    placeholder="Vietnamese Name..."
                     {...field}
                   />
                   {fieldState.error && (
@@ -151,7 +162,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Input
                     id="abbreviations"
-                    placeholder="Ex: FUC"
+                    placeholder="Abbreviations..."
                     {...field}
                   />
                   {fieldState.error && (
@@ -172,7 +183,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Textarea
                     id="description"
-                    placeholder="Type description for topic here."
+                    placeholder="Type description for topic here..."
                     className="w-full min-h-[90px]"
                     {...field}
                   />
@@ -264,14 +275,14 @@ const RegisterTopicForm: React.FC = () => {
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="supervisor2">Supervisor 2</Label>
+            <Label htmlFor="supervisor2">Co Supervisor Email</Label>
             <Controller
               name="coSupervisorEmails"
               control={control}
               render={({ field }) => (
                 <Input
                   id="supervisor2"
-                  placeholder="Ex: SangNM"
+                  placeholder="Email"
                   {...field}
                 />
               )}
@@ -287,12 +298,32 @@ const RegisterTopicForm: React.FC = () => {
           <Download />
           Template
         </Button>
-        <Button type="submit" className="h-12 flex items-center">
+        <Button type="button" className="h-12 flex items-center" onClick={handleConfirm}>
           {isLoading ? <Loader2 className="animate-spin" /> : <Send className="mr-2" />}
           Register
         </Button>
       </CardFooter>
     </form>
+    <Dialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Registration</DialogTitle>
+            <DialogDescription>
+              Are you sure to register this topic?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsConfirmOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit(onSubmit)} className="flex items-center">
+              {isLoading ? <Loader2 className="animate-spin" /> : <Send className="mr-2" />}
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+  </>
   );
 };
 

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Tabs } from "@/components/layout/app-tabs";
-import { SupervisorTopicProvider } from "@/contexts/supervisor/supervisor-topic-management";
+import { SupervisorTopicProvider } from "@/contexts/supervisor/supervisor-topic-context";
 
 const items = [
   { label: "Topics", href: "/supervisor/topics" },

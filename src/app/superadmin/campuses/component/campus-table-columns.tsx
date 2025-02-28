@@ -23,7 +23,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import UpdateCampus from "./update-campus";
-import { useCampus } from "@/contexts/superadmin/superadmin-campus-management";
+import { useCampus } from "@/contexts/superadmin/superadmin-campus-context";
 
 export type Campus = {
   id: string;

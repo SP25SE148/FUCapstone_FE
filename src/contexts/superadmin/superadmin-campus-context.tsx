@@ -27,9 +27,9 @@ interface CampusContextProps {
   removeCampus: (id: string) => Promise<void>;
 }
 
-const CampusContext = createContext<CampusContextProps | undefined>(undefined);
+const SuperadminCampusContext = createContext<CampusContextProps | undefined>(undefined);
 
-export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
+export const SuperadminCampusProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [campuses, setCampuses] = useState<Campus[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -97,7 +97,7 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <CampusContext.Provider
+    <SuperadminCampusContext.Provider
       value={{
         campuses,
         loading,
@@ -108,12 +108,12 @@ export const CampusProvider = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-    </CampusContext.Provider>
+    </SuperadminCampusContext.Provider>
   );
 };
 
 export const useCampus = () => {
-  const context = useContext(CampusContext);
+  const context = useContext(SuperadminCampusContext);
   if (!context) {
     throw new Error("useCampus must be used within a CampusProvider");
   }

@@ -24,9 +24,9 @@ interface CapstoneContextProps {
   removeCapstone: (id: string) => Promise<void>;
 }
 
-const CapstoneContext = createContext<CapstoneContextProps | undefined>(undefined);
+const SuperadminCapstoneContext = createContext<CapstoneContextProps | undefined>(undefined);
 
-export const CapstoneProvider = ({ children }: { children: React.ReactNode }) => {
+export const SuperadminCapstoneProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [capstones, setCapstones] = useState<Capstone[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -94,16 +94,16 @@ export const CapstoneProvider = ({ children }: { children: React.ReactNode }) =>
   }, []);
 
   return (
-    <CapstoneContext.Provider
+    <SuperadminCapstoneContext.Provider
       value={{ capstones, loading, fetchCapstoneList, addCapstone, updateCapstone, removeCapstone }}
     >
       {children}
-    </CapstoneContext.Provider>
+    </SuperadminCapstoneContext.Provider>
   );
 };
 
 export const useCapstone = () => {
-  const context = useContext(CapstoneContext);
+  const context = useContext(SuperadminCapstoneContext);
   if (!context) {
     throw new Error("useCapstone must be used within a CapstoneProvider");
   }

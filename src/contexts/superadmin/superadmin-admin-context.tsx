@@ -21,9 +21,9 @@ interface AdminContextProps {
   addAdmin: (data: Admin) => Promise<void>;
 }
 
-const AdminContext = createContext<AdminContextProps | undefined>(undefined);
+const SuperadminAdminContext = createContext<AdminContextProps | undefined>(undefined);
 
-export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
+export const SuperadminAdminProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,14 +64,14 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AdminContext.Provider value={{ admins, loading, fetchAdminList, addAdmin }}>
+    <SuperadminAdminContext.Provider value={{ admins, loading, fetchAdminList, addAdmin }}>
       {children}
-    </AdminContext.Provider>
+    </SuperadminAdminContext.Provider>
   );
 };
 
 export const useAdmin = () => {
-  const context = useContext(AdminContext);
+  const context = useContext(SuperadminAdminContext);
   if (!context) {
     throw new Error("useAdmin must be used within an AdminProvider");
   }

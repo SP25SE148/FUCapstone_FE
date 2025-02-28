@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/card";
 import {
   useMajorGroup,
-  MajorGroupProvider,
-} from "@/contexts/superadmin/superadmin-majorgroup-management";
+  SuperadminMajorGroupProvider,
+} from "@/contexts/superadmin/superadmin-majorgroup-context";
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 interface Major {
@@ -89,8 +89,8 @@ function MajorPageContent() {
 
 export default function MajorPage() {
   return (
-    <MajorGroupProvider>
+    <SuperadminMajorGroupProvider>
       <MajorPageContent />
-    </MajorGroupProvider>
+    </SuperadminMajorGroupProvider>
   );
 }

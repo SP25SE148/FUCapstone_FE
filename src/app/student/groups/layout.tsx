@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Tabs } from "@/components/layout/app-tabs";
-import { StudentGroupProvider } from "@/contexts/student/student-group-managment";
+import { StudentGroupProvider } from "@/contexts/student/student-group-context";
 
 const items = [
   { label: "My Group", href: "/student/groups" },
