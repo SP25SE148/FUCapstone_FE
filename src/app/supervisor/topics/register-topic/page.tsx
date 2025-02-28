@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import RegisterTopicForm from "@/app/supervisor/topics/register-topic/components/register-topic-form";
-=======
-import { Download, Send } from "lucide-react";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import RegisterTopicForm from "@/app/supervisor/topics/register-topic/components/register-topic-form";
-import { Button } from "@/components/ui/button";
->>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 
 export default function RegisterTopicPage() {
   return (
@@ -20,22 +13,6 @@ export default function RegisterTopicPage() {
         </CardDescription>
       </CardHeader>
       <RegisterTopicForm />
-<<<<<<< HEAD
-=======
-      <CardFooter className="justify-between">
-        <Button
-          variant={"outline"}
-          className="h-12 border-primary text-primary hover:bg-primary hover:text-white"
-        >
-          <Download />
-          Template
-        </Button>
-        <Button className="h-12">
-          <Send />
-          Register
-        </Button>
-      </CardFooter>
->>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
     </Card>
   );
 }

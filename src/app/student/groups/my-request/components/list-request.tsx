@@ -1,24 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-<<<<<<< HEAD
-=======
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import MyRequest from "@/app/student/groups/my-request/components/my-requests";
-import GroupRequest from "@/app/student/groups/my-request/components/group-request";
-import { useStudentGroup } from "@/contexts/student/student-group-management";
->>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { useRouter } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
@@ -133,17 +115,10 @@ export function ListRequest() {
   };
 
   return (
-<<<<<<< HEAD
     <Card className="min-h-[calc(100vh-60px)] bg-gradient-to-tr from-primary/5 to-background">
       <CardHeader>
         <CardTitle className="font-semibold tracking-tight text-xl text-primary">List Request</CardTitle>
         <CardDescription>Information about your request</CardDescription>
-=======
-    <Card className="w-full shadow-lg">
-      <CardHeader className="border-b">
-      <CardTitle className="font-semibold tracking-tight text-xl text-primary">List Request</CardTitle>
-      <CardDescription>List of requests from students</CardDescription>
->>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="my-request" className="w-full">

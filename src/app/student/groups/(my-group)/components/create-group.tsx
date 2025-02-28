@@ -3,11 +3,7 @@ import { CirclePlus, Users } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-<<<<<<< HEAD
 import { useStudentGroup } from "@/contexts/student/student-group-context";
-=======
-import { useStudentGroup } from "@/contexts/student/student-group-management";
->>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 
 export default function CreateGroup() {
     const { createGroup } = useStudentGroup();
