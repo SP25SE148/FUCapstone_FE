@@ -21,7 +21,7 @@ export function News({ data }: NewsProps) {
   const router = useRouter();
   return (
     <div className="container mx-auto px-24 py-6">
-      <div className="bg-gradient-to-r from-violet-300 to-primary text-background py-8 rounded-lg shadow-lg mb-6">
+      <div className="bg-gradient-to-r from-[#ade9ff] to-primary text-background py-8 rounded-lg shadow-lg mb-6">
         <h1 className="text-4xl font-extrabold text-center">
           Welcome to the News Section
         </h1>

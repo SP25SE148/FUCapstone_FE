@@ -9,8 +9,13 @@ import InviteMember from "./invite-member";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useStudentGroup } from "@/contexts/student/student-group-managment";
-import { useStudentProfile } from "@/contexts/student/student-profile-managment";
+<<<<<<< HEAD
+import { useStudentGroup } from "@/contexts/student/student-group-context";
+import { useStudentProfile } from "@/contexts/student/student-profile-context";
+=======
+import { useStudentGroup } from "@/contexts/student/student-group-management";
+import { useStudentProfile } from "@/contexts/student/student-profile-management";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog";
 

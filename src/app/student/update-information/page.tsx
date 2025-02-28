@@ -8,7 +8,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useStudentProfile } from "@/contexts/student/student-profile-managment";
+<<<<<<< HEAD
+import { useStudentProfile } from "@/contexts/student/student-profile-context";
+=======
+import { useStudentProfile } from "@/contexts/student/student-profile-management";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 export default function StudentUpdateForm() {

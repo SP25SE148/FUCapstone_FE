@@ -1,9 +1,14 @@
 "use client";
 
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+=======
+import type React from "react";
+import { useEffect, useState } from "react";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,10 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+<<<<<<< HEAD
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Send, Loader2, ArrowRight } from "lucide-react";
-import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-management";
+import { Download, Send, Loader2 } from "lucide-react";
+import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const difficulties = ["Easy", "Medium", "Hard"];
 
@@ -35,7 +42,7 @@ const formSchema = z.object({
 
 const RegisterTopicForm: React.FC = () => {
   const { businessAreas, registerTopic } = useSupervisorTopic();
-  const { handleSubmit, control, reset } = useForm<z.infer<typeof formSchema>>({
+  const { handleSubmit, control, reset, trigger } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       capstoneId: "",
@@ -51,6 +58,7 @@ const RegisterTopicForm: React.FC = () => {
   });
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
@@ -71,9 +79,18 @@ const RegisterTopicForm: React.FC = () => {
     reset();
     setFile(null);
     setIsLoading(false);
+    setIsConfirmOpen(false);
+  };
+
+  const handleConfirm = async () => {
+    const isvalid = await trigger();
+    if (isvalid) {
+    setIsConfirmOpen(true);
+   }
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)}>
       <CardContent className="p-8 pt-0">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -88,7 +105,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Input
                     id="capstone"
-                    placeholder="Ex: SEP490"
+                    placeholder="Capstone ID..."
                     {...field}
                   />
                   {fieldState.error && (
@@ -109,7 +126,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Input
                     id="englishName"
-                    placeholder="Ex: Capstone management system for FPT university teachers and students"
+                    placeholder="English Name..."
                     {...field}
                   />
                   {fieldState.error && (
@@ -130,7 +147,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Input
                     id="vietnameseName"
-                    placeholder="Ex: Hệ thống quản lý đồ án cho giảng viên và sinh viên của trường đại học FPT"
+                    placeholder="Vietnamese Name..."
                     {...field}
                   />
                   {fieldState.error && (
@@ -151,7 +168,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Input
                     id="abbreviations"
-                    placeholder="Ex: FUC"
+                    placeholder="Abbreviations..."
                     {...field}
                   />
                   {fieldState.error && (
@@ -172,7 +189,7 @@ const RegisterTopicForm: React.FC = () => {
                 <>
                   <Textarea
                     id="description"
-                    placeholder="Type description for topic here."
+                    placeholder="Type description for topic here..."
                     className="w-full min-h-[90px]"
                     {...field}
                   />
@@ -264,14 +281,14 @@ const RegisterTopicForm: React.FC = () => {
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="supervisor2">Supervisor 2</Label>
+            <Label htmlFor="supervisor2">Co Supervisor Email</Label>
             <Controller
               name="coSupervisorEmails"
               control={control}
               render={({ field }) => (
                 <Input
                   id="supervisor2"
-                  placeholder="Ex: SangNM"
+                  placeholder="Email"
                   {...field}
                 />
               )}
@@ -287,13 +304,122 @@ const RegisterTopicForm: React.FC = () => {
           <Download />
           Template
         </Button>
-        <Button type="submit" className="h-12 flex items-center">
+        <Button type="button" className="h-12 flex items-center" onClick={handleConfirm}>
           {isLoading ? <Loader2 className="animate-spin" /> : <Send className="mr-2" />}
           Register
         </Button>
       </CardFooter>
     </form>
+    <Dialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Registration</DialogTitle>
+            <DialogDescription>
+              Are you sure to register this topic?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsConfirmOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit(onSubmit)} className="flex items-center">
+              {isLoading ? <Loader2 className="animate-spin" /> : <Send className="mr-2" />}
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+  </>
   );
 };
 
 export default RegisterTopicForm;
+=======
+import { CardContent } from "@/components/ui/card";
+import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-management";
+
+const difficulties = ["Easy", "Medium", "Hard"];
+
+const RegisterTopicForm: React.FC = () => {
+  const { businessAreas } = useSupervisorTopic();
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
+  const [businessArea, setBusinessArea] = useState<string>("");
+
+  return (
+    <CardContent className="p-8 pt-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="space-y-1">
+          <Label htmlFor="capstone">Capstone</Label>
+          <Input id="capstone" placeholder="Ex: SEP490" />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="englishName">English Name</Label>
+          <Input
+            id="englishName"
+            placeholder="Ex: Capstone management system for FPT university teachers and students"
+          />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="vietnameseName">Vietnamese Name</Label>
+          <Input
+            id="vietnameseName"
+            placeholder="Ex: Hệ thống quản lý đồ án cho giảng viên và sinh viên của trường đại học FPT"
+          />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="abbreviations">Abbreviations</Label>
+          <Input id="abbreviations" placeholder="Ex: FUC" />
+        </div>
+        <div className="space-y-1 md:col-span-2">
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            placeholder="Type description for topic here."
+            className="w-full min-h-[90px]"
+          />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="difficulty">Difficulty Level</Label>
+          <Select onValueChange={setSelectedDifficulty}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select difficulty level" />
+            </SelectTrigger>
+            <SelectContent>
+              {difficulties.map((difficulty) => (
+                <SelectItem key={difficulty} value={difficulty}>
+                  {difficulty}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="businessArea">Business Area</Label>
+          <Select value={businessArea} onValueChange={setBusinessArea}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select business area" />
+            </SelectTrigger>
+            <SelectContent>
+              {businessAreas.map((area) => (
+                <SelectItem key={area.id} value={area.name}>
+                  {area.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="file">File</Label>
+          <Input id="file" type="file" />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="supervisor2">Supervisor 2</Label>
+          <Input id="supervisor2" placeholder="Ex: SangNM" />
+        </div>
+      </div>
+    </CardContent>
+  );
+};
+
+export default RegisterTopicForm;
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd

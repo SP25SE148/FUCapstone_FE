@@ -1,6 +1,10 @@
 "use client";
 
+<<<<<<< HEAD
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
+=======
 import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-management";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
 import {
