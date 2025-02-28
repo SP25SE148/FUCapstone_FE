@@ -1,16 +1,10 @@
 "use client";
 
 import { toast } from "sonner";
-<<<<<<<< HEAD:src/contexts/student/student-profile-context.tsx
 import { useAuth } from "../auth-context";
 import { useApi } from "../../hooks/use-api";
-========
-
->>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd:src/contexts/student/student-profile-management.tsx
 import { useRouter, usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "@/contexts/auth-context";
-import { useApi } from "@/hooks/use-api";
 
 interface StudentProfile {
   id: string;

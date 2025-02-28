@@ -6,11 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-<<<<<<< HEAD
 import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
-=======
-import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-management";
->>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 
 export default function AddMajorGroup() {
   const { addMajorGroup } = useMajorGroup(); 

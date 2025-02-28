@@ -4,11 +4,8 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-<<<<<<<< HEAD:src/contexts/student/student-group-context.tsx
 import { useStudentProfile } from "./student-profile-context";
-========
-import { useStudentProfile } from "./student-profile-management";
->>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd:src/contexts/student/student-group-management.tsx
+
 
 interface Member {
   id: string;
