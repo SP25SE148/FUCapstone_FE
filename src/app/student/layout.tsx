@@ -2,7 +2,11 @@
 
 import React from "react";
 import StudentTaskbar from "@/app/student/components/student-taskbar";
+<<<<<<< HEAD
 import { StudentProfileProvider } from "@/contexts/student/student-profile-context";
+=======
+import { StudentProfileProvider } from "@/contexts/student/student-profile-management";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 
 export default function RootLayout({
   children,

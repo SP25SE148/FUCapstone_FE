@@ -14,8 +14,13 @@ import {
 } from "@/components/ui/card";
 import {
   useMajorGroup,
+<<<<<<< HEAD
   SuperadminMajorGroupProvider,
 } from "@/contexts/superadmin/superadmin-majorgroup-context";
+=======
+  MajorGroupProvider,
+} from "@/contexts/superadmin/superadmin-majorgroup-management";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 
 interface Major {

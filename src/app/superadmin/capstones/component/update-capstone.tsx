@@ -7,7 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+<<<<<<< HEAD
 import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-context";
+=======
+import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-management";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface Capstone {

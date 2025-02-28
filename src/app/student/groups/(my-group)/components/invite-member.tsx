@@ -5,7 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { useStudentGroup } from "@/contexts/student/student-group-context";
+=======
+import { useStudentGroup } from "@/contexts/student/student-group-management";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 const formSchema = z.object({

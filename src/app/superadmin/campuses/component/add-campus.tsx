@@ -9,7 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+<<<<<<< HEAD
 import { useCampus } from "@/contexts/superadmin/superadmin-campus-context";
+=======
+import { useCampus } from "@/contexts/superadmin/superadmin-campus-management";
+>>>>>>> 7b63b41533e81202df5ffb7dd3054130119342fd
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const formSchema = z.object({
