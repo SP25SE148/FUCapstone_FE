@@ -1,3 +1,4 @@
+import LookupTopic from "./lookup-topic";
 import { columns, Topic } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -78,7 +79,7 @@ export default function TopicTable() {
                         <DataTable columns={columns} data={data} />
                     </TabsContent>
                     <TabsContent value="allTopics">
-
+                        <LookupTopic />
                     </TabsContent>
                 </Tabs>
             </CardContent>
