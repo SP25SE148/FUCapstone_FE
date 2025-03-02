@@ -1,6 +1,6 @@
 import TopicTable from "./components/topic-table";
 
-export default function TopicsPage() {
+export default function MyTopicsPage() {
     return (
         <TopicTable />
     )

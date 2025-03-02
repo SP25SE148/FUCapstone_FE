@@ -5,7 +5,7 @@ import { Tabs } from "@/components/layout/app-tabs";
 import { SupervisorTopicProvider } from "@/contexts/supervisor/supervisor-topic-context";
 
 const items = [
-  { label: "Topics", href: "/supervisor/topics" },
+  { label: "My Topics", href: "/supervisor/topics" },
   { label: "Register Topic", href: "/supervisor/topics/register-topic" },
   { label: "My Request", href: "/supervisor/topics/my-request" },
 ];

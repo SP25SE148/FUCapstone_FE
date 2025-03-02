@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useApi } from "../../hooks/use-api";
 import { toast } from "sonner";
+import React, { createContext, useContext, useEffect, useState } from "react";
+
+import { useApi } from "../../hooks/use-api";
 
 interface BusinessArea {
   id: string;
@@ -10,9 +11,35 @@ interface BusinessArea {
   description: string;
 }
 
+interface Topic {
+  id: string;
+  code: string;
+  campusId: string;
+  semesterId: string
+  capstoneId: string;
+  businessAreaName: string;
+  difficultyLevel: number;
+  englishName: string;
+  vietnameseName: string
+  abbreviation: string;
+  description: string;
+  mainSupervisorEmail: string
+  mainSupervisorName: string
+  coSupervisors: [];
+  fileName: string;
+  fileUrl: string
+  createdDate: string;
+  status: number
+}
+
 interface SupervisorTopicContextType {
-  fetchBusinessArea: () => Promise<void>;
+  isLoading: boolean;
+  topicsOfSupervisor: any;
   businessAreas: BusinessArea[];
+  fetchCampusList: () => Promise<[]>;
+  fetchSemesterList: () => Promise<[]>;
+  fetchBusinessArea: () => Promise<void>;
+  fetchTopicsOfSupervisor: () => Promise<void>
   registerTopic: (data: FormData) => Promise<void>;
 }
 
@@ -24,7 +51,21 @@ export const SupervisorTopicProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const { callApi } = useApi();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [businessAreas, setBusinessAreas] = useState<BusinessArea[]>([]);
+  const [topicsOfSupervisor, setTopicsOfSupervisor] = useState<Topic[]>([]);
+
+  const fetchTopicsOfSupervisor = async () => {
+    setIsLoading(true);
+    try {
+      const response = await callApi("fuc/topics/supervisor", {
+        method: "GET",
+      });
+      setTopicsOfSupervisor(response?.value);
+    } finally {
+      setIsLoading(false)
+    }
+  };
 
   const fetchBusinessArea = async () => {
     try {
@@ -56,16 +97,36 @@ export const SupervisorTopicProvider: React.FC<{
     return response;
   };
 
+  const fetchCampusList = async () => {
+    const response = await callApi("fuc/AcademicManagement/campus", {
+      method: "GET",
+    });
+    return (response?.value);
+  };
+
+  const fetchSemesterList = async () => {
+    const response = await callApi("fuc/AcademicManagement/semester", {
+      method: "GET",
+    });
+    return (response?.value);
+  };
+
   useEffect(() => {
+    fetchTopicsOfSupervisor();
     fetchBusinessArea();
   }, []);
 
   return (
     <SupervisorTopicContext.Provider
       value={{
-        fetchBusinessArea,
+        isLoading,
         businessAreas,
+        topicsOfSupervisor,
         registerTopic,
+        fetchCampusList,
+        fetchSemesterList,
+        fetchBusinessArea,
+        fetchTopicsOfSupervisor,
       }}
     >
       {children}
