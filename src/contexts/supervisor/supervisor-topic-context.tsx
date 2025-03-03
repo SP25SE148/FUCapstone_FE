@@ -39,6 +39,7 @@ interface SupervisorTopicContextType {
   fetchCampusList: () => Promise<[]>;
   fetchSemesterList: () => Promise<[]>;
   fetchBusinessArea: () => Promise<void>;
+  fetchCapstoneListByMajor: (majorId: string) => Promise<[]>;
   fetchTopicsOfSupervisor: () => Promise<void>
   registerTopic: (data: FormData) => Promise<void>;
 }
@@ -85,6 +86,13 @@ export const SupervisorTopicProvider: React.FC<{
     }
   };
 
+  const fetchCapstoneListByMajor = async (majorId: string) => {
+    const response = await callApi(`fuc/AcademicManagement/capstone/by-major/${majorId}`, {
+      method: "GET",
+    });
+    return (response?.value);
+  };
+
   const registerTopic = async (data: FormData) => {
     const response = await callApi(`fuc/topics`, {
       method: "POST",
@@ -126,6 +134,7 @@ export const SupervisorTopicProvider: React.FC<{
         fetchCampusList,
         fetchSemesterList,
         fetchBusinessArea,
+        fetchCapstoneListByMajor,
         fetchTopicsOfSupervisor,
       }}
     >
