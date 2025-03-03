@@ -11,7 +11,19 @@ interface BusinessArea {
   description: string;
 }
 
-interface Topic {
+export interface LookupProp {
+  mainSupervisorEmail: string,
+  searchTerm: string,
+  status: string,
+  difficultyLevel: string,
+  businessAreaId: string,
+  capstoneId: string,
+  semesterId: string,
+  campusId: string,
+  pageNumber: string,
+}
+
+export interface Topic {
   id: string;
   code: string;
   campusId: string;
@@ -34,14 +46,20 @@ interface Topic {
 
 interface SupervisorTopicContextType {
   isLoading: boolean;
+  lookupTopics: any;
   topicsOfSupervisor: any;
   businessAreas: BusinessArea[];
   fetchCampusList: () => Promise<[]>;
   fetchSemesterList: () => Promise<[]>;
+  fetchCapstoneList: () => Promise<[]>;
   fetchBusinessArea: () => Promise<void>;
-  fetchCapstoneListByMajor: (majorId: string) => Promise<[]>;
-  fetchTopicsOfSupervisor: () => Promise<void>
+
+  fetchTopicsOfSupervisor: () => Promise<void>;
+  fetchTopicsById: (id: string) => Promise<Topic>;
+  lookupTopic: (data: LookupProp) => Promise<any>;
+
   registerTopic: (data: FormData) => Promise<void>;
+  getPresignedUrlTopicDocument: (id: string) => Promise<string>
 }
 
 const SupervisorTopicContext = createContext<
@@ -53,6 +71,7 @@ export const SupervisorTopicProvider: React.FC<{
 }> = ({ children }) => {
   const { callApi } = useApi();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [lookupTopics, setLookupTopics] = useState<any>({});
   const [businessAreas, setBusinessAreas] = useState<BusinessArea[]>([]);
   const [topicsOfSupervisor, setTopicsOfSupervisor] = useState<Topic[]>([]);
 
@@ -66,6 +85,20 @@ export const SupervisorTopicProvider: React.FC<{
     } finally {
       setIsLoading(false)
     }
+  };
+
+  const fetchTopicsById = async (id: string) => {
+    const response = await callApi(`fuc/topics/${id}`, {
+      method: "GET",
+    });
+    return (response?.value);
+  };
+
+  const getPresignedUrlTopicDocument = async (id: string) => {
+    const response = await callApi(`fuc/topics/presigned/${id}`, {
+      method: "GET",
+    });
+    return (response?.value);
   };
 
   const fetchBusinessArea = async () => {
@@ -119,6 +152,21 @@ export const SupervisorTopicProvider: React.FC<{
     return (response?.value);
   };
 
+  const fetchCapstoneList = async () => {
+    const response = await callApi("fuc/AcademicManagement/capstone", {
+      method: "GET",
+    });
+    return (response?.value);
+  };
+
+  const lookupTopic = async (data: LookupProp) => {
+    const response = await callApi(`fuc/topics?MainSupervisorEmail=${data?.mainSupervisorEmail}&SearchTerm=${data?.searchTerm}&Status=${data?.status}&DifficultyLevel=${data?.difficultyLevel}&BusinessAreaId=${data?.businessAreaId}&CapstoneId=${data?.capstoneId}&SemesterId=${data?.semesterId}&CampusId=${data?.campusId}&PageNumber=${data?.pageNumber}&PageSize=5`, {
+      method: "GET",
+    });
+    setLookupTopics(response?.value);
+    return response;
+  };
+
   useEffect(() => {
     fetchTopicsOfSupervisor();
     fetchBusinessArea();
@@ -128,14 +176,19 @@ export const SupervisorTopicProvider: React.FC<{
     <SupervisorTopicContext.Provider
       value={{
         isLoading,
+        lookupTopics,
         businessAreas,
         topicsOfSupervisor,
+        lookupTopic,
         registerTopic,
+        fetchTopicsById,
         fetchCampusList,
         fetchSemesterList,
+        fetchCapstoneList,
         fetchBusinessArea,
         fetchCapstoneListByMajor,
         fetchTopicsOfSupervisor,
+        getPresignedUrlTopicDocument,
       }}
     >
       {children}
