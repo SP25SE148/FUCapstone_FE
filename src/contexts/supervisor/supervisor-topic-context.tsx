@@ -53,9 +53,11 @@ interface SupervisorTopicContextType {
   fetchSemesterList: () => Promise<[]>;
   fetchCapstoneList: () => Promise<[]>;
   fetchBusinessArea: () => Promise<void>;
+
   fetchTopicsOfSupervisor: () => Promise<void>;
   fetchTopicsById: (id: string) => Promise<Topic>;
   lookupTopic: (data: LookupProp) => Promise<any>;
+
   registerTopic: (data: FormData) => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>
 }
@@ -115,6 +117,13 @@ export const SupervisorTopicProvider: React.FC<{
       });
       console.error("Error fetching business areas:", error);
     }
+  };
+
+  const fetchCapstoneListByMajor = async (majorId: string) => {
+    const response = await callApi(`fuc/AcademicManagement/capstone/by-major/${majorId}`, {
+      method: "GET",
+    });
+    return (response?.value);
   };
 
   const registerTopic = async (data: FormData) => {
@@ -177,6 +186,7 @@ export const SupervisorTopicProvider: React.FC<{
         fetchSemesterList,
         fetchCapstoneList,
         fetchBusinessArea,
+        fetchCapstoneListByMajor,
         fetchTopicsOfSupervisor,
         getPresignedUrlTopicDocument,
       }}

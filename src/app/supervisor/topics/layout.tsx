@@ -8,6 +8,7 @@ const items = [
   { label: "My Topics", href: "/supervisor/topics" },
   { label: "Register Topic", href: "/supervisor/topics/register-topic" },
   { label: "My Request", href: "/supervisor/topics/my-request" },
+  { label: "Topic Appraisal", href: "/supervisor/topics/appraisal" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

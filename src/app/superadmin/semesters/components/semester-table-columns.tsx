@@ -19,10 +19,14 @@ import { Badge } from "@/components/ui/badge";
 export type Semester = {
   id: string;
   name: string;
-  code: string;
   startDate: string;
   endDate: string;
-  status: string;
+  isDeleted: boolean;
+  createdDate: string;
+  updatedDate: string | null;
+  createdBy: string;
+  updatedBy: string | null;
+  deletedAt: string | null;
 };
 
 export const columns: ColumnDef<Semester>[] = [
@@ -52,41 +56,41 @@ export const columns: ColumnDef<Semester>[] = [
     ),
   },
   {
-    accessorKey: "code",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
-    ),
-  },
-  {
     accessorKey: "startDate",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Start Date" />
     ),
+    cell: ({ row }) => {
+      const startDate = new Date(row.original.startDate).toLocaleDateString();
+      return <span>{startDate}</span>;
+    },
   },
   {
     accessorKey: "endDate",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="End Date" />
     ),
+    cell: ({ row }) => {
+      const endDate = new Date(row.original.endDate).toLocaleDateString();
+      return <span>{endDate}</span>;
+    },
   },
   {
-    accessorKey: "status",
+    accessorKey: "isDeleted",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const campus = row.original;
-      const status = campus.status;
-
+      const isDeleted = row.original.isDeleted;
       return (
         <Badge
           className={`${
-            status === "Processing"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
+            isDeleted
+              ? "bg-red-100 text-red-600 hover:bg-red-100"
+              : "bg-green-100 text-green-600 hover:bg-green-100"
           }`}
         >
-          {campus.status}
+          {isDeleted ? "Deleted" : "Active"}
         </Badge>
       );
     },
@@ -94,7 +98,7 @@ export const columns: ColumnDef<Semester>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const manager = row.original;
+      const semester = row.original;
 
       return (
         <div className="flex items-center justify-center">
@@ -108,13 +112,12 @@ export const columns: ColumnDef<Semester>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(manager.id)}
+                onClick={() => navigator.clipboard.writeText(semester.id)}
               >
-                Copy payment ID
+                Copy Semester ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <DropdownMenuItem>View details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

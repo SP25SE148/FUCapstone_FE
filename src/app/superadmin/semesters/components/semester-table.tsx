@@ -10,10 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { semesterData } from "@/app/superadmin/semesters/table-data";
+import { useSemester } from "@/contexts/superadmin/superadmin-semester-context";
 
 export default function SemesterTable() {
-  const data = semesterData;
+  const { semesters } = useSemester();
 
   return (
     <Card>
@@ -23,7 +23,7 @@ export default function SemesterTable() {
             <CardTitle className="font-semibold tracking-tight text-xl">
               Semesters
             </CardTitle>
-            <CardDescription>List of FPT University smesters</CardDescription>
+            <CardDescription>List of FPT University semesters</CardDescription>
           </div>
           <Button className="bg-primary hover:bg-primary/90">
             Add Semester
@@ -31,7 +31,7 @@ export default function SemesterTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={semesters} />
       </CardContent>
     </Card>
   );
