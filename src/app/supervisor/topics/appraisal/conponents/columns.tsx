@@ -1,58 +1,16 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { MoreHorizontal } from "lucide-react"
+import Link from "next/link"
 import { ColumnDef } from "@tanstack/react-table"
 
+import { TopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context"
+
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
-import Link from "next/link"
 
-export type Topic = {
-    id: string
-    capstone: string
-    code: string
-    englishName: string
-    vietnameseName: string
-    abbreviation: string
-    supervisor: string
-    supervisor2: string
-}
-
-const ActionsCell = ({ topic }: { topic: Topic }) => {
-    const router = useRouter();
-
-    return (
-        <div className="flex items-center justify-center">
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem
-                        onClick={() => navigator.clipboard.writeText(topic.id)}
-                    >
-                        Copy Topic ID
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onClick={() => router.push(`/supervisor/topics/appraisal/${topic.id}`)}
-                    >
-                        View details
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
-    );
-};
-
-export const columns: ColumnDef<Topic>[] = [
+export const columns: ColumnDef<TopicAppraisal>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -76,63 +34,89 @@ export const columns: ColumnDef<Topic>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "capstone",
+        accessorKey: "topicEnglishName",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Capstone" />
+            <DataTableColumnHeader column={column} title="English name" />
         ),
     },
     {
-        accessorKey: "code",
+        accessorKey: "status",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Code" />
-        ),
-    },
-    {
-        accessorKey: "englishName",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="English Name" />
+            <DataTableColumnHeader column={column} title="Appraisal status" />
         ),
         cell: ({ row }) => {
-            return (
-                <Link className="text-primary font-bold underline" href={`/supervisor/topics/appraisal/${row?.original?.id}`}>{row.original.englishName}</Link>
+            const topicAppraisal = row.original;
+            switch (topicAppraisal?.status) {
+                case "Pending":
+                    return (
+                        <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                            Pending
+                        </Badge>
+                    );
+                case "Accepted":
+                    return (
+                        <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                            Accepted
+                        </Badge>
+                    );
+                case "Considered":
+                    return (
+                        <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
+                            Considered
+                        </Badge>
+                    );
+                case "Rejected":
+                    return (
+                        <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
+                            Rejected
+                        </Badge>
+                    );
+                default:
+                    return null;
+            }
+        },
+    },
+    {
+        accessorKey: "appraisalDate",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Appraisal date" />
+        ),
+        cell: ({ row }) => {
+            const topicAppraisal = row.original;
+            const date = new Date(topicAppraisal?.appraisalDate || "");
+            // Chuyển sang giờ Việt Nam (GMT+7)
+            const vnDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
+
+            const day = vnDate.getDate().toString().padStart(2, '0');
+            const month = (vnDate.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
+            const year = vnDate.getFullYear();
+
+            const hours = vnDate.getHours().toString().padStart(2, '0');
+            const minutes = vnDate.getMinutes().toString().padStart(2, '0');
+            const seconds = vnDate.getSeconds().toString().padStart(2, '0');
+
+            return topicAppraisal?.appraisalDate && (
+                <div className="flex items-center gap-2">
+                    <span>{`${day}/${month}/${year}`}</span>
+                    <span className="text-muted-foreground">{`${hours}:${minutes}:${seconds}`}</span>
+                </div>
             )
         }
     },
     {
-        accessorKey: "vietnameseName",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Vietnamese Name" />
-        ),
-    },
-    {
-        accessorKey: "abbreviation",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Abbreviation" />
-        ),
-    },
-    {
-        accessorKey: "supervisor",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Supervisor" />
-        ),
-    },
-    {
-        accessorKey: "supervisor2",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Supervisor 2" />
-        ),
-    },
-    // {
-    //     accessorKey: "status",
-    //     header: ({ column }) => (
-    //         <DataTableColumnHeader column={column} title="Status" />
-    //     ),
-    // },
-    {
-        id: "actions",
+        id: "appraisal",
         cell: ({ row }) => {
-            const topic = row.original;
-            return <ActionsCell topic={topic} />;
+            const topicAppraisal = row.original;
+            return topicAppraisal?.status == "Pending" && <Button size={"sm"}>
+                <Link
+                    href={{
+                        pathname: `/supervisor/topics/appraisal/${topicAppraisal?.topicId}`,
+                        query: { topicAppraisalId: `${topicAppraisal?.topicAppraisalId}` }
+                    }}
+                >
+                    Appraisal
+                </Link>
+            </Button>;
         },
     },
 ];

@@ -60,9 +60,6 @@ interface SupervisorTopicContextType {
   lookupTopic: (data: LookupProp) => Promise<any>;
   registerTopic: (data: FormData) => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
-
-  fetchTopicAppraisalAssigned: () => Promise<[]>;
-  submitAppraisalForSupervisor: (data: any) => Promise<any>;
 }
 
 const SupervisorTopicContext = createContext<
@@ -170,24 +167,6 @@ export const SupervisorTopicProvider: React.FC<{
     return response;
   };
 
-  const fetchTopicAppraisalAssigned = async () => {
-    const response = await callApi("fuc/topics/get-topic-appraisal-by-self?Status&SearchTerm&OrderByAppraisalDate", {
-      method: "GET",
-    });
-    return (response?.value);
-  };
-
-  const submitAppraisalForSupervisor = async (data: any) => {
-    const response = await callApi(`fuc/topics/appraisal`, {
-      method: "POST",
-      body: data,
-    });
-    if (response?.isSuccess === true) {
-      toast.success("Topic registered successfully");
-    }
-    return response;
-  };
-
   useEffect(() => {
     fetchTopicsOfSupervisor();
     fetchBusinessArea();
@@ -209,9 +188,7 @@ export const SupervisorTopicProvider: React.FC<{
         fetchBusinessArea,
         fetchTopicsOfSupervisor,
         fetchCapstoneListByMajor,
-        fetchTopicAppraisalAssigned,
         getPresignedUrlTopicDocument,
-        submitAppraisalForSupervisor,
       }}
     >
       {children}

@@ -4,10 +4,11 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { BookOpen, Loader2, Send, School, Calendar, FileCheck, PenTool, BriefcaseBusiness, Star, BadgeInfo, FileX } from "lucide-react";
 
 import { Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
+import { useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,12 +21,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const formSchema = z.object({
   appraisalContent: z.string()
-    .min(10, "Appraisal content must be at least 10 characters long.")
-    .max(500, "Appraisal content must not exceed 500 characters."),
+    // .min(10, "Appraisal content must be at least 10 characters long.")
+    .max(500, "Appraisal content must not exceed 500 characters.")
+    .optional(),
 
   appraisalComment: z.string()
-    .min(5, "Appraisal comment must be at least 5 characters long.")
-    .max(200, "Appraisal comment must not exceed 200 characters."),
+    // .min(5, "Appraisal comment must be at least 5 characters long.")
+    .max(200, "Appraisal comment must not exceed 200 characters.")
+    .optional(),
 
   status: z.enum(["1", "2", "3"], {
     errorMap: () => ({ message: "Please select evaluation" }),
@@ -102,9 +105,12 @@ export default function TopicAppraisalDetail() {
   const [isLoading, setIsLoading] = useState(false);
 
   const params = useParams();
-  const id: string = String(params.id);
+  const searchParams = useSearchParams();
+  const topicId: string = String(params.id);
+  const topicAppraisalId = searchParams.get('topicAppraisalId');
   const [topic, setTopic] = useState<Topic>();
-  const { fetchTopicsById, submitAppraisalForSupervisor } = useSupervisorTopic();
+  const { fetchTopicsById } = useSupervisorTopic();
+  const { getTopicAppraisalBySelf, submitAppraisalForSupervisor } = useSupervisorTopicAppraisal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -117,8 +123,15 @@ export default function TopicAppraisalDetail() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const res: any = await submitAppraisalForSupervisor(values);
+      const data = {
+        "topicAppraisalId": topicAppraisalId,
+        "appraisalContent": values?.appraisalContent,
+        "appraisalComment": values?.appraisalComment,
+        "status": Number(values?.status),
+      }
+      const res: any = await submitAppraisalForSupervisor(data);
       if (res?.isSuccess) {
+        getTopicAppraisalBySelf();
         form.reset();
         router.back()
       }
@@ -129,10 +142,10 @@ export default function TopicAppraisalDetail() {
 
   useEffect(() => {
     (async () => {
-      const topicDetail = await fetchTopicsById(id);
+      const topicDetail = await fetchTopicsById(topicId);
       setTopic(topicDetail)
     })();
-  }, [])
+  }, [topicId, topicAppraisalId])
 
   return topic
     ?
