@@ -106,7 +106,7 @@ const RegisterTopicForm: React.FC = () => {
                 name="capstoneId"
                 control={control}
                 render={({ field, fieldState }) => (
-                  <Select onValueChange={field.onChange} defaultValue={field.value} onOpenChange={handleFetchCapstones}>
+                  <Select onValueChange={field.onChange} value={field.value} onOpenChange={handleFetchCapstones}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a capstone" />
                     </SelectTrigger>
@@ -218,7 +218,7 @@ const RegisterTopicForm: React.FC = () => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <>
-                    <Select onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select difficulty level" />
                       </SelectTrigger>

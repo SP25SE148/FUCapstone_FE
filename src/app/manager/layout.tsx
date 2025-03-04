@@ -23,6 +23,14 @@ const items = [
             {
                 title: "List topics",
                 url: "/manager/topics",
+            },
+            {
+                title: "Assign appraisal",
+                url: "/manager/topics/assign-appraisal",
+            },
+            {
+                title: "List appraisal",
+                url: "/manager/topics/appraisal",
             }
         ]
     },
