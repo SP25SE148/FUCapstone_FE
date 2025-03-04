@@ -6,7 +6,7 @@ import { Download } from "lucide-react";
 import { Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function DownloadDocument({ topic }: { topic: Topic }) {
     const { getPresignedUrlTopicDocument } = useSupervisorTopic();
@@ -46,6 +46,7 @@ export default function DownloadDocument({ topic }: { topic: Topic }) {
                 <DialogContent className="max-w-4xl w-full">
                     <DialogHeader>
                         <DialogTitle>Preview</DialogTitle>
+                        <DialogDescription>Document of <strong className="text-primary">{topic?.englishName}</strong></DialogDescription>
                     </DialogHeader>
                     <iframe
                         className="w-full h-[540px]"

@@ -250,5 +250,4 @@ export default function TopicDetailsPage() {
                 </div>
             </div>
         </Card>
-
 }
