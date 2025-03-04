@@ -22,7 +22,7 @@ const items = [
         children: [
             {
                 title: "List topics",
-                url: "/manager/topics",
+                url: "/manager/topics/list-topic",
             },
             {
                 title: "Assign appraisal",
