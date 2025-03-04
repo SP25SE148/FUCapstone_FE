@@ -10,9 +10,27 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 
 const items = [
-    { title: "Dashboard", url: "/manager", icon: LayoutDashboard, },
-    { title: "Topics", url: "/manager/topics", icon: FileText, },
-    { title: "Groups", url: "/manager/groups", icon: Users, },
+    {
+        title: "Dashboard",
+        url: "/manager",
+        icon: LayoutDashboard,
+    },
+    {
+        title: "Topics",
+        url: "#",
+        icon: FileText,
+        children: [
+            {
+                title: "List topics",
+                url: "/manager/topics",
+            }
+        ]
+    },
+    {
+        title: "Groups",
+        url: "/manager/groups",
+        icon: Users,
+    },
 ]
 
 export default function Layout({ children }: { children: React.ReactNode }) {
