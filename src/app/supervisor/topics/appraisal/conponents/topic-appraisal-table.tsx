@@ -1,9 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react";
-
 import { useAuth } from "@/contexts/auth-context";
-import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
+import { useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
 
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
@@ -11,16 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function TopicAppraisalTable() {
     const { user } = useAuth();
-    const { fetchTopicAppraisalAssigned } = useSupervisorTopic();
-
-    const [appraisalList, setAppraisalList] = useState<[]>([]);
-
-    useEffect(() => {
-        (async () => {
-            const appraisals = await fetchTopicAppraisalAssigned()
-            setAppraisalList(appraisals);
-        })();
-    }, [user])
+    const { topicAppraisals } = useSupervisorTopicAppraisal();
 
     return (
         <Card className="min-h-[calc(100vh-60px)]">
@@ -29,7 +18,7 @@ export default function TopicAppraisalTable() {
                 <CardDescription>List topic appraisal assigned for <span className="text-primary font-semibold">{user?.name}</span></CardDescription>
             </CardHeader>
             <CardContent>
-                <DataTable columns={columns} data={appraisalList || []} />
+                <DataTable columns={columns} data={topicAppraisals || []} />
             </CardContent>
         </Card>
     );
