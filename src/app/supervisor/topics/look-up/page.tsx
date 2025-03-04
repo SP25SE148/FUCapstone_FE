@@ -3,15 +3,14 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, ChevronRight, Filter, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileX, Filter, Search, Trash2 } from "lucide-react";
 
 import { LookupProp, Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import ItemTopic from "./components/item-topic";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -38,60 +37,7 @@ const formSchema = z.object({
         .or(z.literal('')),
 });
 
-const getStatus = (status: number | undefined) => {
-    switch (status) {
-        case 0:
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    Pending
-                </Badge>
-            );
-        case 1:
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Passed
-                </Badge>
-            );
-        case 2:
-            return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                    Considered
-                </Badge>
-            );
-        case 3:
-            return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    Failed
-                </Badge>
-            );
-        default:
-            return null;
-    }
-}
-
-const getCreatedDate = (data: string | undefined) => {
-    const date = new Date(data || "");
-    // Chuyển sang giờ Việt Nam (GMT+7)
-    const vnDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
-
-    const day = vnDate.getDate().toString().padStart(2, '0');
-    const month = (vnDate.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
-    const year = vnDate.getFullYear();
-
-    const hours = vnDate.getHours().toString().padStart(2, '0');
-    const minutes = vnDate.getMinutes().toString().padStart(2, '0');
-    const seconds = vnDate.getSeconds().toString().padStart(2, '0');
-
-    return (
-        <div className="flex items-center gap-2">
-            <span>{`${day}/${month}/${year}`}</span>
-            <span className="text-muted-foreground">{`${hours}:${minutes}:${seconds}`}</span>
-        </div>
-    )
-};
-
 export default function LookupTopicPage() {
-    const router = useRouter();
     const { lookupTopics, businessAreas, fetchCampusList, fetchSemesterList, fetchCapstoneList, lookupTopic } = useSupervisorTopic();
 
     const [open, setOpen] = useState<boolean>(false);
@@ -116,6 +62,7 @@ export default function LookupTopicPage() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setPageNumber(1);
         const data: LookupProp = {
             searchTerm: values?.searchTerm || "",
             campusId: values?.campusId || "all",
@@ -125,7 +72,7 @@ export default function LookupTopicPage() {
             difficultyLevel: values?.difficultyLevel || "all",
             status: values?.status || "all",
             mainSupervisorEmail: values?.mainSupervisorEmail || "all",
-            pageNumber: String(pageNumber)
+            pageNumber: "1"
         }
         setIsLoading(true);
         try {
@@ -136,6 +83,23 @@ export default function LookupTopicPage() {
         } finally {
             setIsLoading(false);
         }
+    }
+
+    const handleReset = () => {
+        form.reset()
+        const data: LookupProp = {
+            searchTerm: "",
+            campusId: "all",
+            semesterId: "all",
+            capstoneId: "all",
+            businessAreaId: "all",
+            difficultyLevel: "all",
+            status: "all",
+            mainSupervisorEmail: "all",
+            pageNumber: "1"
+        };
+        lookupTopic(data);
+        setOpen(false);
     }
 
     // pagination handle
@@ -163,6 +127,22 @@ export default function LookupTopicPage() {
         })();
     }, []);
 
+    useEffect(() => {
+        const values = form.getValues()
+        const data: LookupProp = {
+            searchTerm: values?.searchTerm || "",
+            campusId: values?.campusId || "all",
+            semesterId: values?.semesterId || "all",
+            capstoneId: values?.capstoneId || "all",
+            businessAreaId: values?.businessAreaId || "all",
+            difficultyLevel: values?.difficultyLevel || "all",
+            status: values?.status || "all",
+            mainSupervisorEmail: values?.mainSupervisorEmail || "all",
+            pageNumber: String(pageNumber)
+        };
+        lookupTopic(data);
+    }, [pageNumber]);
+
     return (
         <Card className="min-h-[calc(100vh-60px)]">
             <div className="flex items-center justify-between">
@@ -175,10 +155,11 @@ export default function LookupTopicPage() {
                     Filter
                 </Button>
             </div>
-            <CardContent>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                        {open && <Card className="p-4 space-y-2">
+            <CardContent className="space-y-8">
+                {/* filter */}
+                {open && <Card className="p-4">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
                             <FormField
                                 control={form.control}
                                 name="searchTerm"
@@ -368,60 +349,64 @@ export default function LookupTopicPage() {
                                     </FormItem>
                                 )}
                             />
-                            <div className="flex justify-end">
+                            <div className="flex justify-end gap-4">
+                                <Button type="reset" onClick={handleReset} variant={"outline"}>
+                                    <Trash2 />
+                                    Clear
+                                </Button>
                                 <Button type="submit">
                                     <Search />
                                     Search
                                 </Button>
                             </div>
+                        </form>
+                    </Form >
+                </Card>}
 
-                        </Card>}
-                        <div className="space-y-4">
-                            {lookupTopics?.items?.map((topic: Topic, index: number) => (
-                                <Card
-                                    key={index}
-                                    className="p-4 grid grid-cols-4 items-center cursor-pointer hover:bg-muted"
-                                    onClick={() => {
-                                        router.push(`/supervisor/topics/${topic?.id}`)
-                                    }}
-                                >
-                                    <span className="font-semibold text-primary">{topic?.code}</span>
-                                    <div className="col-span-2">
-                                        <p className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName} - {topic?.abbreviation}</p>
-                                        <p className="text-sm text-muted-foreground">{topic?.vietnameseName}</p>
-                                    </div>
-                                    <div className="flex flex-col items-end gap-2">
-                                        {getStatus(topic?.status)}
-                                        <div className="flex gap-2 text-sm text-muted-foreground">
-                                            <span>Created at:</span> {getCreatedDate(topic?.createdDate)}
-                                        </div>
-                                    </div>
-                                </Card>
-                            ))}
+                {/* ko tìm thấy */}
+                {lookupTopics?.items?.length <= 0 && <Card className="p-6 flex items-center justify-center bg-muted">
+                    <div className="flex flex-col items-center justify-center gap-8">
+                        <FileX className="size-20 text-primary" />
+                        <div className="space-y-2">
+                            <p className="text-2xl font-bold text-center">
+                                We couldn't find any topics that match your request.
+                            </p>
+                            <p className="text-muted-foreground text-center">
+                                Please try again with other criteria.
+                            </p>
                         </div>
-                        {lookupTopics?.items?.length > 0 && <div className="flex items-center justify-center gap-2">
-                            <Button
-                                size={"icon"}
-                                onClick={pageNumber > 1 ? handlePreviousPage : (e) => e.preventDefault()}
-                                className={`cursor-pointer ${pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""}`}>
-                                <ChevronLeft />
-                            </Button>
-                            <div>
-                                {lookupTopics?.currentPage} / {lookupTopics?.totalNumberOfPages}
-                            </div>
-                            <div>
-                                Total: {lookupTopics?.totalNumberOfItems}
-                            </div>
-                            <Button
-                                size={"icon"}
-                                onClick={pageNumber < lookupTopics?.totalNumberOfPages ? handleNextPage : (e) => e.preventDefault()}
-                                className={`cursor-pointer ${pageNumber === lookupTopics?.totalNumberOfPages ? "opacity-50 cursor-not-allowed" : ""}`}
-                            >
-                                <ChevronRight />
-                            </Button>
-                        </div>}
-                    </form>
-                </Form >
+                    </div>
+                </Card>}
+
+                {/* list topic */}
+                <div className="space-y-4">
+                    {lookupTopics?.items?.map((topic: Topic, index: number) => (
+                        <ItemTopic key={index} topic={topic} />
+                    ))}
+                </div>
+
+                {/* phân trang */}
+                {lookupTopics?.items?.length > 0 && <div className="flex items-center justify-center gap-2">
+                    <Button
+                        size={"icon"}
+                        onClick={pageNumber > 1 ? handlePreviousPage : (e) => e.preventDefault()}
+                        className={`cursor-pointer ${pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""}`}>
+                        <ChevronLeft />
+                    </Button>
+                    <div>
+                        {lookupTopics?.currentPage} / {lookupTopics?.totalNumberOfPages}
+                    </div>
+                    <div>
+                        Total: {lookupTopics?.totalNumberOfItems}
+                    </div>
+                    <Button
+                        size={"icon"}
+                        onClick={pageNumber < lookupTopics?.totalNumberOfPages ? handleNextPage : (e) => e.preventDefault()}
+                        className={`cursor-pointer ${pageNumber === lookupTopics?.totalNumberOfPages ? "opacity-50 cursor-not-allowed" : ""}`}
+                    >
+                        <ChevronRight />
+                    </Button>
+                </div>}
             </CardContent >
         </Card >
     )
