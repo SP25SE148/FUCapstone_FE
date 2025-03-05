@@ -28,10 +28,10 @@ const items = [
                 title: "Assign appraisal",
                 url: "/manager/topics/assign-appraisal",
             },
-            {
-                title: "List appraisal",
-                url: "/manager/topics/appraisal",
-            }
+            // {
+            //     title: "List appraisal",
+            //     url: "/manager/topics/appraisal",
+            // }
         ]
     },
     {
@@ -67,7 +67,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                                                     {index === paths.length - 1 ? (
                                                         <BreadcrumbPage>{paths[index].charAt(0).toUpperCase() + paths[index].slice(1)}</BreadcrumbPage>
                                                     ) : (
-                                                        <BreadcrumbLink href={`/admin/${paths[index]}`}>{paths[index].charAt(0).toUpperCase() + paths[index].slice(1)}</BreadcrumbLink>
+                                                        <BreadcrumbLink href={`/manager/${paths[index]}`}>{paths[index].charAt(0).toUpperCase() + paths[index].slice(1)}</BreadcrumbLink>
                                                     )}
                                                 </BreadcrumbItem>
                                             </React.Fragment>

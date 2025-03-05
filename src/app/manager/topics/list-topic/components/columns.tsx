@@ -35,6 +35,21 @@ const ActionsCell = ({ topic }: { topic: Topic }) => {
   );
 };
 
+const getStatusBadge = (status: number) => {
+  switch (status) {
+    case 0:
+      return <Badge className="bg-yellow-100 text-yellow-600 hover:bg-yellow-100">Pending</Badge>;
+    case 1:
+      return <Badge className="bg-green-100 text-green-600 hover:bg-green-100">Passed</Badge>;
+    case 2:
+      return <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100">Considered</Badge>;
+    case 3:
+      return <Badge className="bg-red-100 text-red-600 hover:bg-red-100">Failed</Badge>;
+    default:
+      return null;
+  }
+};
+
 export const columns: ColumnDef<Topic>[] = [
   {
     accessorKey: "englishName",
@@ -78,20 +93,7 @@ export const columns: ColumnDef<Topic>[] = [
     ),
     cell: ({ row }) => {
       const status = row.original.status;
-      const statusText = status === 0 ? "Pending" : status === 1 ? "Approved" : "Rejected";
-      return (
-        <Badge
-          className={`${
-            status === 0
-              ? "bg-yellow-100 text-yellow-600 hover:bg-yellow-100"
-              : status === 1
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {statusText}
-        </Badge>
-      );
+      return getStatusBadge(status);
     },
   },
   {
