@@ -1,12 +1,15 @@
 "use client";
 
+import { toast } from "sonner";
 import { useApi } from "@/hooks/use-api";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 export interface Template {
   id: string;
   fileUrl: string;
+  fileName: string;
   isActive: boolean;
+  isFile: boolean;
   createdBy: string;
   createdDate: string;
 }
@@ -14,8 +17,12 @@ export interface Template {
 interface SuperadminTemplateContextProps {
   isLoading: boolean;
   templates: Template[];
+  subFolder: Template[];
   fetchTemplateList: () => Promise<void>;
+  getTemplateById: (id: string) => Promise<any>;
+  createFileTemplateDocument: (data: any) => Promise<any>
   getPresignedUrlTemplateDocument: (id: string) => Promise<string>;
+  createFolderTemplateDocument: (data: { parentId: string, folderName: string }) => Promise<any>;
 }
 
 const SuperadminTemplateContext = createContext<SuperadminTemplateContextProps | undefined>(undefined);
@@ -24,6 +31,7 @@ export const SuperadminTemplateProvider = ({ children }: { children: React.React
   const { callApi } = useApi();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Template[]>([]);
+  const [subFolder, setSubFolder] = useState<Template[]>([]);
 
   const fetchTemplateList = async () => {
     setIsLoading(true);
@@ -40,16 +48,46 @@ export const SuperadminTemplateProvider = ({ children }: { children: React.React
   const getPresignedUrlTemplateDocument = async (id: string) => {
     const response = await callApi(`fuc/Documents/template/presigned/${id}`, {
       method: "GET",
-    });    
+    });
     return (response?.value);
   };
+
+  const createFolderTemplateDocument = async (data: { parentId: string, folderName: string }) => {
+    const response = await callApi("fuc/Documents/templates/folder", {
+      method: "POST",
+      body: data
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Create folder successfully")
+    }
+    return response;
+  };
+
+  const getTemplateById = async (templateId: string) => {
+    const response = await callApi(`fuc/Documents/templates?templateid=${templateId}`, {
+      method: "GET",
+    });
+    setSubFolder(response?.value || []);
+  };
+
+  const createFileTemplateDocument = async (data: any) => {
+    const response: any = await callApi("fuc/Documents/templates/file", {
+      method: "POST",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Upload file successfully");
+    }
+    return response
+  }
 
   useEffect(() => {
     fetchTemplateList();
   }, []);
 
   return (
-    <SuperadminTemplateContext.Provider value={{ templates, isLoading, fetchTemplateList, getPresignedUrlTemplateDocument }}>
+    <SuperadminTemplateContext.Provider value={{ templates, subFolder, isLoading, fetchTemplateList, getPresignedUrlTemplateDocument, createFolderTemplateDocument, getTemplateById, createFileTemplateDocument }}>
       {children}
     </SuperadminTemplateContext.Provider>
   );
