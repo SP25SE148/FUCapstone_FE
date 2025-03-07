@@ -49,10 +49,11 @@ export default function ItemFolderFile({ item }: { item: Template }) {
                 } else {
                     fetchTemplateList();
                 }
-                setOpenConfirmDelete(false)
+                setOpenConfirmDelete(false);
             }
         } finally {
             setIsLoading(false);
+            setOpenConfirmDelete(false);
         }
     }
 
@@ -66,10 +67,11 @@ export default function ItemFolderFile({ item }: { item: Template }) {
                 } else {
                     fetchTemplateList();
                 }
-                setOpenConfirmChangeStatus(false)
+                setOpenConfirmChangeStatus(false);
             }
         } finally {
             setIsLoading(false);
+            setOpenConfirmChangeStatus(false);
         }
     }
 
