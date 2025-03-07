@@ -40,11 +40,11 @@ const getStatusBadge = (status: number) => {
     case 0:
       return <Badge className="bg-yellow-100 text-yellow-600 hover:bg-yellow-100">Pending</Badge>;
     case 1:
-      return <Badge className="bg-green-100 text-green-600 hover:bg-green-100">Passed</Badge>;
+      return <Badge className="bg-green-100 text-green-600 hover:bg-green-100">Approved</Badge>;
     case 2:
       return <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100">Considered</Badge>;
     case 3:
-      return <Badge className="bg-red-100 text-red-600 hover:bg-red-100">Failed</Badge>;
+      return <Badge className="bg-red-100 text-red-600 hover:bg-red-100">Rejected</Badge>;
     default:
       return null;
   }
@@ -56,44 +56,68 @@ export const columns: ColumnDef<Topic>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="English Name" />
     ),
+    cell: ({ row }) => {
+      const topic = row.original;
+      return (
+        <Link href={`/manager/topics/list-topic/${topic.id}`} className="text-primary semibold underline">
+          {topic.englishName}
+        </Link>
+      );
+    },
   },
   {
-    accessorKey: "abbreviation",
+    accessorKey: "topicAppraisals[0]",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Abbreviation" />
-    ),
-  },
-  {
-    accessorKey: "mainSupervisorName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Main Supervisor" />
-    ),
-  },
-  {
-    accessorKey: "businessAreaName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Business Area" />
-    ),
-  },
-  {
-    accessorKey: "difficultyLevel",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Difficulty Level" />
+      <DataTableColumnHeader column={column} title="Appraisal 1" />
     ),
     cell: ({ row }) => {
-      const difficulty = row.original.difficultyLevel;
-      const difficultyText = difficulty === 0 ? "Easy" : difficulty === 1 ? "Medium" : "Hard";
-      return <span>{difficultyText}</span>;
+      const appraisal = row.original.topicAppraisals[0];
+      if (!appraisal) return <span>N/A</span>;
+      return (
+        <div>
+          {getStatusBadge(appraisal.status)}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "topicAppraisals[1]",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Appraisal 2" />
+    ),
+    cell: ({ row }) => {
+      const appraisal = row.original.topicAppraisals[1];
+      if (!appraisal) return <span>N/A</span>;
+      return (
+        <div>
+          {getStatusBadge(appraisal.status)}
+        </div>
+      );
     },
   },
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Final Status" />
     ),
     cell: ({ row }) => {
       const status = row.original.status;
       return getStatusBadge(status);
+    },
+  },
+  {
+    id: "appraisal",
+    header: "Appraisal",
+    cell: ({ row }) => {
+      const topic = row.original;
+      const isPendingOrEmpty = topic.status === 0 || topic.topicAppraisals.length === 0;
+      return (
+        isPendingOrEmpty && (
+          <Button asChild>
+            <Link href={`/manager/topics/list-topic/${topic.id}`}>Appraisal</Link>
+          </Button>
+        )
+      );
     },
   },
   {

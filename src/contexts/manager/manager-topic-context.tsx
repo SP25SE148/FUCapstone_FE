@@ -81,6 +81,7 @@ export const ManagerTopicProvider = ({
       });
       if(response?.isSuccess === true) {
         toast.success("Appraisal submitted successfully");
+        fetchTopics();
     }
     return response;
   };
