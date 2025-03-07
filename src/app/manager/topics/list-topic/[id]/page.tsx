@@ -88,6 +88,7 @@ const getCreatedDate = (data: string | undefined) => {
 const evaluationOptions = [
   { value: "Accept", color: "bold text-green-500 hover:text-green-30000" },
   { value: "Reject", color: "bold text-red-500 hover:text-red-30000" },
+  { value: "Consider", color: "bold text-blue-500 hover:text-blue-30000" },
 ];
 
 export default function TopicDetail() {

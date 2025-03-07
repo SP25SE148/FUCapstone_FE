@@ -8,17 +8,10 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import {
-  BookOpen,
-  Briefcase,
-  GraduationCap,
-  Users,
-  Award,
-  FileCode,
-  BarChart3,
-} from "lucide-react";
+import {BookOpen, GraduationCap, Users, Award, BarChart3, FileCheck, BriefcaseBusiness, BadgeInfo,} from "lucide-react";
+import DownloadDocument from "@/app/student/groups/my-topic/components/download-document";
 
 interface Topic {
   enName: string;
@@ -87,183 +80,172 @@ const topic: Topic = {
 export default function MyTopicPage() {
   return (
     <div className="container mx-auto w-full">
-      <Card className="w-full shadow-lg">
-        <CardHeader className="pb-4 ">
-          <div className="flex justify-between items-start">
-            <div>
-              <CardTitle className="text-xl font-bold">
-                {topic.enName}
-              </CardTitle>
-              <CardDescription className="text-md">
-                {topic.vnName}
-              </CardDescription>
-            </div>
-            <Badge variant="outline" className="text-sm font-medium px-3 py-1">
-              {topic.status}
-            </Badge>
-          </div>
+      <Card className="min-h-[calc(100vh-60px)]">
+        <CardHeader>
+          <CardTitle className="font-semibold tracking-tight text-xl text-primary">
+            {topic.enName}
+          </CardTitle>
+          <CardDescription>{topic.vnName}</CardDescription>
         </CardHeader>
 
-        <CardContent className="pt-6 space-y-8">
-          <div className="flex gap-64">
-            <div className="flex items-start space-x-3">
-              <div className="bg-muted rounded-md p-2 mt-0.5">
-                <FileCode className="h-5 w-5 text-primary" />
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-4 gap-4">
+            <div className="flex items-center space-x-2">
+              <div className="bg-muted rounded-md p-2">
+                <FileCheck className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  Topic Code
-                </h3>
-                <p className="font-semibold">{topic.topicCode}</p>
+                <h3 className="text-sm text-muted-foreground">Topic Code</h3>
+                <p className="font-semibold tracking-tight">
+                  {topic.topicCode}
+                </p>
               </div>
             </div>
-
-            <div className="flex items-start space-x-3">
-              <div className="bg-muted rounded-md p-2 mt-0.5">
-                <BookOpen className="h-5 w-5 text-primary" />
+            <div className="flex items-center space-x-2">
+              <div className="bg-muted rounded-md p-2">
+                <BookOpen className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  Capstone
-                </h3>
-                <p className="font-semibold">{topic.capstone}</p>
+                <h3 className="text-sm text-muted-foreground">Capstone</h3>
+                <p className="font-semibold tracking-tight">
+                  {topic.capstone}
+                </p>
               </div>
             </div>
-
-            <div className="flex items-start space-x-3">
-              <div className="bg-muted rounded-md p-2 mt-0.5">
-                <Award className="h-5 w-5 text-primary" />
+            <div className="flex items-center space-x-2">
+              <div className="bg-muted rounded-md p-2">
+                <Award className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  Abbreviation
-                </h3>
-                <p className="font-semibold">{topic.abbreviations}</p>
+                <h3 className="text-sm text-muted-foreground">Abbreviation</h3>
+                <p className="font-semibold tracking-tight">
+                  {topic.abbreviations}
+                </p>
               </div>
             </div>
-
-            <div className="flex items-start space-x-3">
-              <div className="bg-muted rounded-md p-2 mt-0.5">
-                <BarChart3 className="h-5 w-5 text-primary" />
+            <div className="flex items-center space-x-2">
+              <div className="bg-muted rounded-md p-2">
+                <BarChart3 className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  Difficulty
-                </h3>
-                <p className="font-semibold">{topic.difficultyLevel}</p>
+                <h3 className="text-sm text-muted-foreground">Difficulty</h3>
+                <p className="font-semibold tracking-tight">
+                  {topic.difficultyLevel}
+                </p>
               </div>
             </div>
           </div>
-          <div className="flex gap-64">
-            <div className="flex items-start space-x-3">
-              <div className="bg-muted rounded-md p-2 mt-0.5">
-                <GraduationCap className="h-5 w-5 text-primary" />
+          <div className="grid grid-cols-4 gap-4">
+            <div className="flex items-center space-x-2">
+              <div className="bg-muted rounded-md p-2">
+                <GraduationCap className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  Profession
-                </h3>
-                <p className="font-semibold">{topic.profession}</p>
+                <h3 className="text-sm text-muted-foreground">Profession</h3>
+                <p className="font-semibold tracking-tight">
+                  {topic.profession}
+                </p>
               </div>
             </div>
-
-            <div className="flex items-start space-x-3">
-              <div className="bg-muted rounded-md p-2 mt-0.5">
-                <Briefcase className="h-5 w-5 text-primary" />
+            <div className="flex items-center space-x-2">
+              <div className="bg-muted rounded-md p-2">
+                <BriefcaseBusiness className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  Business Area
-                </h3>
-                <p className="font-semibold">{topic.businessArea}</p>
+                <h3 className="text-sm text-muted-foreground">Business Area</h3>
+                <p className="font-semibold tracking-tight">
+                  {topic.businessArea}
+                </p>
               </div>
             </div>
-
-            <div className="flex items-start space-x-3">
-              <div className="bg-muted rounded-md p-2 mt-0.5">
-                <Users className="h-5 w-5 text-primary" />
+            <div className="flex items-center space-x-2">
+              <div className="bg-muted rounded-md p-2">
+                <Users className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  Specialty
-                </h3>
-                <p className="font-semibold">{topic.specialty}</p>
+                <h3 className="text-sm text-muted-foreground">Specialty</h3>
+                <p className="font-semibold tracking-tight">
+                  {topic.specialty}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="bg-muted rounded-md p-2">
+                <BadgeInfo className="size-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-sm text-muted-foreground">Status</h3>
+                <Badge variant="outline" className="text-sm font-medium px-3 py-1">
+                  {topic.status}
+                </Badge>
               </div>
             </div>
           </div>
-
           <div>
-            <h3 className="text-lg font-semibold mb-3">Description</h3>
-            <p className="text-md leading-relaxed text-muted-foreground">
+            <h3 className="text-sm text-muted-foreground">Description:</h3>
+            <p className="p-4 font-semibold tracking-tight text-justify italic">
               {topic.description}
             </p>
           </div>
 
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Supervisor</h3>
+          <div>
+            <h3 className="text-sm text-muted-foreground">Supervisor:</h3>
+            <div className="p-4 pl-0 grid grid-cols-1 gap-4">
               <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/20">
-                <Avatar className="h-12 w-12 border-2 border-primary/10">
-                  <AvatarImage
-                    src={`/placeholder.svg?height=48&widtarh=48`}
-                    alt={topic.supervisor.name}
-                  />
-                  <AvatarFallback className="text-lg font-medium">
-                    {topic.supervisor.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .slice(-1)}
+                <Avatar className="size-12 border-2 border-primary/10">
+                  <AvatarFallback className="text-lg font-semibold text-primary">
+                    {topic.supervisor.name?.slice(-1)}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-semibold text-lg">
-                    {topic.supervisor.name}
-                  </p>
+                  <p className="font-bold">{topic.supervisor.name}</p>
                   <p className="text-sm text-muted-foreground">
                     {topic.supervisor.email}
                   </p>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Students</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {topic.students.map((student, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/10 transition-colors"
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage
-                        src={`/placeholder.svg?height=40&width=40`}
-                        alt={student.name}
-                      />
-                      <AvatarFallback>
-                        {student.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .slice(-1)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-grow">
-                      <p className="font-semibold">{student.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {student.email}
-                      </p>
-                    </div>
-                    {student.isLeader ? (
-                      <Badge variant="secondary" className="ml-auto">
-                        Leader
-                      </Badge>
-                    ) : (
-                      <Badge variant="secondary" className="ml-auto">
-                        Member
-                      </Badge>
-                    )}
+          <div>
+            <h3 className="text-sm text-muted-foreground">Students:</h3>
+            <div className="p-4 pl-0 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {topic.students.map((student, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-4 p-4 border rounded-lg bg-muted/20"
+                >
+                  <Avatar className="size-12 border-2 border-primary/10">
+                    <AvatarFallback className="text-lg font-semibold text-primary">
+                      {student.name?.slice(-1)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-bold">{student.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {student.email}
+                    </p>
                   </div>
-                ))}
-              </div>
+                  {student.isLeader ? (
+                    <Badge variant="secondary" className="ml-auto">
+                      Leader
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary" className="ml-auto">
+                      Member
+                    </Badge>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <DownloadDocument 
+            // topic={topic} 
+            />
+            <div className="flex gap-2 text-sm text-muted-foreground">
+              <span>Created at:</span> <span>February 28, 2025</span>
             </div>
           </div>
         </CardContent>

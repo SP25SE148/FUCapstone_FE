@@ -1,9 +1,9 @@
 "use client";
 
-import { columns, Topic } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useManagerTopics } from "@/contexts/manager/manager-topic-context";
+import { Topic, useManagerTopics } from "@/contexts/manager/manager-topic-context";
 
 export default function TopicTable() {
   const { topics, loading } = useManagerTopics();
