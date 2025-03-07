@@ -21,16 +21,22 @@ const formSchemaFolder = z.object({
 
 const formSchemaFile = z.object({
     file: z
-        .any()
-        .refine((files) => files?.length === 1, "Please select a file.")
+        .custom<FileList>((val) => val instanceof FileList, {
+            message: "Invalid file input",
+        })
+        .refine((files) => files?.length === 1, {
+            message: "Please select one file.",
+        })
         .refine((files) => {
             const allowedTypes = [
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
                 "application/msword", // .doc
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
             ];
-            return files && allowedTypes.includes(files[0]?.type);
-        }, "Only accept Word (.doc, .docx) or Excel (.xlsx) files"),
+            return allowedTypes.includes(files[0].type);
+        }, {
+            message: "Only accept Word (.doc, .docx) or Excel (.xlsx) files.",
+        }),
 });
 
 export default function NewFolderFile() {
@@ -194,7 +200,7 @@ export default function NewFolderFile() {
                                     <FormItem>
                                         <FormLabel>File</FormLabel>
                                         <FormControl>
-                                            <Input type="file" accept=".xlsx" onChange={(e) => field.onChange(e.target.files)} disabled={isLoading} />
+                                            <Input type="file" accept=".xlsx, .doc, .docx" onChange={(e) => field.onChange(e.target.files)} disabled={isLoading} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
