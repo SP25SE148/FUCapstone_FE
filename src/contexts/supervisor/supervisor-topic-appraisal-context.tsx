@@ -17,10 +17,34 @@ export interface TopicAppraisal {
     appraisalDate: string | null
 }
 
+export interface Topic {
+  id: string;
+  code: string;
+  campusId: string;
+  semesterId: string
+  capstoneId: string;
+  businessAreaName: string;
+  difficultyLevel: number;
+  englishName: string;
+  vietnameseName: string
+  abbreviation: string;
+  description: string;
+  mainSupervisorEmail: string
+  mainSupervisorName: string
+  coSupervisors: [];
+  fileName: string;
+  fileUrl: string
+  createdDate: string;
+  status: number;
+  topicAppraisals: [];
+}
+
 interface SupervisorTopicAppraisalContextType {
     topicAppraisals: TopicAppraisal[];
     getTopicAppraisalBySelf: () => Promise<void>;
     submitAppraisalForSupervisor: (data: any) => Promise<any>;
+    fetchTopicsById: (id: string) => Promise<any>;
+    getPresignedUrlTopicDocument: (id: string) => Promise<string>;
 }
 
 const SupervisorTopicAppraisalContext = createContext<
@@ -39,6 +63,17 @@ export const SupervisorTopicAppraisalProvider: React.FC<{
         });
         setTopicAppraisals(response?.value);
     };
+
+    const fetchTopicsById = async (id: string) => {
+        const response = await callApi(`fuc/topics/${id}`);
+        return (response?.value);
+      };
+
+      const getPresignedUrlTopicDocument = async (id: string) => {
+        const response = await callApi(`fuc/topics/presigned/${id}`);
+        return (response?.value);
+      };
+    
 
     const submitAppraisalForSupervisor = async (data: any) => {
         const response = await callApi(`fuc/topics/appraisal`, {
@@ -61,6 +96,8 @@ export const SupervisorTopicAppraisalProvider: React.FC<{
                 topicAppraisals,
                 getTopicAppraisalBySelf,
                 submitAppraisalForSupervisor,
+                fetchTopicsById,
+                getPresignedUrlTopicDocument
             }}
         >
             {children}
