@@ -1,27 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Download, Send, Loader2 } from "lucide-react";
-import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useAuth } from "@/contexts/auth-context";
 
-const difficulties = ["Easy", "Medium", "Hard"];
+import { useSupervisorTopicRegister } from "@/contexts/supervisor/supervisor-topic-register-context";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+
+const difficulties = [
+  { value: "0", name: "Easy" },
+  { value: "1", name: "Medium" },
+  { value: "2", name: "Hard" },
+];
 
 const formSchema = z.object({
   capstoneId: z.string().min(1, "Capstone is required"),
@@ -31,14 +30,32 @@ const formSchema = z.object({
   description: z.string().min(1, "Description is required"),
   difficulty: z.string().min(1, "Difficulty Level is required"),
   businessArea: z.string().min(1, "Business Area is required"),
-  file: z.instanceof(File).optional(),
+  file: z
+    .custom<FileList>((val) => val instanceof FileList, {
+      message: "Invalid file input",
+    })
+    .refine((files) => files?.length === 1, {
+      message: "Please select one file.",
+    })
+    .refine((files) => {
+      const allowedTypes = [
+        "application/msword", // .doc
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+      ];
+      return allowedTypes.includes(files[0].type);
+    }, {
+      message: "Only accept Word (.doc, .docx) files.",
+    }),
   coSupervisorEmails: z.string().optional(),
 });
 
-const RegisterTopicForm: React.FC = () => {
-  const { businessAreas, registerTopic, fetchCapstoneListByMajor } = useSupervisorTopic();
-  const { user } = useAuth();
-  const { handleSubmit, control, reset, trigger } = useForm<z.infer<typeof formSchema>>({
+export default function RegisterTopicForm() {
+  const { businessAreaList, capstoneList, registerTopic } = useSupervisorTopicRegister();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       capstoneId: "",
@@ -52,258 +69,192 @@ const RegisterTopicForm: React.FC = () => {
       coSupervisorEmails: "",
     },
   });
-  const [file, setFile] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [capstoneList, setCapstoneList] = useState([]);
 
-  const handleFetchCapstones = async () => {
-    if (capstoneList.length === 0 && user?.MajorId) {
-      const capstones: any = await fetchCapstoneListByMajor(user.MajorId);
-      setCapstoneList(capstones);
-    }
-  };
-
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append("CapstoneId", data.capstoneId);
-    formData.append("BusinessAreaId", data.businessArea);
-    formData.append("EnglishName", data.englishName);
-    formData.append("VietnameseName", data.vietnameseName);
-    formData.append("Abbreviation", data.abbreviation);
-    formData.append("Description", data.description);
-    formData.append("DifficultyLevel", data.difficulty === "Easy" ? "0" : data.difficulty === "Medium" ? "1" : "2");
-    if (file) {
-      formData.append("File", file);
+    try {
+      const formData = new FormData();
+      formData.append("CapstoneId", values.capstoneId);
+      formData.append("BusinessAreaId", values.businessArea);
+      formData.append("EnglishName", values.englishName);
+      formData.append("VietnameseName", values.vietnameseName);
+      formData.append("Abbreviation", values.abbreviation);
+      formData.append("Description", values.description);
+      formData.append("DifficultyLevel", values.difficulty);
+      if (values.file) {
+        const file = values.file[0]; // Lấy file đầu tiên
+        formData.append("File", file);
+      }
+      formData.append("CoSupervisorEmails", values.coSupervisorEmails || "");
+      const res: any = await registerTopic(formData);
+      if (res?.isSuccess) {
+        form.reset();
+      }
+    } finally {
+      setIsLoading(false);
+      setIsConfirmOpen(false);
     }
-    formData.append("CoSupervisorEmails", data.coSupervisorEmails || "");
-
-    await registerTopic(formData);
-    reset();
-    setFile(null);
-    setIsLoading(false);
-    setIsConfirmOpen(false);
-  };
+  }
 
   const handleConfirm = async () => {
-    const isValid = await trigger();
+    const isValid = await form.trigger();
     if (isValid) {
       setIsConfirmOpen(true);
     }
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="p-8 pt-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <Label htmlFor="capstone">
-                Capstone <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="capstoneId"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <Select onValueChange={field.onChange} value={field.value} onOpenChange={handleFetchCapstones}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <CardContent className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="capstoneId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Capstone <span className="text-red-500">*</span></FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={capstoneList?.length == 0 || isLoading}>
+                  <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a capstone" />
                     </SelectTrigger>
-                    <SelectContent>
-                      {capstoneList.map((capstone: any, index) => (
-                        <SelectItem key={index} value={capstone.id}>
-                          <strong>{capstone.id}</strong> - <span className="text-muted-foreground text-xs">{capstone.name}</span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                    {fieldState.error && (
-                      <p className="text-red-500 text-sm">{fieldState.error.message}</p>
-                    )}
-                  </Select>
-                )}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="englishName">
-                English Name <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="englishName"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <Input
-                      id="englishName"
-                      placeholder="English Name..."
-                      {...field}
-                    />
-                    {fieldState.error && (
-                      <p className="text-red-500 text-sm">{fieldState.error.message}</p>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="vietnameseName">
-                Vietnamese Name <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="vietnameseName"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <Input
-                      id="vietnameseName"
-                      placeholder="Vietnamese Name..."
-                      {...field}
-                    />
-                    {fieldState.error && (
-                      <p className="text-red-500 text-sm">{fieldState.error.message}</p>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="abbreviations">
-                Abbreviations <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="abbreviation"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <Input
-                      id="abbreviations"
-                      placeholder="Abbreviations..."
-                      {...field}
-                    />
-                    {fieldState.error && (
-                      <p className="text-red-500 text-sm">{fieldState.error.message}</p>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-            <div className="space-y-1 md:col-span-2">
-              <Label htmlFor="description">
-                Description <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="description"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <Textarea
-                      id="description"
-                      placeholder="Type description for topic here..."
-                      className="w-full min-h-[90px]"
-                      {...field}
-                    />
-                    {fieldState.error && (
-                      <p className="text-red-500 text-sm">{fieldState.error.message}</p>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="difficulty">
-                Difficulty Level <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="difficulty"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select difficulty level" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {difficulties.map((difficulty) => (
-                          <SelectItem key={difficulty} value={difficulty}>
-                            {difficulty}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {fieldState.error && (
-                      <p className="text-red-500 text-sm">{fieldState.error.message}</p>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="businessArea">
-                Business Area <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="businessArea"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select business area" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {businessAreas.map((area) => (
-                          <SelectItem key={area.id} value={area.id}>
-                            {area.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {fieldState.error && (
-                      <p className="text-red-500 text-sm">{fieldState.error.message}</p>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="file">
-                File <span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="file"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <Input
-                      id="file"
-                      type="file"
-                      onChange={(e) => {
-                        setFile(e.target.files ? e.target.files[0] : null);
-                        field.onChange(e.target.files ? e.target.files[0] : null);
-                      }}
-                    />
-                    {fieldState.error && (
-                      <p className="text-red-500 text-sm">{fieldState.error.message}</p>
-                    )}
-                  </>
-                )}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="supervisor2">Co Supervisor Email</Label>
-              <Controller
-                name="coSupervisorEmails"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    id="supervisor2"
-                    placeholder="Email"
+                  </FormControl>
+                  <SelectContent>
+                    {capstoneList?.map((capstone: any, index) => (
+                      <SelectItem key={index} value={capstone?.id}><strong>{capstone?.id}</strong> - <span className="text-muted-foreground text-xs">{capstone?.name}</span></SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="englishName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>English Name <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Input placeholder="English Name..." {...field} disabled={isLoading} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="vietnameseName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Vietnamese Name <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Input placeholder="Vietnamese Name..." {...field} disabled={isLoading} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="abbreviation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Abbreviations <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Input placeholder="Abbreviations..." {...field} disabled={isLoading} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel>Description <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Type description for topic here..."
+                    className="resize-y"
                     {...field}
                   />
-                )}
-              />
-            </div>
-          </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="difficulty"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Difficulty level <span className="text-red-500">*</span></FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={difficulties.length == 0 || isLoading}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select difficulty level" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {difficulties?.map((difficulty: any, index) => (
+                      <SelectItem key={index} value={difficulty?.value}><strong>{difficulty?.name}</strong></SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="businessArea"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Business Area <span className="text-red-500">*</span></FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={businessAreaList.length == 0 || isLoading}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select business area" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {businessAreaList?.map((businessArea: any, index) => (
+                      <SelectItem key={index} value={businessArea?.id}><strong>{businessArea?.name}</strong></SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="file"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>File <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Input type="file" accept=".docx, .doc" onChange={(e) => field.onChange(e.target.files)} disabled={isLoading} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="coSupervisorEmails"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Co Supervisor Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Email" {...field} disabled={isLoading} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </CardContent>
         <CardFooter className="justify-between">
           <Button
@@ -313,34 +264,32 @@ const RegisterTopicForm: React.FC = () => {
             <Download />
             Template
           </Button>
-          <Button type="button" className="h-12 flex items-center" onClick={handleConfirm}>
-            {isLoading ? <Loader2 className="animate-spin" /> : <Send className="mr-2" />}
+          <Button type="button" className="h-12" onClick={handleConfirm}>
+            <Send />
             Register
           </Button>
         </CardFooter>
-      </form>
 
-      <Dialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirm Registration</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to register this topic?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsConfirmOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSubmit(onSubmit)} className="flex items-center">
-              {isLoading ? <Loader2 className="animate-spin" /> : <Send className="mr-2" />}
-              Confirm
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+        <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Registration</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to register this topic?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <Button variant="outline" onClick={() => setIsConfirmOpen(false)} disabled={isLoading}>
+                Cancel
+              </Button>
+              <Button type="submit" className="flex items-center" onClick={() => { form.handleSubmit(onSubmit)() }} disabled={isLoading}>
+                {isLoading ? <Loader2 className="animate-spin" /> : <Send />}
+                {isLoading ? "Sending" : "Confirm"}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </form>
+    </Form>
   );
 };
-
-export default RegisterTopicForm;

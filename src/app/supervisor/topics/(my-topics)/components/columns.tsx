@@ -136,7 +136,7 @@ export const columns: ColumnDef<Topic>[] = [
                 case 1:
                     return (
                         <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                            Passed
+                            Approved
                         </Badge>
                     );
                 case 2:
@@ -148,7 +148,7 @@ export const columns: ColumnDef<Topic>[] = [
                 case 3:
                     return (
                         <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                            Failed
+                            Rejected
                         </Badge>
                     );
                 default:

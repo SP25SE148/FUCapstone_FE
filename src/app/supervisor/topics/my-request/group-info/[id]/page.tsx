@@ -1,20 +1,12 @@
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 
 export default function GroupInfoPage() {
     return (
         <Card className="min-h-[calc(100vh-60px)]">
             <CardHeader>
-                <CardTitle className="font-semibold tracking-tight text-xl">Group Information</CardTitle>
+                <CardTitle className="font-semibold tracking-tight text-xl text-primary">Group Information</CardTitle>
                 <CardDescription>Detailed information about group members</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
