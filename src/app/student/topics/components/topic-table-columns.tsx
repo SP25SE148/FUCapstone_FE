@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Topic } from "@/app/student/topics/type";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,6 +14,7 @@ import { MoreHorizontal } from "lucide-react";
 import TopicSheet from "@/app/student/topics/components/topic-sheet";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { Topic } from "@/contexts/student/student-topic-context";
 
 const ActionsCell = ({ topic }: { topic: Topic }) => {
   const [open, setOpen] = useState(false);
@@ -41,31 +41,34 @@ const ActionsCell = ({ topic }: { topic: Topic }) => {
   );
 };
 
-const StatusCell = ({ status }: { status: string }) => {
+const DifficultyLevelCell = ({ level }: { level: number }) => {
+  const levelText = level === 0 ? "Easy" : level === 1 ? "Medium" : "Hard";
   const color =
-    status === "Assigned"
-      ? "bg-red-100 text-red-600 hover:bg-red-100"
-      : "bg-green-100 text-green-600 hover:bg-green-100";
-  return <Badge className={color}>{status}</Badge>;
+    level === 0
+      ? "bg-green-100 text-green-600 hover:bg-green-100"
+      : level === 1
+      ? "bg-yellow-100 text-yellow-600 hover:bg-yellow-100"
+      : "bg-red-100 text-red-600 hover:bg-red-100";
+  return <Badge className={color}>{levelText}</Badge>;
 };
 
 export const columns: ColumnDef<Topic>[] = [
   {
-    accessorKey: "enName",
+    accessorKey: "englishName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="English Name" />
     ),
   },
   {
-    accessorKey: "vnName",
+    accessorKey: "vietnameseName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Vietnamese Name" />
     ),
   },
   {
-    accessorKey: "createBy",
+    accessorKey: "mainSupervisorName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Created By" />
+      <DataTableColumnHeader column={column} title="Supervisor" />
     ),
   },
   {
@@ -75,11 +78,17 @@ export const columns: ColumnDef<Topic>[] = [
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "difficultyLevel",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Difficulty Level" />
     ),
-    cell: ({ row }) => <StatusCell status={row.original.status} />,
+    cell: ({ row }) => <DifficultyLevelCell level={row.original.difficultyLevel} />,
+  },
+  {
+    accessorKey: "businessAreaName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Business Area" />
+    ),
   },
   {
     id: "actions",

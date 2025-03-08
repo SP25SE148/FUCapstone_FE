@@ -7,17 +7,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { BookOpen, Loader2, Send, School, Calendar, FileCheck, PenTool, BriefcaseBusiness, Star, BadgeInfo, FileX } from "lucide-react";
 
-import { Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
-import { useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
+import { Topic, useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import DownloadDocument from "../../[id]/components/download-document";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import DownloadDocument from "@/app/supervisor/topics/appraisal/[id]/components/download-document";
 
 const formSchema = z.object({
   appraisalContent: z.string()
@@ -109,8 +108,7 @@ export default function TopicAppraisalDetail() {
   const topicId: string = String(params.id);
   const topicAppraisalId = searchParams.get('topicAppraisalId');
   const [topic, setTopic] = useState<Topic>();
-  const { fetchTopicsById } = useSupervisorTopic();
-  const { getTopicAppraisalBySelf, submitAppraisalForSupervisor } = useSupervisorTopicAppraisal();
+  const { getTopicAppraisalBySelf, submitAppraisalForSupervisor, fetchTopicsById } = useSupervisorTopicAppraisal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

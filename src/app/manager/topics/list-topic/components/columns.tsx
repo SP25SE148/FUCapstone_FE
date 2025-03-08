@@ -110,7 +110,7 @@ export const columns: ColumnDef<Topic>[] = [
     header: "Appraisal",
     cell: ({ row }) => {
       const topic = row.original;
-      const isPendingOrEmpty = topic.status === 0 || topic.topicAppraisals.length === 0;
+      const isPendingOrEmpty = topic.status === 0 && topic.topicAppraisals.length !== 0;
       return (
         isPendingOrEmpty && (
           <Button asChild>

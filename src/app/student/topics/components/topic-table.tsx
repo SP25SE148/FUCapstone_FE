@@ -2,7 +2,6 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/student/topics/components/topic-table-columns";
-import { topics } from "@/app/student/topics/data-table";
 import {
   Card,
   CardContent,
@@ -10,8 +9,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useStudentTopics } from "@/contexts/student/student-topic-context";
+import { useStudentProfile } from "@/contexts/student/student-profile-context";
+import CreateGroup from "@/app/student/topics/components/create-group";
 
 export default function TopicTable() {
+  const { topics } = useStudentTopics();
+  const { studentProfile } = useStudentProfile();
+
+
+  if (!studentProfile?.isHaveBeenJoinGroup) {
+    return <CreateGroup />;
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -27,11 +37,7 @@ export default function TopicTable() {
         </div>
       </CardHeader>
       <CardContent>
-        {/* {loading ? (
-          <SkeletonLoader />
-        ) : ( */}
         <DataTable columns={columns} data={topics} />
-        {/* )} */}
       </CardContent>
     </Card>
   );
