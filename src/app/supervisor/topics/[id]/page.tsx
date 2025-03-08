@@ -1,12 +1,13 @@
 "use client"
 
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BadgeInfo, BookOpen, BriefcaseBusiness, Calendar, FileCheck, FileX, PenTool, School, Star } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { BadgeInfo, BookOpen, BriefcaseBusiness, Calendar, FileCheck, FileX, PenTool, School, Star, Undo2 } from "lucide-react";
 
 import { Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import DownloadDocument from "./components/download-document";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,7 +36,7 @@ const getStatus = (status: number | undefined) => {
         case 1:
             return (
                 <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Passed
+                    Approved
                 </Badge>
             );
         case 2:
@@ -47,7 +48,7 @@ const getStatus = (status: number | undefined) => {
         case 3:
             return (
                 <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    Failed
+                    Rejected
                 </Badge>
             );
         default:
@@ -77,6 +78,7 @@ const getCreatedDate = (data: string | undefined) => {
 };
 
 export default function TopicDetailsPage() {
+    const router = useRouter();
     const params = useParams();
     const id: string = String(params.id);
     const [topic, setTopic] = useState<Topic>();
@@ -92,10 +94,17 @@ export default function TopicDetailsPage() {
     return topic
         ?
         <Card className="min-h-[calc(100vh-60px)]">
-            <CardHeader>
-                <CardTitle className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName}</CardTitle>
-                <CardDescription>{topic?.vietnameseName}</CardDescription>
-            </CardHeader>
+            <div className="flex items-center">
+                <Button className="ml-6" size={"icon"}
+                    onClick={() => router.back()}
+                >
+                    <Undo2 />
+                </Button>
+                <CardHeader>
+                    <CardTitle className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName}</CardTitle>
+                    <CardDescription>{topic?.vietnameseName}</CardDescription>
+                </CardHeader>
+            </div>
             <CardContent className="space-y-4">
                 <div className="grid grid-cols-4 gap-4">
                     <div className="flex items-center space-x-2">

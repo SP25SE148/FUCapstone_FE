@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, ChevronRight, FileX, Filter, Search, Trash2 } from "lucide-react";
 
-import { LookupProp, Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
+import { useSupervisorTopicLookup, LookupProp, Topic } from "@/contexts/supervisor/supervisor-topic-lookup-context";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -38,14 +38,11 @@ const formSchema = z.object({
 });
 
 export default function LookupTopicPage() {
-    const { lookupTopics, businessAreas, fetchCampusList, fetchSemesterList, fetchCapstoneList, lookupTopic } = useSupervisorTopic();
+    const { lookupList, campusList, semesterList, capstoneList, businessAreaList, lookupTopic } = useSupervisorTopicLookup();
 
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [campusList, setCampusList] = useState<[]>([]);
-    const [semesterList, setSemesterList] = useState<[]>([]);
-    const [capstoneList, setCapstoneList] = useState<[]>([]);
-    const [pageNumber, setPageNumber] = useState<number>(lookupTopics?.currentPage || 1);
+    const [pageNumber, setPageNumber] = useState<number>(lookupList?.currentPage || 1);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -104,7 +101,7 @@ export default function LookupTopicPage() {
 
     // pagination handle
     const handleNextPage = () => {
-        if (pageNumber < lookupTopics?.totalNumberOfPages) {
+        if (pageNumber < lookupList?.totalNumberOfPages) {
             setPageNumber((prev: number) => prev + 1);
         }
     };
@@ -113,19 +110,6 @@ export default function LookupTopicPage() {
             setPageNumber((prev: number) => prev - 1);
         }
     };
-
-    useEffect(() => {
-        (async () => {
-            const [campuses, semesters, capstones] = await Promise.all([
-                fetchCampusList(),
-                fetchSemesterList(),
-                fetchCapstoneList(),
-            ]);
-            setCampusList(campuses);
-            setSemesterList(semesters);
-            setCapstoneList(capstones);
-        })();
-    }, []);
 
     useEffect(() => {
         const values = form.getValues()
@@ -272,7 +256,7 @@ export default function LookupTopicPage() {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    {businessAreas?.map((businessArea: any, index: number) => (
+                                                    {businessAreaList?.map((businessArea: any, index: number) => (
                                                         <SelectItem key={index} value={businessArea?.id}><strong>{businessArea?.name}</strong></SelectItem>
                                                     ))}
                                                 </SelectContent>
@@ -327,9 +311,9 @@ export default function LookupTopicPage() {
                                                 </FormControl>
                                                 <SelectContent>
                                                     <SelectItem value={"0"}><strong>Pending</strong></SelectItem>
-                                                    <SelectItem value={"1"}><strong>Passed</strong></SelectItem>
+                                                    <SelectItem value={"1"}><strong>Approved</strong></SelectItem>
                                                     <SelectItem value={"2"}><strong>Considered</strong></SelectItem>
-                                                    <SelectItem value={"3"}><strong>Failed</strong></SelectItem>
+                                                    <SelectItem value={"3"}><strong>Rejected</strong></SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />
@@ -364,7 +348,7 @@ export default function LookupTopicPage() {
                 </Card>}
 
                 {/* ko tìm thấy */}
-                {lookupTopics?.items?.length <= 0 && <Card className="p-6 flex items-center justify-center bg-muted">
+                {lookupList?.items?.length <= 0 && <Card className="p-6 flex items-center justify-center bg-muted">
                     <div className="flex flex-col items-center justify-center gap-8">
                         <FileX className="size-20 text-primary" />
                         <div className="space-y-2">
@@ -380,13 +364,13 @@ export default function LookupTopicPage() {
 
                 {/* list topic */}
                 <div className="space-y-4">
-                    {lookupTopics?.items?.map((topic: Topic, index: number) => (
+                    {lookupList?.items?.map((topic: Topic, index: number) => (
                         <ItemTopic key={index} topic={topic} />
                     ))}
                 </div>
 
                 {/* phân trang */}
-                {lookupTopics?.items?.length > 0 && <div className="flex items-center justify-center gap-2">
+                {lookupList?.items?.length > 0 && <div className="flex items-center justify-center gap-2">
                     <Button
                         size={"icon"}
                         onClick={pageNumber > 1 ? handlePreviousPage : (e) => e.preventDefault()}
@@ -394,15 +378,15 @@ export default function LookupTopicPage() {
                         <ChevronLeft />
                     </Button>
                     <div>
-                        {lookupTopics?.currentPage} / {lookupTopics?.totalNumberOfPages}
+                        {lookupList?.currentPage} / {lookupList?.totalNumberOfPages}
                     </div>
                     <div>
-                        Total: {lookupTopics?.totalNumberOfItems}
+                        Total: {lookupList?.totalNumberOfItems}
                     </div>
                     <Button
                         size={"icon"}
-                        onClick={pageNumber < lookupTopics?.totalNumberOfPages ? handleNextPage : (e) => e.preventDefault()}
-                        className={`cursor-pointer ${pageNumber === lookupTopics?.totalNumberOfPages ? "opacity-50 cursor-not-allowed" : ""}`}
+                        onClick={pageNumber < lookupList?.totalNumberOfPages ? handleNextPage : (e) => e.preventDefault()}
+                        className={`cursor-pointer ${pageNumber === lookupList?.totalNumberOfPages ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
                         <ChevronRight />
                     </Button>
