@@ -37,15 +37,8 @@ export const AdminStudentProvider = ({ children }: { children: React.ReactNode }
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchStudentList = async () => {
-    setIsLoading(true);
-    try {
-      const response = await callApi("fuc/User/get-all-student", {
-        method: "GET",
-      });
-      setStudents(response?.value);
-    } finally {
-      setIsLoading(false)
-    }
+    const response = await callApi("fuc/User/get-all-student");
+    setStudents(response?.value);
   };
 
   const addStudent = async (data: any) => {
@@ -79,21 +72,22 @@ export const AdminStudentProvider = ({ children }: { children: React.ReactNode }
   };
 
   const fetchMajorList = async () => {
-    const response = await callApi("fuc/AcademicManagement/major", {
-      method: "GET",
-    });
+    const response = await callApi("fuc/AcademicManagement/major");
     return (response?.value);
   };
 
   const fetchCapstoneListByMajor = async (majorId: string) => {
-    const response = await callApi(`fuc/AcademicManagement/capstone/by-major/${majorId}`, {
-      method: "GET",
-    });
+    const response = await callApi(`fuc/AcademicManagement/capstone/by-major/${majorId}`);
     return (response?.value);
   };
 
   useEffect(() => {
-    fetchStudentList();
+    setIsLoading(true);
+    try {
+      fetchStudentList();
+    } finally {
+      setIsLoading(false)
+    }
   }, []);
 
   return (

@@ -31,15 +31,8 @@ export const AdminManagerProvider = ({ children }: { children: React.ReactNode }
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchManagerList = async () => {
-    setIsLoading(true);
-    try {
-      const response = await callApi("identity/Users/get-all-manager", {
-        method: "GET",
-      });
-      setManagers(response?.value);
-    } finally {
-      setIsLoading(false)
-    }
+    const response = await callApi("identity/Users/get-all-manager");
+    setManagers(response?.value);
   };
 
   const addManager = async (data: any) => {
@@ -55,14 +48,17 @@ export const AdminManagerProvider = ({ children }: { children: React.ReactNode }
   };
 
   const fetchCapstoneList = async () => {
-    const response = await callApi("fuc/AcademicManagement/capstone", {
-      method: "GET",
-    });
+    const response = await callApi("fuc/AcademicManagement/capstone");
     return (response?.value);
   };
 
   useEffect(() => {
-    fetchManagerList();
+    setIsLoading(true);
+    try {
+      fetchManagerList();
+    } finally {
+      setIsLoading(false)
+    }
   }, []);
 
   return (

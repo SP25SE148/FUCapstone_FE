@@ -32,15 +32,8 @@ export const AdminSupervisorProvider = ({ children }: { children: React.ReactNod
   const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
 
   const fetchSupervisorList = async () => {
-    setIsLoading(true);
-    try {
-      const response = await callApi("fuc/User/get-all-supervisor", {
-        method: "GET",
-      });
-      setSupervisors(response?.value);
-    } finally {
-      setIsLoading(false)
-    }
+    const response = await callApi("fuc/User/get-all-supervisor");
+    setSupervisors(response?.value);
   };
 
   const addSupervisor = async (data: Supervisor) => {
@@ -74,14 +67,17 @@ export const AdminSupervisorProvider = ({ children }: { children: React.ReactNod
   };
 
   const fetchMajorList = async () => {
-    const response = await callApi("fuc/AcademicManagement/major", {
-      method: "GET",
-    });
+    const response = await callApi("fuc/AcademicManagement/major");
     return (response?.value);
   };
 
   useEffect(() => {
-    fetchSupervisorList();
+    setIsLoading(true);
+    try {
+      fetchSupervisorList();
+    } finally {
+      setIsLoading(false)
+    }
   }, []);
 
   return (
