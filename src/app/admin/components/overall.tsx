@@ -44,23 +44,8 @@ Overall.Skeleton = () => {
                 <Skeleton className="h-7 w-24" />
                 <Skeleton className="h-5 w-24" />
             </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <div>
-                    <Skeleton className="mb-2 h-7 w-52" />
-                    <Skeleton className="h-8 w-24" />
-                </div>
-                <div>
-                    <Skeleton className="mb-2 h-7 w-52" />
-                    <Skeleton className="h-8 w-24" />
-                </div>
-                <div>
-                    <Skeleton className="mb-2 h-7 w-52" />
-                    <Skeleton className="h-8 w-24" />
-                </div>
-                <div>
-                    <Skeleton className="mb-2 h-7 w-52" />
-                    <Skeleton className="h-8 w-24" />
-                </div>
+            <CardContent>
+                <Skeleton className="h-16 w-full" />
             </CardContent>
         </Card>
     )
