@@ -57,7 +57,7 @@ export interface Topic {
   semesterId: string
   capstoneId: string;
   businessAreaName: string;
-  difficultyLevel: number;
+  difficultyLevel: string;
   englishName: string;
   vietnameseName: string
   abbreviation: string;
@@ -68,7 +68,7 @@ export interface Topic {
   fileName: string;
   fileUrl: string
   createdDate: string;
-  status: number;
+  status: string;
   topicAppraisals: [];
 }
 
@@ -98,6 +98,7 @@ interface SupervisorTopicLookupContextType {
   capstoneList: Capstone[];
   businessAreaList: BusinessArea[];
   lookupTopic: (data: LookupProp) => Promise<any>;
+  getPresignedUrlTopicDocument: (id: string) => Promise<string>;
 }
 
 const SupervisorTopicLookupContext = createContext<
@@ -147,6 +148,11 @@ export const SupervisorTopicLookupProvider: React.FC<{
     return response;
   };
 
+  const getPresignedUrlTopicDocument = async (id: string) => {
+    const response = await callApi(`fuc/topics/presigned/${id}`);
+    return (response?.value);
+  };
+
   useEffect(() => {
     fetchCampusList();
     fetchSemesterList();
@@ -163,6 +169,7 @@ export const SupervisorTopicLookupProvider: React.FC<{
         capstoneList,
         businessAreaList,
         lookupTopic,
+        getPresignedUrlTopicDocument,
       }}
     >
       {children}
