@@ -4,21 +4,13 @@ import { Clock, Inbox } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { RequestMember } from "@/contexts/student/student-group-context";
 
-interface Request {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentEmail: string;
-  studentFullName: string;
-  isLeader: boolean;
-  status: string;
-}
 
 interface MyRequestProps {
-  requests: Request[];
+  requests: RequestMember[];
   getStatusBadge: (status: string) => JSX.Element | null;
-  handleCancelClick: (request: Request) => void;
+  handleCancelClick: (request: RequestMember) => void;
 }
 
 const MyRequest: React.FC<MyRequestProps> = ({

@@ -7,19 +7,19 @@ import { useStudentTopics } from "@/contexts/student/student-topic-context";
 import { toast } from "sonner";
 
 interface RegisterTopicProps {
-  topicId: string;
+  topicId: any;
+  groupId: any;
 }
 
-export default function RegisterTopic({ topicId }: RegisterTopicProps) {
-  const { getGroupInfoByStudentId, createTopicRequest } = useStudentTopics();
+export default function RegisterTopic({ topicId, groupId }: RegisterTopicProps) {
+  const { createTopicRequest } = useStudentTopics();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
     setLoading(true);
     try {
-      const groupInfo = await getGroupInfoByStudentId();
-      await createTopicRequest(topicId, groupInfo.id);
+      await createTopicRequest(topicId, groupId);
     } catch (error) {
       toast.error("Failed to register topic", {
         description: `${error}`,

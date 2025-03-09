@@ -5,31 +5,21 @@ import { useRouter } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useStudentGroup } from "@/contexts/student/student-group-context";
+import { RequestMember, useStudentGroup } from "@/contexts/student/student-group-context";
 import MyRequest from "@/app/student/groups/my-request/components/my-requests";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GroupRequest from "@/app/student/groups/my-request/components/group-request";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, } from "@/components/ui/dialog";
 
-interface Request {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentEmail: string;
-  studentFullName: string;
-  isLeader: boolean;
-  status: string;
-}
-
 export function ListRequest() {
   const router = useRouter();
   const [openCancelDialog, setOpenCancelDialog] = useState(false);
   const [openActionDialog, setOpenActionDialog] = useState(false);
-  const [sentRequests, setSentRequests] = useState<Request[]>([]);
-  const [receivedRequests, setReceivedRequests] = useState<Request[]>([]);
+  const [sentRequests, setSentRequests] = useState<RequestMember[]>([]);
+  const [receivedRequests, setReceivedRequests] = useState<RequestMember[]>([]);
   const [actionType, setActionType] = useState<"accept" | "reject">("accept");
-  const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<RequestMember | null>(null);
   const { listrequest, getGroupMemberReq, updateStatusInvitation } = useStudentGroup();
 
   useEffect(() => {
@@ -73,12 +63,12 @@ export function ListRequest() {
     }
   };
 
-  const handleCancelClick = (request: Request) => {
+  const handleCancelClick = (request: RequestMember) => {
     setSelectedRequest(request);
     setOpenCancelDialog(true);
   };
 
-  const handleActionClick = (request: Request, action: "accept" | "reject") => {
+  const handleActionClick = (request: RequestMember, action: "accept" | "reject") => {
     setSelectedRequest(request);
     setActionType(action);
     setOpenActionDialog(true);

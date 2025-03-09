@@ -48,33 +48,46 @@ interface GroupInfo {
   }[];
 }
 
+interface TopicRequest {
+  groupCode: string;
+  groupId: string;
+  supervisorId: string;
+  supervisorFullName: string;
+  topicId: string;
+  topicCode: string;
+  topicEnglishName: string;
+  status: string;
+  requestedBy: string;
+  leaderFullName: string | null;
+  createdDate: string;
+}
+
 interface StudentTopicContextProps {
   topics: Topic[];
+  topicRequest: TopicRequest | null;
+  groupInfo: GroupInfo | null;
   fetchPassedTopic: () => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   getGroupInfoByStudentId: () => Promise<GroupInfo>;
   createTopicRequest: (topicId: string, groupId: string) => Promise<void>;
+  fetchTopicRequest: () => Promise<void>;
 }
 
-const StudentTopicContext = createContext<StudentTopicContextProps | undefined>(
-  undefined
-);
+const StudentTopicContext = createContext<StudentTopicContextProps | undefined>(undefined);
 
 export const useStudentTopics = () => {
   const context = useContext(StudentTopicContext);
   if (!context) {
-    throw new Error(
-      "useStudentTopics must be used within a StudentTopicProvider"
-    );
+    throw new Error("useStudentTopics must be used within a StudentTopicProvider");
   }
   return context;
 };
 
-export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { callApi } = useApi();
   const [topics, setTopics] = useState<Topic[]>([]);
+  const [topicRequest, setTopicRequest] = useState<TopicRequest | null>(null);
+  const [groupInfo, setGroupInfo] = useState<GroupInfo | null>(null);
 
   const fetchPassedTopic = async () => {
     try {
@@ -99,11 +112,10 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getGroupInfoByStudentId = async () => {
     const response = await callApi("fuc/Group/get-by-student-id");
-    if (response?.isSuccess) {
-      return response.value;
-    } else {
-      throw new Error(response?.error?.message || "Failed to fetch group info");
-    }
+    // if (response?.isSuccess) {
+      setGroupInfo(response.value);
+      // return response.value;
+    // } 
   };
 
   const createTopicRequest = async (topicId: string, groupId: string) => {
@@ -114,21 +126,32 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({
     if (response?.isSuccess === true) {
       toast.success("Register Topic successfully");
       fetchPassedTopic();
+      fetchTopicRequest();
     }
+  };
+
+  const fetchTopicRequest = async () => {
+    const response = await callApi("fuc/Group/get-topic-request");
+    setTopicRequest(response.value);
   };
 
   useEffect(() => {
     fetchPassedTopic();
+    fetchTopicRequest();
+    getGroupInfoByStudentId();
   }, []);
 
   return (
     <StudentTopicContext.Provider
       value={{
         topics,
+        topicRequest,
+        groupInfo,
         fetchPassedTopic,
         getPresignedUrlTopicDocument,
         getGroupInfoByStudentId,
         createTopicRequest,
+        fetchTopicRequest,
       }}
     >
       {children}

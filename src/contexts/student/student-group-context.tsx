@@ -7,7 +7,7 @@ import { useApi } from "../../hooks/use-api";
 import { useStudentProfile } from "./student-profile-context";
 
 
-interface Member {
+export interface Member {
   id: string;
   groupId: string;
   studentId: string;
@@ -17,12 +17,24 @@ interface Member {
   status: string;
 }
 
-interface Request {
-  groupMemberRequestSentByLeader: Member[];
-  groupMemberRequested: Member[];
+export interface RequestMember {
+  id: string;
+  groupId: string;
+  studentId: string;
+  studentFullName: string;
+  studentEmail: string;
+  isLeader: boolean;
+  createdBy: string;
+  createdDate: string;
+  status: string;
 }
 
-interface Group {
+export interface Request {
+  groupMemberRequestSentByLeader: RequestMember[];
+  groupMemberRequested: RequestMember[];
+}
+
+export interface Group {
   id: string;
   campusName: string;
   semesterName: string;
