@@ -5,20 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { RequestMember } from "@/contexts/student/student-group-context";
 
-interface Request {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentEmail: string;
-  studentFullName: string;
-  isLeader: boolean;
-  status: string;
-}
+
 
 interface GroupRequestProps {
-  requests: Request[];
-  handleActionClick: (request: Request, action: "accept" | "reject") => void;
+  requests: RequestMember[];
+  handleActionClick: (request: RequestMember, action: "accept" | "reject") => void;
 }
 
 const GroupRequest: React.FC<GroupRequestProps> = ({
@@ -82,11 +75,11 @@ const GroupRequest: React.FC<GroupRequestProps> = ({
                     </Avatar>
                     <div>
                       <p className="text-sm font-medium">
-                        {request.studentFullName} invited you to join their group
+                        {request.createdBy} invited you to join their group
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center mt-1">
                         <Clock className="mr-1 h-3 w-3" />{" "}
-                        {new Date().toLocaleString()}
+                        {request.createdDate.toLocaleString()}
                       </p>
                     </div>
                   </div>
