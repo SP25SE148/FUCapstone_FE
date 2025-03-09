@@ -12,43 +12,43 @@ import DownloadDocument from "./components/download-document";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-const getDifficultyStatus = (status: number | undefined) => {
+const getDifficultyStatus = (status: string | undefined) => {
     switch (status) {
-        case 0:
-            return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">Easy</Badge>
-        case 1:
-            return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">Medium</Badge>
-        case 2:
-            return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">Hard</Badge>
+        case "Easy":
+            return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">{status}</Badge>
+        case "Medium":
+            return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">{status}</Badge>
+        case "Hard":
+            return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">{status}</Badge>
         default:
             return null;
     }
 }
 
-const getStatus = (status: number | undefined) => {
+const getStatus = (status: string | undefined) => {
     switch (status) {
-        case 0:
+        case "Pending":
             return (
                 <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    Pending
+                    {status}
                 </Badge>
             );
-        case 1:
+        case "Approved":
             return (
                 <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Approved
+                    {status}
                 </Badge>
             );
-        case 2:
+        case "Considered":
             return (
                 <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                    Considered
+                    {status}
                 </Badge>
             );
-        case 3:
+        case "Rejected":
             return (
                 <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    Rejected
+                    {status}
                 </Badge>
             );
         default:

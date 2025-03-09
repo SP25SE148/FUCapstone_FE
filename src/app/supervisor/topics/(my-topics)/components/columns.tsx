@@ -20,7 +20,7 @@ export type Topic = {
     semesterId: string
     capstoneId: string;
     businessAreaName: string;
-    difficultyLevel: number;
+    difficultyLevel: string;
     englishName: string;
     vietnameseName: string
     abbreviation: string;
@@ -31,7 +31,7 @@ export type Topic = {
     fileName: string;
     fileUrl: string
     createdDate: string;
-    status: number
+    status: string
 }
 
 export const columns: ColumnDef<Topic>[] = [
@@ -127,28 +127,28 @@ export const columns: ColumnDef<Topic>[] = [
         cell: ({ row }) => {
             const topic = row.original;
             switch (topic?.status) {
-                case 0:
+                case "Pending":
                     return (
                         <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                            Pending
+                            {topic?.status}
                         </Badge>
                     );
-                case 1:
+                case "Approved":
                     return (
                         <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                            Approved
+                            {topic?.status}
                         </Badge>
                     );
-                case 2:
+                case "Considered":
                     return (
                         <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                            Considered
+                            {topic?.status}
                         </Badge>
                     );
-                case 3:
+                case "Rejected":
                     return (
                         <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                            Rejected
+                            {topic?.status}
                         </Badge>
                     );
                 default:

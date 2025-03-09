@@ -36,8 +36,6 @@ export const SupervisorTopicRegisterProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const { user } = useAuth();
-  console.log(user);
-
   const { callApi } = useApi();
 
   const [capstoneList, setCapstoneList] = useState<Capstone[]>([]);

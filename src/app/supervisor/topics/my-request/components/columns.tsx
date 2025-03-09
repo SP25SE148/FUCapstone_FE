@@ -1,30 +1,62 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { MoreHorizontal } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
+import { getDate } from "@/lib/utils"
+import { useSupervisorTopicRequest } from "@/contexts/supervisor/supervisor-topic-request-context"
+
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
-import Link from "next/link"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Topic = {
-    id: string
-    capstone: string
-    code: string
-    englishName: string
-    vietnameseName: string
-    abbreviation: string
-    supervisor: string
-    supervisor2: string
-    status: "Pending" | "Available"
+interface Request {
+    topicRequestId: string;
+    groupCode: string,
+    groupId: string,
+    supervisorId: string,
+    supervisorFullName: string,
+    topicId: string,
+    topicCode: string,
+    topicEnglishName: string,
+    status: string,
+    requestedBy: string,
+    leaderFullName: string,
+    createdDate: string
 }
 
-export const columns: ColumnDef<Topic>[] = [
+const getStatus = (status: string | undefined) => {
+    switch (status) {
+        case "UnderReview":
+            return (
+                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                    Under Review
+                </Badge>
+            );
+        case "Approved":
+            return (
+                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                    {status}
+                </Badge>
+            );
+        case "Rejected":
+            return (
+                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
+                    {status}
+                </Badge>
+            );
+        default:
+            return null;
+    }
+}
+
+export const columns: ColumnDef<Request>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -48,84 +80,131 @@ export const columns: ColumnDef<Topic>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "capstone",
+        accessorKey: "topicCode",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Capstone" />
+            <DataTableColumnHeader column={column} title="Topic Code" />
         ),
     },
     {
-        accessorKey: "code",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Code" />
-        ),
-    },
-    {
-        accessorKey: "englishName",
+        accessorKey: "topicEnglishName",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="English Name" />
         ),
         cell: ({ row }) => {
             return (
-                <Link className="text-primary hover:underline" href={`/supervisor/topics/${row?.original?.id}`}>{row.original.englishName}</Link>
+                <Link className="text-primary underline underline-offset-2 font-bold hover:text-blue-400" href={`/supervisor/topics/${row?.original?.topicId}`}>{row.original.topicEnglishName}</Link>
             )
         }
     },
     {
-        accessorKey: "vietnameseName",
+        accessorKey: "groupCode",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Vietnamese Name" />
+            <DataTableColumnHeader column={column} title="Group Code" />
+        ),
+        cell: ({ row }) => {
+            return (
+                <Link className="text-primary underline underline-offset-2 font-bold hover:text-blue-400" href={`/supervisor/topics/my-request/group-info/${row?.original?.groupId}`}>{row.original.groupCode}</Link>
+            )
+        }
+    },
+    {
+        accessorKey: "leaderFullName",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Leader Name" />
         ),
     },
     {
-        accessorKey: "abbreviation",
+        accessorKey: "createdDate",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Abbreviation" />
+            <DataTableColumnHeader column={column} title="Created Date" />
         ),
-    },
-    {
-        accessorKey: "supervisor",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Supervisor" />
-        ),
-    },
-    {
-        accessorKey: "supervisor2",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Supervisor 2" />
-        ),
+        cell: ({ row }) => {
+            const request = row.original;
+            return <span className="text-muted-foreground">{getDate(request?.createdDate)}</span>
+        }
     },
     {
         accessorKey: "status",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Status" />
         ),
+        cell: ({ row }) => {
+            const request = row.original;
+            return getStatus(request?.status)
+        }
     },
     {
         id: "actions",
         cell: ({ row }) => {
-            const router = useRouter();
+            const { updateTopicRequestStatus } = useSupervisorTopicRequest();
             const topic = row.original;
+            const [status, setStatus] = useState<number>(0);
+            const [isLoading, setIsLoading] = useState<boolean>(false);
+            const [openConfirm, setOpenConfirm] = useState<boolean>(false);
+
+            async function handleConfirm() {
+                setIsLoading(true);
+                try {
+                    const res: any = await updateTopicRequestStatus({
+                        TopicRequestId: topic?.topicRequestId,
+                        Status: status
+                    });
+                } finally {
+                    setStatus(0);
+                    setIsLoading(false);
+                    setOpenConfirm(false);
+                }
+            }
 
             return (
-                <div className="flex items-center justify-center">
-                    <DropdownMenu >
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() => router.push(`topics/${topic.id}`)}
-                            >
-                                View details
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
+                <>
+                    <div className="flex items-center justify-center gap-2 flex-wrap">
+                        <Button
+                            size={"sm"}
+                            onClick={() => {
+                                setStatus(2);
+                                setOpenConfirm(true);
+                            }}
+                        >
+                            Accepted
+                        </Button>
+                        <Button
+                            size={"sm"}
+                            onClick={() => {
+                                setStatus(1);
+                                setOpenConfirm(true);
+                            }}
+                            variant={"destructive"}
+                        >
+                            Rejected
+                        </Button>
+                    </div>
+
+                    <AlertDialog open={openConfirm} onOpenChange={setOpenConfirm}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. Please check again before submit.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel
+                                    disabled={isLoading}
+                                >
+                                    Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleConfirm}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading && <Loader2 className="animate-spin" />}
+                                    {isLoading ? "Please wait" : "Continue"}
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </>
             )
         },
     },

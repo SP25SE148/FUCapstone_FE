@@ -3,51 +3,51 @@
 import { useState } from "react";
 import { BadgeInfo, BookOpen, BriefcaseBusiness, Calendar, FileCheck, PenTool, School, Star } from "lucide-react";
 
-import { Topic } from "@/contexts/supervisor/supervisor-topic-context";
+import { Topic } from "@/contexts/supervisor/supervisor-topic-lookup-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import DownloadDocument from "../../[id]/components/download-document";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import DownloadDocument from "./download-document";
 
-const getDifficultyStatus = (status: number | undefined) => {
+const getDifficultyStatus = (status: string | undefined) => {
     switch (status) {
-        case 0:
-            return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">Easy</Badge>
-        case 1:
-            return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">Medium</Badge>
-        case 2:
-            return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">Hard</Badge>
+        case "Easy":
+            return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">{status}</Badge>
+        case "Medium":
+            return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">{status}</Badge>
+        case "Hard":
+            return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">{status}</Badge>
         default:
             return null;
     }
 }
 
-const getStatus = (status: number | undefined) => {
+const getStatus = (status: string | undefined) => {
     switch (status) {
-        case 0:
+        case "Pending":
             return (
                 <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    Pending
+                    {status}
                 </Badge>
             );
-        case 1:
+        case "Approved":
             return (
                 <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Approved
+                    {status}
                 </Badge>
             );
-        case 2:
+        case "Considered":
             return (
                 <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                    Considered
+                    {status}
                 </Badge>
             );
-        case 3:
+        case "Rejected":
             return (
                 <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    Rejected
+                    {status}
                 </Badge>
             );
         default:
@@ -83,21 +83,18 @@ export default function ItemTopic({ topic }: { topic: Topic }) {
         <>
             {/* item topic */}
             <Card
-                className="p-4 grid grid-cols-4 items-center cursor-pointer hover:bg-muted"
+                className="p-4 grid grid-cols-5 items-center cursor-pointer hover:bg-muted"
                 onClick={() => {
                     setOpenDetail(true);
                 }}
             >
-                <div className="col-span-3 flex items-center gap-4">
-                    <span className="font-semibold text-primary">{topic?.code}</span>
-                    <div className="col-span-2">
-                        <p className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName} - {topic?.abbreviation}</p>
-                        <p className="text-sm text-muted-foreground">{topic?.vietnameseName}</p>
-                    </div>
+                <div className="col-span-3">
+                    <p className="font-semibold tracking-tight text-lg text-primary">{topic?.code} - {topic?.englishName} - {topic?.abbreviation}</p>
+                    <p className="text-sm text-muted-foreground">{topic?.vietnameseName}</p>
                 </div>
-                <div className="flex flex-col items-end gap-2">
+                <div className="col-span-2   flex flex-col items-end gap-2">
                     {getStatus(topic?.status)}
-                    <div className="flex gap-2 text-sm text-muted-foreground">
+                    <div className="flex gap-2 text-xs text-muted-foreground">
                         <span>Created at:</span> {getCreatedDate(topic?.createdDate)}
                     </div>
                 </div>

@@ -12,7 +12,7 @@ export interface Topic {
   semesterId: string
   capstoneId: string;
   businessAreaName: string;
-  difficultyLevel: number;
+  difficultyLevel: string;
   englishName: string;
   vietnameseName: string
   abbreviation: string;
@@ -23,7 +23,7 @@ export interface Topic {
   fileName: string;
   fileUrl: string
   createdDate: string;
-  status: number;
+  status: string;
   topicAppraisals: [];
 }
 
