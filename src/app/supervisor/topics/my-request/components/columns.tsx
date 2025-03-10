@@ -39,7 +39,7 @@ const getStatus = (status: string | undefined) => {
                     Under Review
                 </Badge>
             );
-        case "Approved":
+        case "Accepted":
             return (
                 <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
                     {status}
@@ -158,7 +158,7 @@ export const columns: ColumnDef<Request>[] = [
 
             return (
                 <>
-                    <div className="flex items-center justify-center gap-2 flex-wrap">
+                    {topic?.status === "UnderReview" && <div className="flex items-center justify-center gap-2 flex-wrap">
                         <Button
                             size={"sm"}
                             onClick={() => {
@@ -178,7 +178,7 @@ export const columns: ColumnDef<Request>[] = [
                         >
                             Rejected
                         </Button>
-                    </div>
+                    </div>}
 
                     <AlertDialog open={openConfirm} onOpenChange={setOpenConfirm}>
                         <AlertDialogContent>
