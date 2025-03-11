@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { ColumnDef } from "@tanstack/react-table"
 
+import { getDate } from "@/lib/utils"
 import { TopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context"
 
 import { Badge } from "@/components/ui/badge"
@@ -83,24 +84,8 @@ export const columns: ColumnDef<TopicAppraisal>[] = [
         ),
         cell: ({ row }) => {
             const topicAppraisal = row.original;
-            const date = new Date(topicAppraisal?.appraisalDate || "");
-            // Chuyển sang giờ Việt Nam (GMT+7)
-            const vnDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
 
-            const day = vnDate.getDate().toString().padStart(2, '0');
-            const month = (vnDate.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
-            const year = vnDate.getFullYear();
-
-            const hours = vnDate.getHours().toString().padStart(2, '0');
-            const minutes = vnDate.getMinutes().toString().padStart(2, '0');
-            const seconds = vnDate.getSeconds().toString().padStart(2, '0');
-
-            return topicAppraisal?.appraisalDate && (
-                <div className="flex items-center gap-2">
-                    <span>{`${day}/${month}/${year}`}</span>
-                    <span className="text-muted-foreground">{`${hours}:${minutes}:${seconds}`}</span>
-                </div>
-            )
+            return topicAppraisal?.appraisalDate && <span className="text-muted-foreground">{getDate(topicAppraisal?.appraisalDate)}</span>
         }
     },
     {

@@ -1,15 +1,16 @@
 "use client"
 
 import { useState } from "react";
-import { BadgeInfo, BookOpen, BriefcaseBusiness, Calendar, FileCheck, PenTool, School, Star } from "lucide-react";
+import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, PenTool, School, Star, User2, Users } from "lucide-react";
 
+import { getDate } from "@/lib/utils";
 import { Topic } from "@/contexts/supervisor/supervisor-topic-lookup-context";
 
 import { Badge } from "@/components/ui/badge";
+import DownloadDocument from "./download-document";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import DownloadDocument from "./download-document";
 
 const getDifficultyStatus = (status: string | undefined) => {
     switch (status) {
@@ -55,27 +56,6 @@ const getStatus = (status: string | undefined) => {
     }
 }
 
-const getCreatedDate = (data: string | undefined) => {
-    const date = new Date(data || "");
-    // Chuyển sang giờ Việt Nam (GMT+7)
-    const vnDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
-
-    const day = vnDate.getDate().toString().padStart(2, '0');
-    const month = (vnDate.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
-    const year = vnDate.getFullYear();
-
-    const hours = vnDate.getHours().toString().padStart(2, '0');
-    const minutes = vnDate.getMinutes().toString().padStart(2, '0');
-    const seconds = vnDate.getSeconds().toString().padStart(2, '0');
-
-    return (
-        <div className="flex items-center gap-2">
-            <span>{`${day}/${month}/${year}`}</span>
-            <span className="text-muted-foreground">{`${hours}:${minutes}:${seconds}`}</span>
-        </div>
-    )
-};
-
 export default function ItemTopic({ topic }: { topic: Topic }) {
     const [openDetail, setOpenDetail] = useState<boolean>(false);
 
@@ -94,160 +74,176 @@ export default function ItemTopic({ topic }: { topic: Topic }) {
                 </div>
                 <div className="col-span-2   flex flex-col items-end gap-2">
                     {getStatus(topic?.status)}
-                    <div className="flex gap-2 text-xs text-muted-foreground">
-                        <span>Created at:</span> {getCreatedDate(topic?.createdDate)}
-                    </div>
+                    <p className="text-sm text-muted-foreground">Created at: {getDate(topic?.createdDate)}</p>
                 </div>
             </Card>
 
             {/* view detail */}
             <Dialog open={openDetail} onOpenChange={setOpenDetail}>
                 <DialogContent className="max-w-4xl w-full max-h-[600px] overflow-auto">
-                    <DialogHeader>
-                        <DialogTitle className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName}</DialogTitle>
-                        <DialogDescription>{topic?.vietnameseName}</DialogDescription>
-                    </DialogHeader>
-                    <Card>
-                        <CardContent className="pt-6 space-y-4">
-                            <div className="grid grid-cols-4 gap-4">
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-muted rounded-md p-2">
-                                        <School className="size-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-muted-foreground">
-                                            Campus
-                                        </h3>
-                                        <p className="font-semibold tracking-tight">{topic?.campusId}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-muted rounded-md p-2">
-                                        <Calendar className="size-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-muted-foreground">
-                                            Semester
-                                        </h3>
-                                        <p className="font-semibold tracking-tight">{topic?.semesterId}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-muted rounded-md p-2">
-                                        <BookOpen className="size-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-muted-foreground">
-                                            Capstone
-                                        </h3>
-                                        <p className="font-semibold tracking-tight">{topic?.capstoneId}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-muted rounded-md p-2">
-                                        <FileCheck className="size-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-muted-foreground">
-                                            Topic code
-                                        </h3>
-                                        <p className="font-semibold tracking-tight">{topic?.code}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-muted rounded-md p-2">
-                                        <PenTool className="size-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-muted-foreground">
-                                            Abbreviation
-                                        </h3>
-                                        <p className="font-semibold tracking-tight">{topic?.abbreviation}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-muted rounded-md p-2">
-                                        <BriefcaseBusiness className="size-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-muted-foreground">
-                                            Business area
-                                        </h3>
-                                        <p className="font-semibold tracking-tight">{topic?.businessAreaName}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-muted rounded-md p-2">
-                                        <Star className="size-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-muted-foreground">
-                                            Difficulty
-                                        </h3>
-                                        {getDifficultyStatus(topic?.difficultyLevel)}
-                                    </div>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-muted rounded-md p-2">
-                                        <BadgeInfo className="size-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm text-muted-foreground">
-                                            Status
-                                        </h3>
-                                        {getStatus(topic?.status)}
-                                    </div>
-                                </div>
+                    <div className="flex items-center justify-between">
+                        <DialogHeader>
+                            <DialogTitle className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName}</DialogTitle>
+                            <DialogDescription>{topic?.vietnameseName}</DialogDescription>
+                        </DialogHeader>
+                        <DownloadDocument topic={topic} />
+                    </div>
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <h3 className="font-semibold flex items-center gap-2">
+                                    <BookUser className="size-4 text-primary" />
+                                    General Information
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Created at: {getDate(topic?.createdDate)}
+                                </p>
                             </div>
-                            <div>
-                                <h3 className="text-sm text-muted-foreground">Description:</h3>
-                                <p className="p-4 font-semibold tracking-tight text-justify italic">{topic?.description}</p>
-                            </div>
-                            <div>
-                                <h3 className="text-sm text-muted-foreground">Supervisor(s):</h3>
-                                <div className="p-4 grid grid-cols-2 gap-4">
-                                    <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/20">
-                                        <Avatar className="size-12 border-2 border-primary/10">
-                                            <AvatarFallback className="text-lg font-semibold text-primary">
-                                                {topic?.mainSupervisorName.slice(-1)}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            <p className="font-bold">
-                                                {topic?.mainSupervisorName}
-                                            </p>
-                                            <p className="text-sm text-muted-foreground">
-                                                {topic?.mainSupervisorEmail}
-                                            </p>
+                            <Card className="bg-primary/5">
+                                <CardContent className="p-6 space-y-2">
+                                    <div className="grid grid-cols-4 gap-6 text-sm border-b pb-4 mb-4">
+                                        <div className="flex items-center space-x-2">
+                                            <div className="bg-muted rounded-md p-2">
+                                                <School className="size-5 text-primary" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm text-muted-foreground">
+                                                    Campus
+                                                </h3>
+                                                <p className="font-semibold tracking-tight">{topic?.campusId}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="bg-muted rounded-md p-2">
+                                                <Calendar className="size-5 text-primary" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm text-muted-foreground">
+                                                    Semester
+                                                </h3>
+                                                <p className="font-semibold tracking-tight">{topic?.semesterId}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="bg-muted rounded-md p-2">
+                                                <BookOpen className="size-5 text-primary" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm text-muted-foreground">
+                                                    Capstone
+                                                </h3>
+                                                <p className="font-semibold tracking-tight">{topic?.capstoneId}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="bg-muted rounded-md p-2">
+                                                <FileCheck className="size-5 text-primary" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm text-muted-foreground">
+                                                    Topic code
+                                                </h3>
+                                                <p className="font-semibold tracking-tight">{topic?.code}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="bg-muted rounded-md p-2">
+                                                <PenTool className="size-5 text-primary" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm text-muted-foreground">
+                                                    Abbreviation
+                                                </h3>
+                                                <p className="font-semibold tracking-tight">{topic?.abbreviation}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="bg-muted rounded-md p-2">
+                                                <BriefcaseBusiness className="size-5 text-primary" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm text-muted-foreground">
+                                                    Business area
+                                                </h3>
+                                                <p className="font-semibold tracking-tight">{topic?.businessAreaName}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="bg-muted rounded-md p-2">
+                                                <Star className="size-5 text-primary" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm text-muted-foreground">
+                                                    Difficulty
+                                                </h3>
+                                                {getDifficultyStatus(topic?.difficultyLevel)}
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="bg-muted rounded-md p-2">
+                                                <BadgeInfo className="size-5 text-primary" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm text-muted-foreground">
+                                                    Status
+                                                </h3>
+                                                {getStatus(topic?.status)}
+                                            </div>
                                         </div>
                                     </div>
-                                    {topic?.coSupervisors?.map((supervisor: any, index) => (
-                                        <div key={index} className="flex items-center gap-4 p-4 border rounded-lg bg-muted/20">
-                                            <Avatar className="size-12 border-2 border-primary/10">
-                                                <AvatarFallback className="text-lg font-semibold text-primary">
-                                                    {supervisor?.SupervisorName.slice(-1)}
+                                    <div className="space-y-2">
+                                        <h3 className="text-sm text-muted-foreground">Description:</h3>
+                                        <p className="font-semibold tracking-tight text-justify italic">{topic?.description}</p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        <div className="space-y-2">
+                            <h3 className="font-semibold flex items-center gap-2">
+                                <Users className="size-4 text-primary" />
+                                Supervisor(s):
+                            </h3>
+                            <div className="grid grid-cols-2 gap-2">
+                                <Card className="bg-primary/5">
+                                    <CardContent className="p-4">
+                                        <div className="flex items-center gap-3">
+                                            <Avatar className="size-12 border-2 border-primary">
+                                                <AvatarFallback className="bg-primary/10">
+                                                    <User2 className="size-6 text-primary" />
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div>
-                                                <p className="font-bold">
-                                                    {supervisor?.SupervisorName}
-                                                </p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {supervisor?.SupervisorEmail}
-                                                </p>
+                                                <p className="font-semibold"> {topic?.mainSupervisorName}</p>
+                                                <p className="text-sm text-muted-foreground">{topic?.mainSupervisorEmail}</p>
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
+                                    </CardContent>
+                                </Card>
+                                {topic?.coSupervisors?.map((supervisor: any, index) => (
+                                    <Card key={index} className="bg-primary/5">
+                                        <CardContent className="p-4">
+                                            <div className="flex items-center gap-3">
+                                                <Avatar className="size-12 border-2 border-primary">
+                                                    <AvatarFallback className="bg-primary/10">
+                                                        <User2 className="size-6 text-primary" />
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <div>
+                                                    <p className="font-semibold">
+                                                        {supervisor?.SupervisorName}
+                                                    </p>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        {supervisor?.SupervisorEmail}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))}
                             </div>
-                            <div className="flex justify-between items-center">
-                                <DownloadDocument topic={topic} />
-                                <div className="flex gap-2 text-sm text-muted-foreground">
-                                    <span>Created at:</span> {getCreatedDate(topic?.createdDate)}
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 </DialogContent>
             </Dialog>
         </>
