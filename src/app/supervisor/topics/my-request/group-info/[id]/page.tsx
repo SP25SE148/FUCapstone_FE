@@ -42,43 +42,6 @@ const getGroupStatusBadge = (status: string) => {
     }
 };
 
-const getMemberStatusBadge = (status: string) => {
-    switch (status) {
-        case "UnderReview":
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    Under Review
-                </Badge>
-            );
-        case "Accepted":
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Accepted
-                </Badge>
-            );
-        case "Rejected":
-            return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                    Rejected
-                </Badge>
-            );
-        case "LeftGroup":
-            return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    Left Group
-                </Badge>
-            );
-        case "Cancelled":
-            return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    Cancelled
-                </Badge>
-            );
-        default:
-            return null;
-    }
-};
-
 export default function GroupInfoPage() {
     const router = useRouter();
     const params = useParams();
@@ -113,16 +76,16 @@ export default function GroupInfoPage() {
                 </CardHeader>
             </div>
             <CardContent>
-                <div className="space-y-8">
+                <div className="space-y-4">
                     {/* Group info */}
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                         <h3 className="font-semibold flex items-center gap-2">
                             <BookUser className="size-4 text-primary" />
                             General Information
                         </h3>
-                        <Card className="border-primary/20 bg-primary/5">
+                        <Card className="bg-primary/5">
                             <CardContent className="p-6">
-                                <div className="flex items-center justify-between border-b border-primary/20 pb-4 mb-4">
+                                <div className="flex items-center justify-between border-b pb-4 mb-4">
                                     <div className="flex flex-1 items-center gap-4">
                                         <Avatar className="h-16 w-16 border-2 border-primary">
                                             <AvatarFallback className="bg-primary/10">
@@ -169,12 +132,12 @@ export default function GroupInfoPage() {
 
                     {/* List invited */}
                     {group?.groupMemberList && group?.groupMemberList?.length > 0 && (
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             <h3 className="font-semibold flex items-center gap-2">
                                 <Users className="size-4 text-primary" />
                                 Member(s)
                             </h3>
-                            <div className="space-y-2">
+                            <div className="grid grid-cols-2 gap-2">
                                 <Card className="bg-primary/5">
                                     <CardContent className="p-4">
                                         <div className="flex items-center gap-3">
@@ -203,9 +166,6 @@ export default function GroupInfoPage() {
                                                     <p className="font-semibold">{member.studentFullName} - {member.studentId}</p>
                                                     <p className="text-sm text-muted-foreground">{member?.isLeader ? "Leader" : "Member"} - {member.studentEmail}</p>
                                                 </div>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                {getMemberStatusBadge(member?.status)}
                                             </div>
                                         </CardContent>
                                     </Card>

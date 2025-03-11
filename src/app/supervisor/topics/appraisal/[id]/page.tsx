@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { BookOpen, Loader2, Send, School, Calendar, FileCheck, PenTool, BriefcaseBusiness, Star, BadgeInfo, FileX } from "lucide-react";
+import { BookOpen, Loader2, Send, School, Calendar, FileCheck, PenTool, BriefcaseBusiness, Star, BadgeInfo, FileX, Undo2, BookUser, Users, User2, Scale } from "lucide-react";
 
+import { getDate } from "@/lib/utils";
 import { Topic, useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
 
 import { Badge } from "@/components/ui/badge";
@@ -15,8 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import DownloadDocument from "@/app/supervisor/topics/appraisal/[id]/components/download-document";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
   appraisalContent: z.string()
@@ -34,80 +35,59 @@ const formSchema = z.object({
   }),
 });
 
-const getDifficultyStatus = (status: number | undefined) => {
+const getDifficultyStatus = (status: string | undefined) => {
   switch (status) {
-    case 0:
-      return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">Easy</Badge>
-    case 1:
-      return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">Medium</Badge>
-    case 2:
-      return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">Hard</Badge>
+    case "Easy":
+      return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">{status}</Badge>
+    case "Medium":
+      return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">{status}</Badge>
+    case "Hard":
+      return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">{status}</Badge>
     default:
       return null;
   }
 }
 
-const getStatus = (status: number | undefined) => {
+const getStatus = (status: string | undefined) => {
   switch (status) {
-    case 0:
+    case "Pending":
       return (
         <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-          Pending
+          {status}
         </Badge>
       );
-    case 1:
+    case "Approved":
       return (
         <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-          Passed
+          {status}
         </Badge>
       );
-    case 2:
+    case "Considered":
       return (
         <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-          Considered
+          {status}
         </Badge>
       );
-    case 3:
+    case "Rejected":
       return (
         <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-          Failed
+          {status}
         </Badge>
       );
     default:
       return null;
   }
 }
-
-const getCreatedDate = (data: string | undefined) => {
-  const date = new Date(data || "");
-  // Chuyển sang giờ Việt Nam (GMT+7)
-  const vnDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
-
-  const day = vnDate.getDate().toString().padStart(2, '0');
-  const month = (vnDate.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
-  const year = vnDate.getFullYear();
-
-  const hours = vnDate.getHours().toString().padStart(2, '0');
-  const minutes = vnDate.getMinutes().toString().padStart(2, '0');
-  const seconds = vnDate.getSeconds().toString().padStart(2, '0');
-
-  return (
-    <div className="flex items-center gap-2">
-      <span>{`${day}/${month}/${year}`}</span>
-      <span className="text-muted-foreground">{`${hours}:${minutes}:${seconds}`}</span>
-    </div>
-  )
-};
 
 export default function TopicAppraisalDetail() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-
   const params = useParams();
   const searchParams = useSearchParams();
   const topicId: string = String(params.id);
   const topicAppraisalId = searchParams.get('topicAppraisalId');
+
   const [topic, setTopic] = useState<Topic>();
+  const [isLoading, setIsLoading] = useState(false);
   const { getTopicAppraisalBySelf, submitAppraisalForSupervisor, fetchTopicsById } = useSupervisorTopicAppraisal();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -148,152 +128,183 @@ export default function TopicAppraisalDetail() {
   return topic
     ?
     <Card className="min-h-[calc(100vh-60px)]">
-      <CardHeader>
-        <CardTitle className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName}</CardTitle>
-        <CardDescription>{topic?.vietnameseName}</CardDescription>
-      </CardHeader>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Button className="ml-6" size={"icon"}
+            onClick={() => router.back()}
+          >
+            <Undo2 />
+          </Button>
+          <CardHeader>
+            <CardTitle className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName}</CardTitle>
+            <CardDescription>{topic?.vietnameseName}</CardDescription>
+          </CardHeader>
+        </div>
+        <DownloadDocument topic={topic} />
+      </div>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-4 gap-4">
-          <div className="flex items-center space-x-2">
-            <div className="bg-muted rounded-md p-2">
-              <School className="size-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm text-muted-foreground">
-                Campus
-              </h3>
-              <p className="font-semibold tracking-tight">{topic?.campusId}</p>
-            </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold flex items-center gap-2">
+              <BookUser className="size-4 text-primary" />
+              General Information
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Created at: {getDate(topic?.createdDate)}
+            </p>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-muted rounded-md p-2">
-              <Calendar className="size-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm text-muted-foreground">
-                Semester
-              </h3>
-              <p className="font-semibold tracking-tight">{topic?.semesterId}</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-muted rounded-md p-2">
-              <BookOpen className="size-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm text-muted-foreground">
-                Capstone
-              </h3>
-              <p className="font-semibold tracking-tight">{topic?.capstoneId}</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-muted rounded-md p-2">
-              <FileCheck className="size-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm text-muted-foreground">
-                Topic code
-              </h3>
-              <p className="font-semibold tracking-tight">{topic?.code}</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-muted rounded-md p-2">
-              <PenTool className="size-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm text-muted-foreground">
-                Abbreviation
-              </h3>
-              <p className="font-semibold tracking-tight">{topic?.abbreviation}</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-muted rounded-md p-2">
-              <BriefcaseBusiness className="size-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm text-muted-foreground">
-                Business area
-              </h3>
-              <p className="font-semibold tracking-tight">{topic?.businessAreaName}</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-muted rounded-md p-2">
-              <Star className="size-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm text-muted-foreground">
-                Difficulty
-              </h3>
-              {getDifficultyStatus(topic?.difficultyLevel)}
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="bg-muted rounded-md p-2">
-              <BadgeInfo className="size-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm text-muted-foreground">
-                Status
-              </h3>
-              {getStatus(topic?.status)}
-            </div>
-          </div>
-        </div>
-        <div>
-          <h3 className="text-sm text-muted-foreground">Description:</h3>
-          <p className="p-4 font-semibold tracking-tight text-justify italic">{topic?.description}</p>
-        </div>
-        <div>
-          <h3 className="text-sm text-muted-foreground">Supervisor(s):</h3>
-          <div className="p-4 grid grid-cols-2 gap-4">
-            <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/20">
-              <Avatar className="size-12 border-2 border-primary/10">
-                <AvatarFallback className="text-lg font-semibold text-primary">
-                  {topic?.mainSupervisorName?.slice(-1)}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-bold">
-                  {topic?.mainSupervisorName}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {topic?.mainSupervisorEmail}
-                </p>
-              </div>
-            </div>
-            {topic?.coSupervisors?.map((supervisor: any, index) => (
-              <div key={index} className="flex items-center gap-4 p-4 border rounded-lg bg-muted/20">
-                <Avatar className="size-12 border-2 border-primary/10">
-                  <AvatarFallback className="text-lg font-semibold text-primary">
-                    {supervisor?.SupervisorName.slice(-1)}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-bold">
-                    {supervisor?.SupervisorName}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {supervisor?.SupervisorEmail}
-                  </p>
+          <Card className="bg-primary/5">
+            <CardContent className="p-6 space-y-2">
+              <div className="grid grid-cols-4 gap-6 text-sm border-b pb-4 mb-4">
+                <div className="flex items-center space-x-2">
+                  <div className="bg-muted rounded-md p-2">
+                    <School className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm text-muted-foreground">
+                      Campus
+                    </h3>
+                    <p className="font-semibold tracking-tight">{topic?.campusId}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="bg-muted rounded-md p-2">
+                    <Calendar className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm text-muted-foreground">
+                      Semester
+                    </h3>
+                    <p className="font-semibold tracking-tight">{topic?.semesterId}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="bg-muted rounded-md p-2">
+                    <BookOpen className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm text-muted-foreground">
+                      Capstone
+                    </h3>
+                    <p className="font-semibold tracking-tight">{topic?.capstoneId}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="bg-muted rounded-md p-2">
+                    <FileCheck className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm text-muted-foreground">
+                      Topic code
+                    </h3>
+                    <p className="font-semibold tracking-tight">{topic?.code}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="bg-muted rounded-md p-2">
+                    <PenTool className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm text-muted-foreground">
+                      Abbreviation
+                    </h3>
+                    <p className="font-semibold tracking-tight">{topic?.abbreviation}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="bg-muted rounded-md p-2">
+                    <BriefcaseBusiness className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm text-muted-foreground">
+                      Business area
+                    </h3>
+                    <p className="font-semibold tracking-tight">{topic?.businessAreaName}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="bg-muted rounded-md p-2">
+                    <Star className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm text-muted-foreground">
+                      Difficulty
+                    </h3>
+                    {getDifficultyStatus(topic?.difficultyLevel)}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="bg-muted rounded-md p-2">
+                    <BadgeInfo className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm text-muted-foreground">
+                      Status
+                    </h3>
+                    {getStatus(topic?.status)}
+                  </div>
                 </div>
               </div>
+              <div className="space-y-2">
+                <h3 className="text-sm text-muted-foreground">Description:</h3>
+                <p className="font-semibold tracking-tight text-justify italic">{topic?.description}</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="font-semibold flex items-center gap-2">
+            <Users className="size-4 text-primary" />
+            Supervisor(s):
+          </h3>
+          <div className="grid grid-cols-2 gap-2">
+            <Card className="bg-primary/5">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <Avatar className="size-12 border-2 border-primary">
+                    <AvatarFallback className="bg-primary/10">
+                      <User2 className="size-6 text-primary" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-semibold"> {topic?.mainSupervisorName}</p>
+                    <p className="text-sm text-muted-foreground">{topic?.mainSupervisorEmail}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            {topic?.coSupervisors?.map((supervisor: any, index) => (
+              <Card key={index} className="bg-primary/5">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="size-12 border-2 border-primary">
+                      <AvatarFallback className="bg-primary/10">
+                        <User2 className="size-6 text-primary" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold">
+                        {supervisor?.SupervisorName}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {supervisor?.SupervisorEmail}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <DownloadDocument topic={topic} />
-          <div className="flex gap-2 text-sm text-muted-foreground">
-            <span>Created at:</span> {getCreatedDate(topic?.createdDate)}
-          </div>
-        </div>
-        <div>
-          <h3 className="text-sm text-muted-foreground">Evaluation:</h3>
+
+        <div className="space-y-2">
+          <h3 className="font-semibold flex items-center gap-2">
+            <Scale className="size-4 text-primary" />
+            Evaluation:
+          </h3>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="status"

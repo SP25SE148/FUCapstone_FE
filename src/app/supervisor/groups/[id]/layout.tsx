@@ -1,12 +1,19 @@
+"use client"
+
 import React from "react";
+import { useParams } from "next/navigation";
+
 import { Tabs } from "@/components/layout/app-tabs";
 
-const items = [
-    { label: "Group Info", href: "/supervisor/groups/1" },
-    { label: "Project Progress", href: "/supervisor/groups/1/project-progress" },
-];
-
 export default function Layout({ children }: { children: React.ReactNode }) {
+    const params = useParams();
+    const groupId = params?.id;
+
+    const items = [
+        { label: "Group Info", href: `/supervisor/groups/${groupId}` },
+        { label: "Project Progress", href: `/supervisor/groups/${groupId}/project-progress` },
+    ];
+
     return (
         <div className="flex flex-col gap-2">
             <Tabs items={items} />
