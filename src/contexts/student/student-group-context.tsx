@@ -71,7 +71,7 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
   const [listrequest, setListRequest] = useState<Request | null>(null);
 
   const fetchGroupInfo = async () => {
-    const response = await callApi("fuc/Group/get-by-student-id", {
+    const response = await callApi("fuc/Group/information", {
       method: "GET",
     });
     setGroupInfo(response?.value);

@@ -111,7 +111,7 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   const getGroupInfoByStudentId = async () => {
-    const response = await callApi("fuc/Group/get-by-student-id");
+    const response = await callApi("fuc/Group/information");
     // if (response?.isSuccess) {
       setGroupInfo(response.value);
       // return response.value;
@@ -132,7 +132,7 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const fetchTopicRequest = async () => {
     const response = await callApi("fuc/Group/get-topic-request");
-    setTopicRequest(response.value);
+    setTopicRequest(response.value[response.value.length - 1]);
   };
 
   useEffect(() => {

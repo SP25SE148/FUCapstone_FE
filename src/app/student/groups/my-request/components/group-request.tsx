@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { RequestMember } from "@/contexts/student/student-group-context";
+import { getDate } from "@/lib/utils";
 
 
 
@@ -79,7 +80,7 @@ const GroupRequest: React.FC<GroupRequestProps> = ({
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center mt-1">
                         <Clock className="mr-1 h-3 w-3" />{" "}
-                        {request.createdDate.toLocaleString()}
+                        {getDate(request.createdDate)}
                       </p>
                     </div>
                   </div>
