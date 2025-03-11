@@ -21,8 +21,8 @@ export default function StudentTaskbar() {
     },
     {
       icon: LayoutGrid,
-      label: "Tasks",
-      href: "/student/tasks",
+      label: "Workspace",
+      href: "/student/workspace",
     },
     {
       icon: Bell,
