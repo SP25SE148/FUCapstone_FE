@@ -21,15 +21,15 @@ export default function GroupsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
                 <h3 className="text-sm text-muted-foreground">Semester: {groupList?.[0]?.semesterCode}</h3>
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                     {groupList?.map((group, index) => (
                         <Card
                             key={index}
-                            className="relative h-40 p-6 select-none cursor-pointer overflow-hidden bg-primary/5 hover:bg-primary/10"
+                            className="relative h-60 p-6 select-none cursor-pointer overflow-hidden bg-primary/5 hover:bg-primary/10"
                             onClick={() => { router.push(`/supervisor/groups/${group?.groupId}`) }}
                         >
-                            <CardTitle className="font-semibold tracking-tight text-xl text-primary">{group?.groupCode}</CardTitle>
-                            <CardDescription>{group?.englishName}</CardDescription>
+                            <CardTitle className="font-semibold tracking-tight text-xl text-primary">{group?.englishName}</CardTitle>
+                            <CardDescription>{group?.groupCode}</CardDescription>
                             <div className="absolute bottom-4 flex items-center gap-2 font-semibold text-sm text-primary hover:text-blue-400">Go to workspace <ArrowRight className="size-4" /></div>
                         </Card>
                     ))}

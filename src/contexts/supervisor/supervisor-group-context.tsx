@@ -1,9 +1,10 @@
 "use client";
 
+import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { usePathname } from "next/navigation";
 
 export interface Group {
   groupId: string,
@@ -13,9 +14,73 @@ export interface Group {
   englishName: string
 }
 
+export interface Member {
+  id: string;
+  groupId: string;
+  studentId: string;
+  studentFullName: string;
+  studentEmail: string;
+  isLeader: boolean;
+  createdBy: string,
+  createdDate: string,
+  status: string;
+}
+
+export interface Topic {
+  id: string;
+  code: string;
+  campusId: string;
+  semesterId: string
+  capstoneId: string;
+  businessAreaName: string;
+  difficultyLevel: string;
+  englishName: string;
+  vietnameseName: string
+  abbreviation: string;
+  description: string;
+  mainSupervisorEmail: string
+  mainSupervisorName: string
+  coSupervisors: [];
+  fileName: string;
+  fileUrl: string
+  createdDate: string;
+  status: string;
+  topicAppraisals: [];
+}
+
+export interface GroupTopicInfo {
+  id: string,
+  semesterName: string,
+  majorName: string,
+  capstoneName: string,
+  campusName: string,
+  topicCode: string,
+  groupCode: string,
+  status: string,
+  groupMemberList: Member[];
+  topicResponse: Topic
+}
+
+export interface ProjectProgressWeek {
+  id: string,
+  weekNumber: number,
+  taskDescription: string,
+  status: number,
+  meetingLocation: string | null,
+  meetingContent: string | null
+}
+
+export interface ProjectProgress {
+  id: string,
+  meetingDate: string,
+  projectProgressWeeks: ProjectProgressWeek[]
+}
+
 interface SupervisorGroupContextType {
   groupList: Group[];
-  groupTopicInfo: {};
+  getTopicGroupInformation: (groupId: string) => Promise<GroupTopicInfo>;
+  getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
+  importProjectProgress: (data: any) => Promise<void>;
 }
 
 const SupervisorGroupContext = createContext<
@@ -28,7 +93,6 @@ export const SupervisorGroupProvider: React.FC<{
   const { callApi } = useApi();
   const pathName = usePathname();
   const [groupList, setGroupList] = useState<Group[]>([]);
-  const [groupTopicInfo, setGroupTopicInfo] = useState<{}>({});
 
   const getGroupManageBySupervisor = async () => {
     const response = await callApi("fuc/group/manage");
@@ -36,21 +100,40 @@ export const SupervisorGroupProvider: React.FC<{
   };
 
   const getTopicGroupInformation = async (groupId: string) => {
-    const response = await callApi("fuc/Group/information");
-    setGroupTopicInfo(response?.value);
+    const response = await callApi(`fuc/group/${groupId}`);
+    return (response?.value);
+  };
+
+  const getProjectProgressOfGroup = async (groupId: string) => {
+    const response = await callApi(`fuc/group/${groupId}/progress`);
+    return (response?.value);
+  };
+
+  const importProjectProgress = async (data: any) => {
+    const response: any = await callApi("fuc/group/progress/import", {
+      method: "POST",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Upload project progress successfully");
+    }
+    return response
   };
 
   useEffect(() => {
     if (pathName === "/supervisor/groups") {
       getGroupManageBySupervisor();
     }
-  }, []);
+  }, [pathName]);
 
   return (
     <SupervisorGroupContext.Provider
       value={{
         groupList,
-        groupTopicInfo
+        getTopicGroupInformation,
+        getProjectProgressOfGroup,
+        importProjectProgress
       }}
     >
       {children}
