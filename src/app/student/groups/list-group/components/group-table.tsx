@@ -3,6 +3,7 @@
 import { Users } from "lucide-react";
 
 import { useStudentProfile } from "@/contexts/student/student-profile-context";
+import { useStudentListGroup } from "@/contexts/student/student-list-group-context";
 
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
@@ -10,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function GroupTable() {
     const { studentProfile } = useStudentProfile();
+    const { listGroup } = useStudentListGroup();
 
     return (
         <>
@@ -35,7 +37,7 @@ export default function GroupTable() {
                         <CardDescription>Information of list group is available to join</CardDescription>
                     </CardHeader >
                     <CardContent>
-                        <DataTable columns={columns} data={[]} />
+                        <DataTable columns={columns} data={listGroup || []} />
                     </CardContent>
                 </Card >}
         </>

@@ -1,19 +1,30 @@
 "use client"
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { MoreHorizontal } from "lucide-react"
+import { useState } from "react"
+import { Eye } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import GroupInfoSheet from "./group-info-sheet"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Topic = {
+export interface Member {
+    id: string;
+    groupId: string;
+    studentId: string;
+    studentFullName: string;
+    studentEmail: string;
+    isLeader: boolean;
+    createdBy: string,
+    createdDate: string,
+    status: string;
+}
+
+export interface Topic {
     id: string;
     code: string;
     campusId: string;
@@ -31,10 +42,24 @@ export type Topic = {
     fileName: string;
     fileUrl: string
     createdDate: string;
-    status: string
+    status: string;
+    topicAppraisals: [];
 }
 
-export const columns: ColumnDef<Topic>[] = [
+export interface GroupTopicInfo {
+    id: string,
+    semesterName: string,
+    majorName: string,
+    capstoneName: string,
+    campusName: string,
+    topicCode: string,
+    groupCode: string,
+    status: string,
+    groupMemberList: Member[];
+    topicResponse: Topic
+}
+
+export const columns: ColumnDef<GroupTopicInfo>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -58,66 +83,42 @@ export const columns: ColumnDef<Topic>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "capstoneId",
+        accessorKey: "campusName",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Capstone" />
+            <DataTableColumnHeader column={column} title="Campus" />
         ),
     },
     {
-        accessorKey: "semesterId",
+        accessorKey: "semesterName",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Semester" />
         ),
     },
     {
-        accessorKey: "code",
+        accessorKey: "majorName",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Code" />
+            <DataTableColumnHeader column={column} title="Major" />
         ),
     },
     {
-        accessorKey: "englishName",
+        accessorKey: "capstoneName",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="English Name" />
+            <DataTableColumnHeader column={column} title="Capstone" />
+        ),
+    },
+    {
+        id: "leaderName",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Leader" />
         ),
         cell: ({ row }) => {
+            const group = row.original;
+            const groupLeader = group?.groupMemberList?.find((x) => x.isLeader === true)
+
             return (
-                <Link className="text-primary underline underline-offset-2 font-bold hover:text-blue-400" href={`/supervisor/topics/${row?.original?.id}`}>{row.original.englishName}</Link>
+                <span>{groupLeader?.studentFullName}</span>
             )
         }
-    },
-    {
-        accessorKey: "abbreviation",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Abbreviation" />
-        ),
-    },
-    {
-        accessorKey: "createdDate",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Created Date" />
-        ),
-        cell: ({ row }) => {
-            const topic = row.original;
-            const date = new Date(topic?.createdDate);
-            // Chuyển sang giờ Việt Nam (GMT+7)
-            const vnDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
-
-            const day = vnDate.getDate().toString().padStart(2, '0');
-            const month = (vnDate.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
-            const year = vnDate.getFullYear();
-
-            const hours = vnDate.getHours().toString().padStart(2, '0');
-            const minutes = vnDate.getMinutes().toString().padStart(2, '0');
-            const seconds = vnDate.getSeconds().toString().padStart(2, '0');
-
-            return (
-                <div className="flex items-center gap-2">
-                    <span>{`${day}/${month}/${year}`}</span>
-                    <span className="text-muted-foreground">{`${hours}:${minutes}:${seconds}`}</span>
-                </div>
-            )
-        },
     },
     {
         accessorKey: "status",
@@ -125,30 +126,12 @@ export const columns: ColumnDef<Topic>[] = [
             <DataTableColumnHeader column={column} title="Status" />
         ),
         cell: ({ row }) => {
-            const topic = row.original;
-            switch (topic?.status) {
+            const group = row.original;
+            switch (group?.status) {
                 case "Pending":
                     return (
                         <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                            {topic?.status}
-                        </Badge>
-                    );
-                case "Approved":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                            {topic?.status}
-                        </Badge>
-                    );
-                case "Considered":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                            {topic?.status}
-                        </Badge>
-                    );
-                case "Rejected":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                            {topic?.status}
+                            {group?.status}
                         </Badge>
                     );
                 default:
@@ -159,28 +142,16 @@ export const columns: ColumnDef<Topic>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            const router = useRouter();
-            const topic = row.original;
+            const group = row.original;
+            const [open, setOpen] = useState<boolean>(false);
 
             return (
                 <div className="flex items-center justify-center">
-                    <DropdownMenu >
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() => router.push(`topics/${topic.id}`)}
-                            >
-                                View details
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => setOpen(true)}>
+                        <Eye className="h-4 w-4" />
+                    </Button>
+
+                    <GroupInfoSheet open={open} onClose={() => setOpen(false)} group={group} />
                 </div>
             )
         },
