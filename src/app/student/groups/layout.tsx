@@ -6,6 +6,7 @@ import { StudentGroupProvider } from "@/contexts/student/student-group-context";
 
 const items = [
   { label: "My Group", href: "/student/groups" },
+  { label: "List Group", href: "/student/groups/list-group" },
   { label: "My Request", href: "/student/groups/my-request" },
   { label: "My Topic", href: "/student/groups/my-topic" },
 ];

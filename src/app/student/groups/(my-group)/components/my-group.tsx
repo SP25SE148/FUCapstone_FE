@@ -16,16 +16,24 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 export default function MyGroup() {
     const { studentProfile, loading } = useStudentProfile();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openDelete, setOpenDelete] = useState<boolean>(false);
+    const [openRegister, setOpenRegister] = useState<boolean>(false);
     const [deleteInfo, setDeleteInfo] = useState<{} | null>({});
     const { groupInfo, updateStatusInvitation, registerGroup } = useStudentGroup();
     const leaderInfo = groupInfo?.groupMemberList?.find((x) => x.isLeader == true)
     const memberList = groupInfo?.groupMemberList?.filter((x) => x.isLeader == false)
 
     const handleDeleteMember = async () => {
-        const res: any = await updateStatusInvitation(deleteInfo);
-        if (res?.isSuccess) {
-            setDeleteInfo(null);
+        setIsLoading(true);
+        try {
+            const res: any = await updateStatusInvitation(deleteInfo);
+            if (res?.isSuccess) {
+                setDeleteInfo(null);
+            }
+        } finally {
+            setIsLoading(false);
+            setOpenDelete(false);
         }
     };
 
@@ -97,8 +105,14 @@ export default function MyGroup() {
         }
     };
 
-    const handleRegisterGroup = () => {
-        registerGroup(groupInfo?.id || "");
+    const handleRegisterGroup = async () => {
+        setIsLoading(true);
+        try {
+            await registerGroup(groupInfo?.id || "");
+        } finally {
+            setIsLoading(false);
+            setOpenRegister(false);
+        }
     };
 
     if (loading) {
@@ -122,10 +136,10 @@ export default function MyGroup() {
                         {studentProfile?.id == leaderInfo?.studentId && groupInfo?.status == "Pending" &&
                             <Button
                                 className="m-6 transition-all hover:scale-105"
-                                onClick={handleRegisterGroup}
+                                onClick={() => setOpenRegister(true)}
                             >
                                 <Send />
-                                REGISTER GROUP
+                                REGISTER
                             </Button>
                         }
                     </div>
@@ -269,13 +283,30 @@ export default function MyGroup() {
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
                             <AlertDialogAction
-                                onClick={() => handleDeleteMember()}
+                                disabled={isLoading}
+                                onClick={handleDeleteMember}
                                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             >
                                 Remove
                             </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                {/* comfirm */}
+                <AlertDialog open={openRegister} onOpenChange={setOpenRegister}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. Please check again before continue.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+                            <AlertDialogAction disabled={isLoading} onClick={handleRegisterGroup}>Continue</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
