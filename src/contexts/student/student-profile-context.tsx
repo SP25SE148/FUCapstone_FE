@@ -1,33 +1,12 @@
 "use client";
 
 import { toast } from "sonner";
-import { useAuth } from "../auth-context";
-import { useApi } from "../../hooks/use-api";
 import { useRouter, usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-interface StudentProfile {
-  id: string;
-  fullName: string;
-  majorId: string;
-  majorName: string;
-  capstoneId: string;
-  capstoneName: string;
-  campusId: string;
-  campusName: string;
-  email: string;
-  isEligible: boolean;
-  status: string;
-  mark: number;
-  businessArea: string;
-  isHaveBeenJoinGroup: boolean;
-}
-
-interface BusinessArea {
-  id: string;
-  name: string;
-  description: string;
-}
+import { useAuth } from "../auth-context";
+import { useApi } from "../../hooks/use-api";
+import { BusinessArea, StudentProfile } from "@/types/types";
 
 interface StudentProfileContextType {
   studentProfile: StudentProfile | null;
