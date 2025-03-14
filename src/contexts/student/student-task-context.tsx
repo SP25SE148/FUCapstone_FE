@@ -58,6 +58,7 @@ interface StudentTaskContextProps {
   fetchGroupInfo: () => Promise<void>;
   updateTask: (task: Task) => void;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
+  submitSummaryWeekForLeader: (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => Promise<void>;
 }
 
 const StudentTaskContext = createContext<StudentTaskContextProps | undefined>(undefined);
@@ -138,12 +139,23 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
   };
 
+  const submitSummaryWeekForLeader = async (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => {
+      const response = await callApi("fuc/group/progress/week/summary", {
+        method: "POST",
+        body: data,
+      });
+      if (response?.isSuccess) {
+        toast.success("Summary submitted successfully");
+      } 
+      return response;
+    };
+
   useEffect(() => {
     fetchGroupInfo();
   }, []);
 
   return (
-    <StudentTaskContext.Provider value={{ tasks, createTask, updateTask, groupInfo, fetchGroupInfo, getProjectProgressOfGroup }}>
+    <StudentTaskContext.Provider value={{ tasks, createTask, updateTask, groupInfo, fetchGroupInfo, getProjectProgressOfGroup, submitSummaryWeekForLeader}}>
       {children}
     </StudentTaskContext.Provider>
   );

@@ -9,5 +9,5 @@ export default function EvaluationWeek({ data, refresh }: { data: any, refresh: 
             <Button size={"sm"} onClick={() => setOpen(true)}>Evaluation</Button>
             <EvaluationSheet open={open} onClose={() => setOpen(false)} data={data} refresh={refresh} />
         </>
-    )
+    ) 
 }
