@@ -12,11 +12,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Clock, Plus } from "lucide-react";
 import TaskHistory from "@/app/student/workspace/(tasks)/components/task-history";
-import AssignTask from "@/app/student/workspace/(tasks)/components/assign-task";
-import UpdateStatus from "@/app/student/workspace/(tasks)/components/update-status";
 import AddTask from "@/app/student/workspace/(tasks)/components/add-task";
-import { DataTable } from "@/components/ui/data-table";
 import { tasks as initialTasks } from "@/app/student/workspace/(tasks)/data";
+import { TaskDataTable } from "@/app/student/workspace/(tasks)/components/task-data-table";
 
 export default function TasksTable() {
   const [tasks, setTasks] = useState(initialTasks);
@@ -60,7 +58,7 @@ export default function TasksTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={tasks} />
+        <TaskDataTable columns={columns} data={tasks} />
       </CardContent>
       {showHistory && <TaskHistory onClose={() => setShowHistory(false)} />}
       {showCreateTask && (

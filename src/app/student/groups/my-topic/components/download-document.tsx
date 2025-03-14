@@ -1,50 +1,49 @@
 "use client"
 
-// import { useState } from "react";
+import { useState } from "react";
 import { Download } from "lucide-react";
 
 
 import { Button } from "@/components/ui/button";
-// import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-// import { Topic, useManagerTopics } from "@/contexts/manager/manager-topic-context";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Topic, useStudentGroup } from "@/contexts/student/student-group-context";
 
 export default function DownloadDocument(
-    // { topic }: { topic: Topic }
+    { topic }: { topic: Topic }
 ) {
-    // const { getPresignedUrlTopicDocument } = useManagerTopics();
+    const { getPresignedUrlTopicDocument } = useStudentGroup();
 
-    // const [open, setOpen] = useState<boolean>(false);
-    // const [urlPreview, setUrlPreview] = useState<string>("");
+    const [open, setOpen] = useState<boolean>(false);
+    const [urlPreview, setUrlPreview] = useState<string>("");
 
-    // async function handleClickPreview() {
-    //     const url = await getPresignedUrlTopicDocument(topic?.id);
-    //     setUrlPreview(url);
-    //     setOpen(true);
-    // }
+    async function handleClickPreview() {
+        const url = await getPresignedUrlTopicDocument(topic?.id);
+        setUrlPreview(url);
+        setOpen(true);
+    }
 
-    // async function handleDownload() {
-    //     if (!urlPreview) return;
-    //     const a = document.createElement("a");
-    //     a.href = urlPreview;
-    //     a.download = topic?.englishName; // Đặt tên file khi tải về
-    //     document.body.appendChild(a);
-    //     a.click();
-    //     document.body.removeChild(a);
-    // }
+    async function handleDownload() {
+        if (!urlPreview) return;
+        const a = document.createElement("a");
+        a.href = urlPreview;
+        a.download = topic?.englishName; 
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
 
     return (
         <>
             <Button
                 variant={"outline"}
-                // onClick={handleClickPreview}
+                onClick={handleClickPreview}
                 className="h-12 border-primary text-primary hover:bg-primary hover:text-white"
             >
                 <Download />
                 Document
             </Button>
 
-            {/* Modal xem trước */}
-            {/* <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="max-w-4xl w-full">
                     <DialogHeader>
                         <DialogTitle>Preview</DialogTitle>
@@ -61,7 +60,7 @@ export default function DownloadDocument(
                         </Button>
                     </DialogFooter>
                 </DialogContent>
-            </Dialog> */}
+            </Dialog>
         </>
     )
 }

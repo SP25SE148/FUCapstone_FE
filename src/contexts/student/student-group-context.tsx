@@ -29,6 +29,28 @@ export interface RequestMember {
   status: string;
 }
 
+export interface Topic {
+  id: string;
+  code: string;
+  mainSupervisorName: string;
+  mainSupervisorEmail: string;
+  englishName: string;
+  vietnameseName: string;
+  abbreviation: string;
+  description: string;
+  fileName: string;
+  fileUrl: undefined;
+  status: string;
+  difficultyLevel: string;
+  businessAreaName: string;
+  capstoneId: string;
+  semesterId: string;
+  campusId: string;
+  createdDate: string;
+  coSupervisors: [],
+  topicAppraisals: []
+}
+
 export interface Request {
   groupMemberRequestSentByLeader: RequestMember[];
   groupMemberRequested: RequestMember[];
@@ -44,6 +66,7 @@ export interface Group {
   topicCode: string;
   groupMemberList: Member[];
   status: string;
+  topicResponse: Topic;
 }
 
 interface StudentGroupContextType {
@@ -55,6 +78,8 @@ interface StudentGroupContextType {
   inviteMember: (data: any) => Promise<void>;
   registerGroup: (groupId: string) => Promise<void>;
   updateStatusInvitation: (data: any) => Promise<void>;
+  getPresignedUrlTopicDocument: (id: string) => Promise<string>;
+
 }
 
 const StudentGroupContext = createContext<StudentGroupContextType | undefined>(
@@ -123,6 +148,13 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
     return response;
   };
 
+  const getPresignedUrlTopicDocument = async (id: string) => {
+    const response = await callApi(`fuc/topics/presigned/${id}`, {
+      method: "GET",
+    });
+    return (response?.value);
+  };
+
   const registerGroup = async (groupId: string) => {
     const response = await callApi(`fuc/Group/${groupId}`, {
       method: "PUT",
@@ -150,6 +182,7 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
         fetchGroupInfo,
         getGroupMemberReq,
         updateStatusInvitation,
+        getPresignedUrlTopicDocument
       }}
     >
       {children}

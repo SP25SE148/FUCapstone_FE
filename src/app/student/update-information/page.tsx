@@ -14,7 +14,7 @@ import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 export default function StudentUpdateForm() {
   const { studentProfile, businessAreas, fetchBusinessArea, updateStudentProfile } = useStudentProfile();
   const [businessArea, setBusinessArea] = useState("");
-  const [mark, setMark] = useState<number>(0);
+  const [GPA, setGPA] = useState<number>(0);
   const [fullName, setFullName] = useState("");
   const [campusName, setCampusName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,7 +26,7 @@ export default function StudentUpdateForm() {
       setCampusName(studentProfile.campusName);
       setEmail(studentProfile.email);
       setBusinessArea(studentProfile.businessArea);
-      setMark(studentProfile.mark);
+      setGPA(studentProfile.gpa);
     }
   }, [studentProfile]);
 
@@ -42,11 +42,11 @@ export default function StudentUpdateForm() {
     e.preventDefault();
     const selectedBusinessArea = businessAreas.find(area => area.name === businessArea);
     if (selectedBusinessArea) {
-      await updateStudentProfile({ businessAreaId: selectedBusinessArea.id, mark });
+      await updateStudentProfile({ businessAreaId: selectedBusinessArea.id, GPA: GPA });
     }
   };
 
-  const isFormValid = businessArea && mark >= 5 && mark <= 10;
+  const isFormValid = businessArea && GPA >= 5 && GPA <= 10;
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
@@ -110,14 +110,14 @@ export default function StudentUpdateForm() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="mark">
-                    Mark <span className="text-red-500">*</span>
+                  <Label htmlFor="GPA">
+                  GPA <span className="text-red-500">*</span>
                   </Label>
                   <Input
-                    id="mark"
+                    id="GPA"
                     type="number"
-                    value={mark}
-                    onChange={(e) => setMark(Number(e.target.value))}
+                    value={GPA}
+                    onChange={(e) => setGPA(Number(e.target.value))}
                     min={5}
                     max={10}
                     step={0.1}

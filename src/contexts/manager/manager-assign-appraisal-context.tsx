@@ -57,20 +57,18 @@ export const ManagerAssignAppraisalProvider = ({ children }: { children: React.R
   };
 
   const assignAppraisalTopic = async () => {
-    try {
-      await callApi("fuc/topics/assign-topic-appraisal", {
-        method: "POST",
-        body: selectedSupervisors,
-      });
+    
+    const response = await callApi("fuc/topics/assign-topic-appraisal", {
+      method: "POST",
+      body: selectedSupervisors,
+    });
+    if (response?.isSuccess === true) {
       toast.success("Supervisors assigned successfully");
       clearSelectedSupervisors();
-    } catch (error) {
-      toast.error("Error assigning supervisors", {
-        description: `${error}`,
-      });
-      console.error("Error assigning supervisors:", error);
     }
-  };
+    return response;
+ 
+};
 
   const toggleSupervisorSelection = (email: string) => {
     setSelectedSupervisors((prev) =>
