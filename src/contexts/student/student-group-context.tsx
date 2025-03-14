@@ -81,8 +81,6 @@ interface StudentGroupContextType {
   updateStatusInvitation: (data: any) => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
-  
-
 }
 
 const StudentGroupContext = createContext<StudentGroupContextType | undefined>(
@@ -192,6 +190,7 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
         updateStatusInvitation,
         getPresignedUrlTopicDocument,
         getProjectProgressOfGroup,
+        
       }}
     >
       {children}
