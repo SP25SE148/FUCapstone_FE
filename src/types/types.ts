@@ -22,3 +22,18 @@ export interface StudentProfile {
     businessArea: string;
     isHaveBeenJoinGroup: boolean;
 }
+
+export interface ProjectProgressWeek {
+    id: string,
+    weekNumber: number,
+    taskDescription: string,
+    status: number,
+    meetingLocation: string | null,
+    meetingContent: string | null
+  }
+  
+  export interface ProjectProgress {
+    id: string,
+    meetingDate: string,
+    projectProgressWeeks: ProjectProgressWeek[]
+  }
