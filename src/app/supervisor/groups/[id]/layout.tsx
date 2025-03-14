@@ -12,6 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const items = [
         { label: "Group Info", href: `/supervisor/groups/${groupId}` },
         { label: "Project Progress", href: `/supervisor/groups/${groupId}/project-progress` },
+        { label: "My Evaluation", href: `/supervisor/groups/${groupId}/my-evaluation` },
     ];
 
     return (
