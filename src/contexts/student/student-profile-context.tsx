@@ -16,7 +16,7 @@ interface StudentProfileContextType {
   fetchBusinessArea: () => Promise<void>;
   updateStudentProfile: (data: {
     businessAreaId: string;
-    mark: number;
+    GPA: number;
   }) => Promise<void>;
 }
 
@@ -81,7 +81,7 @@ export const StudentProfileProvider: React.FC<{
 
   const updateStudentProfile = async (data: {
     businessAreaId: string;
-    mark: number;
+    GPA: number;
   }) => {
     setLoading(true);
     const response = await callApi(`fuc/User/student`, {
@@ -106,7 +106,7 @@ export const StudentProfileProvider: React.FC<{
 
   useEffect(() => {
     if (studentProfile) {
-      if (studentProfile.businessArea === "" && studentProfile.mark === 0) {
+      if (studentProfile.businessArea === "" && studentProfile.gpa === 0) {
         router.push("/student/update-information");
       }
     }

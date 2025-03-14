@@ -1,22 +1,63 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useApi } from "@/hooks/use-api";
+import { toast } from "sonner";
 
 export interface Task {
+  TaskId: string;
+  KeyTask: string;
+  Description: string;
+  Summary: string;
+  AssigneeId: string;
+  ProjectProgressId: string;
+  Status: string;
+  Priority: string;
+  DueDate: string;
+}
+
+export interface Member {
   id: string;
-  keyTask: string;
-  description: string;
-  summary: string;
-  assignee: string;
+  groupId: string;
+  studentId: string;
+  studentFullName: string;
+  studentEmail: string;
+  isLeader: boolean;
   status: string;
-  priority: string;
-  dueDate: string;
+}
+
+export interface Group {
+  id: string;
+  campusName: string;
+  semesterName: string;
+  majorName: string;
+  capstoneName: string;
+  groupCode: string;
+  topicCode: string;
+  groupMemberList: Member[];
+  status: string;
+}
+
+interface ProjectProgress {
+  id: string;
+  meetingDate: string;
+  projectProgressWeeks: {
+    id: string;
+    weekNumber: number;
+    taskDescription: string;
+    status: number;
+    meetingLocation: string | null;
+    meetingContent: string | null;
+  }[];
 }
 
 interface StudentTaskContextProps {
   tasks: Task[];
-  createTask: (task: Task) => void;
+  groupInfo: Group | null;
+  createTask: (task: Task) => Promise<void>;
+  fetchGroupInfo: () => Promise<void>;
   updateTask: (task: Task) => void;
+  getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
 }
 
 const StudentTaskContext = createContext<StudentTaskContextProps | undefined>(undefined);
@@ -30,6 +71,8 @@ export const useStudentTasks = () => {
 };
 
 export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { callApi } = useApi();
+  const [groupInfo, setGroupInfo] = useState<Group | null>(null);
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: "1",
@@ -53,16 +96,54 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
     },
   ]);
 
-  const createTask = (task: Task) => {
-    setTasks([...tasks, task]);
+  const fetchGroupInfo = async () => {
+    const response = await callApi("fuc/Group/information", {
+      method: "GET",
+    });
+    setGroupInfo(response?.value);
+  };
+
+  const getProjectProgressOfGroup = async (groupId: string) => {
+    const response = await callApi(`fuc/group/${groupId}/progress`);
+    return response?.value;
+  };
+
+  const createTask = async (task: Task) => {
+    const response = await callApi("fuc/group/progress/tasks", {
+      method: "POST",
+      body: {
+        TaskId: "00000000-0000-0000-0000-000000000000",
+        KeyTask: task.KeyTask,
+        Description: task.Description,
+        Summary: task.Summary,
+        AssigneeId: task.AssigneeId,
+        ProjectProgressId: task.ProjectProgressId,
+        Status: task.Status,
+        Priority: task.Priority,
+        DueDate: task.DueDate,
+      },
+    });
+
+    if (response?.isSuccess) {
+      toast.success("Task created successfully");
+      setTasks([...tasks, { ...task, id: response.value.id }]);
+    } else {
+      toast.error("Error creating task", {
+        description: response?.error?.message || "Failed to create task",
+      });
+    }
   };
 
   const updateTask = (task: Task) => {
-    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
+    setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
   };
 
+  useEffect(() => {
+    fetchGroupInfo();
+  }, []);
+
   return (
-    <StudentTaskContext.Provider value={{ tasks, createTask, updateTask }}>
+    <StudentTaskContext.Provider value={{ tasks, createTask, updateTask, groupInfo, fetchGroupInfo, getProjectProgressOfGroup }}>
       {children}
     </StudentTaskContext.Provider>
   );

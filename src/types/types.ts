@@ -18,7 +18,7 @@ export interface StudentProfile {
     email: string;
     isEligible: boolean;
     status: string;
-    mark: number;
+    gpa: number;
     businessArea: string;
     isHaveBeenJoinGroup: boolean;
 }

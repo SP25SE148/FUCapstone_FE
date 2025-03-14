@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Sheet, SheetContent, SheetClose } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetClose, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import type { Task } from "@/contexts/student/student-task-context"
@@ -30,16 +30,17 @@ export default function TaskDetailSheet({ task, open, onClose }: TaskDetailSheet
   return (
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent className="w-full sm:max-w-[40%] p-0 overflow-hidden flex flex-col h-full shadow-lg" side="right">
-        <div className="flex items-center justify-between p-4 border-b bg-muted/30">
-          <div className="flex items-center gap-3">
+        <SheetHeader className="flex items-start justify-start p-4 border-b bg-muted/30">
+          <SheetTitle className="flex items-center gap-3">
             <Hash className="h-5 w-5 text-primary" />
             <Input
               value={keyTask}
               onChange={(e) => setKeyTask(e.target.value)}
               className="font-medium border-0 bg-transparent focus-visible:ring-1 h-9 w-[180px]"
             />
-          </div>
-        </div>
+          </SheetTitle>
+          <SheetDescription className="text-sm text-muted-foreground">Task ID: {task.id}</SheetDescription>
+        </SheetHeader>
 
         <div className="flex h-full overflow-hidden">
           <div className="w-full overflow-y-auto p-5 flex flex-col gap-2">
