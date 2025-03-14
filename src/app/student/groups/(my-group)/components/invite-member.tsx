@@ -26,7 +26,7 @@ export default function InviteMember() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const res: any = await inviteMember({
-            "memberEmailList": [values.email]
+            "MemberEmail": values.email
         });
         if (res?.isSuccess) {
             form.reset();
