@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Calendar1, ClipboardX, LayoutList, X } from "lucide-react";
 
+import { ProjectProgress, ProjectProgressWeek, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import EvaluationWeek from "./components/evaluation-week";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import UploadProjectProgress from "./components/upload-project-progress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ProjectProgress, ProjectProgressWeek, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 const getStatus = (status: number | undefined) => {
     switch (status) {
@@ -53,7 +55,7 @@ export default function ProjectProgressPage() {
                     <CardTitle className="font-semibold tracking-tight text-xl text-primary">Project Progress</CardTitle>
                     <CardDescription>Detail information of project progress</CardDescription>
                 </CardHeader>
-                <UploadProjectProgress refresh={() => setIsRefresh(!isRefresh)} />
+                {!projectProgress && <UploadProjectProgress refresh={() => setIsRefresh(!isRefresh)} />}
             </div>
             {projectProgress
                 ?
@@ -95,7 +97,17 @@ export default function ProjectProgressPage() {
                                     <Calendar1 className="size-4 text-primary" />
                                     Week: {currentProjectProgressWeek?.weekNumber}
                                 </h3>
-                                <Button size={"icon"} variant={"ghost"} onClick={() => { setCurrentProjectProgressWeek(null) }}><X /></Button>
+                                <div className="flex items-center gap-2">
+                                    <EvaluationWeek
+                                        data={
+                                            {
+                                                "projectProgressId": projectProgress?.id,
+                                                currentProjectProgressWeek
+                                            }
+                                        }
+                                    />
+                                    <Button size={"icon"} variant={"ghost"} onClick={() => { setCurrentProjectProgressWeek(null) }}><X /></Button>
+                                </div>
                             </div>
 
                             {/* body */}
