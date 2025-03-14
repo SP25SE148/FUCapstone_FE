@@ -76,13 +76,31 @@ export interface ProjectProgress {
   projectProgressWeeks: ProjectProgressWeek[]
 }
 
+export interface EvaluationWeek {
+  weekNumber: number,
+  contributionPercentage: number,
+  summary: string | null,
+  meetingContent: string,
+  comments: string,
+  status: string
+}
+
+export interface EvaluationStudent {
+  studentCode: string,
+  studentName: string,
+  studentRole: string,
+  averageContributionPercentage: number,
+  evaluationWeeks: EvaluationWeek[]
+}
+
 interface SupervisorGroupContextType {
   groupList: Group[];
   getTopicGroupInformation: (groupId: string) => Promise<GroupTopicInfo>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   importProjectProgress: (data: any) => Promise<void>;
   evaluationWeeklyProgress: (data: any) => Promise<void>;
-  getEvaluationWeeklyProgress: (groupId: string) => Promise<ProjectProgress>;
+  getEvaluationWeeklyProgress: (groupId: string) => Promise<EvaluationStudent[]>;
+  exportEvaluationWeeklyProgressFile: (groupId: string) => Promise<any>;
 }
 
 const SupervisorGroupContext = createContext<
@@ -140,6 +158,11 @@ export const SupervisorGroupProvider: React.FC<{
     return (response?.value);
   };
 
+  const exportEvaluationWeeklyProgressFile = async (groupId: string) => {
+    const response = await callApi(`fuc/group/progress/week/evaluation/${groupId}/excel`);
+    return (response?.value);
+  };
+
   useEffect(() => {
     if (pathName === "/supervisor/groups") {
       getGroupManageBySupervisor();
@@ -154,7 +177,8 @@ export const SupervisorGroupProvider: React.FC<{
         getProjectProgressOfGroup,
         importProjectProgress,
         evaluationWeeklyProgress,
-        getEvaluationWeeklyProgress
+        getEvaluationWeeklyProgress,
+        exportEvaluationWeeklyProgressFile
       }}
     >
       {children}

@@ -18,6 +18,7 @@ interface GroupInfoSheetProps {
     data: any;
     open: boolean;
     onClose: () => void;
+    refresh: () => void;
 }
 
 interface EvaluationData {
@@ -27,7 +28,7 @@ interface EvaluationData {
     status: number | null;
 }
 
-export default function EvaluationSheet({ data, open, onClose }: GroupInfoSheetProps) {
+export default function EvaluationSheet({ data, open, onClose, refresh }: GroupInfoSheetProps) {
     const { getTopicGroupInformation, evaluationWeeklyProgress } = useSupervisorGroup();
     const params = useParams();
     const id: string = String(params.id);
@@ -96,6 +97,7 @@ export default function EvaluationSheet({ data, open, onClose }: GroupInfoSheetP
             }
             const res: any = await evaluationWeeklyProgress(body);
             if (res?.isSuccess) {
+                refresh()
                 setOpenConfirm(false);
                 onClose();
             }

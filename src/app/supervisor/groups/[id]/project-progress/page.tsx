@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Calendar1, ClipboardX, LayoutList, X } from "lucide-react";
 
 import { ProjectProgress, ProjectProgressWeek, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
@@ -44,7 +44,8 @@ export default function ProjectProgressPage() {
     useEffect(() => {
         (async () => {
             const projectProgressDetail = await getProjectProgressOfGroup(id);
-            setProjectProgress(projectProgressDetail)
+            setProjectProgress(projectProgressDetail);
+            setCurrentProjectProgressWeek(null);
         })();
     }, [isRefresh])
 
@@ -61,6 +62,9 @@ export default function ProjectProgressPage() {
                 ?
                 <CardContent className="grid grid-cols-2 gap-4">
                     <div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] overflow-y-auto space-y-2 rounded-xl shadow">
+                        <h3 className="sticky top-0 z-10 p-2 font-semibold bg-primary text-background rounded-xl">
+                            Meeting date: {projectProgress?.meetingDate}
+                        </h3>
                         {projectProgress?.projectProgressWeeks?.map((projectProgressWeek: ProjectProgressWeek, index) => (
                             <Card
                                 key={index}
@@ -96,16 +100,18 @@ export default function ProjectProgressPage() {
                                 <h3 className="font-semibold flex items-center gap-2">
                                     <Calendar1 className="size-4 text-primary" />
                                     Week: {currentProjectProgressWeek?.weekNumber}
+                                    {getStatus(currentProjectProgressWeek?.status)}
                                 </h3>
                                 <div className="flex items-center gap-2">
-                                    <EvaluationWeek
+                                    {currentProjectProgressWeek?.status !== 0 && <EvaluationWeek
                                         data={
                                             {
                                                 "projectProgressId": projectProgress?.id,
                                                 currentProjectProgressWeek
                                             }
                                         }
-                                    />
+                                        refresh={() => setIsRefresh(!isRefresh)}
+                                    />}
                                     <Button size={"icon"} variant={"ghost"} onClick={() => { setCurrentProjectProgressWeek(null) }}><X /></Button>
                                 </div>
                             </div>

@@ -1,13 +1,13 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import EvaluationSheet from "./evaluation-sheet";
-import { useState } from "react";
 
-export default function EvaluationWeek({ data }: { data: any }) {
+export default function EvaluationWeek({ data, refresh }: { data: any, refresh: () => void }) {
     const [open, setOpen] = useState<boolean>(false)
     return (
         <>
             <Button size={"sm"} onClick={() => setOpen(true)}>Evaluation</Button>
-            <EvaluationSheet open={open} onClose={() => setOpen(false)} data={data} />
+            <EvaluationSheet open={open} onClose={() => setOpen(false)} data={data} refresh={refresh} />
         </>
     )
 }
