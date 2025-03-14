@@ -1,14 +1,10 @@
-import { LayoutGrid } from 'lucide-react'
+import ProjectProgressView from "@/app/student/workspace/project-progress/components/project-progress";
+
 
 export default function ProjectProgressPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <LayoutGrid className="h-16 w-16 text-[#6C47FF] mb-4" />
-      <h1 className="text-2xl font-bold text-center">Project Progress</h1>
-      <p className="text-muted-foreground text-center mt-2">
-        Access your personal workspace and ongoing projects.
-      </p>
-    </div>
-  )
+      <div className="flex flex-col gap-4">
+        <ProjectProgressView />
+      </div>
+  );
 }
-

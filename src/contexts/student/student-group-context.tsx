@@ -5,6 +5,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
 import { useStudentProfile } from "./student-profile-context";
+import { ProjectProgress } from "@/types/types";
 
 
 export interface Member {
@@ -79,6 +80,8 @@ interface StudentGroupContextType {
   registerGroup: (groupId: string) => Promise<void>;
   updateStatusInvitation: (data: any) => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
+  getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
+  
 
 }
 
@@ -107,6 +110,11 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
       method: "GET",
     });
     setListRequest(response?.value);
+  };
+
+  const getProjectProgressOfGroup = async (groupId: string) => {
+    const response = await callApi(`fuc/group/${groupId}/progress`);
+    return (response?.value);
   };
 
   const createGroup = async () => {
@@ -182,7 +190,8 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
         fetchGroupInfo,
         getGroupMemberReq,
         updateStatusInvitation,
-        getPresignedUrlTopicDocument
+        getPresignedUrlTopicDocument,
+        getProjectProgressOfGroup,
       }}
     >
       {children}
