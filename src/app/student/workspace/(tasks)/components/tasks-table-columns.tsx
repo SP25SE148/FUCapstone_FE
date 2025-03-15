@@ -1,50 +1,53 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import type { ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
-import type { Task } from "@/contexts/student/student-task-context"
-import AssignTask from "@/app/student/workspace/(tasks)/components/assign-task"
-import UpdateStatus from "@/app/student/workspace/(tasks)/components/update-status"
-import UpdatePriority from "@/app/student/workspace/(tasks)/components/update-priority"
-import UpdateDueDate from "@/app/student/workspace/(tasks)/components/update-duedate"
-import TaskDetailSheet from "@/app/student/workspace/(tasks)/components/task-detail-sheet"
-import { User, Flag, Calendar, Hash, BarChart, ClipboardList, AlignLeft } from "lucide-react"
+import { useState } from "react";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import type { Task } from "@/contexts/student/student-task-context";
+import AssignTask from "@/app/student/workspace/(tasks)/components/assign-task";
+import UpdateStatus from "@/app/student/workspace/(tasks)/components/update-status";
+import UpdatePriority from "@/app/student/workspace/(tasks)/components/update-priority";
+import UpdateDueDate from "@/app/student/workspace/(tasks)/components/update-duedate";
+import TaskDetailSheet from "@/app/student/workspace/(tasks)/components/task-detail-sheet";
+import { User, Flag, Calendar, Hash, BarChart, ClipboardList, AlignLeft } from "lucide-react";
 
-
-const AssignTaskCell = ({ task, onAssign }: { task: Task; onAssign: (assignedTo: string) => void }) => {
-  return <AssignTask task={task} onAssign={onAssign} />
-}
+const AssignTaskCell = ({
+  task,
+  students,
+  onAssign,
+}: {
+  task: Task;
+  students: { id: string; fullName: string }[];
+  onAssign: (assignedTo: string) => void;
+}) => {
+  return <AssignTask task={task} onAssign={onAssign} students={students} />;
+};
 
 const UpdateStatusCell = ({ task }: { task: Task }) => {
-  return <UpdateStatus task={task} onClose={() => {}} />
-}
+  return <UpdateStatus task={task} onClose={() => {}} />;
+};
 
 const UpdatePriorityCell = ({ task }: { task: Task }) => {
-  return <UpdatePriority task={task} onClose={() => {}} />
-}
+  return <UpdatePriority task={task} onClose={() => {}} />;
+};
 
 const UpdateDueDateCell = ({ task }: { task: Task }) => {
-  return <UpdateDueDate task={task} onClose={() => {}} />
-}
+  return <UpdateDueDate task={task} onClose={() => {}} />;
+};
 
 const KeyTaskCell = ({ task }: { task: Task }) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
       <button className="text-primary underline font-semibold" onClick={() => setOpen(true)}>
         {task.keyTask}
       </button>
-      <TaskDetailSheet
-        task={task}
-        open={open}
-        onClose={() => setOpen(false)}
-      />
+      <TaskDetailSheet task={task} open={open} onClose={() => setOpen(false)} />
     </div>
-  )
-}
+  );
+};
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -73,12 +76,12 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => <KeyTaskCell task={row.original} />,
   },
-  {
-    accessorKey: "description",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Description" icon={<AlignLeft className="mr-2 h-4 w-4" />} />
-    ),
-  },
+  // {
+  //   accessorKey: "description",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Description" icon={<AlignLeft className="mr-2 h-4 w-4" />} />
+  //   ),
+  // },
   {
     accessorKey: "summary",
     header: ({ column }) => (
@@ -86,15 +89,15 @@ export const columns: ColumnDef<Task>[] = [
     ),
   },
   {
-    accessorKey: "assignee",
+    accessorKey: "assigneeId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Assignee" icon={<User className="mr-2 h-4 w-4" />} />
     ),
     cell: ({ row }) => (
-      <AssignTaskCell
+      <AssignTask
         task={row.original}
         onAssign={(assignedTo) => {
-          row.original.assignee = assignedTo
+          row.original.assigneeId = assignedTo; // Update the assigneeId
         }}
       />
     ),
@@ -120,5 +123,5 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => <UpdateDueDateCell task={row.original} />,
   },
-]
+];
 

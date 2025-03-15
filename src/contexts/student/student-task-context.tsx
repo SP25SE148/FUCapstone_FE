@@ -2,17 +2,28 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApi } from "@/hooks/use-api";
+import { useAuth } from "@/contexts/auth-context"; 
 import { toast } from "sonner";
 
 export interface Task {
-  TaskId: string;
+  id: string;
+  keyTask: string; 
+  summary: string;
+  assigneeId: string;
+  reporterId: string;
+  status: number;
+  priority: number;
+  dueDate: string;
+  // createdDate: string;
+}
+
+export interface TaskRequest {
   KeyTask: string;
   Description: string;
   Summary: string;
   AssigneeId: string;
   ProjectProgressId: string;
-  Status: string;
-  Priority: string;
+  Priority: number;
   DueDate: string;
 }
 
@@ -54,10 +65,11 @@ interface ProjectProgress {
 interface StudentTaskContextProps {
   tasks: Task[];
   groupInfo: Group | null;
-  createTask: (task: Task) => Promise<void>;
+  createTask: (task: TaskRequest) => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
-  updateTask: (task: Task) => void;
+  // updateTask: (task: Task) => void;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
+  fetchProgressTask: (projectProgressId: string) => Promise<void>;
   submitSummaryWeekForLeader: (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => Promise<void>;
 }
 
@@ -73,29 +85,9 @@ export const useStudentTasks = () => {
 
 export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { callApi } = useApi();
+  const { user } = useAuth(); 
   const [groupInfo, setGroupInfo] = useState<Group | null>(null);
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: "1",
-      keyTask: "TASK-1",
-      description: "Description for Task 1",
-      summary: "Summary for Task 1",
-      assignee: "Person 1",
-      status: "Todo",
-      priority: "Medium",
-      dueDate: "2025-03-15",
-    },
-    {
-      id: "2",
-      keyTask: "TASK-2",
-      description: "Description for Task 2",
-      summary: "Summary for Task 2",
-      assignee: "Person 2",
-      status: "Inprocess",
-      priority: "High",
-      dueDate: "2025-03-20",
-    },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const fetchGroupInfo = async () => {
     const response = await callApi("fuc/Group/information", {
@@ -109,53 +101,77 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
     return response?.value;
   };
 
-  const createTask = async (task: Task) => {
+  const fetchProgressTask = async (projectProgressId: string) => {
+    const response = await callApi(`fuc/group/progress/${projectProgressId}/tasks`, {
+      method: "GET",
+    });
+    if (response?.isSuccess) {
+      setTasks(response.value);
+    } else {
+      toast.error("Failed to fetch tasks");
+    }
+    return response?.value;
+  };
+
+  const createTask = async (task: TaskRequest) => {
     const response = await callApi("fuc/group/progress/tasks", {
       method: "POST",
-      body: {
-        TaskId: "00000000-0000-0000-0000-000000000000",
-        KeyTask: task.KeyTask,
-        Description: task.Description,
-        Summary: task.Summary,
-        AssigneeId: task.AssigneeId,
-        ProjectProgressId: task.ProjectProgressId,
-        Status: task.Status,
-        Priority: task.Priority,
-        DueDate: task.DueDate,
-      },
+      body: task,
     });
 
     if (response?.isSuccess) {
       toast.success("Task created successfully");
-      setTasks([...tasks, { ...task, id: response.value.id }]);
-    } else {
-      toast.error("Error creating task", {
-        description: response?.error?.message || "Failed to create task",
-      });
+
+      const newTask: Task = {
+        id: response.value.id,
+        keyTask: task.KeyTask, // Ensure property names match the Task type
+        summary: task.Summary,
+        assigneeId: task.AssigneeId,
+        priority: task.Priority,
+        dueDate: task.DueDate,
+        reporterId: user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"] || "",
+        status: 2, 
+      };
+
+      setTasks((prevTasks) => [...prevTasks, newTask]);
     }
+    return response;
   };
 
-  const updateTask = (task: Task) => {
-    setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
-  };
+  // const updateTask = (task: Task) => {
+  //   setTasks((prevTasks) => prevTasks.map((t) => (t.TaskId === task.TaskId ? task : t)));
+  // };
 
   const submitSummaryWeekForLeader = async (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => {
-      const response = await callApi("fuc/group/progress/week/summary", {
-        method: "POST",
-        body: data,
-      });
-      if (response?.isSuccess) {
-        toast.success("Summary submitted successfully");
-      } 
-      return response;
-    };
+    const response = await callApi("fuc/group/progress/week/summary", {
+      method: "POST",
+      body: data,
+    });
+    if (response?.isSuccess) {
+      toast.success("Summary submitted successfully");
+    } else {
+      toast.error("Failed to submit summary");
+    }
+    return response;
+  };
 
   useEffect(() => {
     fetchGroupInfo();
   }, []);
 
   return (
-    <StudentTaskContext.Provider value={{ tasks, createTask, updateTask, groupInfo, fetchGroupInfo, getProjectProgressOfGroup, submitSummaryWeekForLeader}}>
+    <StudentTaskContext.Provider
+      value={{
+        tasks,
+        createTask,
+        // updateTask,
+        groupInfo,
+        fetchGroupInfo,
+        getProjectProgressOfGroup,
+        fetchProgressTask,
+        submitSummaryWeekForLeader,
+      }}
+    >
       {children}
     </StudentTaskContext.Provider>
   );
