@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Calendar1, ClipboardX, LayoutList, X } from "lucide-react";
- 
+
 import { ProjectProgress, ProjectProgressWeek, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import { Badge } from "@/components/ui/badge";
@@ -133,6 +133,14 @@ export default function ProjectProgressPage() {
                                         {currentProjectProgressWeek?.taskDescription?.split("\n")?.map((task: string, index: number) => (
                                             <p key={index} className="font-semibold text-sm">{task}</p>
                                         ))}
+                                    </div>
+                                </div>
+                                <div className="space-y-4">
+                                    <h3 className="text-sm text-muted-foreground">
+                                        Summary from leader:
+                                    </h3>
+                                    <div className="space-y-2">
+                                        {currentProjectProgressWeek?.summary}
                                     </div>
                                 </div>
                             </div>

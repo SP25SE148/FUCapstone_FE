@@ -67,7 +67,8 @@ export interface ProjectProgressWeek {
   taskDescription: string,
   status: number,
   meetingLocation: string | null,
-  meetingContent: string | null
+  meetingContent: string | null,
+  summary: string | null,
 }
 
 export interface ProjectProgress {

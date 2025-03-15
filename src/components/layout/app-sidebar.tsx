@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, ChevronsUpDown, LucideIcon } from "lucide-react";
+import { ChevronRight, ChevronsUpDown, LucideIcon, User2 } from "lucide-react";
 
 import { useAuth } from "@/contexts/auth-context";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "../ui/dropdown-menu";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, } from "@/components/ui/sidebar";
@@ -93,12 +93,10 @@ export function AppSidebar({
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <Avatar className="h-8 w-8 rounded-lg border-2 border-primary">
+                    <AvatarFallback className="rounded-lg">
+                      <User2 className="size-6 text-primary" />
+                    </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{user?.name}</span>
