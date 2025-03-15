@@ -10,44 +10,41 @@ interface UpdateStatusProps {
   onClose: () => void;
 }
 
+const statusOptions = [
+  { value: "0", label: "Done", color: "bg-green-100 text-green-600" },
+  { value: "1", label: "In Progress", color: "bg-blue-100 text-blue-600" },
+  { value: "2", label: "To Do", color: "bg-gray-100 text-gray-600" },
+];
+
 export default function UpdateStatus({ task, onClose }: UpdateStatusProps) {
-  const [status, setStatus] = useState(task.status);
+  const [status, setStatus] = useState<string>(task.status.toString());
 
   const handleUpdate = (newStatus: string) => {
     setStatus(newStatus);
-    // Handle update status logic here
     onClose();
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Inprocess":
-        return "bg-blue-100 text-blue-600";
-      case "Done":
-        return "bg-green-100 text-green-600";
-      case "Todo":
-      default:
-        return "bg-gray-100 text-gray-600";
-    }
+  const getStatusLabel = (statusValue: string) => {
+    const statusOption = statusOptions.find((option) => option.value === statusValue);
+    return statusOption ? statusOption.label : "Unknown";
+  };
+
+  const getStatusColor = (statusValue: string) => {
+    const statusOption = statusOptions.find((option) => option.value === statusValue);
+    return statusOption ? statusOption.color : "bg-gray-100 text-gray-600";
   };
 
   return (
     <Select onValueChange={handleUpdate} value={status}>
       <SelectTrigger>
-        <Badge className={getStatusColor(status)}>
-          {status}
-        </Badge>
+        <Badge className={getStatusColor(status)}>{getStatusLabel(status)}</Badge>
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="Todo">
-          <Badge className={getStatusColor("Todo")}>Todo</Badge>
-        </SelectItem>
-        <SelectItem value="Inprocess">
-          <Badge className={getStatusColor("Inprocess")}>In Process</Badge>
-        </SelectItem>
-        <SelectItem value="Done">
-          <Badge className={getStatusColor("Done")}>Done</Badge>
-        </SelectItem>
+        {statusOptions.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            <Badge className={option.color}>{option.label}</Badge>
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

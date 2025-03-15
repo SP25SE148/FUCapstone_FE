@@ -90,19 +90,10 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [groupInfo, setGroupInfo] = useState<GroupInfo | null>(null);
 
   const fetchPassedTopic = async () => {
-    try {
-      const response = await callApi("fuc/group/get-available-topics");
+    const response = await callApi("fuc/group/get-available-topics");
       if (response?.isSuccess) {
         setTopics(response?.value?.items);
-      } else {
-        throw new Error(response?.error?.message || "Failed to fetch topics");
       }
-    } catch (error) {
-      toast.error("Error getting topics", {
-        description: `${error}`,
-      });
-      console.error("Failed to fetch topics", error);
-    }
   };
 
   const getPresignedUrlTopicDocument = async (id: string) => {

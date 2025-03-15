@@ -10,8 +10,14 @@ interface UpdatePriorityProps {
   onClose: () => void;
 }
 
+const priorityOptions = [
+  { value: "0", label: "High", color: "bg-red-100 text-red-600" },
+  { value: "1", label: "Medium", color: "bg-yellow-100 text-yellow-600" },
+  { value: "2", label: "Low", color: "bg-blue-100 text-blue-600" },
+];
+
 export default function UpdatePriority({ task, onClose }: UpdatePriorityProps) {
-  const [priority, setPriority] = useState(task.priority);
+  const [priority, setPriority] = useState<string>(task.priority.toString());
 
   const handleUpdate = (newPriority: string) => {
     setPriority(newPriority);
@@ -19,34 +25,27 @@ export default function UpdatePriority({ task, onClose }: UpdatePriorityProps) {
     onClose();
   };
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "Low":
-        return "bg-blue-100 text-blue-600";
-      case "Medium":
-        return "bg-yellow-100 text-yellow-600";
-      case "High":
-        return "bg-red-100 text-red-600";
-    }
+  const getPriorityLabel = (priorityValue: string) => {
+    const priorityOption = priorityOptions.find((option) => option.value === priorityValue);
+    return priorityOption ? priorityOption.label : "Unknown";
+  };
+
+  const getPriorityColor = (priorityValue: string) => {
+    const priorityOption = priorityOptions.find((option) => option.value === priorityValue);
+    return priorityOption ? priorityOption.color : "bg-gray-100 text-gray-600";
   };
 
   return (
     <Select onValueChange={handleUpdate} value={priority}>
       <SelectTrigger>
-        <Badge className={getPriorityColor(priority)}>
-          {priority}
-        </Badge>
+        <Badge className={getPriorityColor(priority)}>{getPriorityLabel(priority)}</Badge>
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="Low">
-          <Badge className={getPriorityColor("Low")}>Low</Badge>
-        </SelectItem>
-        <SelectItem value="Medium">
-          <Badge className={getPriorityColor("Medium")}>Medium</Badge>
-        </SelectItem>
-        <SelectItem value="High">
-          <Badge className={getPriorityColor("High")}>High</Badge>
-        </SelectItem>
+        {priorityOptions.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            <Badge className={option.color}>{option.label}</Badge>
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
