@@ -14,19 +14,8 @@ export interface Member {
   studentId: string;
   studentFullName: string;
   studentEmail: string;
+  gpa: number;
   isLeader: boolean;
-  status: string;
-}
-
-export interface RequestMember {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentFullName: string;
-  studentEmail: string;
-  isLeader: boolean;
-  createdBy: string;
-  createdDate: string;
   status: string;
 }
 
@@ -52,11 +41,6 @@ export interface Topic {
   topicAppraisals: []
 }
 
-export interface Request {
-  groupMemberRequestSentByLeader: RequestMember[];
-  groupMemberRequested: RequestMember[];
-}
-
 export interface Group {
   id: string;
   campusName: string;
@@ -65,6 +49,7 @@ export interface Group {
   capstoneName: string;
   groupCode: string;
   topicCode: string;
+  averageGPA: number;
   groupMemberList: Member[];
   status: string;
   topicResponse: Topic;
@@ -72,10 +57,8 @@ export interface Group {
 
 interface StudentGroupContextType {
   groupInfo: Group | null;
-  listrequest: Request | null;
   createGroup: () => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
-  getGroupMemberReq: () => Promise<void>;
   inviteMember: (data: any) => Promise<void>;
   registerGroup: (groupId: string) => Promise<void>;
   updateStatusInvitation: (data: any) => Promise<void>;
@@ -94,20 +77,12 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
   const { fetchStudentProfile } = useStudentProfile();
 
   const [groupInfo, setGroupInfo] = useState<Group | null>(null);
-  const [listrequest, setListRequest] = useState<Request | null>(null);
 
   const fetchGroupInfo = async () => {
     const response = await callApi("fuc/Group/information", {
       method: "GET",
     });
     setGroupInfo(response?.value);
-  };
-
-  const getGroupMemberReq = async () => {
-    const response = await callApi("fuc/Group/student/get-group-member-request", {
-      method: "GET",
-    });
-    setListRequest(response?.value);
   };
 
   const getProjectProgressOfGroup = async (groupId: string) => {
@@ -135,7 +110,6 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
     if (response?.isSuccess === true) {
       toast.success("Send invitation successfully");
       fetchGroupInfo();
-      getGroupMemberReq();
     }
     return response;
   };
@@ -148,7 +122,6 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
     if (response?.isSuccess === true) {
       toast.success("Update status invitation successfully");
       fetchGroupInfo();
-      getGroupMemberReq();
       fetchStudentProfile();
     }
     return response;
@@ -174,23 +147,19 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     fetchGroupInfo();
-    getGroupMemberReq();
   }, []);
 
   return (
     <StudentGroupContext.Provider
       value={{
         groupInfo,
-        listrequest,
         createGroup,
         inviteMember,
         registerGroup,
         fetchGroupInfo,
-        getGroupMemberReq,
         updateStatusInvitation,
         getPresignedUrlTopicDocument,
         getProjectProgressOfGroup,
-        
       }}
     >
       {children}

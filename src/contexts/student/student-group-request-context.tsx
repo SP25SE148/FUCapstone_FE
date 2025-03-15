@@ -13,6 +13,7 @@ export interface RequestMember {
   studentId: string;
   studentFullName: string;
   studentEmail: string;
+  gpa: number;
   isLeader: boolean;
   createdBy: string;
   createdDate: string;

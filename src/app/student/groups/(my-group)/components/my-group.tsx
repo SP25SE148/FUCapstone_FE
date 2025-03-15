@@ -170,7 +170,7 @@ export default function MyGroup() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-3 gap-6 text-sm">
+                                        <div className="grid grid-cols-4 gap-6 text-sm">
                                             <div className="space-y-2">
                                                 <p className="font-medium text-muted-foreground">Group Code</p>
                                                 <p className="pl-2 font-semibold">{groupInfo?.groupCode}</p>
@@ -178,6 +178,10 @@ export default function MyGroup() {
                                             <div className="space-y-2">
                                                 <p className="font-medium text-muted-foreground">Topic Code</p>
                                                 <p className="pl-2 font-semibold">{groupInfo?.topicCode}</p>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <p className="font-medium text-muted-foreground">Average GPA</p>
+                                                <p className="pl-2 font-semibold">{groupInfo?.averageGPA}</p>
                                             </div>
                                             <div className="space-y-2">
                                                 <p className="font-medium text-muted-foreground">Campus</p>
@@ -219,8 +223,8 @@ export default function MyGroup() {
                                                             <User2 className="size-6 text-primary" />
                                                         </AvatarFallback>
                                                     </Avatar>
-                                                    <div>
-                                                        <p className="font-semibold">{leaderInfo?.studentFullName} - {leaderInfo?.studentId}</p>
+                                                    <div className="min-w-[400px]">
+                                                        <p className="font-semibold text-primary">{leaderInfo?.studentFullName} - {leaderInfo?.studentId} - GPA: {leaderInfo?.gpa}</p>
                                                         <p className="text-sm text-muted-foreground">{leaderInfo?.isLeader ? "Leader" : "Member"} - {leaderInfo?.studentEmail}</p>
                                                     </div>
                                                 </div>
@@ -236,7 +240,7 @@ export default function MyGroup() {
                                                             </AvatarFallback>
                                                         </Avatar>
                                                         <div>
-                                                            <p className="font-semibold">{member.studentFullName} - {member.studentId}</p>
+                                                            <p className="font-semibold text-primary">{member.studentFullName} - {member.studentId} - GPA: {member?.gpa}</p>
                                                             <p className="text-sm text-muted-foreground">{member?.isLeader ? "Leader" : "Member"} - {member.studentEmail}</p>
                                                         </div>
                                                     </div>

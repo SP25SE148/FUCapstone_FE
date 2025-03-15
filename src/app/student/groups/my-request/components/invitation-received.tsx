@@ -92,7 +92,7 @@ export default function InvitationReceived() {
                     </Avatar>
                     <div className="space-y-2">
                       <p className="text-sm font-medium">
-                        <span className="text-primary font-bold">{request.createdBy}</span> invited you to join their group.
+                        <span className="text-primary font-bold">{request.createdBy} - GPA: {request?.gpa}</span> invited you to join their group.
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="size-3" />

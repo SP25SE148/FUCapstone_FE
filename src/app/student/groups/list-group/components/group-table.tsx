@@ -10,8 +10,8 @@ import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function GroupTable() {
-    const { studentProfile } = useStudentProfile();
     const { listGroup } = useStudentListGroup();
+    const { studentProfile } = useStudentProfile();
 
     return (
         <>
