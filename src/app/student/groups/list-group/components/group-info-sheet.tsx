@@ -1,9 +1,9 @@
 "use client";
 
-import { Users, BookUser, User2, Send } from "lucide-react";
+import { Users, BookUser, User2 } from "lucide-react";
 
 import { Member } from "./columns";
-import { Button } from "@/components/ui/button";
+import ApplyGroup from "./apply-group";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, } from "@/components/ui/sheet";
@@ -126,10 +126,7 @@ export default function GroupInfoSheet({ group, open, onClose }: GroupInfoSheetP
                     )}
                 </div>
                 <SheetFooter className="mt-6">
-                    <Button type="submit">
-                        <Send />
-                        Apply
-                    </Button>
+                    <ApplyGroup group={group} onClose={onClose} />
                 </SheetFooter>
             </SheetContent>
         </Sheet>
