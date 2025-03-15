@@ -81,7 +81,7 @@ export default function ApplicationReceived() {
                     </Avatar>
                     <div className="space-y-2">
                       <p className="text-sm font-medium">
-                        <span className="text-primary font-bold">{request.studentFullName}</span> request to join your group.
+                        <span className="text-primary font-bold">{request.studentFullName} - GPA: {request?.gpa}</span> request to join your group.
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="size-3" />

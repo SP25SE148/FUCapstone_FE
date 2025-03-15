@@ -11,6 +11,7 @@ export interface Member {
     studentId: string;
     studentFullName: string;
     studentEmail: string;
+    gpa: number;
     isLeader: boolean;
     createdBy: string,
     createdDate: string,
@@ -47,6 +48,7 @@ export interface GroupTopicInfo {
     campusName: string,
     topicCode: string,
     groupCode: string,
+    averageGPA: number
     status: string,
     groupMemberList: Member[];
     topicResponse: Topic

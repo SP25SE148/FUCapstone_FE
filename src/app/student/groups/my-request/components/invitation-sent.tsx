@@ -87,7 +87,7 @@ export default function InvitationSent() {
                     </Avatar>
                     <div className="space-y-2">
                       <p className="text-sm font-medium">
-                        Request to <span className="text-primary font-bold">{request.studentFullName}</span> to join your group.
+                        Request to <span className="text-primary font-bold">{request.studentFullName} - GPA: {request?.gpa}</span> to join your group.
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="size-3" />

@@ -81,7 +81,7 @@ export default function ApplicationSent() {
                     </Avatar>
                     <div className="space-y-2">
                       <p className="text-sm font-medium">
-                        You have sent a request to join <span className="text-primary font-bold">{request.studentFullName}</span>'s group.
+                        You have sent a request to join <span className="text-primary font-bold">{request.studentFullName} - GPA: {request?.gpa}</span> group.
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="size-3" />

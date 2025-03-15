@@ -18,6 +18,7 @@ export interface Member {
     studentId: string;
     studentFullName: string;
     studentEmail: string;
+    gpa: number;
     isLeader: boolean;
     createdBy: string,
     createdDate: string,
@@ -54,6 +55,7 @@ export interface GroupTopicInfo {
     campusName: string,
     topicCode: string,
     groupCode: string,
+    averageGPA: number
     status: string,
     groupMemberList: Member[];
     topicResponse: Topic
@@ -104,6 +106,12 @@ export const columns: ColumnDef<GroupTopicInfo>[] = [
         accessorKey: "capstoneName",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Capstone" />
+        ),
+    },
+    {
+        accessorKey: "averageGPA",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Average GPA" />
         ),
     },
     {
