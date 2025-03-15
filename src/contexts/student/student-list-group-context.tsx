@@ -4,8 +4,6 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { useStudentProfile } from "./student-profile-context";
-
 
 export interface Member {
     id: string;
@@ -56,6 +54,7 @@ export interface GroupTopicInfo {
 
 interface StudentListGroupContextType {
     listGroup: GroupTopicInfo[] | null;
+    createJoinGroupRequest: (data: { GroupId: string }) => Promise<any>
 }
 
 const StudentListGroupContext = createContext<StudentListGroupContextType | undefined>(
@@ -69,11 +68,22 @@ export const StudentListGroupProvider: React.FC<{ children: React.ReactNode }> =
     const [listGroup, setListGroup] = useState<GroupTopicInfo[]>([]);
 
     const fetchGroupList = async () => {
-        const response = await callApi("fuc/group/pending", {
-            method: "GET",
-        });
+        const response = await callApi("fuc/group/pending");
         setListGroup(response?.value);
     };
+
+    const createJoinGroupRequest = async (data: { GroupId: string }) => {
+        const response = await callApi(`fuc/Group/join-group-request`, {
+            method: "POST",
+            body: data
+        });
+
+        if (response?.isSuccess) {
+            toast.success("Apply successfully");
+        }
+        return response;
+    }
+
 
     useEffect(() => {
         fetchGroupList();
@@ -82,7 +92,8 @@ export const StudentListGroupProvider: React.FC<{ children: React.ReactNode }> =
     return (
         <StudentListGroupContext.Provider
             value={{
-                listGroup
+                listGroup,
+                createJoinGroupRequest
             }}
         >
             {children}

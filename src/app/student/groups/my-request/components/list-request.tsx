@@ -1,109 +1,14 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import InvitationSent from "./invitation-sent";
+import ApplicationSent from "./application-sent";
+import InvitationReceived from "./invitation-received";
+import ApplicationReceived from "./application-received";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { RequestMember, useStudentGroup } from "@/contexts/student/student-group-context";
-import MyRequest from "@/app/student/groups/my-request/components/my-requests";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import GroupRequest from "@/app/student/groups/my-request/components/group-request";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, } from "@/components/ui/dialog";
 
 export function ListRequest() {
-  const router = useRouter();
-  const [openCancelDialog, setOpenCancelDialog] = useState(false);
-  const [openActionDialog, setOpenActionDialog] = useState(false);
-  const [sentRequests, setSentRequests] = useState<RequestMember[]>([]);
-  const [receivedRequests, setReceivedRequests] = useState<RequestMember[]>([]);
-  const [actionType, setActionType] = useState<"accept" | "reject">("accept");
-  const [selectedRequest, setSelectedRequest] = useState<RequestMember | null>(null);
-  const { listrequest, getGroupMemberReq, updateStatusInvitation } = useStudentGroup();
-
-  useEffect(() => {
-    const fetchRequests = async () => {
-      if (listrequest) {
-        setSentRequests(listrequest.groupMemberRequestSentByLeader);
-        setReceivedRequests(listrequest.groupMemberRequested);
-      }
-    };
-    fetchRequests();
-  }, [listrequest, getGroupMemberReq]);
-
-  const getStatusBadge = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "underreview":
-        return (
-          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-            Under Review
-          </Badge>
-        );
-      case "accepted":
-        return (
-          <Badge variant="secondary" className="bg-green-100 text-green-800">
-            Accepted
-          </Badge>
-        );
-      case "rejected":
-        return (
-          <Badge variant="secondary" className="bg-red-100 text-red-800">
-            Rejected
-          </Badge>
-        );
-      case "cancelled":
-        return (
-          <Badge variant="secondary" className="bg-red-100 text-red-800">
-            Cancelled
-          </Badge>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const handleCancelClick = (request: RequestMember) => {
-    setSelectedRequest(request);
-    setOpenCancelDialog(true);
-  };
-
-  const handleActionClick = (request: RequestMember, action: "accept" | "reject") => {
-    setSelectedRequest(request);
-    setActionType(action);
-    setOpenActionDialog(true);
-  };
-
-  const handleCancelConfirm = async () => {
-    if (selectedRequest) {
-      const data = {
-        id: selectedRequest.id,
-        groupId: selectedRequest.groupId,
-        memberId: selectedRequest.studentId,
-        status: 4,
-      };
-      await updateStatusInvitation(data);
-    }
-    setOpenCancelDialog(false);
-  };
-
-  const handleActionConfirm = async () => {
-    if (selectedRequest) {
-      const data = {
-        id: selectedRequest.id,
-        groupId: selectedRequest.groupId,
-        memberId: selectedRequest.studentId,
-        status: actionType === "accept" ? 1 : 2,
-      };
-      const response: any = await updateStatusInvitation(data);
-      if (response?.isSuccess && actionType === "accept") {
-        router.push("/student/groups");
-      }
-      console.log("Request response: ", response);
-    }
-    setOpenActionDialog(false);
-  };
-
   return (
     <Card className="min-h-[calc(100vh-60px)] bg-gradient-to-tr from-primary/5 to-background">
       <CardHeader>
@@ -111,76 +16,27 @@ export function ListRequest() {
         <CardDescription>Information about your request</CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="my-request" className="w-full">
+        <Tabs defaultValue="invitation-sent" className="w-full">
           <TabsList className="mb-4">
-            <TabsTrigger value="my-request">My Request</TabsTrigger>
-            <TabsTrigger value="group-request">
-              Groups I&apos;ve Request
-            </TabsTrigger>
+            <TabsTrigger value="invitation-sent">Invitation sent</TabsTrigger>
+            <TabsTrigger value="invitation-received">Invitation received</TabsTrigger>
+            <TabsTrigger value="application-sent">Application sent</TabsTrigger>
+            <TabsTrigger value="application-received">Application received</TabsTrigger>
           </TabsList>
-          <TabsContent value="my-request">
-            <MyRequest
-              requests={sentRequests}
-              getStatusBadge={getStatusBadge}
-              handleCancelClick={handleCancelClick}
-            />
+          <TabsContent value="invitation-sent">
+            <InvitationSent />
           </TabsContent>
-          <TabsContent value="group-request">
-            <GroupRequest
-              requests={receivedRequests}
-              handleActionClick={handleActionClick}
-            />
+          <TabsContent value="invitation-received">
+            <InvitationReceived />
+          </TabsContent>
+          <TabsContent value="application-sent">
+            <ApplicationSent />
+          </TabsContent>
+          <TabsContent value="application-received">
+            <ApplicationReceived />
           </TabsContent>
         </Tabs>
       </CardContent>
-
-      {/* Cancel Confirmation Dialog */}
-      <Dialog open={openCancelDialog} onOpenChange={setOpenCancelDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Cancel Request</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to cancel this request?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setOpenCancelDialog(false)}
-            >
-              No
-            </Button>
-            <Button variant="destructive" onClick={handleCancelConfirm}>
-              Yes, Cancel
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Accept/Reject Confirmation Dialog */}
-      <Dialog open={openActionDialog} onOpenChange={setOpenActionDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {actionType === "accept" ? "Accept" : "Reject"} Request
-            </DialogTitle>
-            <DialogDescription>
-              Are you sure you want to {actionType} this request?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setOpenActionDialog(false)}
-            >
-              No
-            </Button>
-            <Button variant="default" onClick={handleActionConfirm}>
-              Yes, {actionType === "accept" ? "Accept" : "Reject"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </Card>
   );
 }
