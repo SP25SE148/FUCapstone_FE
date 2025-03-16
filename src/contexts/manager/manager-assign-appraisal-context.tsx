@@ -36,8 +36,7 @@ export const ManagerAssignAppraisalProvider = ({ children }: { children: React.R
 
   const fetchAssignSupervisor = async () => {
     setLoading(true);
-    try {
-      const response = await callApi("fuc/User/get-all-supervisor", {
+   const response = await callApi("fuc/User/get-all-supervisor", {
         method: "GET",
       });
 
@@ -47,13 +46,7 @@ export const ManagerAssignAppraisalProvider = ({ children }: { children: React.R
         setSupervisors(filteredSupervisors);
         setLoading(false);
       }, 1000);
-    } catch (error) {
-      toast.error("Error fetching supervisors", {
-        description: `${error}`,
-      });
-      console.error("Error fetching supervisors:", error);
-      setLoading(false);
-    }
+    
   };
 
   const assignAppraisalTopic = async () => {

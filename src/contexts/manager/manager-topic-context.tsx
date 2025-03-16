@@ -15,7 +15,7 @@ export interface Topic {
   description: string;
   fileName: string;
   fileUrl: string;
-  status: number;
+  status: string;
   difficultyLevel: number;
   businessAreaName: string;
   capstoneId: string;
@@ -32,6 +32,8 @@ interface TopicContextProps {
   fetchTopics: () => Promise<void>;
   submitAppraisal: (data: any) => Promise<any>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
+  fetchAssignSupervisor: () => Promise<any>;
+  assignTopicAppraisalForSpecificSupervisor: (data: { TopicId: string; SupervisorId: string }) => Promise<any>;
 }
 
 const ManagerTopicContext = createContext<TopicContextProps | undefined>(
@@ -67,11 +69,18 @@ export const ManagerTopicProvider = ({
     }
   };
 
+  const fetchAssignSupervisor = async () => {
+   const response = await callApi("fuc/User/get-all-supervisor", {
+        method: "GET",
+      });
+      return response?.value;
+  };
+
   const getPresignedUrlTopicDocument = async (id: string) => {
     const response = await callApi(`fuc/topics/presigned/${id}`, {
       method: "GET",
     });
-    return (response?.value);
+    return response?.value;
   };
 
   const submitAppraisal = async (data: any) => {
@@ -86,6 +95,20 @@ export const ManagerTopicProvider = ({
     return response;
   };
 
+  const assignTopicAppraisalForSpecificSupervisor = async (data: { TopicId: string; SupervisorId: string }) => {
+    const response = await callApi("fuc/topics/assign-topic-appraisal/supervisor", {
+      method: "POST",
+      body: data,
+    });
+  
+    if (response?.isSuccess) {
+      toast.success("Supervisor assigned successfully!");
+      fetchTopics();
+    } 
+  
+    return response;
+  };
+
   useEffect(() => {
     fetchTopics();
   }, []);
@@ -97,7 +120,9 @@ export const ManagerTopicProvider = ({
         loading,
         fetchTopics,
         submitAppraisal,
+        fetchAssignSupervisor,
         getPresignedUrlTopicDocument,
+        assignTopicAppraisalForSpecificSupervisor
       }}
     >
       {children}
