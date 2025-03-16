@@ -27,11 +27,7 @@ const items = [
             {
                 title: "Assign appraisal",
                 url: "/manager/topics/assign-appraisal",
-            },
-            // {
-            //     title: "List appraisal",
-            //     url: "/manager/topics/appraisal",
-            // }
+            }
         ]
     },
     {
