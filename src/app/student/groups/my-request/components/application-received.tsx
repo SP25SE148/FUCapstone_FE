@@ -30,6 +30,12 @@ const getStatusBadge = (status: string) => {
           {status}
         </Badge>
       );
+    case "Cancelled":
+      return (
+        <Badge variant="secondary" className="bg-red-100 text-red-800">
+          Cancelled
+        </Badge>
+      );
     default:
       return null;
   }

@@ -2,10 +2,10 @@
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { useParams } from "next/navigation";
 import { Send, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useRouter } from "next/navigation";
 
 import { Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
@@ -39,13 +39,13 @@ const formSchema = z.object({
         }, {
             message: "Only accept Word (.doc, .docx) files.",
         }),
-    coSupervisorEmails: z.string().optional(),
 });
 
 export default function UpdateTopicForm() {
+    const router = useRouter();
     const params = useParams();
     const id: string = String(params.id);
-    const { fetchTopicsById } = useSupervisorTopic();
+    const { fetchTopicsById, updateTopic } = useSupervisorTopic();
 
     const [topic, setTopic] = useState<Topic>();
     const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +59,6 @@ export default function UpdateTopicForm() {
             abbreviation: "",
             description: "",
             file: undefined,
-            coSupervisorEmails: "",
         },
     });
 
@@ -75,11 +74,11 @@ export default function UpdateTopicForm() {
                 const file = values.file[0]; // Lấy file đầu tiên
                 formData.append("File", file);
             }
-            formData.append("CoSupervisorEmails", values.coSupervisorEmails || "");
-            // const res: any = await registerTopic(formData);
-            // if (res?.isSuccess) {
-            //     form.reset();
-            // }
+            const res: any = await updateTopic(topic?.id || "", formData);
+            if (res?.isSuccess) {
+                form.reset();
+                router.back();
+            }
         } finally {
             setIsLoading(false);
             setIsConfirmOpen(false);
@@ -107,7 +106,6 @@ export default function UpdateTopicForm() {
                 vietnameseName: topic.vietnameseName || "",
                 abbreviation: topic.abbreviation || "",
                 description: topic.description || "",
-                coSupervisorEmails: "",
                 file: undefined, // Không thể pre-fill file input
             });
         }
@@ -193,19 +191,6 @@ export default function UpdateTopicForm() {
                                 <FormLabel>File <span className="text-red-500">*</span></FormLabel>
                                 <FormControl>
                                     <Input type="file" accept=".docx, .doc" onChange={(e) => field.onChange(e.target.files)} disabled={isLoading} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="coSupervisorEmails"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Co Supervisor Email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Email" {...field} disabled={isLoading} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

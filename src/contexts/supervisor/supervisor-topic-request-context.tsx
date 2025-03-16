@@ -17,8 +17,13 @@ interface Request {
   topicEnglishName: string,
   status: string,
   requestedBy: string,
+  gpa: number,
   leaderFullName: string,
   createdDate: string
+}
+
+interface TopicRequest {
+  [key: string]: Request[];
 }
 
 interface Member {
@@ -29,6 +34,7 @@ interface Member {
   studentEmail: string;
   isLeader: boolean;
   status: string;
+  gpa: number;
 }
 
 export interface Group {
@@ -39,12 +45,13 @@ export interface Group {
   capstoneName: string;
   groupCode: string;
   topicCode: string;
+  averageGPA: number;
   groupMemberList: Member[];
   status: string;
 }
 
 interface SupervisorTopicRequestContextType {
-  requestList: Request[];
+  requestList: TopicRequest;
   getGroupById: (id: string) => Promise<any>
   updateTopicRequestStatus: (data: { TopicRequestId: string, Status: number }) => Promise<any>
 }
@@ -57,7 +64,7 @@ export const SupervisorTopicRequestProvider: React.FC<{
   const { callApi } = useApi();
   const pathName = usePathname();
 
-  const [requestList, setRequestList] = useState<Request[]>([]);
+  const [requestList, setRequestList] = useState<TopicRequest>({});
 
   const getTopicRequest = async () => {
     const response = await callApi(`fuc/Group/get-topic-request`);
