@@ -1,9 +1,10 @@
 "use client";
 
+import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { usePathname } from "next/navigation";
 
 export interface Topic {
   id: string;
@@ -32,6 +33,7 @@ interface SupervisorTopicContextType {
   fetchTopicsOfSupervisor: () => Promise<void>;
   fetchTopicsById: (id: string) => Promise<Topic>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
+  updateTopic: (topicId: string, data: FormData) => Promise<any>;
 }
 
 const SupervisorTopicContext = createContext<
@@ -60,6 +62,17 @@ export const SupervisorTopicProvider: React.FC<{
     return (response?.value);
   };
 
+  const updateTopic = async (topicId: string, data: FormData) => {
+    const response = await callApi(`fuc/topics/${topicId}`, {
+      method: "PUT",
+      body: data,
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Update topic successfully");
+    }
+    return response;
+  };
+
   useEffect(() => {
     if (pathName === "/supervisor/topics") {
       fetchTopicsOfSupervisor();
@@ -73,6 +86,7 @@ export const SupervisorTopicProvider: React.FC<{
         fetchTopicsById,
         fetchTopicsOfSupervisor,
         getPresignedUrlTopicDocument,
+        updateTopic
       }}
     >
       {children}
