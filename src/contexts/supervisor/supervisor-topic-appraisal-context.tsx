@@ -81,7 +81,7 @@ export const SupervisorTopicAppraisalProvider: React.FC<{
             body: data,
         });
         if (response?.isSuccess === true) {
-            toast.success("Topic registered successfully");
+            toast.success("Appraisal topic successfully");
         }
         return response;
     };

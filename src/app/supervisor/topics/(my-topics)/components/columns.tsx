@@ -173,12 +173,17 @@ export const columns: ColumnDef<Topic>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
                             <DropdownMenuItem
                                 onClick={() => router.push(`topics/${topic.id}`)}
                             >
                                 View details
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
+                            {topic?.status == "Considered" && <DropdownMenuItem
+                                onClick={() => router.push(`topics/${topic.id}/update`)}
+                            >
+                                Update topic
+                            </DropdownMenuItem>}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
