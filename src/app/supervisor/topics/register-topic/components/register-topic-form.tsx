@@ -1,8 +1,8 @@
 "use client";
 
 import { z } from "zod";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import React, { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Download, Send, Loader2 } from "lucide-react";
 
@@ -50,11 +50,12 @@ const formSchema = z.object({
 });
 
 export default function RegisterTopicForm() {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { businessAreaList, capstoneList, registerTopic } = useSupervisorTopicRegister();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -88,7 +89,20 @@ export default function RegisterTopicForm() {
       formData.append("CoSupervisorEmails", values.coSupervisorEmails || "");
       const res: any = await registerTopic(formData);
       if (res?.isSuccess) {
-        form.reset();
+        form.reset({
+          capstoneId: "",
+          englishName: "",
+          vietnameseName: "",
+          abbreviation: "",
+          description: "",
+          difficulty: "",
+          businessArea: "",
+          file: undefined,
+          coSupervisorEmails: "",
+        });
+      };
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
     } finally {
       setIsLoading(false);
@@ -113,7 +127,7 @@ export default function RegisterTopicForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Capstone <span className="text-red-500">*</span></FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={capstoneList?.length == 0 || isLoading}>
+                <Select key={field.value} onValueChange={field.onChange} defaultValue={field.value} disabled={capstoneList?.length == 0 || isLoading}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a capstone" />
@@ -191,7 +205,7 @@ export default function RegisterTopicForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Difficulty level <span className="text-red-500">*</span></FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={difficulties.length == 0 || isLoading}>
+                <Select key={field.value} onValueChange={field.onChange} defaultValue={field.value} disabled={difficulties.length == 0 || isLoading}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select difficulty level" />
@@ -213,7 +227,7 @@ export default function RegisterTopicForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Business Area <span className="text-red-500">*</span></FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={businessAreaList.length == 0 || isLoading}>
+                <Select key={field.value} onValueChange={field.onChange} defaultValue={field.value} disabled={businessAreaList.length == 0 || isLoading}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select business area" />
@@ -236,7 +250,7 @@ export default function RegisterTopicForm() {
               <FormItem>
                 <FormLabel>File <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Input type="file" accept=".docx, .doc" onChange={(e) => field.onChange(e.target.files)} disabled={isLoading} />
+                  <Input ref={fileInputRef} type="file" accept=".docx, .doc" onChange={(e) => field.onChange(e.target.files)} disabled={isLoading} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

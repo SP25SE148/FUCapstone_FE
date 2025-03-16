@@ -223,7 +223,7 @@ export default function MyGroup() {
                                                             <User2 className="size-6 text-primary" />
                                                         </AvatarFallback>
                                                     </Avatar>
-                                                    <div className="min-w-[400px]">
+                                                    <div>
                                                         <p className="font-semibold text-primary">{leaderInfo?.studentFullName} - {leaderInfo?.studentId} - GPA: {leaderInfo?.gpa}</p>
                                                         <p className="text-sm text-muted-foreground">{leaderInfo?.isLeader ? "Leader" : "Member"} - {leaderInfo?.studentEmail}</p>
                                                     </div>

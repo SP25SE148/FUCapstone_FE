@@ -72,7 +72,7 @@ export default function ItemTopic({ topic }: { topic: Topic }) {
                     <p className="font-semibold tracking-tight text-lg text-primary">{topic?.code} - {topic?.englishName} - {topic?.abbreviation}</p>
                     <p className="text-sm text-muted-foreground">{topic?.vietnameseName}</p>
                 </div>
-                <div className="col-span-2   flex flex-col items-end gap-2">
+                <div className="col-span-2 text-right space-y-2">
                     {getStatus(topic?.status)}
                     <p className="text-sm text-muted-foreground">Created at: {getDate(topic?.createdDate)}</p>
                 </div>
