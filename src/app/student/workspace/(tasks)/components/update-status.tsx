@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Task } from "@/contexts/student/student-task-context";
+import { Task, useStudentTasks } from "@/contexts/student/student-task-context";
 
 interface UpdateStatusProps {
   task: Task;
@@ -18,9 +18,23 @@ const statusOptions = [
 
 export default function UpdateStatus({ task, onClose }: UpdateStatusProps) {
   const [status, setStatus] = useState<string>(task.status.toString());
+  const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
 
-  const handleUpdate = (newStatus: string) => {
+  const handleUpdate = async (newStatus: string) => {
     setStatus(newStatus);
+
+    const projectProgress = groupInfo?.id
+      ? await getProjectProgressOfGroup(groupInfo.id)
+      : null;
+
+    if (projectProgress?.id) {
+      await updateTask({
+        ...task,
+        projectProgressId: projectProgress.id,
+        status: parseInt(newStatus, 10),
+      });
+    }
+
     onClose();
   };
 

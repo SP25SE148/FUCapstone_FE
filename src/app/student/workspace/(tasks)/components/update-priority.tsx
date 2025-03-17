@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Task } from "@/contexts/student/student-task-context";
+import { Task, useStudentTasks } from "@/contexts/student/student-task-context";
 
 interface UpdatePriorityProps {
   task: Task;
@@ -18,10 +18,23 @@ const priorityOptions = [
 
 export default function UpdatePriority({ task, onClose }: UpdatePriorityProps) {
   const [priority, setPriority] = useState<string>(task.priority.toString());
+  const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
 
-  const handleUpdate = (newPriority: string) => {
+  const handleUpdate = async (newPriority: string) => {
     setPriority(newPriority);
-    // Handle update priority logic here
+
+    const projectProgress = groupInfo?.id
+      ? await getProjectProgressOfGroup(groupInfo.id)
+      : null;
+
+    if (projectProgress?.id) {
+      await updateTask({
+        ...task,
+        projectProgressId: projectProgress.id,
+        priority: parseInt(newPriority, 10),
+      });
+    }
+
     onClose();
   };
 
