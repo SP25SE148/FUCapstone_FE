@@ -2,15 +2,14 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Calendar1, ClipboardX, LayoutList, X } from "lucide-react";
+import { ClipboardX, LayoutList } from "lucide-react";
 
 import { ProjectProgress, ProjectProgressWeek, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import EvaluationWeek from "./components/evaluation-week";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import UploadProjectProgress from "./components/upload-project-progress";
+import ProjectProgressWeekDetail from "./components/project-progress-week-detail";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const getStatus = (status: number | undefined) => {
@@ -94,57 +93,12 @@ export default function ProjectProgressPage() {
                     </div>
                     {currentProjectProgressWeek
                         ?
-                        <div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] p-4 rounded-xl border bg-card text-card-foreground shadow">
-                            {/* header */}
-                            <div className="mb-4 flex items-center justify-between">
-                                <h3 className="font-semibold flex items-center gap-2">
-                                    <Calendar1 className="size-4 text-primary" />
-                                    Week: {currentProjectProgressWeek?.weekNumber}
-                                    {getStatus(currentProjectProgressWeek?.status)}
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    {currentProjectProgressWeek?.status !== 0 && <EvaluationWeek
-                                        data={
-                                            {
-                                                "projectProgressId": projectProgress?.id,
-                                                currentProjectProgressWeek
-                                            }
-                                        }
-                                        refresh={() => setIsRefresh(!isRefresh)}
-                                    />}
-                                    <Button size={"icon"} variant={"ghost"} onClick={() => { setCurrentProjectProgressWeek(null) }}><X /></Button>
-                                </div>
-                            </div>
-
-                            {/* body */}
-                            <div className="space-y-4">
-                                <h4 className="text-sm text-muted-foreground">
-                                    Meeting location: <span className="font-semibold text-sm">{currentProjectProgressWeek?.meetingLocation}</span>
-                                </h4>
-                                <div className="space-y-2">
-                                    <h3 className="text-sm text-muted-foreground">Meeting content:</h3>
-                                    <p className="font-semibold tracking-tight text-sm text-justify italic">{currentProjectProgressWeek?.meetingContent}</p>
-                                </div>
-                                <div className="space-y-4">
-                                    <h3 className="text-sm text-muted-foreground">
-                                        Task description:
-                                    </h3>
-                                    <div className="space-y-2">
-                                        {currentProjectProgressWeek?.taskDescription?.split("\n")?.map((task: string, index: number) => (
-                                            <p key={index} className="font-semibold text-sm">{task}</p>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="space-y-4">
-                                    <h3 className="text-sm text-muted-foreground">
-                                        Summary from leader:
-                                    </h3>
-                                    <div className="space-y-2">
-                                        {currentProjectProgressWeek?.summary}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ProjectProgressWeekDetail
+                            projectProgressId={projectProgress?.id}
+                            currentProjectProgressWeek={currentProjectProgressWeek}
+                            refresh={() => { setIsRefresh(!isRefresh) }}
+                            onClose={() => { setCurrentProjectProgressWeek(null) }}
+                        />
                         :
                         <div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] rounded-xl border bg-card text-card-foreground shadow">
                             <div className="h-full flex flex-col items-center justify-center gap-8">
@@ -173,7 +127,8 @@ export default function ProjectProgressPage() {
                             </p>
                         </div>
                     </div>
-                </CardContent>}
-        </Card>
+                </CardContent>
+            }
+        </Card >
     )
 }

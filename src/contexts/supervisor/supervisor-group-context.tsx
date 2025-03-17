@@ -99,6 +99,7 @@ interface SupervisorGroupContextType {
   getTopicGroupInformation: (groupId: string) => Promise<GroupTopicInfo>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   importProjectProgress: (data: any) => Promise<void>;
+  updateProjectProgressWeek: (data: any) => Promise<void>;
   evaluationWeeklyProgress: (data: any) => Promise<void>;
   getEvaluationWeeklyProgress: (groupId: string) => Promise<EvaluationStudent[]>;
   exportEvaluationWeeklyProgressFile: (groupId: string) => Promise<any>;
@@ -142,6 +143,18 @@ export const SupervisorGroupProvider: React.FC<{
     return response
   };
 
+  const updateProjectProgressWeek = async (data: any) => {
+    const response: any = await callApi("fuc/group/progress/week", {
+      method: "PUT",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Update project progress week successfully");
+    }
+    return response
+  };
+
   const evaluationWeeklyProgress = async (data: any) => {
     const response: any = await callApi("fuc/group/progress/week/evaluations", {
       method: "POST",
@@ -177,6 +190,7 @@ export const SupervisorGroupProvider: React.FC<{
         getTopicGroupInformation,
         getProjectProgressOfGroup,
         importProjectProgress,
+        updateProjectProgressWeek,
         evaluationWeeklyProgress,
         getEvaluationWeeklyProgress,
         exportEvaluationWeeklyProgressFile
