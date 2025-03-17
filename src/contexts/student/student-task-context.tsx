@@ -8,14 +8,17 @@ import { ProjectProgress } from "@/types/types";
 
 export interface Task {
   id: string;
-  keyTask: string; 
+  keyTask: string;
+  description: string; 
   summary: string;
   assigneeId: string;
   reporterId: string;
+  comment: string | null;
   status: number;
   priority: number;
   dueDate: string;
-  // createdDate: string;
+  createdDate: string;
+  projectProgressId: string | null;
 }
 
 export interface TaskRequest {
@@ -28,6 +31,20 @@ export interface TaskRequest {
   DueDate: string;
 }
 
+export interface TaskUpdate 
+  {
+    TaskId: string;
+    ProjectProgressId: string;
+    KeyTask: string;
+    Description: string;
+    Summary: string;
+    Comment: string;
+    AssigneeId: string;
+    Status: number;
+    Priority: number;
+    DueDate: string;
+  }
+   
 export interface Member {
   id: string;
   groupId: string;
@@ -56,10 +73,11 @@ interface StudentTaskContextProps {
   groupInfo: Group | null;
   createTask: (task: TaskRequest) => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
-  // updateTask: (task: Task) => void;
+  updateTask: (updatedTask: Task) => Promise<void>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   fetchProgressTask: (projectProgressId: string) => Promise<void>;
   submitSummaryWeekForLeader: (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => Promise<void>;
+  getTaskDetail: (taskId: string) => Promise<Task | null>;
 }
 
 const StudentTaskContext = createContext<StudentTaskContextProps | undefined>(undefined);
@@ -107,29 +125,59 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
       method: "POST",
       body: task,
     });
-
+  
     if (response?.isSuccess) {
       toast.success("Task created successfully");
 
       const newTask: Task = {
         id: response.value.id,
-        keyTask: task.KeyTask, // Ensure property names match the Task type
-        summary: task.Summary,
-        assigneeId: task.AssigneeId,
-        priority: task.Priority,
-        dueDate: task.DueDate,
-        reporterId: user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"] || "",
-        status: 2, 
+        keyTask: response.value.keyTask,
+        summary: response.value.summary,
+        comment: null,
+        description: response.value.description,
+        assigneeId: response.value.assigneeId,
+        reporterId: response.value.reporterId,
+        status: response.value.status,
+        priority: response.value.priority,
+        dueDate: response.value.dueDate,
+        createdDate: response.value.createdDate,
+        projectProgressId: null
       };
-
+  
       setTasks((prevTasks) => [...prevTasks, newTask]);
+    } else {
+      toast.error("Failed to create task");
     }
     return response;
   };
 
-  // const updateTask = (task: Task) => {
-  //   setTasks((prevTasks) => prevTasks.map((t) => (t.TaskId === task.TaskId ? task : t)));
-  // };
+  const updateTask = async (updatedTask: any) => {
+    const response = await callApi("fuc/group/progress/tasks", {
+      method: "POST",
+      body: {
+        TaskId: updatedTask.id,
+        ProjectProgressId: updatedTask.projectProgressId,
+        KeyTask: updatedTask.keyTask,
+        Description: updatedTask.description,
+        Summary: updatedTask.summary,
+        Comment: updatedTask.comment || "",
+        AssigneeId: updatedTask.assigneeId,
+        Status: updatedTask.status,
+        Priority: updatedTask.priority,
+        DueDate: updatedTask.dueDate,
+      },
+    });
+  
+    if (response?.isSuccess) {
+      toast.success("Task updated successfully");
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+        )
+      );
+    } 
+    return response;
+  };
 
   const submitSummaryWeekForLeader = async (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => {
     const response = await callApi("fuc/group/progress/week/summary", {
@@ -144,6 +192,19 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
     return response;
   };
 
+  const getTaskDetail = async (taskId: string) => {
+    const response = await callApi(`efuc/group/progress/tasks/${taskId}`, {
+      method: "GET",
+    });
+  
+    if (response?.isSuccess) {
+      return response.value;
+    } else {
+      toast.error("Failed to fetch task details");
+      return null;
+    }
+  };
+
   useEffect(() => {
     fetchGroupInfo();
   }, []);
@@ -153,12 +214,13 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
       value={{
         tasks,
         createTask,
-        // updateTask,
+        updateTask,
         groupInfo,
         fetchGroupInfo,
         getProjectProgressOfGroup,
         fetchProgressTask,
         submitSummaryWeekForLeader,
+        getTaskDetail,
       }}
     >
       {children}

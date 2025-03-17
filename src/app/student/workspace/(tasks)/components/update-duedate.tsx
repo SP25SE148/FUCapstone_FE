@@ -11,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Task } from "@/contexts/student/student-task-context";
+import { Task, useStudentTasks } from "@/contexts/student/student-task-context";
 
 interface UpdateDueDateProps {
   task: Task;
@@ -22,12 +22,23 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
   const [date, setDate] = React.useState<Date | undefined>(
     task.dueDate ? new Date(task.dueDate) : undefined
   );
+  const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
 
-  const handleDateChange = (selectedDate: Date | undefined) => {
+  const handleDateChange = async (selectedDate: Date | undefined) => {
     setDate(selectedDate);
-    if (selectedDate) {
-      task.dueDate = selectedDate.toISOString();
+
+    const projectProgress = groupInfo?.id
+      ? await getProjectProgressOfGroup(groupInfo.id)
+      : null;
+
+    if (selectedDate && projectProgress?.id) {
+      await updateTask({
+        ...task,
+        projectProgressId: projectProgress.id,
+        dueDate: selectedDate.toISOString(),
+      });
     }
+
     onClose();
   };
 

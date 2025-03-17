@@ -12,18 +12,6 @@ import UpdateDueDate from "@/app/student/workspace/(tasks)/components/update-due
 import TaskDetailSheet from "@/app/student/workspace/(tasks)/components/task-detail-sheet";
 import { User, Flag, Calendar, Hash, BarChart, ClipboardList, AlignLeft } from "lucide-react";
 
-const AssignTaskCell = ({
-  task,
-  students,
-  onAssign,
-}: {
-  task: Task;
-  students: { id: string; fullName: string }[];
-  onAssign: (assignedTo: string) => void;
-}) => {
-  return <AssignTask task={task} onAssign={onAssign} students={students} />;
-};
-
 const UpdateStatusCell = ({ task }: { task: Task }) => {
   return <UpdateStatus task={task} onClose={() => {}} />;
 };
@@ -97,7 +85,7 @@ export const columns: ColumnDef<Task>[] = [
       <AssignTask
         task={row.original}
         onAssign={(assignedTo) => {
-          row.original.assigneeId = assignedTo; // Update the assigneeId
+          row.original.assigneeId = assignedTo; 
         }}
       />
     ),

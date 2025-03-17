@@ -13,20 +13,21 @@ import { Button } from "@/components/ui/button";
 import { Clock, Plus } from "lucide-react";
 import TaskHistory from "@/app/student/workspace/(tasks)/components/task-history";
 import AddTask from "@/app/student/workspace/(tasks)/components/add-task";
-import { TaskDataTable } from "@/app/student/workspace/(tasks)/components/task-data-table";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
+import { DataTable } from "@/components/ui/data-table";
 
 export default function TasksTable() {
-  const { tasks, fetchProgressTask, groupInfo, getProjectProgressOfGroup } = useStudentTasks();
+  const { tasks, fetchProgressTask, groupInfo, getProjectProgressOfGroup } =
+    useStudentTasks();
   const [showHistory, setShowHistory] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
       if (groupInfo?.id) {
-        const projectProgress = await getProjectProgressOfGroup(groupInfo.id); 
+        const projectProgress = await getProjectProgressOfGroup(groupInfo.id);
         if (projectProgress?.id) {
-          await fetchProgressTask(projectProgress.id); 
+          await fetchProgressTask(projectProgress.id);
         }
       }
     };
@@ -67,7 +68,7 @@ export default function TasksTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <TaskDataTable columns={columns} data={tasks} />
+        <DataTable columns={columns} data={tasks.slice().reverse()} />
       </CardContent>
       {showHistory && <TaskHistory onClose={() => setShowHistory(false)} />}
       {showCreateTask && <AddTask onClose={() => setShowCreateTask(false)} />}

@@ -11,7 +11,7 @@ interface AssignTaskProps {
 }
 
 export default function AssignTask({ task, onAssign }: AssignTaskProps) {
-  const { groupInfo } = useStudentTasks(); 
+  const { groupInfo, updateTask, getProjectProgressOfGroup } = useStudentTasks();
   const [students, setStudents] = useState<{ studentId: string; studentFullName: string }[]>([]);
   const [assignedTo, setAssignedTo] = useState<string>(task.assigneeId || "");
 
@@ -27,8 +27,21 @@ export default function AssignTask({ task, onAssign }: AssignTaskProps) {
     }
   }, [groupInfo]);
 
-  const handleAssign = (value: string) => {
+  const handleAssign = async (value: string) => {
     setAssignedTo(value);
+
+    const projectProgress = groupInfo?.id
+      ? await getProjectProgressOfGroup(groupInfo.id)
+      : null;
+
+    if (projectProgress?.id) {
+      await updateTask({
+        ...task,
+        projectProgressId: projectProgress.id,
+        assigneeId: value,
+      });
+    }
+
     onAssign(value);
   };
 
