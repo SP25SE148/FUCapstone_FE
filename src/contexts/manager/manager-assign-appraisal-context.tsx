@@ -40,13 +40,13 @@ export const ManagerAssignAppraisalProvider = ({ children }: { children: React.R
         method: "GET",
       });
 
+      if (response?.isSuccess === true) {
       const filteredSupervisors = response.value.filter((supervisor: Supervisor) => supervisor.majorId === user?.MajorId);
-
       setTimeout(() => {
         setSupervisors(filteredSupervisors);
         setLoading(false);
       }, 1000);
-    
+    }
   };
 
   const assignAppraisalTopic = async () => {

@@ -183,8 +183,7 @@ export const columns: ColumnDef<Topic>[] = [
       const topic = row.original;
       const missingAssign =
         topic.status === "Pending" &&
-        (topic.topicAppraisals.length === 0 ||
-          topic.topicAppraisals.length < 2);
+        topic.topicAppraisals.length === 1;
       return missingAssign && <AssignAppraisalCell topic={row.original} />;
     },
     // cell: ({ row }) => <AssignAppraisalCell topic={row.original} />,

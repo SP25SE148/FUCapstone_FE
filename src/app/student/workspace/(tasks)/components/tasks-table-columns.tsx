@@ -76,12 +76,12 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => <KeyTaskCell task={row.original} />,
   },
-  // {
-  //   accessorKey: "description",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Description" icon={<AlignLeft className="mr-2 h-4 w-4" />} />
-  //   ),
-  // },
+  {
+    accessorKey: "description",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Description" icon={<AlignLeft className="mr-2 h-4 w-4" />} />
+    ),
+  },
   {
     accessorKey: "summary",
     header: ({ column }) => (

@@ -14,9 +14,10 @@ interface LeaderEvaluationSheetProps {
   };
   open: boolean;
   onClose: () => void;
+  refresh: () => void;
 }
 
-export default function LeaderEvaluationSheet({ data, open, onClose }: LeaderEvaluationSheetProps) {
+export default function LeaderEvaluationSheet({ data, open, onClose, refresh }: LeaderEvaluationSheetProps) {
   const { submitSummaryWeekForLeader } = useStudentTasks();
   const [summary, setSummary] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,6 +34,7 @@ export default function LeaderEvaluationSheet({ data, open, onClose }: LeaderEva
       await submitSummaryWeekForLeader(requestBody);
       setOpenConfirm(false);
       onClose();
+      refresh();
     } finally {
       setIsLoading(false);
     }

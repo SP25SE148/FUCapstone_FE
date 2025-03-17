@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { Calendar1, ClipboardX, LayoutList, X } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -45,11 +44,11 @@ const getStatus = (status: number | undefined) => {
 
 export default function ProjectProgressView() {
   const { getProjectProgressOfGroup } = useStudentTasks();
-
+  const { groupInfo } = useStudentTasks();
+  const [isRefresh, setIsRefresh] = useState<boolean>(false);
   const [projectProgress, setProjectProgress] = useState<ProjectProgress>();
   const [currentProjectProgressWeek, setCurrentProjectProgressWeek] =
     useState<ProjectProgressWeek | null>();
-  const { groupInfo } = useStudentTasks();
 
   useEffect(() => {
     (async () => {
@@ -58,8 +57,9 @@ export default function ProjectProgressView() {
         groupInfo.id
       );
       setProjectProgress(projectProgressDetail);
+      setCurrentProjectProgressWeek(null);
     })();
-  }, [groupInfo]);
+  }, [groupInfo, isRefresh]);
 
   return (
     <Card className="min-h-[calc(100vh-60px)]">
@@ -117,21 +117,25 @@ export default function ProjectProgressView() {
                   Week: {currentProjectProgressWeek?.weekNumber}
                 </h3>
                 <div className="flex items-center gap-2">
-                  <LeaderEvaluationWeek
-                    data={{
-                      projectProgressId: projectProgress?.id,
-                      projectProgressWeekId: currentProjectProgressWeek?.id,
-                    }}
-                  />
+                  {currentProjectProgressWeek?.status === 1 &&
+                    currentProjectProgressWeek?.summary === null && (
+                      <LeaderEvaluationWeek
+                        data={{
+                          projectProgressId: projectProgress?.id,
+                          projectProgressWeekId: currentProjectProgressWeek?.id,
+                        }}
+                        refresh={() => setIsRefresh(!isRefresh)}
+                      />
+                    )}
                   <Button
-                  size={"icon"}
-                  variant={"ghost"}
-                  onClick={() => {
-                    setCurrentProjectProgressWeek(null);
-                  }}
-                >
-                  <X />
-                </Button>
+                    size={"icon"}
+                    variant={"ghost"}
+                    onClick={() => {
+                      setCurrentProjectProgressWeek(null);
+                    }}
+                  >
+                    <X />
+                  </Button>
                 </div>
               </div>
 
@@ -162,6 +166,20 @@ export default function ProjectProgressView() {
                           {task}
                         </p>
                       ))}
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="text-sm text-muted-foreground">
+                      Summary from leader:
+                    </h3>
+                    <ul className="space-y-2 list-disc list-inside">
+                      {currentProjectProgressWeek?.summary
+                        ?.split("\n")
+                        ?.map((line: string, index: number) => (
+                          <li key={index} className="font-semibold text-sm">
+                            {line}
+                          </li>
+                        ))}
+                    </ul>
                   </div>
                 </div>
               </div>
