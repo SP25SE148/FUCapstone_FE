@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApi } from "@/hooks/use-api";
 import { useAuth } from "@/contexts/auth-context"; 
 import { toast } from "sonner";
+import { ProjectProgress } from "@/types/types";
 
 export interface Task {
   id: string;
@@ -49,18 +50,6 @@ export interface Group {
   status: string;
 }
 
-interface ProjectProgress {
-  id: string;
-  meetingDate: string;
-  projectProgressWeeks: {
-    id: string;
-    weekNumber: number;
-    taskDescription: string;
-    status: number;
-    meetingLocation: string | null;
-    meetingContent: string | null;
-  }[];
-}
 
 interface StudentTaskContextProps {
   tasks: Task[];
@@ -149,9 +138,9 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
     });
     if (response?.isSuccess) {
       toast.success("Summary submitted successfully");
-    } else {
-      toast.error("Failed to submit summary");
-    }
+      
+    } 
+    
     return response;
   };
 
