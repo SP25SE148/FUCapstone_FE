@@ -92,7 +92,7 @@ export const columns: ColumnDef<TopicAppraisal>[] = [
         id: "appraisal",
         cell: ({ row }) => {
             const topicAppraisal = row.original;
-            return topicAppraisal?.status == "Pending" && <Button size={"sm"}>
+            return topicAppraisal?.status == "Pending" && <Button size={"sm"} asChild>
                 <Link
                     href={{
                         pathname: `/supervisor/topics/appraisal/${topicAppraisal?.topicId}`,
