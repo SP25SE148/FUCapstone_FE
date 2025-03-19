@@ -29,8 +29,15 @@ export default function TopicTable() {
         return "bg-blue-100 text-blue-800 border-blue-200";
     }
   };
- 
-  return !studentProfile?.isHaveBeenJoinGroup || groupInfo?.status !== "InProgress" ? (
+
+  const underReviewRequests = topicRequest
+    ? Object.entries(topicRequest).filter(([key, value]) =>
+        value.some((request) => request.status === "UnderReview")
+      )
+    : [];
+
+  return !studentProfile?.isHaveBeenJoinGroup ||
+    groupInfo?.status !== "InProgress" ? (
     <CreateGroup />
   ) : (
     <Card className="min-h-[calc(100vh-16px)]">
@@ -44,63 +51,81 @@ export default function TopicTable() {
               List of Graduation Project Topics that students can register for
             </CardDescription>
           </div>
-          
-          {topicRequest && (
+
+          {underReviewRequests.length > 0 && (
             <div className="mt-6 border border-primary/20 rounded-lg overflow-hidden shadow-sm">
               <div className="bg-primary/10 px-4 py-3 border-b border-primary/20">
                 <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
                   <ClipboardCheck className="h-5 w-5" />
-                  Your Topic Request
+                  Your Topic Requests
                 </h3>
               </div>
               <div className="p-4 bg-background">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-start gap-3">
-                    <BookOpen className="h-5 w-5 text-primary mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Topic
-                      </p>
-                      <p className="font-medium">
-                        {topicRequest.topicEnglishName}
-                      </p>
+                {underReviewRequests.map(([key, requests]) => (
+                  <div key={key} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {requests
+                        .filter((request) => request.status === "UnderReview")
+                        .map((request, index) => (
+                          <div
+                            key={request.topicRequestId}
+                            className="grid grid-cols-2 gap-4"
+                          >
+                            <div className="flex items-start gap-3">
+                              <BookOpen className="h-5 w-5 text-primary mt-0.5" />
+                              <div>
+                                <p className="text-sm font-medium text-muted-foreground">
+                                  Topic
+                                </p>
+                                <p className="font-medium">
+                                  {request.topicEnglishName}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-3">
+                              <Code className="h-5 w-5 text-primary mt-0.5" />
+                              <div>
+                                <p className="text-sm font-medium text-muted-foreground">
+                                  Topic Code
+                                </p>
+                                <p className="font-medium">
+                                  {request.topicCode}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-3">
+                              <User className="h-5 w-5 text-primary mt-0.5" />
+                              <div>
+                                <p className="text-sm font-medium text-muted-foreground">
+                                  Supervisor
+                                </p>
+                                <p className="font-medium">
+                                  {request.supervisorFullName}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-3">
+                              <div>
+                                <p className="text-sm font-medium text-muted-foreground">
+                                  Status
+                                </p>
+                                <Badge
+                                  className={`mt-1 ${getStatusColor(
+                                    request.status
+                                  )}`}
+                                >
+                                  {request.status}
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Code className="h-5 w-5 text-primary mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Topic Code
-                      </p>
-                      <p className="font-medium">{topicRequest.topicCode}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <User className="h-5 w-5 text-primary mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Supervisor
-                      </p>
-                      <p className="font-medium">
-                        {topicRequest.supervisorFullName}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Status
-                      </p>
-                      <Badge
-                        className={`mt-1 ${getStatusColor(
-                          topicRequest.status
-                        )}`}
-                      >
-                        {topicRequest.status}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           )}
