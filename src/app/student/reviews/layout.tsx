@@ -4,8 +4,7 @@ import React from "react";
 import { Tabs } from "@/components/layout/app-tabs";
 
 const items = [
-  { label: "Reviews", href: "/supervisor/calendars" },
-  { label: "Defenses", href: "/supervisor/calendars/defenses" },
+  { label: "Reviews", href: "/student/reviews" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

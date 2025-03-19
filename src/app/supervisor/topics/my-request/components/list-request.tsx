@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link";
-import { useState } from "react";
-import { Loader2, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Inbox, Loader2, Users } from "lucide-react";
 
 import { getDate } from "@/lib/utils";
 import { useSupervisorTopicRequest } from "@/contexts/supervisor/supervisor-topic-request-context";
@@ -44,6 +44,7 @@ export default function ListRequest() {
     const [status, setStatus] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openConfirm, setOpenConfirm] = useState<boolean>(false);
+    const [openAccordionValues, setOpenAccordionValues] = useState<string[]>([])
 
     async function handleConfirm(topicRequestId: string) {
         setIsLoading(true);
@@ -58,11 +59,19 @@ export default function ListRequest() {
             setOpenConfirm(false);
         }
     }
-    return (
-        <>
-            {Object.entries(requestList).map(([key, value]) => (
-                <Accordion key={key} type="single" collapsible>
-                    <AccordionItem value="item-1">
+
+    useEffect(() => {
+        if (requestList) {
+            setOpenAccordionValues(Object.keys(requestList))
+        }
+    }, [requestList])
+
+    return requestList
+        ?
+        <CardContent>
+            <Accordion type="multiple" value={openAccordionValues} onValueChange={setOpenAccordionValues}>
+                {Object?.entries(requestList).map(([key, value]) => (
+                    <AccordionItem key={key} value={key}>
                         <AccordionTrigger className="text-primary font-bold">{key}</AccordionTrigger>
                         <AccordionContent className="pl-4 space-y-2">
                             {value.map((request) => (
@@ -136,8 +145,21 @@ export default function ListRequest() {
                             ))}
                         </AccordionContent>
                     </AccordionItem>
-                </Accordion>
-            ))}
-        </>
-    )
+                ))}
+            </Accordion>
+        </CardContent>
+        :
+        <CardContent className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)]">
+            <div className="h-full flex flex-col items-center justify-center gap-8">
+                <Inbox className="size-20 text-primary" />
+                <div className="space-y-2">
+                    <p className="text-xl font-bold text-center">
+                        You did not receive any requests.
+                    </p>
+                    <p className="text-muted-foreground text-center text-sm">
+                        Please check back later.
+                    </p>
+                </div>
+            </div>
+        </CardContent>
 }

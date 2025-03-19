@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function DefensesCalendarsPage() {
+export default function DefensesPage() {
     return (
         <Card className="min-h-[calc(100vh-60px)]">
             <CardHeader>

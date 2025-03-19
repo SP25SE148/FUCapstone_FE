@@ -1,6 +1,6 @@
 import { columns } from "./components/columns"
-import UploadReviewCalendar from "./components/upload-review-calendar"
 import { DataTable } from "@/components/ui/data-table"
+import UploadReviewCalendar from "./components/upload-review-calendar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card"
 
 export default function ReviewsPage() {
