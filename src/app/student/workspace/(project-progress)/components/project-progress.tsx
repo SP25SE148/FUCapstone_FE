@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
 import { ProjectProgress, ProjectProgressWeek } from "@/types/types";
-import LeaderEvaluationWeek from "@/app/student/workspace/project-progress/components/leader-evaluation-week";
+import LeaderEvaluationWeek from "@/app/student/workspace/(project-progress)/components/leader-evaluation-week";
 
 const getStatus = (status: number | undefined) => {
   switch (status) {

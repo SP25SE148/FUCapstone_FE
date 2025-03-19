@@ -71,6 +71,12 @@ export const columns: ColumnDef<Topic>[] = [
     ),
   },
   {
+    accessorKey: "numberOfTopicRequest",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Group(s)'ve Sent Request" />
+    ),
+  },
+  {
     id: "info",
     cell: ({ row }) => <InfoCell topic={row.original} />,
   },

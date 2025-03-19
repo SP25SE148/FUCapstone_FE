@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import type { Task } from "@/contexts/student/student-task-context";
-import AssignTask from "@/app/student/workspace/(tasks)/components/assign-task";
-import UpdateStatus from "@/app/student/workspace/(tasks)/components/update-status";
-import UpdatePriority from "@/app/student/workspace/(tasks)/components/update-priority";
-import UpdateDueDate from "@/app/student/workspace/(tasks)/components/update-duedate";
-import TaskDetailSheet from "@/app/student/workspace/(tasks)/components/task-detail-sheet";
-import { User, Flag, Calendar, Hash, BarChart, ClipboardList, AlignLeft } from "lucide-react";
+import AssignTask from "@/app/student/workspace/tasks/components/assign-task";
+import UpdateStatus from "@/app/student/workspace/tasks/components/update-status";
+import UpdatePriority from "@/app/student/workspace/tasks/components/update-priority";
+import UpdateDueDate from "@/app/student/workspace/tasks/components/update-duedate";
+import { User, Flag, Calendar, Hash, BarChart, ClipboardList } from "lucide-react";
 
 const UpdateStatusCell = ({ task }: { task: Task }) => {
   return <UpdateStatus task={task} onClose={() => {}} />;
@@ -25,14 +24,16 @@ const UpdateDueDateCell = ({ task }: { task: Task }) => {
 };
 
 const KeyTaskCell = ({ task }: { task: Task }) => {
-  const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <div>
-      <button className="text-primary underline font-semibold" onClick={() => setOpen(true)}>
+      <button
+        className="text-primary underline font-semibold"
+        onClick={() => router.push(`/student/workspace/tasks/${task.id}`)}
+      >
         {task.keyTask}
       </button>
-      <TaskDetailSheet task={task} open={open} onClose={() => setOpen(false)} />
     </div>
   );
 };
@@ -63,12 +64,6 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Key" icon={<Hash className="mr-2 h-4 w-4" />} />
     ),
     cell: ({ row }) => <KeyTaskCell task={row.original} />,
-  },
-  {
-    accessorKey: "description",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Description" icon={<AlignLeft className="mr-2 h-4 w-4" />} />
-    ),
   },
   {
     accessorKey: "summary",

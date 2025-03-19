@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { format } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
   const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
 
   const handleDateChange = async (selectedDate: Date | undefined) => {
+    if (!selectedDate) return;
     setDate(selectedDate);
 
     const projectProgress = groupInfo?.id
@@ -42,17 +43,22 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
     onClose();
   };
 
+  const isDateDisabled = (date: Date) => {
+    const today = startOfDay(new Date());
+    return isBefore(date, today); 
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
-            "w-[240px] justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal",
             !date && "text-muted-foreground"
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-full" />
+          <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
@@ -62,6 +68,7 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
           selected={date}
           onSelect={handleDateChange}
           initialFocus
+          disabled={(date) => isDateDisabled(date)} 
         />
       </PopoverContent>
     </Popover>
