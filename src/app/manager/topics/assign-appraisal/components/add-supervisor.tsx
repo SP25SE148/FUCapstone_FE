@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { CirclePlus } from "lucide-react";
+
+import { useAssignAppraisal } from "@/contexts/manager/manager-assign-appraisal-context";
+
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useAssignAppraisal } from "@/contexts/manager/manager-assign-appraisal-context";
 
 export default function AddSupervisor() {
   const { selectedSupervisors, assignAppraisalTopic, clearSelectedSupervisors } = useAssignAppraisal();

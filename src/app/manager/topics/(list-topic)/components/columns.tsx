@@ -1,21 +1,17 @@
 "use client";
 
+import Link from "next/link";
+import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { MoreHorizontal, UserCheck } from "lucide-react";
+
+import { Topic } from "@/contexts/manager/manager-topic-context";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, UserCheck } from "lucide-react";
-import Link from "next/link";
-import { Topic } from "@/contexts/manager/manager-topic-context";
-import { useState } from "react";
-import AssignSupervisor from "@/app/manager/topics/list-topic/components/add-assign-appraisal";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import AssignSupervisor from "@/app/manager/topics/(list-topic)/components/add-assign-appraisal";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
 const ActionsCell = ({ topic }: { topic: Topic }) => {
   return (
@@ -29,13 +25,14 @@ const ActionsCell = ({ topic }: { topic: Topic }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(topic.id)}
           >
             Copy Topic ID
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/manager/topics/list-topic/${topic.id}`}>
+            <Link href={`/manager/topics/${topic.id}`}>
               View Details
             </Link>
           </DropdownMenuItem>
@@ -51,10 +48,11 @@ const AssignAppraisalCell = ({ topic }: { topic: Topic }) => {
   return (
     <>
       <Button
+        size={"sm"}
         onClick={() => setOpen(true)}
         className="bg-primary hover:bg-primary/90 text-white font-medium px-4 py-2 rounded-md transition-all flex items-center gap-2"
       >
-        <UserCheck className="h-4 w-4" />
+        <UserCheck />
         Assign
       </Button>
       {open && (
@@ -136,8 +134,8 @@ export const columns: ColumnDef<Topic>[] = [
       const topic = row.original;
       return (
         <Link
-          href={`/manager/topics/list-topic/${topic.id}`}
-          className="text-primary semibold underline"
+          href={`/manager/topics/${topic.id}`}
+          className="text-primary underline underline-offset-2 font-bold hover:text-blue-400"
         >
           {topic.englishName}
         </Link>
@@ -178,7 +176,7 @@ export const columns: ColumnDef<Topic>[] = [
   },
   {
     id: "assign",
-    header: "Assign Supervisor",
+    header: () => <span className="text-xs">Assign Appraisal</span>,
     cell: ({ row }) => {
       const topic = row.original;
       const missingAssign =
@@ -186,7 +184,6 @@ export const columns: ColumnDef<Topic>[] = [
         topic.topicAppraisals.length === 1;
       return missingAssign && <AssignAppraisalCell topic={row.original} />;
     },
-    // cell: ({ row }) => <AssignAppraisalCell topic={row.original} />,
   },
   {
     id: "actions",

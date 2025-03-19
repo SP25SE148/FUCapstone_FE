@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Download } from "lucide-react";
 
+import { Topic, useManagerTopics } from "@/contexts/manager/manager-topic-context";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Topic, useManagerTopics } from "@/contexts/manager/manager-topic-context";
 
 export default function DownloadDocument({ topic }: { topic: Topic }) {
     const { getPresignedUrlTopicDocument } = useManagerTopics();
@@ -35,7 +35,7 @@ export default function DownloadDocument({ topic }: { topic: Topic }) {
             <Button
                 variant={"outline"}
                 onClick={handleClickPreview}
-                className="h-12 border-primary text-primary hover:bg-primary hover:text-white"
+                className="mr-6 h-12 border-primary text-primary hover:bg-primary hover:text-white"
             >
                 <Download />
                 Document

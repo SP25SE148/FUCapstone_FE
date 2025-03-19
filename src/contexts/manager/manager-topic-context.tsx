@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
+import React, { createContext, useContext, useState, useEffect } from "react";
+
+import { useApi } from "@/hooks/use-api";
 
 export interface Topic {
   id: string;
@@ -16,7 +17,7 @@ export interface Topic {
   fileName: string;
   fileUrl: string;
   status: string;
-  difficultyLevel: number;
+  difficultyLevel: string;
   businessAreaName: string;
   capstoneId: string;
   semesterId: string;
@@ -28,7 +29,6 @@ export interface Topic {
 
 interface TopicContextProps {
   topics: Topic[];
-  loading: boolean;
   fetchTopics: () => Promise<void>;
   submitAppraisal: (data: any) => Promise<any>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
@@ -47,50 +47,30 @@ export const ManagerTopicProvider = ({
 }) => {
   const { callApi } = useApi();
   const [topics, setTopics] = useState<Topic[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchTopics = async () => {
-    setLoading(true);
-    try {
-      const response = await callApi("fuc/topics/manager", {
-        method: "GET",
-      });
-
-      setTimeout(() => {
-        setTopics(response.value || []);
-        setLoading(false);
-      }, 1000);
-    } catch (error) {
-      toast.error("Error fetching topics", {
-        description: `${error}`,
-      });
-      console.error("Error fetching topics:", error);
-      setLoading(false);
-    }
+    const response = await callApi("fuc/topics/manager");
+    setTopics(response.value || []);
   };
 
   const fetchAssignSupervisor = async () => {
-   const response = await callApi("fuc/User/get-all-supervisor", {
-        method: "GET",
-      });
-      return response?.value;
+    const response = await callApi("fuc/User/get-all-supervisor");
+    return response?.value;
   };
 
   const getPresignedUrlTopicDocument = async (id: string) => {
-    const response = await callApi(`fuc/topics/presigned/${id}`, {
-      method: "GET",
-    });
+    const response = await callApi(`fuc/topics/presigned/${id}`);
     return response?.value;
   };
 
   const submitAppraisal = async (data: any) => {
-    const response =  await callApi("fuc/topics/appraisal/final", {
-        method: "POST",
-        body: data,
-      });
-      if(response?.isSuccess === true) {
-        toast.success("Appraisal submitted successfully");
-        fetchTopics();
+    const response = await callApi("fuc/topics/appraisal/final", {
+      method: "POST",
+      body: data,
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Appraisal submitted successfully");
+      fetchTopics();
     }
     return response;
   };
@@ -100,12 +80,10 @@ export const ManagerTopicProvider = ({
       method: "POST",
       body: data,
     });
-  
     if (response?.isSuccess) {
       toast.success("Supervisor assigned successfully!");
       fetchTopics();
-    } 
-  
+    }
     return response;
   };
 
@@ -117,7 +95,6 @@ export const ManagerTopicProvider = ({
     <ManagerTopicContext.Provider
       value={{
         topics,
-        loading,
         fetchTopics,
         submitAppraisal,
         fetchAssignSupervisor,
