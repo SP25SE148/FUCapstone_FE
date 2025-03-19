@@ -1,7 +1,7 @@
 import { SupervisorTopicProvider } from "@/contexts/supervisor/supervisor-topic-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function ReviewsCalendarsPage() {
+export default function ReviewsPage() {
     return (
         <SupervisorTopicProvider>
             <Card className="min-h-[calc(100vh-60px)]">

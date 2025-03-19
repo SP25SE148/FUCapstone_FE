@@ -4,11 +4,10 @@ import { z } from "zod"
 import * as XLSX from "xlsx";
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { useParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Download, Loader2, Upload } from "lucide-react"
 
-// import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context"
+import { useManagerReview } from "@/contexts/manager/manager-review-context";
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -27,9 +26,7 @@ const formSchema = z.object({
 });
 
 export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
-    const params = useParams();
-    const id: string = String(params.id);
-    // const { importProjectProgress } = useSupervisorGroup();
+    const { importReview } = useManagerReview();
 
     const [open, setOpen] = useState<boolean>(false);
     const [fileData, setFileData] = useState<any[]>([]);
@@ -48,14 +45,13 @@ export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
         try {
             const file = values.file[0]; // Lấy file đầu tiên
             const formData = new FormData();
-            formData.append("GroupId", id)
-            formData.append("File", file);
-            // const res: any = await importProjectProgress(formData);
-            // if (res?.isSuccess) {
-            //     form.reset();
-            //     setOpen(false);
-            //     refresh();
-            // }
+            formData.append("file", file);
+            const res: any = await importReview(formData);
+            if (res?.isSuccess) {
+                form.reset();
+                setOpen(false);
+                // refresh();
+            }
         } finally {
             setIsLoading(false);
         }

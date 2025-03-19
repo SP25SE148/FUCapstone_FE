@@ -1,5 +1,5 @@
 import ListRequest from "./list-request";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function TopicRegistrationRequestTable() {
     return (
@@ -8,9 +8,7 @@ export default function TopicRegistrationRequestTable() {
                 <CardTitle className="font-semibold tracking-tight text-xl text-primary">Topic Registration Request</CardTitle>
                 <CardDescription>List information of topic registration request from groups</CardDescription>
             </CardHeader>
-            <CardContent>
-                <ListRequest />
-            </CardContent>
+            <ListRequest />
         </Card>
     );
 }
