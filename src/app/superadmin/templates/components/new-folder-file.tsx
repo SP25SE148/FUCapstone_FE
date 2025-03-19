@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 const formSchemaFolder = z.object({
     folderName: z.string()
         .min(1, "Folder name must be at least 1 characters.")
-        .max(12, "Folder name must not exceed 12 characters"),
+        .max(50, "Folder name must not exceed 50 characters"),
 });
 
 const formSchemaFile = z.object({
