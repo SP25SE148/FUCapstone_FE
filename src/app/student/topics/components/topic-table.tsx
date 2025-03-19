@@ -29,10 +29,7 @@ export default function TopicTable() {
         return "bg-blue-100 text-blue-800 border-blue-200";
     }
   };
-
-  // if (!studentProfile?.isHaveBeenJoinGroup || groupInfo?.status !== "InProgress") {
-  //   return <CreateGroup />;
-  // }
+ 
   return !studentProfile?.isHaveBeenJoinGroup || groupInfo?.status !== "InProgress" ? (
     <CreateGroup />
   ) : (
@@ -47,6 +44,7 @@ export default function TopicTable() {
               List of Graduation Project Topics that students can register for
             </CardDescription>
           </div>
+          
           {topicRequest && (
             <div className="mt-6 border border-primary/20 rounded-lg overflow-hidden shadow-sm">
               <div className="bg-primary/10 px-4 py-3 border-b border-primary/20">

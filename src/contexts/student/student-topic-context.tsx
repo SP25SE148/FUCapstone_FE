@@ -3,10 +3,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useApi } from "../../hooks/use-api";
+import { RequestsOfTopic } from "@/types/types";
 
 export interface Topic {
   id: string;
   code: string;
+  numberOfTopicRequest: number;
   mainSupervisorName: string;
   mainSupervisorEmail: string;
   englishName: string;
@@ -49,17 +51,7 @@ interface GroupInfo {
 }
 
 interface TopicRequest {
-  groupCode: string;
-  groupId: string;
-  supervisorId: string;
-  supervisorFullName: string;
-  topicId: string;
-  topicCode: string;
-  topicEnglishName: string;
-  status: string;
-  requestedBy: string;
-  leaderFullName: string | null;
-  createdDate: string;
+  [key: string]: RequestsOfTopic[];
 }
 
 interface StudentTopicContextProps {
@@ -68,7 +60,7 @@ interface StudentTopicContextProps {
   groupInfo: GroupInfo | null;
   fetchPassedTopic: () => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
-  getGroupInfoByStudentId: () => Promise<GroupInfo>;
+  getGroupInfoByStudentId: () => Promise<any>;
   createTopicRequest: (topicId: string, groupId: string) => Promise<void>;
   fetchTopicRequest: () => Promise<void>;
 }
@@ -121,10 +113,16 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
+
   const fetchTopicRequest = async () => {
     const response = await callApi("fuc/Group/get-topic-request");
-    setTopicRequest(response.value[response.value.length - 1]);
-  };
+    if (response?.isSuccess) {
+      setTopicRequest(response.value);
+    } else {
+      setTopicRequest(null);
+    }
+  }
+
 
   useEffect(() => {
     fetchPassedTopic();

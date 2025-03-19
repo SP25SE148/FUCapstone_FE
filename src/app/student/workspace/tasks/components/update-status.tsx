@@ -50,7 +50,7 @@ export default function UpdateStatus({ task, onClose }: UpdateStatusProps) {
 
   return (
     <Select onValueChange={handleUpdate} value={status}>
-      <SelectTrigger>
+      <SelectTrigger className="w-full">
         <Badge className={getStatusColor(status)}>{getStatusLabel(status)}</Badge>
       </SelectTrigger>
       <SelectContent>

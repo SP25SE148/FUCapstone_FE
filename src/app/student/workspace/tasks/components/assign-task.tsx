@@ -52,7 +52,7 @@ export default function AssignTask({ task, onAssign }: AssignTaskProps) {
 
   return (
     <Select onValueChange={handleAssign} value={assignedTo}>
-      <SelectTrigger>
+      <SelectTrigger className="w-full">
         <span>{getStudentName(assignedTo)}</span>
       </SelectTrigger>
       <SelectContent>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { columns } from "@/app/student/workspace/(tasks)/components/tasks-table-columns";
+import { columns } from "@/app/student/workspace/tasks/components/tasks-table-columns";
 import {
   Card,
   CardContent,
@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock, Plus } from "lucide-react";
-import TaskHistory from "@/app/student/workspace/(tasks)/components/task-history";
-import AddTask from "@/app/student/workspace/(tasks)/components/add-task";
+import TaskHistory from "@/app/student/workspace/tasks/components/task-history";
+import AddTask from "@/app/student/workspace/tasks/components/add-task";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
 import { DataTable } from "@/components/ui/data-table";
 

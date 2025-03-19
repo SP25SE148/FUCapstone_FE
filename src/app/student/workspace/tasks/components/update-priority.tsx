@@ -50,7 +50,7 @@ export default function UpdatePriority({ task, onClose }: UpdatePriorityProps) {
 
   return (
     <Select onValueChange={handleUpdate} value={priority}>
-      <SelectTrigger>
+      <SelectTrigger className="w-full">
         <Badge className={getPriorityColor(priority)}>{getPriorityLabel(priority)}</Badge>
       </SelectTrigger>
       <SelectContent>

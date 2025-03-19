@@ -153,7 +153,7 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const updateTask = async (updatedTask: any) => {
     const response = await callApi("fuc/group/progress/tasks", {
-      method: "POST",
+      method: "PUT",
       body: {
         TaskId: updatedTask.id,
         ProjectProgressId: updatedTask.projectProgressId,
@@ -193,16 +193,13 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const getTaskDetail = async (taskId: string) => {
-    const response = await callApi(`efuc/group/progress/tasks/${taskId}`, {
+    const response = await callApi(`fuc/group/progress/tasks/${taskId}`, {
       method: "GET",
     });
   
     if (response?.isSuccess) {
       return response.value;
-    } else {
-      toast.error("Failed to fetch task details");
-      return null;
-    }
+    } 
   };
 
   useEffect(() => {
