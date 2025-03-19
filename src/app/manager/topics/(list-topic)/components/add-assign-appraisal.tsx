@@ -1,20 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Search, Mail, BadgeIcon as IdCard } from "lucide-react";
+
+import { useManagerTopics } from "@/contexts/manager/manager-topic-context";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Search, Mail, BadgeIcon as IdCard } from "lucide-react";
-import { useManagerTopics } from "@/contexts/manager/manager-topic-context";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription, } from "@/components/ui/dialog";
 
 interface AssignSupervisorProps {
   topicId: string;
@@ -23,9 +18,9 @@ interface AssignSupervisorProps {
 
 export default function AssignSupervisor({ topicId, onClose }: AssignSupervisorProps) {
   const { fetchAssignSupervisor, assignTopicAppraisalForSpecificSupervisor } = useManagerTopics();
-  const [supervisors, setSupervisors] = useState<{ id: string; fullName: string; email: string }[]>([]);
-  const [selectedSupervisor, setSelectedSupervisor] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSupervisor, setSelectedSupervisor] = useState("");
+  const [supervisors, setSupervisors] = useState<{ id: string; fullName: string; email: string }[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,10 +78,9 @@ export default function AssignSupervisor({ topicId, onClose }: AssignSupervisorP
                 <div
                   key={supervisor.id}
                   className={`flex items-start space-x-3 rounded-lg border p-4 transition-all duration-200 
-                    ${
-                      selectedSupervisor === supervisor.id
-                        ? "border-primary/50 bg-primary/5 shadow-sm"
-                        : "hover:bg-muted/50 hover:border-muted-foreground/20"
+                    ${selectedSupervisor === supervisor.id
+                      ? "border-primary/50 bg-primary/5 shadow-sm"
+                      : "hover:bg-muted/50 hover:border-muted-foreground/20"
                     }`}
                 >
                   <RadioGroupItem value={supervisor.id} id={supervisor.id} className="mt-1" />

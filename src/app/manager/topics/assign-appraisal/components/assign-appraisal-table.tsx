@@ -1,21 +1,14 @@
 "use client";
 
-import { columns, Topic } from "./columns";
+import { useAssignAppraisal } from "@/contexts/manager/manager-assign-appraisal-context";
+
+import { columns } from "./columns";
+import AddSupervisor from "./add-supervisor";
 import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAssignAppraisal } from "@/contexts/manager/manager-assign-appraisal-context";
-import AddSupervisor from "./add-supervisor";
 
 export default function AssignAppraisalTable() {
-  const { supervisors, loading} = useAssignAppraisal();
-
-  const data: Topic[] = supervisors.map((supervisor) => ({
-    id: supervisor.id,
-    fullName: supervisor.fullName,
-    majorName: supervisor.majorName,
-    campusName: supervisor.campusName,
-    email: supervisor.email,
-  }));
+  const { supervisors } = useAssignAppraisal();
 
   return (
     <Card className="min-h-[calc(100vh-60px)]">
@@ -29,7 +22,7 @@ export default function AssignAppraisalTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={supervisors || []} />
       </CardContent>
     </Card>
   );

@@ -1,9 +1,10 @@
 "use client";
 
+import { toast } from "sonner";
 import React, { createContext, useContext, useState, useEffect } from "react";
+
 import { useApi } from "@/hooks/use-api";
 import { useAuth } from "@/contexts/auth-context";
-import { toast } from "sonner";
 
 interface Supervisor {
   id: string;
@@ -18,7 +19,6 @@ interface Supervisor {
 interface AssignAppraisalContextProps {
   supervisors: Supervisor[];
   selectedSupervisors: string[];
-  loading: boolean;
   fetchAssignSupervisor: () => Promise<void>;
   assignAppraisalTopic: () => Promise<void>;
   toggleSupervisorSelection: (email: string) => void;
@@ -32,25 +32,16 @@ export const ManagerAssignAppraisalProvider = ({ children }: { children: React.R
   const { user } = useAuth();
   const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
   const [selectedSupervisors, setSelectedSupervisors] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchAssignSupervisor = async () => {
-    setLoading(true);
-   const response = await callApi("fuc/User/get-all-supervisor", {
-        method: "GET",
-      });
-
-      if (response?.isSuccess === true) {
+    const response = await callApi("fuc/User/get-all-supervisor");
+    if (response?.isSuccess === true) {
       const filteredSupervisors = response.value.filter((supervisor: Supervisor) => supervisor.majorId === user?.MajorId);
-      setTimeout(() => {
-        setSupervisors(filteredSupervisors);
-        setLoading(false);
-      }, 1000);
+      setSupervisors(filteredSupervisors);
     }
   };
 
   const assignAppraisalTopic = async () => {
-    
     const response = await callApi("fuc/topics/assign-topic-appraisal", {
       method: "POST",
       body: selectedSupervisors,
@@ -60,8 +51,7 @@ export const ManagerAssignAppraisalProvider = ({ children }: { children: React.R
       clearSelectedSupervisors();
     }
     return response;
- 
-};
+  };
 
   const toggleSupervisorSelection = (email: string) => {
     setSelectedSupervisors((prev) =>
@@ -75,14 +65,13 @@ export const ManagerAssignAppraisalProvider = ({ children }: { children: React.R
 
   useEffect(() => {
     fetchAssignSupervisor();
-  }, []);
+  }, [user]);
 
   return (
     <ManagerAssignAppraisalContext.Provider
       value={{
         supervisors,
         selectedSupervisors,
-        loading,
         fetchAssignSupervisor,
         assignAppraisalTopic,
         toggleSupervisorSelection,

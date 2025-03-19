@@ -15,7 +15,7 @@ import { MoreHorizontal, UserCheck } from "lucide-react";
 import Link from "next/link";
 import { Topic } from "@/contexts/manager/manager-topic-context";
 import { useState } from "react";
-import AssignSupervisor from "@/app/manager/topics/list-topic/components/add-assign-appraisal";
+import AssignSupervisor from "@/app/manager/topics/(list-topic)/components/add-assign-appraisal";
 
 const ActionsCell = ({ topic }: { topic: Topic }) => {
     return (
