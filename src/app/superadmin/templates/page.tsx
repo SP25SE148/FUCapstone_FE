@@ -13,7 +13,7 @@ export default function TemplatesPage() {
         <Card className="min-h-[calc(100vh-96px)]">
             <div className="flex items-center justify-between">
                 <CardHeader>
-                    <CardTitle className="font-semibold tracking-tight text-xl text-primary ">Templates</CardTitle>
+                    <CardTitle className="font-semibold tracking-tight text-xl text-primary">Templates</CardTitle>
                     <CardDescription>Repository of all templates</CardDescription>
                 </CardHeader>
                 <NewFolderFile />

@@ -2,7 +2,7 @@
 
 import React from "react"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, FileText, Users } from "lucide-react"
+import { LayoutDashboard, FileText, Users, CalendarSync, CalendarCheck2 } from "lucide-react"
 
 import { Separator } from "@/components/ui/separator"
 import { AppSidebar } from "@/components/layout/app-sidebar"
@@ -34,6 +34,16 @@ const items = [
         title: "Groups",
         url: "/manager/groups",
         icon: Users,
+    },
+    {
+        title: "Reviews",
+        url: "/manager/reviews",
+        icon: CalendarSync,
+    },
+    {
+        title: "Defenses",
+        url: "/manager/defenses",
+        icon: CalendarCheck2,
     },
 ]
 
