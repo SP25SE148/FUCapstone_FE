@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { z } from "zod";
+import { z } from "zod"
 import * as XLSX from "xlsx";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, Download, Loader2 } from "lucide-react";
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { useParams } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Download, Loader2, Upload } from "lucide-react"
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useAdminStudent } from "@/contexts/admin/admin-student-context";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+// import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context"
+
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
 
-// Schema kiểm tra file upload (chỉ chấp nhận .xlsx)
 const formSchema = z.object({
     file: z
         .any()
@@ -26,8 +26,12 @@ const formSchema = z.object({
         }, "Only accept Excel files (.xlsx)"),
 });
 
-export default function ImportStudent({ onClose }: { onClose: () => void }) {
-    const { importStudent } = useAdminStudent();
+export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
+    const params = useParams();
+    const id: string = String(params.id);
+    // const { importProjectProgress } = useSupervisorGroup();
+
+    const [open, setOpen] = useState<boolean>(false);
     const [fileData, setFileData] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openPreview, setOpenPreview] = useState<boolean>(false);
@@ -44,12 +48,14 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
         try {
             const file = values.file[0]; // Lấy file đầu tiên
             const formData = new FormData();
-            formData.append("file", file);
-            const res: any = await importStudent(formData);
-            if (res?.isSuccess) {
-                form.reset();
-                onClose();
-            }
+            formData.append("GroupId", id)
+            formData.append("File", file);
+            // const res: any = await importProjectProgress(formData);
+            // if (res?.isSuccess) {
+            //     form.reset();
+            //     setOpen(false);
+            //     refresh();
+            // }
         } finally {
             setIsLoading(false);
         }
@@ -74,14 +80,22 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
 
     return (
         <>
-            <Card>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)}>
-                        <CardHeader>
-                            <CardTitle>Import List Student</CardTitle>
-                            <CardDescription>Download the template and upload the student list</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                    <Button className="mr-6">
+                        <Upload />
+                        Upload
+                    </Button>
+                </DialogTrigger>
+                <DialogContent >
+                    <DialogHeader>
+                        <DialogTitle>Upload Review Calendar</DialogTitle>
+                        <DialogDescription>
+                            Download template and upload review calendar for capstone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                             <FormField
                                 control={form.control}
                                 name="file"
@@ -103,29 +117,29 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
                                     </FormItem>
                                 )}
                             />
-                        </CardContent>
-                        <CardFooter className="grid w-full grid-cols-2 gap-4">
-                            <Button variant={"outline"} type="button" disabled={isLoading}>
-                                <Download />
-                                Template
-                            </Button>
-                            <Button type="submit" disabled={isLoading}>
-                                {isLoading ? (
-                                    <>
-                                        <Loader2 className="animate-spin" />
-                                        Uploading...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Upload />
-                                        Upload
-                                    </>
-                                )}
-                            </Button>
-                        </CardFooter>
-                    </form>
-                </Form>
-            </Card>
+                            <div className="grid grid-cols-2 gap-2">
+                                <Button variant={"outline"} type="button" disabled={isLoading}>
+                                    <Download />
+                                    Template
+                                </Button>
+                                <Button type="submit" disabled={isLoading}>
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="animate-spin" />
+                                            Uploading...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Upload />
+                                            Upload
+                                        </>
+                                    )}
+                                </Button>
+                            </div>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog >
 
             <Dialog open={openPreview} onOpenChange={() => { setOpenPreview(false) }}>
                 <DialogContent className="max-w-4xl w-full">
@@ -141,7 +155,7 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
                                 <TableHeader>
                                     <TableRow>
                                         {Object.keys(fileData[0]).map((key) => (
-                                            <TableHead key={key}>{key}</TableHead>
+                                            <TableHead key={key} className="min-w-[200px]">{key}</TableHead>
                                         ))}
                                     </TableRow>
                                 </TableHeader>
@@ -149,7 +163,7 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
                                     {fileData.map((row, index) => (
                                         <TableRow key={index}>
                                             {Object.values(row).map((cell, i) => (
-                                                <TableCell key={i}>{cell as string}</TableCell>
+                                                <TableCell key={i} className="align-top">{cell as string}</TableCell>
                                             ))}
                                         </TableRow>
                                     ))}
@@ -160,5 +174,5 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
                 </DialogContent>
             </Dialog>
         </>
-    );
+    )
 }

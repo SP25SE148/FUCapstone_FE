@@ -1,4 +1,4 @@
-import { Home, Users, LayoutGrid, Bell, FileText } from 'lucide-react'
+import { Home, Users, LayoutGrid, Bell, FileText, CalendarDays } from 'lucide-react'
 
 import { Taskbar } from "@/components/layout/app-taskbar";
 
@@ -23,6 +23,11 @@ export default function StudentTaskbar() {
       icon: LayoutGrid,
       label: "Workspace",
       href: "/student/workspace",
+    },
+    {
+      icon: CalendarDays,
+      label: "Calendars",
+      href: "/student/calendars",
     },
     {
       icon: Bell,

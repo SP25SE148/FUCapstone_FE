@@ -1,4 +1,4 @@
-import { Home, Users, Bell, FileText } from 'lucide-react'
+import { Home, Users, Bell, FileText, CalendarDays } from 'lucide-react'
 
 import { Taskbar } from "@/components/layout/app-taskbar";
 
@@ -18,6 +18,11 @@ export default function SupervisorTaskbar() {
       icon: Users,
       label: "Groups",
       href: "/supervisor/groups",
+    },
+    {
+      icon: CalendarDays,
+      label: "Calendars",
+      href: "/supervisor/calendars",
     },
     {
       icon: Bell,
