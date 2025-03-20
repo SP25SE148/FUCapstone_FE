@@ -86,12 +86,14 @@ export interface Task {
   assigneeName: string;
   reporterId: string;
   reporterName: string;
-  comment: string | null;
   status: number;
   priority: number;
   dueDate: string;
   createdDate: string;
   projectProgressId: string | null;
+  lastUpdatedDate: string | null;
+  completionDate: string | null;
+  fucTaskHistories: []
 }
 
 export interface EvaluationWeek {
@@ -115,9 +117,11 @@ interface SupervisorGroupContextType {
   groupList: Group[];
   getTopicGroupInformation: (groupId: string) => Promise<GroupTopicInfo>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
+  getProjectProgressTemplate: () => Promise<string>;
   importProjectProgress: (data: any) => Promise<void>;
   updateProjectProgressWeek: (data: any) => Promise<void>;
   getProjectProgressTasks: (projectProgressId: string) => Promise<Task[]>;
+  getProjectProgressTaskDetail: (taskId: string) => Promise<Task>;
   evaluationWeeklyProgress: (data: any) => Promise<void>;
   getEvaluationWeeklyProgress: (groupId: string) => Promise<EvaluationStudent[]>;
   exportEvaluationWeeklyProgressFile: (groupId: string) => Promise<any>;
@@ -146,6 +150,11 @@ export const SupervisorGroupProvider: React.FC<{
 
   const getProjectProgressOfGroup = async (groupId: string) => {
     const response = await callApi(`fuc/group/${groupId}/progress`);
+    return (response?.value);
+  };
+
+  const getProjectProgressTemplate = async () => {
+    const response = await callApi("fuc/Documents/project-progress");
     return (response?.value);
   };
 
@@ -178,6 +187,11 @@ export const SupervisorGroupProvider: React.FC<{
     return response?.value;
   };
 
+  const getProjectProgressTaskDetail = async (taskId: string) => {
+    const response = await callApi(`fuc/group/progress/tasks/${taskId}`);
+    return response.value;
+  };
+
   const evaluationWeeklyProgress = async (data: any) => {
     const response: any = await callApi("fuc/group/progress/week/evaluations", {
       method: "POST",
@@ -196,8 +210,10 @@ export const SupervisorGroupProvider: React.FC<{
   };
 
   const exportEvaluationWeeklyProgressFile = async (groupId: string) => {
-    const response = await callApi(`fuc/group/progress/week/evaluation/${groupId}/excel`);
-    return (response?.value);
+    const response = await callApi(`fuc/group/progress/week/evaluation/${groupId}/excel`, {
+      responseType: "blob"
+    });
+    return (response);
   };
 
   useEffect(() => {
@@ -212,9 +228,11 @@ export const SupervisorGroupProvider: React.FC<{
         groupList,
         getTopicGroupInformation,
         getProjectProgressOfGroup,
+        getProjectProgressTemplate,
         importProjectProgress,
         updateProjectProgressWeek,
         getProjectProgressTasks,
+        getProjectProgressTaskDetail,
         evaluationWeeklyProgress,
         getEvaluationWeeklyProgress,
         exportEvaluationWeeklyProgressFile

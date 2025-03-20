@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
 import { User, Flag, Calendar, Hash, BarChart, ClipboardList } from "lucide-react";
 
@@ -85,6 +87,10 @@ export const columns: ColumnDef<Task>[] = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Key" icon={<Hash />} />
         ),
+        cell: ({ row }) => {
+            const { id } = useParams();
+            return <Link className="text-primary underline underline-offset-2 font-bold hover:text-blue-400" href={`/supervisor/groups/${id}/tasks/${row?.original?.id}`}>{row.original?.keyTask}</Link>
+        }
     },
     {
         accessorKey: "summary",

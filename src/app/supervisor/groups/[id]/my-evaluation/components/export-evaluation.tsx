@@ -1,3 +1,4 @@
+import { saveAs } from "file-saver";
 import { FileDown } from "lucide-react";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,9 @@ export default function ExportEvaluation() {
     const id: string = String(params.id);
 
     const handleExport = async () => {
-        await exportEvaluationWeeklyProgressFile(id)
+        const res = await exportEvaluationWeeklyProgressFile(id);
+        const blob = new Blob([res], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        saveAs(blob, "Evaluation_Project_Progress.xlsx");
     }
 
     return (

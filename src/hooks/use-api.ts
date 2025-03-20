@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/auth-context';
 interface ApiOptions {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
     body?: object;
+    responseType?: "json" | "blob";
 }
 
 export const useApi = () => {
@@ -14,8 +15,8 @@ export const useApi = () => {
     };
 
     const callApi = async (endpoint: string, options: ApiOptions = {}) => {
-        const { method = "GET", body } = options;
-        const currentToken = getToken(); // Lấy token đã cập nhật
+        const { method = "GET", body, responseType = "json" } = options; // Thêm responseType
+        const currentToken = getToken(); // Lấy token
 
         if (!currentToken) {
             console.error("Không tìm thấy token! Người dùng có thể chưa đăng nhập.");
@@ -29,10 +30,8 @@ export const useApi = () => {
         let requestBody: BodyInit | undefined = undefined;
 
         if (body instanceof FormData) {
-            // Nếu là FormData, giữ nguyên body, không cần headers "Content-Type"
-            requestBody = body;
+            requestBody = body; // Nếu là FormData, giữ nguyên
         } else if (body && typeof body === "object") {
-            // Nếu là object, stringify thành JSON
             headers["Content-Type"] = "application/json";
             requestBody = JSON.stringify(body);
         }
@@ -44,12 +43,17 @@ export const useApi = () => {
                 body: requestBody,
             });
 
+            // Nếu responseType là "blob", trả về blob thay vì JSON
+            if (responseType === "blob") {
+                return await response.blob();
+            }
+
             const data = await response.json();
 
-            if (data?.isSuccess !== true && data?.detail == "The specified result value is null.") {
-                console.log(data?.detail || "Something wrong please try again later");
+            if (data?.isSuccess !== true && data?.detail === "The specified result value is null.") {
+                console.log(data?.detail || "Something went wrong, please try again later");
             } else if (data?.isSuccess !== true) {
-                toast.error(data?.detail || "Something wrong please try again later");
+                toast.error(data?.detail || "Something went wrong, please try again later");
             }
 
             return data;

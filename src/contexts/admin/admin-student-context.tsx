@@ -25,6 +25,7 @@ interface AdminStudentContextProps {
   fetchMajorList: () => Promise<[]>;
   fetchStudentList: () => Promise<void>;
   addStudent: (data: any) => Promise<void>;
+  getStudentsTemplate: () => Promise<string>;
   importStudent: (data: any) => Promise<void>;
   fetchCapstoneListByMajor: (majorId: string) => Promise<[]>;
 }
@@ -54,6 +55,11 @@ export const AdminStudentProvider = ({ children }: { children: React.ReactNode }
       }, 10000);
     }
     return response
+  };
+
+  const getStudentsTemplate = async () => {
+    const response = await callApi("fuc/Documents/students");
+    return (response?.value);
   };
 
   const importStudent = async (data: any) => {
@@ -92,7 +98,7 @@ export const AdminStudentProvider = ({ children }: { children: React.ReactNode }
 
   return (
     <AdminStudentContext.Provider
-      value={{ students, isLoading, fetchStudentList, addStudent, importStudent, fetchMajorList, fetchCapstoneListByMajor }}
+      value={{ students, isLoading, fetchStudentList, addStudent, getStudentsTemplate, importStudent, fetchMajorList, fetchCapstoneListByMajor }}
     >
       {children}
     </AdminStudentContext.Provider>

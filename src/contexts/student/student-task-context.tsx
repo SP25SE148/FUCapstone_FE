@@ -2,14 +2,14 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApi } from "@/hooks/use-api";
-import { useAuth } from "@/contexts/auth-context"; 
+import { useAuth } from "@/contexts/auth-context";
 import { toast } from "sonner";
 import { ProjectProgress } from "@/types/types";
 
 export interface Task {
   id: string;
   keyTask: string;
-  description: string; 
+  description: string;
   summary: string;
   assigneeId: string;
   reporterId: string;
@@ -31,20 +31,19 @@ export interface TaskRequest {
   DueDate: string;
 }
 
-export interface TaskUpdate 
-  {
-    TaskId: string;
-    ProjectProgressId: string;
-    KeyTask: string;
-    Description: string;
-    Summary: string;
-    Comment: string;
-    AssigneeId: string;
-    Status: number;
-    Priority: number;
-    DueDate: string;
-  }
-   
+export interface TaskUpdate {
+  TaskId: string;
+  ProjectProgressId: string;
+  KeyTask: string;
+  Description: string;
+  Summary: string;
+  Comment: string;
+  AssigneeId: string;
+  Status: number;
+  Priority: number;
+  DueDate: string;
+}
+
 export interface Member {
   id: string;
   groupId: string;
@@ -78,6 +77,7 @@ interface StudentTaskContextProps {
   fetchProgressTask: (projectProgressId: string) => Promise<void>;
   submitSummaryWeekForLeader: (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => Promise<void>;
   getTaskDetail: (taskId: string) => Promise<Task | null>;
+  uploadGroupDocument: (data: any) => Promise<void>;
 }
 
 const StudentTaskContext = createContext<StudentTaskContextProps | undefined>(undefined);
@@ -92,7 +92,7 @@ export const useStudentTasks = () => {
 
 export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { callApi } = useApi();
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [groupInfo, setGroupInfo] = useState<Group | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
 
@@ -125,7 +125,7 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
       method: "POST",
       body: task,
     });
-  
+
     if (response?.isSuccess) {
       toast.success("Task created successfully");
 
@@ -143,7 +143,7 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
         createdDate: response.value.createdDate,
         projectProgressId: null
       };
-  
+
       setTasks((prevTasks) => [...prevTasks, newTask]);
     } else {
       toast.error("Failed to create task");
@@ -167,7 +167,7 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
         DueDate: updatedTask.dueDate,
       },
     });
-  
+
     if (response?.isSuccess) {
       toast.success("Task updated successfully");
       setTasks((prevTasks) =>
@@ -175,7 +175,7 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
           task.id === updatedTask.id ? { ...task, ...updatedTask } : task
         )
       );
-    } 
+    }
     return response;
   };
 
@@ -186,9 +186,9 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
     });
     if (response?.isSuccess) {
       toast.success("Summary submitted successfully");
-      
-    } 
-    
+
+    }
+
     return response;
   };
 
@@ -196,10 +196,22 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const response = await callApi(`fuc/group/progress/tasks/${taskId}`, {
       method: "GET",
     });
-  
+
     if (response?.isSuccess) {
       return response.value;
-    } 
+    }
+  };
+
+  const uploadGroupDocument = async (data: any) => {
+    const response: any = await callApi("fuc/group/documents", {
+      method: "POST",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Upload document successfully");
+    }
+    return response
   };
 
   useEffect(() => {
@@ -218,6 +230,7 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
         fetchProgressTask,
         submitSummaryWeekForLeader,
         getTaskDetail,
+        uploadGroupDocument
       }}
     >
       {children}

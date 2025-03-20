@@ -26,7 +26,7 @@ const formSchema = z.object({
 });
 
 export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
-    const { importReview } = useManagerReview();
+    const { importReview, getReviewsCalendarTemplate } = useManagerReview();
 
     const [open, setOpen] = useState<boolean>(false);
     const [fileData, setFileData] = useState<any[]>([]);
@@ -74,6 +74,17 @@ export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
         setOpenPreview(true);
     };
 
+    async function handleDownload() {
+        const url = await getReviewsCalendarTemplate();
+        if (!url) return;
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Template_Import_Review_Calendar"; // Đặt tên file khi tải về
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
@@ -114,7 +125,7 @@ export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
                                 )}
                             />
                             <div className="grid grid-cols-2 gap-2">
-                                <Button variant={"outline"} type="button" disabled={isLoading}>
+                                <Button variant={"outline"} type="button" disabled={isLoading} onClick={handleDownload}>
                                     <Download />
                                     Template
                                 </Button>

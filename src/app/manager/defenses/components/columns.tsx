@@ -34,7 +34,6 @@ interface DefendCapstoneProjectInformation {
     isActive: boolean;
 }
 
-
 const ActionsCell = ({ defendInfo }: { defendInfo: DefendCapstoneProjectInformation }) => {
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
