@@ -21,6 +21,7 @@ interface AdminSupervisorContextProps {
   fetchMajorList: () => Promise<[]>;
   fetchSupervisorList: () => Promise<void>;
   addSupervisor: (data: any) => Promise<void>;
+  getSupervisorsTemplate: () => Promise<string>;
   importSupervisor: (data: any) => Promise<void>;
 }
 
@@ -49,6 +50,11 @@ export const AdminSupervisorProvider = ({ children }: { children: React.ReactNod
       }, 10000);
     }
     return response
+  };
+
+  const getSupervisorsTemplate = async () => {
+    const response = await callApi("fuc/Documents/supervisors");
+    return (response?.value);
   };
 
   const importSupervisor = async (data: any) => {
@@ -82,7 +88,7 @@ export const AdminSupervisorProvider = ({ children }: { children: React.ReactNod
 
   return (
     <AdminSupervisorContext.Provider
-      value={{ supervisors, isLoading, fetchSupervisorList, addSupervisor, importSupervisor, fetchMajorList }}
+      value={{ supervisors, isLoading, fetchSupervisorList, addSupervisor, getSupervisorsTemplate, importSupervisor, fetchMajorList }}
     >
       {children}
     </AdminSupervisorContext.Provider>

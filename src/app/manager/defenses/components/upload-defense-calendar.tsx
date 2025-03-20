@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
+import { useManagerDefense } from "@/contexts/manager/manager-defense-context";
 
 const formSchema = z.object({
     file: z
@@ -29,7 +30,7 @@ const formSchema = z.object({
 export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
     const params = useParams();
     const id: string = String(params.id);
-    // const { importProjectProgress } = useSupervisorGroup();
+    const { getDefensesCalendarTemplate } = useManagerDefense();
 
     const [open, setOpen] = useState<boolean>(false);
     const [fileData, setFileData] = useState<any[]>([]);
@@ -78,6 +79,17 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
         setOpenPreview(true);
     };
 
+    async function handleDownload() {
+        const url = await getDefensesCalendarTemplate();
+        if (!url) return;
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Template_Import_Defense_Calendar"; // Đặt tên file khi tải về
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
@@ -118,7 +130,7 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
                                 )}
                             />
                             <div className="grid grid-cols-2 gap-2">
-                                <Button variant={"outline"} type="button" disabled={isLoading}>
+                                <Button variant={"outline"} type="button" disabled={isLoading} onClick={handleDownload}>
                                     <Download />
                                     Template
                                 </Button>

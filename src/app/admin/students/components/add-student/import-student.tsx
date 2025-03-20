@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export default function ImportStudent({ onClose }: { onClose: () => void }) {
-    const { importStudent } = useAdminStudent();
+    const { importStudent, getStudentsTemplate } = useAdminStudent();
     const [fileData, setFileData] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openPreview, setOpenPreview] = useState<boolean>(false);
@@ -72,6 +72,17 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
         setOpenPreview(true);
     };
 
+    async function handleDownload() {
+        const url = await getStudentsTemplate();
+        if (!url) return;
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Template_Import_Student"; // Đặt tên file khi tải về
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
     return (
         <>
             <Card>
@@ -105,7 +116,7 @@ export default function ImportStudent({ onClose }: { onClose: () => void }) {
                             />
                         </CardContent>
                         <CardFooter className="grid w-full grid-cols-2 gap-4">
-                            <Button variant={"outline"} type="button" disabled={isLoading}>
+                            <Button variant={"outline"} type="button" disabled={isLoading} onClick={handleDownload}>
                                 <Download />
                                 Template
                             </Button>

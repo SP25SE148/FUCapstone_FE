@@ -29,7 +29,7 @@ const formSchema = z.object({
 export default function UploadProjectProgress({ refresh }: { refresh: any }) {
     const params = useParams();
     const id: string = String(params.id);
-    const { importProjectProgress } = useSupervisorGroup();
+    const { importProjectProgress, getProjectProgressTemplate } = useSupervisorGroup();
 
     const [open, setOpen] = useState<boolean>(false);
     const [fileData, setFileData] = useState<any[]>([]);
@@ -78,6 +78,17 @@ export default function UploadProjectProgress({ refresh }: { refresh: any }) {
         setOpenPreview(true);
     };
 
+    async function handleDownload() {
+        const url = await getProjectProgressTemplate();
+        if (!url) return;
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Test"; // Đặt tên file khi tải về
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
@@ -118,7 +129,7 @@ export default function UploadProjectProgress({ refresh }: { refresh: any }) {
                                 )}
                             />
                             <div className="grid grid-cols-2 gap-2">
-                                <Button variant={"outline"} type="button" disabled={isLoading}>
+                                <Button variant={"outline"} type="button" disabled={isLoading} onClick={handleDownload}>
                                     <Download />
                                     Template
                                 </Button>
