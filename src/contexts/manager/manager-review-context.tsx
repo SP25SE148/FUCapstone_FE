@@ -6,6 +6,7 @@ import React, { createContext, useContext } from "react";
 import { useApi } from "@/hooks/use-api";
 
 interface ManagerReviewContextProps {
+    getReviewsCalendarTemplate: () => Promise<string>;
     importReview: (data: any) => Promise<void>;
 }
 
@@ -13,6 +14,11 @@ const ManagerReviewContext = createContext<ManagerReviewContextProps | undefined
 
 export const ManagerReviewProvider = ({ children }: { children: React.ReactNode }) => {
     const { callApi } = useApi();
+
+    const getReviewsCalendarTemplate = async () => {
+        const response = await callApi("fuc/Documents/reviews-calendars");
+        return (response?.value);
+    };
 
     const importReview = async (data: any) => {
         const response: any = await callApi("fuc/user/import-review", {
@@ -29,6 +35,7 @@ export const ManagerReviewProvider = ({ children }: { children: React.ReactNode 
     return (
         <ManagerReviewContext.Provider
             value={{
+                getReviewsCalendarTemplate,
                 importReview
             }}
         >
