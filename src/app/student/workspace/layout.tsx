@@ -7,6 +7,7 @@ import { StudentTaskProvider } from "@/contexts/student/student-task-context";
 const items = [
   { label: "Project Progress", href: "/student/workspace" },
   { label: "Tasks", href: "/student/workspace/tasks" },
+  { label: "Document", href: "/student/workspace/document" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
