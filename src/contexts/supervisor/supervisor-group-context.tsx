@@ -92,6 +92,9 @@ export interface Task {
   dueDate: string;
   createdDate: string;
   projectProgressId: string | null;
+  lastUpdatedDate: string | null;
+  completionDate: string | null;
+  fucTaskHistories: []
 }
 
 export interface EvaluationWeek {
@@ -118,6 +121,7 @@ interface SupervisorGroupContextType {
   importProjectProgress: (data: any) => Promise<void>;
   updateProjectProgressWeek: (data: any) => Promise<void>;
   getProjectProgressTasks: (projectProgressId: string) => Promise<Task[]>;
+  getProjectProgressTaskDetail: (taskId: string) => Promise<Task>;
   evaluationWeeklyProgress: (data: any) => Promise<void>;
   getEvaluationWeeklyProgress: (groupId: string) => Promise<EvaluationStudent[]>;
   exportEvaluationWeeklyProgressFile: (groupId: string) => Promise<any>;
@@ -178,6 +182,11 @@ export const SupervisorGroupProvider: React.FC<{
     return response?.value;
   };
 
+  const getProjectProgressTaskDetail = async (taskId: string) => {
+    const response = await callApi(`fuc/group/progress/tasks/${taskId}`);
+    return response.value;
+  };
+
   const evaluationWeeklyProgress = async (data: any) => {
     const response: any = await callApi("fuc/group/progress/week/evaluations", {
       method: "POST",
@@ -215,6 +224,7 @@ export const SupervisorGroupProvider: React.FC<{
         importProjectProgress,
         updateProjectProgressWeek,
         getProjectProgressTasks,
+        getProjectProgressTaskDetail,
         evaluationWeeklyProgress,
         getEvaluationWeeklyProgress,
         exportEvaluationWeeklyProgressFile
