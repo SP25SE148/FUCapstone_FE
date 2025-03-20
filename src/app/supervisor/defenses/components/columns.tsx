@@ -13,32 +13,34 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import Link from "next/link";
 
-interface DefendCapstoneProjectInformation {
-    id: string;
-    topicName: string;
-    capstoneName: string;
-    defendAttempt: boolean;
-    semesterName: string;
-    roomNo: string;
-    date: string;
-    isActive: boolean;
+interface DefendCapstoneProjectCouncilMember {
+  id: string;
+  name: string;
+  isPresident: boolean;
+  isSecretary: boolean;
 }
 
+interface DefendCapstoneProjectInformation {
+  id: string;
+  topic: {
+    id: string;
+    code: string;
+    englishName: string;
+    vietnameseName: string;
+    mainSupervisorName: string;
+    mainSupervisorEmail: string;
+  };
+  defendAttempt: boolean;
+  semesterName: string;
+  roomNo: string;
+  date: string;
+  isActive: boolean;
+  councilMembers: DefendCapstoneProjectCouncilMember[];
+}
 
 const ActionsCell = ({ defendInfo }: { defendInfo: DefendCapstoneProjectInformation }) => {
-  const [open, setOpen] = useState(false);
-  const [updateOpen, setUpdateOpen] = useState(false);
-
   return (
     <div className="flex items-center justify-center">
       <DropdownMenu>
@@ -55,37 +57,14 @@ const ActionsCell = ({ defendInfo }: { defendInfo: DefendCapstoneProjectInformat
           >
             Copy Defend Info ID
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            Remove
+          <DropdownMenuItem>
+            <Link href={`/supervisor/defenses/${defendInfo.id}`}>
+              View More
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirm Removal</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to remove the defend information for {defendInfo.capstoneName}?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={async () => {}}
-            >
-              Yes, Remove
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-   </div>
+    </div>
   );
 };
 
@@ -110,27 +89,30 @@ export const columns: ColumnDef<DefendCapstoneProjectInformation>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "topicName",
+    accessorKey: "topic.englishName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Topic" />
+      <DataTableColumnHeader column={column} title="Topic Name" />
     ),
+    cell: ({ row }) => row.original.topic.englishName,
   },
   {
-    accessorKey: "capstoneName",
+    accessorKey: "topic.code",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Capstone" />
+      <DataTableColumnHeader column={column} title="Topic Code" />
     ),
+    cell: ({ row }) => row.original.topic.code,
+  },
+  {
+    accessorKey: "topic.mainSupervisorName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Supervisor" />
+    ),
+    cell: ({ row }) => row.original.topic.mainSupervisorName,
   },
   {
     accessorKey: "semesterName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Semester" />
-    ),
-  },
-  {
-    accessorKey: "defendAttempt",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Attempt" />
     ),
   },
   {
@@ -171,6 +153,15 @@ export const columns: ColumnDef<DefendCapstoneProjectInformation>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <ActionsCell defendInfo={row.original} />,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <ActionsCell defendInfo={row.original} />
+        <Link href={`/supervisor/defenses/${row.original.id}`}>
+          <Button variant="outline" size="sm">
+            View More
+          </Button>
+        </Link>
+      </div>
+    ),
   },
 ];

@@ -6,6 +6,21 @@ export interface BusinessArea {
 }
 
 // main types
+
+export type Campus = {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  isDeleted: boolean;
+  createdDate: string;
+  updatedDate: string | null;
+  createdBy: string;
+  updatedBy: string | null;
+  deletedAt: string | null;
+};
+
 export interface StudentProfile {
   id: string;
   fullName: string;
@@ -21,6 +36,30 @@ export interface StudentProfile {
   gpa: number;
   businessArea: string;
   isHaveBeenJoinGroup: boolean;
+}
+
+
+export interface Topic {
+  id: string;
+  code: string;
+  numberOfTopicRequest: number;
+  mainSupervisorName: string;
+  mainSupervisorEmail: string;
+  englishName: string;
+  vietnameseName: string;
+  abbreviation: string;
+  description: string;
+  fileName: string;
+  fileUrl: string;
+  status: string;
+  difficultyLevel: string;
+  businessAreaName: string;
+  capstoneId: string;
+  semesterId: string;
+  campusId: string;
+  createdDate: string;
+  coSupervisors: any[];
+  topicAppraisals: any[];
 }
 
 export interface ProjectProgressWeek {
