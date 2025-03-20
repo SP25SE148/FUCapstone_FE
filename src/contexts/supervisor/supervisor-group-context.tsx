@@ -86,7 +86,6 @@ export interface Task {
   assigneeName: string;
   reporterId: string;
   reporterName: string;
-  comment: string | null;
   status: number;
   priority: number;
   dueDate: string;

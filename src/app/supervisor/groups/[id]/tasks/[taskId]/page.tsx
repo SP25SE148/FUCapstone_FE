@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { AlignLeft, ClipboardList, Clock, History, MessageSquare, Undo2 } from "lucide-react";
+import { AlignLeft, ClipboardList, Clock, History, Undo2 } from "lucide-react";
 
 import { getDate } from "@/lib/utils";
 import { Task, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
@@ -10,7 +10,6 @@ import { Task, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const getStatus = (status: number | undefined) => {
@@ -138,79 +137,43 @@ export default function TaskDetailPage() {
                         </Card>
 
                         <Card className="bg-primary/5">
-                            <CardContent className="p-4">
-                                <Tabs defaultValue="comments">
-                                    <TabsList className="mb-1 flex justify-start">
-                                        <TabsTrigger
-                                            value="comments"
-                                            className="flex-1 flex items-center gap-1 text-xs"
-                                        >
-                                            <MessageSquare className="h-5 w-5" />
-                                            Comments
-                                        </TabsTrigger>
-                                        <TabsTrigger
-                                            value="history"
-                                            className="flex-1 flex items-center gap-1 text-xs"
-                                        >
-                                            <History className="h-5 w-5" />
-                                            History
-                                        </TabsTrigger>
-                                    </TabsList>
-
-                                    <TabsContent value="comments" className="space-y-4">
-                                        {task && task.comment ? (
-                                            <div className="border rounded-lg p-4">
-                                                <div className="flex items-start gap-3">
-                                                    <div className="mt-2">{task.comment}</div>
+                            <CardContent className="p-4 space-y-4">
+                                <h3 className="font-semibold flex items-center gap-2">
+                                    <History className="size-4 text-primary" />
+                                    History
+                                </h3>
+                                {task && task?.fucTaskHistories && task.fucTaskHistories.length > 0 ? (
+                                    <div className="border bg-background rounded-lg divide-y">
+                                        {task.fucTaskHistories
+                                            .slice()
+                                            .reverse()
+                                            .map((history: any) => (
+                                                <div key={history.id} className="p-4">
+                                                    <div className="space-y-2">
+                                                        <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                            <History className="h-4 w-4 text-muted-foreground" />
+                                                            {getDate(history.createdDate)}
+                                                        </p>
+                                                        <p className="pl-4 font-semibold tracking-tight">{history.content}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ) : (
-                                            <div className="text-center py-8 border rounded-lg bg-muted/20">
-                                                <MessageSquare className="h-10 w-10 mx-auto text-muted-foreground mb-2 opacity-50" />
-                                                <p className="text-muted-foreground">No comments yet</p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    Be the first to add a comment to this task
-                                                </p>
-                                            </div>
-                                        )}
-                                    </TabsContent>
-
-                                    <TabsContent value="history" className="space-y-4">
-                                        {task && task?.fucTaskHistories && task.fucTaskHistories.length > 0 ? (
-                                            <div className="border rounded-lg divide-y">
-                                                {task.fucTaskHistories
-                                                    .slice()
-                                                    .reverse()
-                                                    .map((history: any) => (
-                                                        <div key={history.id} className="p-4">
-                                                            <div className="flex items-start gap-3">
-                                                                <History className="h-4 w-4 text-muted-foreground" />
-                                                                <div>
-                                                                    <p className="text-sm text-muted-foreground">
-                                                                        {getDate(history.createdDate)}
-                                                                    </p>
-                                                                    <p className="font-medium">{history.content}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        ) : (
-                                            <div className="text-center py-8 border rounded-lg bg-muted/20">
-                                                <Clock className="h-10 w-10 mx-auto text-muted-foreground mb-2 opacity-50" />
-                                                <p className="text-muted-foreground">
-                                                    No history available
-                                                </p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    Changes to this task will be recorded here
-                                                </p>
-                                            </div>
-                                        )}
-                                    </TabsContent>
-                                </Tabs>
+                                            ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-8 border rounded-lg bg-muted/20">
+                                        <Clock className="h-10 w-10 mx-auto text-muted-foreground mb-2 opacity-50" />
+                                        <p className="text-muted-foreground">
+                                            No history available
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            Changes to this task will be recorded here
+                                        </p>
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
                     </div>
+
                     <Card className="bg-primary/5">
                         <CardContent className="space-y-4 p-4">
                             <h3 className="font-semibold flex items-center gap-2">
