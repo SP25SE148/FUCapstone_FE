@@ -205,8 +205,10 @@ export const SupervisorGroupProvider: React.FC<{
   };
 
   const exportEvaluationWeeklyProgressFile = async (groupId: string) => {
-    const response = await callApi(`fuc/group/progress/week/evaluation/${groupId}/excel`);
-    return (response?.value);
+    const response = await callApi(`fuc/group/progress/week/evaluation/${groupId}/excel`, {
+      responseType: "blob"
+    });
+    return (response);
   };
 
   useEffect(() => {
