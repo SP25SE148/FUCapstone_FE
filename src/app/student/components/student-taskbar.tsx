@@ -34,11 +34,6 @@ export default function StudentTaskbar() {
       label: "Defenses",
       href: "/student/defenses",
     },
-    {
-      icon: Bell,
-      label: "Notification",
-      href: "/student/notifications",
-    },
   ];
 
   return (

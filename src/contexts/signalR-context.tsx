@@ -1,96 +1,60 @@
-"use client"
+"use client";
 
-import type React from "react"
-import * as signalR from "@microsoft/signalr"
-import { createContext, useContext, useState, useEffect } from "react"
+import * as signalR from "@microsoft/signalr";
+import { createContext, useContext, useEffect, useState } from "react";
+import { startSignalRConnection, stopSignalRConnection } from "@/utils/signalRService";
 
-import { useAuth } from "./auth-context"
-
-interface SignalRContextType {
-    connection: signalR.HubConnection | null
-    isConnecting: boolean
+interface SignalRContextProps {
+    connection: signalR.HubConnection | null;
+    unreadedNoti: number
 }
 
-const SignalRContext = createContext<SignalRContextType | undefined>(undefined)
+const SignalRContext = createContext<SignalRContextProps>({ connection: null, unreadedNoti: 0 });
 
-export const useSignalR = () => {
-    const context = useContext(SignalRContext)
-    if (context === undefined) {
-        throw new Error("useSignalR must be used within a SignalRProvider")
-    }
-    return context
-}
-
-export const SignalRProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [connection, setConnection] = useState<signalR.HubConnection | null>(null)
-    const [isConnecting, setIsConnecting] = useState(false)
-    const { user } = useAuth()
+export const SignalRProvider = ({ children }: { children: React.ReactNode }) => {
+    const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
+    const [unreadedNoti, setUnreadedNoti] = useState<number>(0);
 
     useEffect(() => {
-        const startConnection = async () => {
-            if (!user) {
-                if (connection) {
-                    await connection.stop()
-                    setConnection(null)
-                    localStorage.removeItem("signalRConnectionEstablished")
-                }
-                return
-            }
-
-            const token = localStorage.getItem("token")
-            if (!token) return
-
-            const isConnectionEstablished = localStorage.getItem("signalRConnectionEstablished")
-            if (isConnectionEstablished === "true" && connection) {
-                // Kết nối đã được thiết lập, không cần tạo lại
-                return
-            }
-
-            setIsConnecting(true)
-            try {
-                const newConnection = new signalR.HubConnectionBuilder()
-                    .withUrl(`https://localhost:8000/notifications?access_token=${token}`, {
-                        withCredentials: false
-                    })
-                    .withAutomaticReconnect()
-                    .build()
-
-                await newConnection.start()
-                setConnection(newConnection)
-                localStorage.setItem("signalRConnectionEstablished", "true")
-            } catch (err) {
-                console.error("SignalR Connection Error: ", err)
-                localStorage.removeItem("signalRConnectionEstablished")
-            } finally {
-                setIsConnecting(false)
-            }
+        const token = localStorage.getItem("token");
+        if (token) {
+            startSignalRConnection(token).then(setConnection);
         }
-
-        startConnection()
 
         return () => {
-            if (connection) {
-                connection.stop()
-                localStorage.removeItem("signalRConnectionEstablished")
-            }
-        }
-    }, [user, connection]) // Added connection as a dependency
+            stopSignalRConnection();
+        };
+    }, []);
 
-    // Thêm một effect riêng để xử lý reconnect khi mất kết nối
     useEffect(() => {
-        if (connection) {
-            connection.onclose(() => {
-                console.log("SignalR connection closed")
-                localStorage.removeItem("signalRConnectionEstablished")
-                // Có thể thêm logic để thử kết nối lại ở đây nếu cần
-            })
+        if (!connection || connection.state !== "Connected") return;
+
+        const handleNotificationCount = (count: number) => {
+            console.log(`🔔 Bạn có ${count} thông báo chưa đọc.`);
+            setUnreadedNoti(count);
+        };
+
+        const handleReceiveNewNotification = (count: number) => {
+            console.log(`🔔 Bạn vừa có thêm ${count} thông báo chưa đọc.`);
+            setUnreadedNoti(prev => +prev + count);
+        };
+
+        // Register new handlers
+        connection.on("NumberOfUnreadedNotifications", handleNotificationCount)
+        connection.on("ReceiveNewNotification", handleReceiveNewNotification)
+
+        return () => {
+            // Fix: Use connection.off for both handlers in cleanup
+            connection.off("NumberOfUnreadedNotifications", handleNotificationCount)
+            connection.off("ReceiveNewNotification", handleReceiveNewNotification)
         }
-    }, [connection])
+    }, [connection, connection?.state]); // Chạy lại khi `connection` thay đổi
 
     return (
-        <SignalRContext.Provider value={{ connection, isConnecting }}>
+        <SignalRContext.Provider value={{ connection, unreadedNoti }}>
             {children}
         </SignalRContext.Provider>
     );
-}
+};
 
+export const useSignalR = () => useContext(SignalRContext);

@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { startSignalRConnection, stopSignalRConnection } from '@/utils/signalRService';
 
 interface User {
     name: string;
@@ -99,9 +100,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             localStorage.setItem("refreshToken", data.value.refreshToken);
             localStorage.setItem("refreshTokenExpiryTime", data.value.refreshTokenExpiryTime);
 
+            await startSignalRConnection(data.value.accessToken);
+
             redirectToRole(decodedToken);
 
             toast.success("Login successful", { description: "Welcome to FUC" });
+
+            // đang cho load lại trang để kết nối signalR, cần tìm giải pháp tối ưu hơn 
+            window.location.reload()
         } else {
             toast.error(data?.error?.message || "Login failed, please try again.");
         }
@@ -139,7 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const logout = async () => {
         const accessToken = localStorage.getItem("token");
-
+        await stopSignalRConnection();
         await fetch("https://localhost:8000/identity/Auth/token/revoke", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

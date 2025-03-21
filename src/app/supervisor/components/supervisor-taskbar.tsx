@@ -29,11 +29,6 @@ export default function SupervisorTaskbar() {
       label: "Defenses",
       href: "/supervisor/defenses",
     },
-    {
-      icon: Bell,
-      label: "Notification",
-      href: "/supervisor/notifications",
-    },
   ];
 
   return (
