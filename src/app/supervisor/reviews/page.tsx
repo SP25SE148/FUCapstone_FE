@@ -1,5 +1,8 @@
 import { SupervisorTopicProvider } from "@/contexts/supervisor/supervisor-topic-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "./components/columns";
+import { defenseData } from "@/app/manager/defenses/data";
 
 export default function ReviewsPage() {
     return (
@@ -10,6 +13,7 @@ export default function ReviewsPage() {
                     <CardDescription>Reviews schedule and information.</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <DataTable columns={columns} data={defenseData} />
                 </CardContent>
             </Card>
         </SupervisorTopicProvider>
