@@ -6,14 +6,19 @@ import { startSignalRConnection, stopSignalRConnection } from "@/utils/signalRSe
 
 interface SignalRContextProps {
     connection: signalR.HubConnection | null;
-    unreadedNoti: number
+    unreadedNoti: number;
+    resetUnreadedNoti: () => void;
 }
 
-const SignalRContext = createContext<SignalRContextProps>({ connection: null, unreadedNoti: 0 });
+const SignalRContext = createContext<SignalRContextProps>({ connection: null, unreadedNoti: 0, resetUnreadedNoti: () => { } });
 
 export const SignalRProvider = ({ children }: { children: React.ReactNode }) => {
     const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
     const [unreadedNoti, setUnreadedNoti] = useState<number>(0);
+
+    const resetUnreadedNoti = () => {
+        setUnreadedNoti(0)
+    }
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -34,9 +39,9 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
             setUnreadedNoti(count);
         };
 
-        const handleReceiveNewNotification = (count: number) => {
-            console.log(`🔔 Bạn vừa có thêm ${count} thông báo chưa đọc.`);
-            setUnreadedNoti(prev => +prev + count);
+        const handleReceiveNewNotification = (message: string) => {
+            console.log(`🔔 Bạn vừa có thêm thông báo chưa đọc: ${message}.`);
+            setUnreadedNoti(prev => +prev + 1);
         };
 
         // Register new handlers
@@ -51,7 +56,7 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
     }, [connection, connection?.state]); // Chạy lại khi `connection` thay đổi
 
     return (
-        <SignalRContext.Provider value={{ connection, unreadedNoti }}>
+        <SignalRContext.Provider value={{ connection, unreadedNoti, resetUnreadedNoti }}>
             {children}
         </SignalRContext.Provider>
     );
