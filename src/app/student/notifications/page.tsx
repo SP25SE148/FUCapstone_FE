@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function NotificationsPage() {
     const { user } = useAuth();
-    const { connection } = useSignalR();
+    const { connection, unreadedNoti } = useSignalR();
     const [notifications, setNotifications] = useState<any>();
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function NotificationsPage() {
         return () => {
             connection.off("ReceiveNotifications", handleReceiveMessage);
         };
-    }, [connection?.state]);
+    }, [connection?.state, !!unreadedNoti]);
 
     return (
         <Card className="min-h-[calc(100vh-16px)]">

@@ -20,7 +20,7 @@ export function Taskbar({
 }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const { unreadedNoti } = useSignalR();
+  const { unreadedNoti, resetUnreadedNoti } = useSignalR();
 
   const signOutHandler = () => {
     logout();
@@ -63,6 +63,7 @@ export function Taskbar({
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
+              onClick={resetUnreadedNoti}
               href={`/${user?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] == "Supervisor" ? "supervisor" : "student"}/notifications`}
               className={cn(
                 "relative flex flex-col items-center p-2 mx-2 rounded-md text-white",
@@ -72,7 +73,7 @@ export function Taskbar({
               )}
             >
               <Bell className="h-6 w-6" />
-              {+unreadedNoti > 0 && <span className="absolute -top-2 -right-2 size-6 flex items-center justify-center text-xs rounded-lg bg-rose-600 text-background">{unreadedNoti > 99 ? "99+" : unreadedNoti}</span>}
+              {unreadedNoti > 0 && <span className="absolute -top-2 -right-2 size-6 flex items-center justify-center text-xs rounded-lg bg-rose-600 text-background">{unreadedNoti > 99 ? "99+" : unreadedNoti}</span>}
             </Link>
           </TooltipTrigger>
           <TooltipContent side="right">
