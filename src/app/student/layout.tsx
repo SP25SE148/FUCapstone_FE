@@ -3,8 +3,9 @@
 import React from "react";
 import StudentTaskbar from "@/app/student/components/student-taskbar";
 import { StudentProfileProvider } from "@/contexts/student/student-profile-context";
+import withAuth from "@/components/layout/withAuth";
 
-export default function RootLayout({
+function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -21,3 +22,4 @@ export default function RootLayout({
     </StudentProfileProvider>
   );
 }
+export default withAuth(RootLayout)
