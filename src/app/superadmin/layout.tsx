@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+import withAuth from "@/components/layout/withAuth";
 
 const items = [
     { title: "Dashboard", url: "/superadmin", icon: LayoutDashboard },
@@ -19,7 +20,7 @@ const items = [
     { title: "Templates", url: "/superadmin/templates", icon: Folders },
 ];
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+function Layout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const paths = pathname.split('/').filter(Boolean).slice(1)
 
@@ -63,3 +64,4 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </SidebarProvider>
     )
 }
+export default withAuth(Layout)
