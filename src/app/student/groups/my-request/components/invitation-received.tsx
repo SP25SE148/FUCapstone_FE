@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { Clock, Check, X, Inbox, User2 } from "lucide-react";
 
 import { cn, getDate } from "@/lib/utils";
+import { useStudentProfile } from "@/contexts/student/student-profile-context";
 import { useStudentGroupRequest, RequestMember } from "@/contexts/student/student-group-request-context";
 
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +45,9 @@ const getStatusBadge = (status: string) => {
 
 export default function InvitationReceived() {
   const router = useRouter();
+  const { studentProfile } = useStudentProfile();
   const { listRequest, updateGroupMemberStatus } = useStudentGroupRequest();
+
   const [info, setInfo] = useState<any>({});
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -111,7 +114,7 @@ export default function InvitationReceived() {
                             setInfo({
                               "id": request?.id,
                               "groupId": request?.groupId,
-                              "memberId": request?.studentId,
+                              "memberId": studentProfile?.id,
                               "status": 1
                             });
                             setOpen(true);
@@ -128,7 +131,7 @@ export default function InvitationReceived() {
                             setInfo({
                               "id": request?.id,
                               "groupId": request?.groupId,
-                              "memberId": request?.studentId,
+                              "memberId": studentProfile?.id,
                               "status": 2
                             });
                             setOpen(true);

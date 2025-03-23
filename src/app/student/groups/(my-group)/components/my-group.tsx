@@ -108,7 +108,7 @@ export default function MyGroup() {
     const handleRegisterGroup = async () => {
         setIsLoading(true);
         try {
-            await registerGroup(groupInfo?.id || "");
+            await registerGroup();
         } finally {
             setIsLoading(false);
             setOpenRegister(false);
