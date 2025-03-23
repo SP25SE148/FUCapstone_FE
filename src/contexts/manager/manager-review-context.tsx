@@ -1,11 +1,28 @@
 "use client";
 
 import { toast } from "sonner";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "@/hooks/use-api";
 
+export interface ReviewCalendar {
+    id: string,
+    topicId: string,
+    topicCode: string,
+    groupId: string,
+    groupCode: string,
+    topicEnglishName: string,
+    mainSupervisorCode: string,
+    coSupervisorsCode: [],
+    attempt: number,
+    slot: number,
+    room: string,
+    date: string,
+    reviewersCode: string[]
+}
+
 interface ManagerReviewContextProps {
+    reviewCalendar: ReviewCalendar[] | []
     getReviewsCalendarTemplate: () => Promise<string>;
     importReview: (data: any) => Promise<void>;
 }
@@ -14,6 +31,7 @@ const ManagerReviewContext = createContext<ManagerReviewContextProps | undefined
 
 export const ManagerReviewProvider = ({ children }: { children: React.ReactNode }) => {
     const { callApi } = useApi();
+    const [reviewCalendar, setReviewCalendar] = useState<ReviewCalendar[]>([]);
 
     const getReviewsCalendarTemplate = async () => {
         const response = await callApi("fuc/Documents/reviews-calendars");
@@ -32,9 +50,19 @@ export const ManagerReviewProvider = ({ children }: { children: React.ReactNode 
         return response
     };
 
+    const getReviewCalendar = async () => {
+        const response = await callApi("fuc/user/manager/get-review-calendar");
+        setReviewCalendar(response?.value);
+    };
+
+    useEffect(() => {
+        getReviewCalendar();
+    }, []);
+
     return (
         <ManagerReviewContext.Provider
             value={{
+                reviewCalendar,
                 getReviewsCalendarTemplate,
                 importReview
             }}

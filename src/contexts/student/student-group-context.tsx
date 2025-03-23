@@ -60,7 +60,7 @@ interface StudentGroupContextType {
   createGroup: () => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
   inviteMember: (data: any) => Promise<void>;
-  registerGroup: (groupId: string) => Promise<void>;
+  registerGroup: () => Promise<void>;
   updateStatusInvitation: (data: any) => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
@@ -134,8 +134,8 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
     return (response?.value);
   };
 
-  const registerGroup = async (groupId: string) => {
-    const response = await callApi(`fuc/Group/${groupId}`, {
+  const registerGroup = async () => {
+    const response = await callApi(`fuc/Group`, {
       method: "PUT",
     });
     if (response?.isSuccess === true) {

@@ -1,124 +1,33 @@
 "use client";
 
-import { MoreHorizontal } from "lucide-react";
+import { getDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ReviewCalendar } from "@/contexts/manager/manager-review-context";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
 
-interface DefendCapstoneProjectCouncilMember {
-  id: string;
-  name: string;
-  isPresident: boolean;
-  isSecretary: boolean;
-}
-
-interface DefendCapstoneProjectInformation {
-  id: string;
-  topic: {
-    id: string;
-    code: string;
-    englishName: string;
-    vietnameseName: string;
-    mainSupervisorName: string;
-    mainSupervisorEmail: string;
-  };
-  defendAttempt: boolean;
-  semesterName: string;
-  roomNo: string;
-  date: string;
-  isActive: boolean;
-  councilMembers: DefendCapstoneProjectCouncilMember[];
-}
-
-const ActionsCell = ({ defendInfo }: { defendInfo: DefendCapstoneProjectInformation }) => {
-  return (
-    <div className="flex items-center justify-center">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(defendInfo.id)}
-          >
-            Copy Defend Info ID
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href={`/supervisor/defenses/${defendInfo.id}`}>
-              View More
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-};
-
-export const columns: ColumnDef<DefendCapstoneProjectInformation>[] = [
+export const columns: ColumnDef<ReviewCalendar>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "topic.englishName",
+    accessorKey: "groupCode",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Topic Name" />
+      <DataTableColumnHeader column={column} title="Group Code" />
     ),
-    cell: ({ row }) => row.original.topic.englishName,
   },
   {
-    accessorKey: "topic.code",
+    accessorKey: "topicCode",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Topic Code" />
-    ),
-    cell: ({ row }) => row.original.topic.code,
+    )
   },
   {
-    accessorKey: "topic.mainSupervisorName",
+    accessorKey: "topicEnglishName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Supervisor" />
-    ),
-    cell: ({ row }) => row.original.topic.mainSupervisorName,
+      <DataTableColumnHeader column={column} title="English Name" />
+    )
   },
   {
-    accessorKey: "semesterName",
+    accessorKey: "attempt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Semester" />
-    ),
-  },
-  {
-    accessorKey: "roomNo",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Room No" />
+      <DataTableColumnHeader column={column} title="Attempt" />
     ),
   },
   {
@@ -127,41 +36,40 @@ export const columns: ColumnDef<DefendCapstoneProjectInformation>[] = [
       <DataTableColumnHeader column={column} title="Date" />
     ),
     cell: ({ row }) => {
-      const date = new Date(row.original.date);
-      return date.toLocaleDateString();
+      const date = row.original?.date;
+      return getDate(date)?.split(" ")?.[0];
     },
   },
   {
-    accessorKey: "isActive",
+    accessorKey: "slot",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Slot" />
+    ),
+  },
+  {
+    accessorKey: "room",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Room" />
+    ),
+  },
+  {
+    accessorKey: "reviewersCode[0]",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Reviewer 1" />
     ),
     cell: ({ row }) => {
-      const status = row.original.isActive ? "Active" : "Inactive";
-      return (
-        <Badge
-          className={`${
-            status === "Active"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {status}
-        </Badge>
-      );
+      const reviewer1 = row.original?.reviewersCode[0];
+      return reviewer1;
     },
   },
   {
-    id: "actions",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <ActionsCell defendInfo={row.original} />
-        <Link href={`/supervisor/reviews/${row.original.id}`}>
-          <Button variant="outline" size="sm">
-            View More
-          </Button>
-        </Link>
-      </div>
+    accessorKey: "reviewersCode[1]",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Reviewer 2" />
     ),
+    cell: ({ row }) => {
+      const reviewer2 = row.original?.reviewersCode[1];
+      return reviewer2;
+    },
   },
 ];

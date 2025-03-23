@@ -33,7 +33,7 @@ export default function CreateGroup() {
                             You are not currently in any groups.
                         </p>
                         <p className="text-muted-foreground text-center">
-                            Please check the <Link href={"/student/groups/my-request"} className="text-primary hover:underline hover:underline-offset-2">My Request</Link> section or create a group for yourself.
+                            Please check the <Link href={"/student/groups/my-request"} className="text-primary font-semibold hover:underline hover:underline-offset-2">My Request</Link> section or create a group for yourself.
                         </p>
                     </div>
                     <Button
