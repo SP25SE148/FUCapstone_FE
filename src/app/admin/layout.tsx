@@ -18,7 +18,7 @@ const items = [
     { title: "Announcements", url: "/admin/announcements", icon: Newspaper, },
 ]
 
-function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const paths = pathname.split('/').filter(Boolean).slice(1)
 
@@ -62,4 +62,3 @@ function Layout({ children }: { children: React.ReactNode }) {
         </SidebarProvider>
     )
 }
-export default withAuth(Layout)
