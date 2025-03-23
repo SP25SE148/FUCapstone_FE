@@ -8,7 +8,6 @@ import { Separator } from "@/components/ui/separator"
 import { AppSidebar } from "@/components/layout/app-sidebar"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
-import withAuth from "@/components/layout/withAuth"
 
 const items = [
     {
