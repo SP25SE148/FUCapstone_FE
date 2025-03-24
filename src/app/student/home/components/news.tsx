@@ -1,11 +1,11 @@
 "use client";
 
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import type { NewsItem } from "@/app/student/home/table-data";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 interface NewsProps {
   data: NewsItem[];
@@ -20,8 +20,9 @@ export function News({ data }: NewsProps) {
 
   const router = useRouter();
   return (
-    <div className="container mx-auto px-24 py-6">
-      <div className="bg-gradient-to-r from-[#ade9ff] to-primary text-background py-8 rounded-lg shadow-lg mb-6">
+    <div className="container mx-auto px-12">
+      {/* header */}
+      <div className="bg-gradient-to-br from-primary to-sky-400 text-background py-6 rounded-lg shadow-lg mb-6">
         <h1 className="text-4xl font-extrabold text-center">
           Welcome to the News Section
         </h1>
@@ -29,7 +30,10 @@ export function News({ data }: NewsProps) {
           Stay updated with the latest news and announcements
         </p>
       </div>
+
+      {/* body */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* main */}
         <div className="col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
           {mainNews.map((news) => (
             <Card
@@ -37,17 +41,17 @@ export function News({ data }: NewsProps) {
               className="border-0 shadow-none cursor-pointer bg-muted"
               onClick={() => router.push(`/student/home/${news.id}`)}
             >
-              <CardContent className="aspect-[16/9] p-0">
+              <CardContent className="aspect-video p-0">
                 <Image
                   src={news.image}
                   alt={news.title}
                   width={549}
                   height={308}
-                  className="object-cover hover:scale-105 transition-transform duration-200"
+                  className="object-cover rounded-lg hover:scale-[99%] transition-all"
                 />
               </CardContent>
               <CardContent className="p-0 py-4">
-                <CardTitle className="font-medium text-lg hover:text-primary">
+                <CardTitle className="font-semibold text-base hover:text-primary">
                   {news.title}
                 </CardTitle>
                 <CardTitle className="text-sm text-muted-foreground">
@@ -57,7 +61,9 @@ export function News({ data }: NewsProps) {
             </Card>
           ))}
         </div>
-        <div className="p-6 rounded-lg bg-background">
+
+        {/* sidebar */}
+        <div className="p-6 rounded-lg bg-background shadow-md">
           <div className="space-y-6">
             {sideNews.map((news) => (
               <Link

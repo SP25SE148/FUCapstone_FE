@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User2, X, Users, Send, BookUser } from "lucide-react";
+import { User2, X, Users, Send, BookUser, FileCheck, Calculator, School, Calendar, BriefcaseBusiness, BookOpen } from "lucide-react";
 
 import CreateGroup from "./create-group";
 import InviteMember from "./invite-member";
@@ -171,33 +171,82 @@ export default function MyGroup() {
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-4 gap-6 text-sm">
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-muted-foreground">Group Code</p>
-                                                <p className="pl-2 font-semibold">{groupInfo?.groupCode}</p>
+                                            <div className="flex items-center space-x-2">
+                                                <div className="rounded-md p-2">
+                                                    <Users className="size-5 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-sm text-muted-foreground">Group Code</h3>
+                                                    <p className="font-semibold tracking-tight">
+                                                        {groupInfo?.groupCode}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-muted-foreground">Topic Code</p>
-                                                <p className="pl-2 font-semibold">{groupInfo?.topicCode}</p>
+                                            <div className="flex items-center space-x-2">
+                                                <div className="rounded-md p-2">
+                                                    <FileCheck className="size-5 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-sm text-muted-foreground">Topic Code</h3>
+                                                    <p className="font-semibold tracking-tight">
+                                                        {groupInfo?.topicCode}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-muted-foreground">Average GPA</p>
-                                                <p className="pl-2 font-semibold">{groupInfo?.averageGPA}</p>
+                                            <div className="flex items-center space-x-2">
+                                                <div className="rounded-md p-2">
+                                                    <Calculator className="size-5 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-sm text-muted-foreground">Average GPA</h3>
+                                                    <p className="font-semibold tracking-tight">
+                                                        {groupInfo?.averageGPA?.toFixed(2)}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-muted-foreground">Campus</p>
-                                                <p className="pl-2 font-semibold">{groupInfo?.campusName}</p>
+                                            <div className="flex items-center space-x-2">
+                                                <div className="rounded-md p-2">
+                                                    <School className="size-5 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-sm text-muted-foreground">Campus</h3>
+                                                    <p className="font-semibold tracking-tight">
+                                                        {groupInfo?.campusName}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-muted-foreground">Semester</p>
-                                                <p className="pl-2 font-semibold">{groupInfo?.semesterName}</p>
+                                            <div className="flex items-center space-x-2">
+                                                <div className="rounded-md p-2">
+                                                    <Calendar className="size-5 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-sm text-muted-foreground">Semester</h3>
+                                                    <p className="font-semibold tracking-tight">
+                                                        {groupInfo?.semesterName}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-muted-foreground">Major</p>
-                                                <p className="pl-2 font-semibold">{groupInfo?.majorName}</p>
+                                            <div className="flex items-center space-x-2">
+                                                <div className="rounded-md p-2">
+                                                    <BriefcaseBusiness className="size-5 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-sm text-muted-foreground">Major</h3>
+                                                    <p className="font-semibold tracking-tight">
+                                                        {groupInfo?.majorName}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="space-y-2">
-                                                <p className="font-medium text-muted-foreground">Capstone</p>
-                                                <p className="pl-2 font-semibold">{groupInfo?.capstoneName}</p>
+                                            <div className="flex items-center space-x-2">
+                                                <div className="rounded-md p-2">
+                                                    <BookOpen className="size-5 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-sm text-muted-foreground">Capstone</h3>
+                                                    <p className="font-semibold tracking-tight">
+                                                        {groupInfo?.capstoneName}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </CardContent>

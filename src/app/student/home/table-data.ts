@@ -1,17 +1,17 @@
 export interface NewsItem {
-    id: string
-    title: string
-    date: string
-    content: string
-    image: string
+  id: string
+  title: string
+  date: string
+  content: string
+  image: string
 }
 
 export const data: NewsItem[] = [
-    {
-        id: "1",
-        title: "Thông báo đăng ký tìm nhóm/thành viên kỳ SP25",
-        date: "2025-04-13",
-        content: `
+  {
+    id: "1",
+    title: "Thông báo đăng ký tìm nhóm/thành viên kỳ SP25",
+    date: "2025-04-13",
+    content: `
           <h2>Thông báo đăng ký tìm nhóm/thành viên kỳ SP25</h2>
           <p>Nhằm hỗ trợ sinh viên hoàn thành các dự án môn học trong kỳ học SP25, Đại học FPT chính thức mở cổng đăng ký tìm nhóm/thành viên. Đây là cơ hội để sinh viên dễ dàng kết nối với các bạn cùng chí hướng, cùng nhau hoàn thành mục tiêu học tập một cách hiệu quả.</p>
           <h3>Hướng dẫn đăng ký</h3>
@@ -30,13 +30,13 @@ export const data: NewsItem[] = [
           </ul>
           <p>Đừng bỏ lỡ cơ hội này, hãy nhanh chóng đăng ký để hoàn thành kỳ học SP25 một cách thành công!</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/DSC06698-1024x576.avif",
-    },
-    {
-        id: "2",
-        title: "Lịch nghỉ lễ Giỗ Tổ Hùng Vương, 30/4 và 1/5",
-        date: "2025-04-14",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/DSC06698-1024x576.avif",
+  },
+  {
+    id: "2",
+    title: "Lịch nghỉ lễ Giỗ Tổ Hùng Vương, 30/4 và 1/5",
+    date: "2025-04-14",
+    content: `
           <h2>Lịch nghỉ lễ Giỗ Tổ Hùng Vương, 30/4 và 1/5</h2>
           <p>Trường Đại học FPT thông báo đến toàn thể sinh viên, giảng viên và cán bộ nhân viên về lịch nghỉ lễ Giỗ Tổ Hùng Vương, Ngày Giải phóng miền Nam 30/4 và Quốc tế Lao động 1/5. Đây là dịp quan trọng để chúng ta tưởng nhớ công lao to lớn của các vị vua Hùng cũng như chào mừng những thành tựu lịch sử của dân tộc.</p>
           <h3>Chi tiết lịch nghỉ</h3>
@@ -54,13 +54,13 @@ export const data: NewsItem[] = [
           </ul>
           <p>Chúc toàn thể sinh viên và cán bộ nhân viên một kỳ nghỉ lễ an lành, vui vẻ và ý nghĩa!</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/DSC066672-2048x1152.avif"
-    },
-    {
-        id: "3",
-        title: "Chương trình định hướng tân sinh viên khóa 2025",
-        date: "2025-04-15",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/DSC066672-2048x1152.avif"
+  },
+  {
+    id: "3",
+    title: "Chương trình định hướng tân sinh viên khóa 2025",
+    date: "2025-04-15",
+    content: `
           <h2>Chương trình định hướng tân sinh viên khóa 2025</h2>
           <p>Để chào đón tân sinh viên khóa 2025, Đại học FPT tổ chức chương trình định hướng kéo dài 3 ngày với nhiều nội dung thú vị. Đây là dịp để các bạn sinh viên mới làm quen với môi trường học tập, gặp gỡ thầy cô và bạn bè, cũng như tìm hiểu về văn hóa của Đại học FPT.</p>
           <h3>Thông tin chi tiết</h3>
@@ -77,13 +77,13 @@ export const data: NewsItem[] = [
           </ul>
           <p>Hãy chuẩn bị tinh thần để bước vào một hành trình học tập mới đầy hứng khởi tại Đại học FPT!</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/473570005_1075162927744915_8531605701161055600_n.avif"
-    },
-    {
-        id: "4",
-        title: "FPT Edu Hackathon 2025 chính thức khởi động",
-        date: "2025-04-16",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/473570005_1075162927744915_8531605701161055600_n.avif"
+  },
+  {
+    id: "4",
+    title: "FPT Edu Hackathon 2025 chính thức khởi động",
+    date: "2025-04-16",
+    content: `
           <h2>FPT Edu Hackathon 2025 chính thức khởi động</h2>
           <p>Cuộc thi lập trình thường niên lớn nhất trong hệ thống FPT Education - FPT Edu Hackathon 2025 - đã chính thức khởi động. Đây là sân chơi để các bạn trẻ đam mê công nghệ thử sức với những bài toán thực tế, sáng tạo những giải pháp hữu ích và tiếp cận với cộng đồng công nghệ hàng đầu tại Việt Nam.</p>
           <h3>Chủ đề năm nay</h3>
@@ -104,13 +104,13 @@ export const data: NewsItem[] = [
           </ul>
           <p>Hãy sẵn sàng để chứng tỏ khả năng sáng tạo và tinh thần đổi mới của bạn tại FPT Edu Hackathon 2025!</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/anh-1-7149-7421-6189-5382.jpeg-768x432.avif"
-    },
-    {
-        id: "5",
-        title: "Công bố danh sách sinh viên đạt học bổng kỳ SP25",
-        date: "2025-04-17",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/anh-1-7149-7421-6189-5382.jpeg-768x432.avif"
+  },
+  {
+    id: "5",
+    title: "Công bố danh sách sinh viên đạt học bổng kỳ SP25",
+    date: "2025-04-17",
+    content: `
           <h2>Công bố danh sách sinh viên đạt học bổng kỳ SP25</h2>
           <p>Đại học FPT vừa chính thức công bố danh sách sinh viên nhận học bổng kỳ học SP25. Đây là sự ghi nhận xứng đáng cho những nỗ lực học tập và đóng góp tích cực của các bạn trong cộng đồng sinh viên.</p>
           <h3>Tiêu chí xét học bổng</h3>
@@ -129,13 +129,13 @@ export const data: NewsItem[] = [
           </ul>
           <p>Chúc mừng tất cả các bạn đã đạt được thành tích xuất sắc này!</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/Picture1-1737178819-8506-1737178945.avif"
-    },
-    {
-        id: "6",
-        title: "Khám phá cơ hội thực tập tại doanh nghiệp Nhật Bản",
-        date: "2025-04-18",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/Picture1-1737178819-8506-1737178945.avif"
+  },
+  {
+    id: "6",
+    title: "Khám phá cơ hội thực tập tại doanh nghiệp Nhật Bản",
+    date: "2025-04-18",
+    content: `
           <h2>Khám phá cơ hội thực tập tại doanh nghiệp Nhật Bản</h2>
           <p>Với mong muốn mang đến cơ hội trải nghiệm thực tế và phát triển kỹ năng làm việc trong môi trường quốc tế, Đại học FPT phối hợp cùng các đối tác Nhật Bản tổ chức chương trình thực tập kéo dài 6 tháng dành cho sinh viên năm cuối.</p>
           <h3>Đối tượng tham gia</h3>
@@ -153,13 +153,13 @@ export const data: NewsItem[] = [
           </ul>
           <p>Hạn đăng ký: 30/04/2025. Sinh viên quan tâm vui lòng gửi hồ sơ về email: <a href="mailto:internship@fpt.edu.vn">internship@fpt.edu.vn</a>.</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/473749584_122134099964474258_5292145693106734610_n.avif"
-    },
-    {
-        id: "7",
-        title: "Workshop: Làm chủ kỹ năng thuyết trình trước đám đông",
-        date: "2025-04-19",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/473749584_122134099964474258_5292145693106734610_n.avif"
+  },
+  {
+    id: "7",
+    title: "Workshop: Làm chủ kỹ năng thuyết trình trước đám đông",
+    date: "2025-04-19",
+    content: `
           <h2>Workshop: Làm chủ kỹ năng thuyết trình trước đám đông</h2>
           <p>Thuyết trình là một trong những kỹ năng quan trọng trong học tập và làm việc. Để giúp sinh viên tự tin hơn khi trình bày ý tưởng, Đại học FPT tổ chức workshop chuyên sâu về kỹ năng thuyết trình.</p>
           <h3>Thông tin chi tiết</h3>
@@ -176,13 +176,13 @@ export const data: NewsItem[] = [
           </ul>
           <p>Số lượng chỗ ngồi có hạn, đăng ký ngay tại quầy lễ tân hoặc qua email <a href="mailto:workshop@fpt.edu.vn">workshop@fpt.edu.vn</a>.</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/Truong-Dai-hoc-FPT-la-mot-trong-nhung-don-vi-tien-phong-dua-vo-Vovinam-vao-chuong-trinh-hoc-the-chat-chinh-khoa-1024x685.avif"
-    },
-    {
-        id: "8",
-        title: "Khai mạc giải bóng đá FPT Cup 2025",
-        date: "2025-04-20",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/Truong-Dai-hoc-FPT-la-mot-trong-nhung-don-vi-tien-phong-dua-vo-Vovinam-vao-chuong-trinh-hoc-the-chat-chinh-khoa-1024x685.avif"
+  },
+  {
+    id: "8",
+    title: "Khai mạc giải bóng đá FPT Cup 2025",
+    date: "2025-04-20",
+    content: `
           <h2>Khai mạc giải bóng đá FPT Cup 2025</h2>
           <p>Giải bóng đá sinh viên FPT Cup 2025 đã chính thức khai mạc vào ngày 20/04/2025 tại sân vận động Hòa Lạc. Đây là giải đấu thường niên nhằm tăng cường tinh thần đoàn kết và tạo sân chơi thể thao bổ ích cho các bạn sinh viên trong toàn trường.</p>
           <h3>Thành phần tham gia</h3>
@@ -204,13 +204,13 @@ export const data: NewsItem[] = [
           </ul>
           <p>Hãy cùng cổ vũ cho các đội bóng và hòa mình vào không khí sôi động của FPT Cup 2025!</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/473815877_1012252167600442_4510454983167684123_n-1-1024x683.avif"
-    },
-    {
-        id: "9",
-        title: "FPT University Alumni Day 2025 - Ngày hội ngộ cựu sinh viên",
-        date: "2025-04-21",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/473815877_1012252167600442_4510454983167684123_n-1-1024x683.avif"
+  },
+  {
+    id: "9",
+    title: "FPT University Alumni Day 2025 - Ngày hội ngộ cựu sinh viên",
+    date: "2025-04-21",
+    content: `
           <h2>FPT University Alumni Day 2025 - Ngày hội ngộ cựu sinh viên</h2>
           <p>Ngày hội Alumni Day 2025, sự kiện thường niên của cộng đồng cựu sinh viên Đại học FPT, sẽ được tổ chức vào ngày 25/04/2025 tại cơ sở Hòa Lạc. Đây là dịp để các thế hệ sinh viên trở về trường, gặp gỡ bạn bè, thầy cô và cùng nhìn lại chặng đường đã qua.</p>
           <h3>Chương trình chính</h3>
@@ -224,13 +224,13 @@ export const data: NewsItem[] = [
           <p>Cựu sinh viên có thể đăng ký tham dự sự kiện qua link: <a href="https://alumni.fpt.edu.vn" target="_blank">alumni.fpt.edu.vn</a>. Thời hạn đăng ký đến hết ngày 23/04/2025.</p>
           <p>Đừng bỏ lỡ cơ hội tái ngộ và mở rộng mạng lưới kết nối cùng FPT University Alumni Day 2025!</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/hoi-xuan-2025_019-1024x683.avif"
-    },
-    {
-        id: "10",
-        title: "Hội chợ việc làm FPT 2025 - Cầu nối sinh viên và doanh nghiệp",
-        date: "2025-04-22",
-        content: `
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2025/01/hoi-xuan-2025_019-1024x683.avif"
+  },
+  {
+    id: "10",
+    title: "Hội chợ việc làm FPT 2025 - Cầu nối sinh viên và doanh nghiệp",
+    date: "2025-04-22",
+    content: `
           <h2>Hội chợ việc làm FPT 2025 - Cầu nối sinh viên và doanh nghiệp</h2>
           <p>Hội chợ việc làm FPT 2025 sẽ diễn ra vào ngày 30/04/2025 tại khuôn viên Đại học FPT Hòa Lạc. Đây là sự kiện thường niên được tổ chức nhằm kết nối sinh viên với các doanh nghiệp hàng đầu, mang đến cơ hội nghề nghiệp đa dạng cho các bạn trẻ.</p>
           <h3>Hoạt động tại sự kiện</h3>
@@ -246,6 +246,6 @@ export const data: NewsItem[] = [
           <p>Vui lòng đăng ký tham gia tại link: <a href="https://careerfair.fpt.edu.vn" target="_blank">careerfair.fpt.edu.vn</a>. Thời hạn đăng ký: 28/04/2025.</p>
           <p>Hội chợ việc làm FPT 2025 hứa hẹn sẽ là một sự kiện đáng nhớ, giúp các bạn sinh viên tiến gần hơn đến ước mơ sự nghiệp của mình!</p>
         `,
-        image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/10/dai-hoc-fpt-16-9-768x512.webp"    }
+    image: "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/10/dai-hoc-fpt-16-9-768x512.webp"
+  }
 ];
-
