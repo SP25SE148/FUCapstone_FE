@@ -113,6 +113,10 @@ export const columns: ColumnDef<GroupTopicInfo>[] = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Average GPA" />
         ),
+        cell: ({ row }) => {
+            const group = row.original;
+            return <span>{group?.averageGPA?.toFixed(2)}</span>
+        }
     },
     {
         id: "leaderName",

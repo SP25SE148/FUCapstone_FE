@@ -4,7 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useParams, useRouter } from "next/navigation";
 
-import { data } from "@/app/student/home/table-data"; 
+import { data } from "@/app/student/home/table-data";
 
 export default function NewsDetailPage() {
   const params = useParams();
@@ -26,28 +26,33 @@ export default function NewsDetailPage() {
   const latestNews = sortedNews.slice(0, 3);
 
   return (
-    <div className="container mx-auto p-4 bg-muted min-h-screen flex flex-col items-center">
-      <div className="relative w-full max-w-4xl h-[720px] flex justify-center items-center">
+    <div className="container mx-auto min-h-screen flex flex-col items-center">
+      {/* image */}
+      <div className="relative w-full max-w-4xl flex justify-center items-center">
         <Image
           src={newsItem.image}
           alt={newsItem.title}
           width={1280}
           height={720}
-          className="object-cover"
+          className="object-cover rounded-lg"
         />
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-          <h1 className="text-3xl text-white font-bold">{newsItem.title}</h1>
+        <div className="absolute bottom-0 left-0 right-0 rounded-lg bg-gradient-to-t from-black to-transparent p-4">
+          <h1 className="text-2xl text-white font-bold">{newsItem.title}</h1>
           <time className="text-muted-foreground block">
             {new Date(newsItem.date).toLocaleDateString("vi-VN")}
           </time>
         </div>
       </div>
-      <div className="p-6 bg-muted w-full max-w-4xl mt-6">
+
+      {/* content */}
+      <div className="w-full max-w-4xl mt-6">
         <div
           className="text-lg leading-relaxed"
           dangerouslySetInnerHTML={{ __html: newsItem.content }}
         />
       </div>
+
+      {/* continue */}
       <div className="flex justify-between items-center w-full max-w-4xl mt-8 border-t pt-4">
         {nextItem ? (
           <div className="text-left">
@@ -76,12 +81,14 @@ export default function NewsDetailPage() {
           <div />
         )}
       </div>
-      <h3 className="text-2xl font-bold my-4 mt-8">LASTEST NEWS</h3>
+
+      {/* lastest */}
+      <h3 className="text-2xl font-bold my-6 text-primary">LASTEST NEWS</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-4xl">
         {latestNews.map((news) => (
           <div
             key={news.id}
-            className="bg-muted rounded-lg overflow-hidden cursor-pointer"
+            className="rounded-lg overflow-hidden cursor-pointer"
             onClick={() => router.push(`/student/home/${news.id}`)}
           >
             <Image
@@ -89,10 +96,10 @@ export default function NewsDetailPage() {
               alt={news.title}
               width={300}
               height={200}
-              className="object-cover w-full h-48"
+              className="object-cover rounded-lg"
             />
             <div className="py-4">
-              <h3 className="text-md font-medium hover:text-primary">
+              <h3 className="font-medium hover:text-primary">
                 {news.title}
               </h3>
               <time className="text-sm text-muted-foreground">

@@ -26,7 +26,7 @@ export default function DownloadDocument(
         if (!urlPreview) return;
         const a = document.createElement("a");
         a.href = urlPreview;
-        a.download = topic?.englishName; 
+        a.download = topic?.englishName;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -37,7 +37,7 @@ export default function DownloadDocument(
             <Button
                 variant={"outline"}
                 onClick={handleClickPreview}
-                className="h-12 border-primary text-primary hover:bg-primary hover:text-white"
+                className="mr-6 border-primary text-primary hover:bg-primary hover:text-white"
             >
                 <Download />
                 Document
