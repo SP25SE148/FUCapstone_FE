@@ -1,27 +1,34 @@
 "use client"
 
+import { useState } from "react"
 import { getDate } from "@/lib/utils"
 import { CalendarIcon, Clock, MapPin, Users, RotateCw, User2 } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import type { ReviewCalendar } from "@/contexts/student/student-review-context"
 
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
 export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
+    const [showDetail, setShowDetail] = useState<boolean>(false);
+
     return (
-        <Card className="overflow-hidden border-l-8 border-l-primary hover:shadow-md transition-all">
-            <CardHeader className="bg-primary/20 p-2">
-                <div className="flex justify-between items-center">
+        <Card
+            className="cursor-pointer select-none hover:shadow-md transition-all"
+            onClick={() => { setShowDetail(!showDetail) }}
+        >
+            <div className="flex items-center justify-between border-b-[1px] bg-primary/20 rounded-t-lg">
+                <CardHeader className="p-4">
                     <div className="flex items-center gap-2">
                         <RotateCw className="size-4 text-primary" />
-                        <span className="font-bold text-primary">Review {calendar?.attempt}</span>
+                        <CardTitle className="font-semibold tracking-tight text-xl text-primary">Review {calendar?.attempt}</CardTitle>
                     </div>
-                    <Badge variant="outline" className="bg-primary text-background font-medium">
-                        Room {calendar?.room}
-                    </Badge>
-                </div>
-            </CardHeader>
+                </CardHeader>
+                <Badge variant="outline" className="mr-4 bg-primary text-background font-medium">
+                    Room {calendar?.room}
+                </Badge>
+            </div>
             <CardContent className="p-4">
                 <div className="grid gap-4">
                     {/* Date and Time Section - Highlighted */}
@@ -32,19 +39,38 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                         </h3>
                         <Card className="bg-primary/5">
                             <CardContent className="p-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="bg-primary text-primary-foreground rounded-lg p-2 flex flex-col items-center justify-center min-w-16 text-center gap-2">
-                                        <CalendarIcon className="size-5" />
-                                        <div className="text-sm font-bold">{getDate(calendar?.date)?.split(" ")?.[0]}</div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="size-4 text-primary" />
-                                            <span className="font-semibold text-primary">Slot {calendar?.slot}</span>
+                                <div className="grid grid-cols-3 gap-4 text-sm">
+                                    <div className="flex items-center space-x-2">
+                                        <div className="rounded-md p-2">
+                                            <CalendarIcon className="size-5 text-primary" />
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <MapPin className="size-4 text-primary" />
-                                            <span className="font-semibold text-primary">Room {calendar?.room}</span>
+                                        <div>
+                                            <h3 className="text-sm text-muted-foreground">Date</h3>
+                                            <p className="font-semibold tracking-tight">
+                                                {getDate(calendar?.date)?.split(" ")?.[0]}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <div className="rounded-md p-2">
+                                            <Clock className="size-5 text-primary" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-muted-foreground">Slot</h3>
+                                            <p className="font-semibold tracking-tight">
+                                                {calendar?.slot}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <div className="rounded-md p-2">
+                                            <MapPin className="size-5 text-primary" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-muted-foreground">Room</h3>
+                                            <p className="font-semibold tracking-tight">
+                                                {calendar?.room}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -53,7 +79,7 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                     </div>
 
                     {/* Reviewers Section */}
-                    <div className="space-y-2">
+                    {showDetail && <div className="space-y-2">
                         <h3 className="font-semibold text-sm flex items-center gap-2">
                             <Users className="size-4 text-primary" />
                             Reviewer(s)
@@ -77,7 +103,7 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                                 </Card>
                             ))}
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </CardContent>
         </Card >

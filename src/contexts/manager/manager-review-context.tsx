@@ -45,6 +45,7 @@ export const ManagerReviewProvider = ({ children }: { children: React.ReactNode 
         });
 
         if (response?.isSuccess === true) {
+            getReviewCalendar();
             toast.success("Import review calendar successfully");
         }
         return response
