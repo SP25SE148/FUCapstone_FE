@@ -74,6 +74,7 @@ export interface ProjectProgressWeek {
 export interface ProjectProgress {
   id: string,
   meetingDate: string,
+  slot: string,
   projectProgressWeeks: ProjectProgressWeek[]
 }
 

@@ -12,8 +12,8 @@ export default function ReviewsPage() {
                 <CardTitle className="font-semibold tracking-tight text-xl text-primary">Reviews</CardTitle>
                 <CardDescription>Reviews schedule and information.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-2">
-                {reviewCalendar?.map((calendar) => (
+            <CardContent className="space-y-4">
+                {reviewCalendar?.reverse()?.map((calendar) => (
                     <ReviewItem key={calendar?.id} calendar={calendar} />
                 ))}
             </CardContent>

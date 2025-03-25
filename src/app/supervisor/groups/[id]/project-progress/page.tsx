@@ -83,9 +83,10 @@ export default function ProjectProgressPage() {
                     ?
                     <CardContent className="grid grid-cols-2 gap-4">
                         < div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] overflow-y-auto space-y-2 rounded-xl shadow" >
-                            <h3 className="sticky top-0 z-10 p-2 font-semibold bg-primary text-background rounded-xl">
-                                Meeting date: {projectProgress?.meetingDate}
-                            </h3>
+                            <div className="sticky top-0 z-10 p-2 font-semibold bg-primary text-background rounded-xl grid grid-cols-2 gap-2">
+                                <span>Meeting date: {projectProgress?.meetingDate}</span>
+                                <span>Slot: {projectProgress?.slot}</span>
+                            </div>
                             {
                                 projectProgress?.projectProgressWeeks?.map((projectProgressWeek: ProjectProgressWeek, index) => (
                                     <Card
