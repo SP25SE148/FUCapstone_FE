@@ -11,7 +11,8 @@ export const useApi = () => {
     const { token } = useAuth();
 
     const getToken = () => {
-        return token || localStorage.getItem("token"); // Lấy token từ Context, nếu không có thì lấy từ localStorage
+        return token
+        // return token || localStorage.getItem("token"); // Lấy token từ Context, nếu không có thì lấy từ localStorage
     };
 
     const callApi = async (endpoint: string, options: ApiOptions = {}) => {
