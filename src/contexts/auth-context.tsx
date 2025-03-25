@@ -3,6 +3,7 @@
 import { toast } from 'sonner';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { startSignalRConnection, stopSignalRConnection } from '@/utils/signalRService';
 
@@ -32,10 +33,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: string }> = ({ children, accessToken='' }) => {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
-    const [token, setToken] = useState<string | null>(null);
+    const [token, setToken] = useState<string | null>(accessToken);
 
     const mapDecodedTokenToUser = (decodedToken: DecodedToken): User => ({
         name: decodedToken.name,
@@ -93,7 +94,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const data = await response.json();
         if (data?.isSuccess) {
             const decodedToken = jwtDecode<DecodedToken>(data.value.accessToken);
-            setToken(data.value.accessToken);
+            await fetch('/api/auth', {
+                method: 'POST',
+                body: JSON.stringify(data.value),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(async (res) => {
+                const payload = await res.json()
+                const data = {
+                    status: res.status,
+                    payload
+                }
+                if (!res.ok) {
+                    throw data
+                } 
+                return data
+            })
+            // setToken(data.value.accessToken);
             setUser(mapDecodedTokenToUser(decodedToken));
 
             localStorage.setItem("token", data.value.accessToken);
@@ -144,13 +162,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const logout = async () => {
-        const accessToken = localStorage.getItem("token");
+        // const accessToken = localStorage.getItem("token");
+        const accessToken = token;
         await stopSignalRConnection();
         await fetch("https://localhost:8000/identity/Auth/token/revoke", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ accessToken }),
         });
+
+        await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ accessToken }),
+          });
 
         setUser(null);
         setToken(null);
@@ -163,33 +190,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        const storedRefreshToken = localStorage.getItem("refreshToken");
-        const refreshTokenExpiryTime = localStorage.getItem("refreshTokenExpiryTime");
-
-        if (storedToken) {
-            try {
-                const decodedToken = jwtDecode<DecodedToken>(storedToken);
-
-                // Kiểm tra refreshTokenExpiryTime có hết hạn chưa
-                if (refreshTokenExpiryTime && new Date(refreshTokenExpiryTime) <= new Date()) {
-                    handleSessionExpired(); // Xóa token và yêu cầu đăng nhập lại
-                    return;
-                }
-
-                if (decodedToken?.exp * 1000 > Date.now()) {
-                    setToken(storedToken);
-                    setUser(mapDecodedTokenToUser(decodedToken));
-                } else if (storedRefreshToken) {
-                    refreshAccessToken(storedToken, storedRefreshToken);
-                } else {
-                    handleSessionExpired();
-                }
-            } catch (error) {
-                handleSessionExpired();
+        if (accessToken) {
+          try {
+            const decodedToken = jwtDecode<DecodedToken>(accessToken);
+    
+            if (decodedToken?.exp * 1000 > Date.now()) {
+              setToken(accessToken);
+              setUser(mapDecodedTokenToUser(decodedToken));
+            } else {
+              handleSessionExpired();
             }
+          } catch (error) {
+            handleSessionExpired();
+          }
         }
-    }, []);
+      }, [accessToken]);
 
     return (
         <AuthContext.Provider value={{ user, token, login, logout }}>

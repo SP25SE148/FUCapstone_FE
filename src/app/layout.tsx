@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { SignalRProvider } from "@/contexts/signalR-context";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { cookies } from "next/headers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -18,15 +19,18 @@ export const metadata: Metadata = {
   description: "FPT University Capstone",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get('accessToken')
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <AuthProvider>
+        <AuthProvider accessToken = {accessToken?.value}>
           <SignalRProvider>
             <ThemeProvider
               attribute="class"
