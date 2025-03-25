@@ -2,27 +2,11 @@
 
 import { toast } from 'sonner';
 import { jwtDecode } from 'jwt-decode';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { startSignalRConnection, stopSignalRConnection } from '@/utils/signalRService';
-
-interface User {
-    name: string;
-    MajorId: string;
-    CampusId: string;
-    CapstoneId: string;
-    "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
-    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": string;
-    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
-    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
-}
-
-interface DecodedToken extends User {
-    iss: string;
-    aud: string;
-    exp: number;
-}
+import { DecodedToken, User } from '@/types/types';
 
 interface AuthContextType {
     user: User | null;
@@ -35,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: string }> = ({ children, accessToken='' }) => {
     const router = useRouter();
+    const pathname = usePathname();
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(accessToken);
 
@@ -190,13 +175,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: s
     };
 
     useEffect(() => {
+        
+        const storedRefreshToken = localStorage.getItem("refreshToken");
+        const refreshTokenExpiryTime = localStorage.getItem("refreshTokenExpiryTime");
+
         if (accessToken) {
           try {
-            const decodedToken = jwtDecode<DecodedToken>(accessToken);
+                const decodedToken = jwtDecode<DecodedToken>(accessToken);
+
+                // Kiểm tra refreshTokenExpiryTime có hết hạn chưa
+                if (refreshTokenExpiryTime && new Date(refreshTokenExpiryTime) <= new Date()) {
+                    handleSessionExpired(); // Xóa token và yêu cầu đăng nhập lại
+                    return;
+                }
     
             if (decodedToken?.exp * 1000 > Date.now()) {
-              setToken(accessToken);
+                    setToken(accessToken);
               setUser(mapDecodedTokenToUser(decodedToken));
+                } else if (storedRefreshToken) {
+                    refreshAccessToken(accessToken, storedRefreshToken);
             } else {
               handleSessionExpired();
             }
@@ -204,7 +201,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: s
             handleSessionExpired();
           }
         }
-      }, [accessToken]);
+    }, []);
 
     return (
         <AuthContext.Provider value={{ user, token, login, logout }}>
