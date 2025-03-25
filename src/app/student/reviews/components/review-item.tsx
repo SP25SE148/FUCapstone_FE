@@ -60,7 +60,7 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                         </h3>
                         <div className="grid grid-cols-2 gap-3">
                             {calendar?.reviewersCode?.map((reviewer: string, index: number) => (
-                                <Card className="bg-primary/5">
+                                <Card key={index} className="bg-primary/5">
                                     <CardContent className="p-4">
                                         <div className="flex items-center gap-3">
                                             <Avatar className="size-12 border-2 border-primary">

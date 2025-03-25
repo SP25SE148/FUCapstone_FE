@@ -1,19 +1,15 @@
 "use client";
 
-import { DataTable } from "@/components/ui/data-table";
-import { columns } from "@/app/student/topics/components/topic-table-columns";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { BookOpen, ClipboardCheck, Code, User } from "lucide-react";
+
 import { useStudentTopics } from "@/contexts/student/student-topic-context";
 import { useStudentProfile } from "@/contexts/student/student-profile-context";
-import { BookOpen, ClipboardCheck, Code, User } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
+import { DataTable } from "@/components/ui/data-table";
 import CreateGroup from "@/app/student/topics/components/create-group";
+import { columns } from "@/app/student/topics/components/topic-table-columns";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 
 export default function TopicTable() {
   const { topics, topicRequest, groupInfo } = useStudentTopics();
@@ -32,8 +28,8 @@ export default function TopicTable() {
 
   const underReviewRequests = topicRequest
     ? Object.entries(topicRequest).filter(([key, value]) =>
-        value.some((request) => request.status === "UnderReview")
-      )
+      value.some((request) => request.status === "UnderReview")
+    )
     : [];
 
   return !studentProfile?.isHaveBeenJoinGroup ||
@@ -44,7 +40,7 @@ export default function TopicTable() {
       <CardHeader>
         <div className="items-center">
           <div>
-            <CardTitle className="font-semibold tracking-tight text-xl">
+            <CardTitle className="font-semibold tracking-tight text-xl text-primary">
               Topics
             </CardTitle>
             <CardDescription>

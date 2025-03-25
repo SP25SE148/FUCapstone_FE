@@ -104,16 +104,14 @@ export default function MyTopicPage() {
     :
     <Card className="min-h-[calc(100vh-60px)]">
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <CardHeader>
-            <CardTitle className="font-semibold tracking-tight text-xl text-primary">
-              {groupInfo?.topicResponse?.englishName}
-            </CardTitle>
-            <CardDescription>
-              {groupInfo?.topicResponse?.vietnameseName}
-            </CardDescription>
-          </CardHeader>
-        </div>
+        <CardHeader>
+          <CardTitle className="font-semibold tracking-tight text-xl text-primary">
+            {groupInfo?.topicResponse?.englishName}
+          </CardTitle>
+          <CardDescription>
+            {groupInfo?.topicResponse?.vietnameseName}
+          </CardDescription>
+        </CardHeader>
         {groupInfo?.topicResponse && (
           <DownloadDocument topic={groupInfo.topicResponse} />
         )}

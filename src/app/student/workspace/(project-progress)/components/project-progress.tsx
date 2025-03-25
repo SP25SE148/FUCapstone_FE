@@ -3,18 +3,13 @@
 import { useEffect, useState } from "react";
 import { Calendar1, ClipboardX, LayoutList, X } from "lucide-react";
 
+import { ProjectProgress, ProjectProgressWeek } from "@/types/types";
+import { useStudentTasks } from "@/contexts/student/student-task-context";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useStudentTasks } from "@/contexts/student/student-task-context";
-import { ProjectProgress, ProjectProgressWeek } from "@/types/types";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 import LeaderEvaluationWeek from "@/app/student/workspace/(project-progress)/components/leader-evaluation-week";
 
 const getStatus = (status: number | undefined) => {
@@ -63,26 +58,28 @@ export default function ProjectProgressView() {
 
   return (
     <Card className="min-h-[calc(100vh-60px)]">
-      <div className="flex items-center justify-between">
-        <CardHeader>
-          <CardTitle className="font-semibold tracking-tight text-xl text-primary">
-            Project Progress
-          </CardTitle>
-          <CardDescription>
-            Detail information of project progress
-          </CardDescription>
-        </CardHeader>
-      </div>
-      {projectProgress ? (
+      <CardHeader>
+        <CardTitle className="font-semibold tracking-tight text-xl text-primary">
+          Project Progress
+        </CardTitle>
+        <CardDescription>
+          Detail information of project progress
+        </CardDescription>
+      </CardHeader>
+      {projectProgress
+        ?
         <CardContent className="grid grid-cols-2 gap-4">
-          <div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] overflow-y-auto space-y-2 rounded-xl shadow">
-            {projectProgress?.projectProgressWeeks?.map(
-              (projectProgressWeek: ProjectProgressWeek, index) => (
+          <div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] overflow-y-auto space-y-2 rounded-xl shadow" >
+            <h3 className="sticky top-0 z-10 p-2 font-semibold bg-primary text-background rounded-xl">
+              Meeting date: {projectProgress?.meetingDate}
+            </h3>
+            {
+              projectProgress?.projectProgressWeeks?.map((projectProgressWeek: ProjectProgressWeek, index) => (
                 <Card
                   key={index}
                   className="bg-primary/5 cursor-pointer hover:bg-primary/20"
                   onClick={() => {
-                    setCurrentProjectProgressWeek(projectProgressWeek);
+                    setCurrentProjectProgressWeek(projectProgressWeek)
                   }}
                 >
                   <CardContent className="p-4">
@@ -94,21 +91,18 @@ export default function ProjectProgressView() {
                       </Avatar>
                       <div className="flex-1 flex items-center justify-between">
                         <div>
-                          <p className="font-semibold">
-                            Week: {projectProgressWeek?.weekNumber}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            Click to view task description
-                          </p>
+                          <p className="font-semibold">Week: {projectProgressWeek?.weekNumber}</p>
+                          <p className="text-xs text-muted-foreground">Click to view task description</p>
                         </div>
                         {getStatus(projectProgressWeek?.status)}
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              )
-            )}
-          </div>
+              ))
+            }
+          </div >
+
           {currentProjectProgressWeek ? (
             <div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] p-4 rounded-xl border bg-card text-card-foreground shadow">
               <div className="mb-4 flex items-center justify-between">
@@ -189,7 +183,7 @@ export default function ProjectProgressView() {
               <div className="h-full flex flex-col items-center justify-center gap-8">
                 <LayoutList className="size-20 text-primary" />
                 <div className="space-y-2">
-                  <p className="text-xl font-bold text-center">
+                  <p className="text-xl font-bold text-center text-primary">
                     No project progress week selected
                   </p>
                   <p className="text-muted-foreground text-center text-sm">
@@ -200,12 +194,12 @@ export default function ProjectProgressView() {
             </div>
           )}
         </CardContent>
-      ) : (
+        :
         <CardContent className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)]">
           <div className="h-full flex flex-col items-center justify-center gap-8">
             <ClipboardX className="size-20 text-primary" />
             <div className="space-y-2">
-              <p className="text-xl font-bold text-center">
+              <p className="text-xl font-bold text-center text-primary">
                 No project progress was uploaded
               </p>
               <p className="text-muted-foreground text-center text-sm">
@@ -214,7 +208,7 @@ export default function ProjectProgressView() {
             </div>
           </div>
         </CardContent>
-      )}
+      }
     </Card>
   );
 }
