@@ -1,8 +1,12 @@
 "use client";
 
-import { getDate } from "@/lib/utils";
+import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
+
+import { getDate } from "@/lib/utils";
 import { ReviewCalendar } from "@/contexts/manager/manager-review-context";
+
+import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 export const columns: ColumnDef<ReviewCalendar>[] = [
@@ -72,4 +76,20 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
       return reviewer2;
     },
   },
+  {
+    id: "action",
+    cell: ({ row }) => {
+      const reviewCalendar = row.original;
+      return <Button asChild size={"sm"}>
+        <Link
+          href={{
+            pathname: `/supervisor/reviews/${reviewCalendar?.id}`,
+            query: { groupId: `${reviewCalendar?.groupId}` }
+          }}
+        >
+          Review
+        </Link>
+      </Button>;
+    },
+  }
 ];
