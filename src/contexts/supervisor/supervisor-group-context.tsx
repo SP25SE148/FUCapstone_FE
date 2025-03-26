@@ -126,6 +126,7 @@ interface SupervisorGroupContextType {
   evaluationWeeklyProgress: (data: any) => Promise<void>;
   getEvaluationWeeklyProgress: (groupId: string) => Promise<EvaluationStudent[]>;
   exportEvaluationWeeklyProgressFile: (groupId: string) => Promise<any>;
+  updateGroupDecisionStatusBySupervisor: (data: any) => Promise<void>
 }
 
 const SupervisorGroupContext = createContext<
@@ -217,6 +218,18 @@ export const SupervisorGroupProvider: React.FC<{
     return (response);
   };
 
+  const updateGroupDecisionStatusBySupervisor = async (data: any) => {
+    const response: any = await callApi("fuc/user/supervisor/update-group-decision-status", {
+      method: "PUT",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Update decision successfully");
+    }
+    return response
+  };
+
   useEffect(() => {
     if (pathName === "/supervisor/groups") {
       getGroupManageBySupervisor();
@@ -236,7 +249,8 @@ export const SupervisorGroupProvider: React.FC<{
         getProjectProgressTaskDetail,
         evaluationWeeklyProgress,
         getEvaluationWeeklyProgress,
-        exportEvaluationWeeklyProgressFile
+        exportEvaluationWeeklyProgressFile,
+        updateGroupDecisionStatusBySupervisor
       }}
     >
       {children}

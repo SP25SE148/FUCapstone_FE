@@ -13,6 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         { label: "Group Info", href: `/supervisor/groups/${groupId}` },
         { label: "Project Progress", href: `/supervisor/groups/${groupId}/project-progress` },
         { label: "My Evaluation", href: `/supervisor/groups/${groupId}/my-evaluation` },
+        { label: "My Decision", href: `/supervisor/groups/${groupId}/my-decision` },
     ];
 
     return (

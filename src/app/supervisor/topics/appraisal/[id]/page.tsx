@@ -103,6 +103,7 @@ export default function TopicAppraisalDetail() {
     try {
       const data = {
         "topicAppraisalId": topicAppraisalId,
+        "topicId": topicId,
         "appraisalContent": values?.appraisalContent,
         "appraisalComment": values?.appraisalComment,
         "status": Number(values?.status),
