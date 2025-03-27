@@ -2,7 +2,7 @@
 
 import React from "react"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, UserRoundCog, UserPen, Users, Newspaper } from "lucide-react"
+import { LayoutDashboard, UserRoundCog, UserPen, Users, Newspaper, CalendarCog } from "lucide-react"
 
 import { Separator } from "@/components/ui/separator"
 import { AppSidebar } from "@/components/layout/app-sidebar"
@@ -15,6 +15,7 @@ const items = [
     { title: "Supervisors", url: "/admin/supervisors", icon: UserPen, },
     { title: "Students", url: "/admin/students", icon: Users, },
     { title: "Announcements", url: "/admin/announcements", icon: Newspaper, },
+    { title: "Configurations", url: "/admin/configurations", icon: CalendarCog, },
 ]
 
 export default function Layout({ children }: { children: React.ReactNode }) {
