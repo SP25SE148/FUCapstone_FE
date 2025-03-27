@@ -5,7 +5,6 @@ import { BookOpen, BriefcaseBusiness, BadgeInfo, Users, FileCheck, BookUser, Sch
 
 import { getDate } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
-import { Topic } from "@/contexts/student/student-topic-context";
 import { useStudentTopics } from "@/contexts/student/student-topic-context";
 
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +14,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import RegisterTopic from "@/app/student/topics/components/register-topic";
 import DownloadDocument from "@/app/student/topics/components/download-document";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from "@/components/ui/sheet";
+import { Topic } from "@/types/types";
 
 interface TopicSheetProps {
   topic: Topic;
@@ -112,6 +112,8 @@ export default function TopicSheet({ topic, open, onClose }: TopicSheetProps) {
       setIsLeader(!!leader);
     }
   }, [groupInfo, user]);
+
+  const hasRegisteredTopic = !!groupInfo?.topicCode;
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
@@ -290,7 +292,9 @@ export default function TopicSheet({ topic, open, onClose }: TopicSheetProps) {
                 Close
               </Button>
             </SheetClose>
-            {isLeader && <RegisterTopic topicId={topic.id} groupId={groupInfo?.id} />}
+            {isLeader && !hasRegisteredTopic && (
+              <RegisterTopic topicId={topic.id} groupId={groupInfo?.id} />
+            )}
           </div>
         </div>
       </SheetContent>
