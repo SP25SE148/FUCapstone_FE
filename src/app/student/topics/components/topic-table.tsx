@@ -56,62 +56,52 @@ export default function TopicTable() {
                   Your Topic Requests
                 </h3>
               </div>
-              <div className="p-4 bg-background">
                 {underReviewRequests.map(([key, requests]) => (
-                  <div key={key} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div key={key} className="flex p-8 w-full">
                       {requests
                         .filter((request) => request.status === "UnderReview")
-                        .map((request, index) => (
+                        .map((request) => (
                           <div
                             key={request.topicRequestId}
-                            className="grid grid-cols-2 gap-4"
+                            className="flex items-center justify-between w-3/4"
                           >
-                            <div className="flex items-start gap-3">
-                              <BookOpen className="h-5 w-5 text-primary mt-0.5" />
+                            <div className="flex items-center gap-3">
+                              <BookOpen className="h-5 w-5 text-primary" />
                               <div>
                                 <p className="text-sm font-medium text-muted-foreground">
                                   Topic
                                 </p>
-                                <p className="font-medium">
-                                  {request.topicEnglishName}
-                                </p>
+                                <p className="font-medium">{request.topicEnglishName}</p>
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3">
-                              <Code className="h-5 w-5 text-primary mt-0.5" />
+                            <div className="flex items-center gap-3">
+                              <Code className="h-5 w-5 text-primary" />
                               <div>
                                 <p className="text-sm font-medium text-muted-foreground">
                                   Topic Code
                                 </p>
-                                <p className="font-medium">
-                                  {request.topicCode}
-                                </p>
+                                <p className="font-medium">{request.topicCode}</p>
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3">
-                              <User className="h-5 w-5 text-primary mt-0.5" />
+                            <div className="flex items-center gap-3">
+                              <User className="h-5 w-5 text-primary" />
                               <div>
                                 <p className="text-sm font-medium text-muted-foreground">
                                   Supervisor
                                 </p>
-                                <p className="font-medium">
-                                  {request.supervisorFullName}
-                                </p>
+                                <p className="font-medium">{request.supervisorFullName}</p>
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3">
+                            <div className="flex items-center gap-3">
                               <div>
                                 <p className="text-sm font-medium text-muted-foreground">
                                   Status
                                 </p>
                                 <Badge
-                                  className={`mt-1 ${getStatusColor(
-                                    request.status
-                                  )}`}
+                                  className={`mt-1 ${getStatusColor(request.status)}`}
                                 >
                                   {request.status}
                                 </Badge>
@@ -119,11 +109,9 @@ export default function TopicTable() {
                             </div>
                           </div>
                         ))}
-                    </div>
                   </div>
                 ))}
               </div>
-            </div>
           )}
         </div>
       </CardHeader>

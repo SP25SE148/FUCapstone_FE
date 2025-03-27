@@ -21,7 +21,7 @@ const formSchema = z.object({
     file: z
         .any()
         .refine((files) => files?.length === 1, "Please select a file.")
-        .refine((files) => {
+        .refine((files) => { 
             const allowedType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; // MIME type của Excel
             return files && files[0]?.type === allowedType;
         }, "Only accept Excel files (.xlsx)"),
@@ -30,7 +30,7 @@ const formSchema = z.object({
 export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
     const params = useParams();
     const id: string = String(params.id);
-    const { getDefensesCalendarTemplate } = useManagerDefense();
+    const { importDefenseCalendar, getDefensesCalendarTemplate } = useManagerDefense();
 
     const [open, setOpen] = useState<boolean>(false);
     const [fileData, setFileData] = useState<any[]>([]);
@@ -51,12 +51,11 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
             const formData = new FormData();
             formData.append("GroupId", id)
             formData.append("File", file);
-            // const res: any = await importProjectProgress(formData);
-            // if (res?.isSuccess) {
-            //     form.reset();
-            //     setOpen(false);
-            //     refresh();
-            // }
+            const res: any = await importDefenseCalendar(formData);
+            if (res?.isSuccess) {
+                form.reset();
+                setOpen(false);
+            }
         } finally {
             setIsLoading(false);
         }

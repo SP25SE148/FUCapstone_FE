@@ -91,7 +91,7 @@ export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
                 <DialogTrigger asChild>
                     <Button className="mr-6">
                         <Upload />
-                        Upload
+                        Upload 
                     </Button>
                 </DialogTrigger>
                 <DialogContent >
