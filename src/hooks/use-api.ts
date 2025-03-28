@@ -2,7 +2,7 @@ import { toast } from 'sonner';
 import { useAuth } from '../contexts/auth-context';
 
 interface ApiOptions {
-    method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
     body?: object;
     responseType?: "json" | "blob";
 }
