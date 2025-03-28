@@ -2,8 +2,8 @@ import { toast } from 'sonner';
 import { useAuth } from '../contexts/auth-context';
 
 interface ApiOptions {
-    method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-    body?: object;
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+    body?: object | number | string;
     responseType?: "json" | "blob";
 }
 
@@ -32,10 +32,15 @@ export const useApi = () => {
 
         if (body instanceof FormData) {
             requestBody = body; // Nếu là FormData, giữ nguyên
+        } else if (typeof body === "string" || typeof body === "number") {
+            headers["Content-Type"] = "application/json"; // Sửa thành application/json
+            requestBody = JSON.stringify(body); // Chuyển thành JSON string
         } else if (body && typeof body === "object") {
             headers["Content-Type"] = "application/json";
             requestBody = JSON.stringify(body);
         }
+        
+
 
         try {
             let response = await fetch(`https://localhost:8000/${endpoint}`, {

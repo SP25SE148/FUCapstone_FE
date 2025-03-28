@@ -7,6 +7,14 @@ export interface BusinessArea {
 
 // main types
 
+export interface SystemConfig {
+  maxTopicsForCoSupervisors: number;
+  maxTopicAppraisalsForTopic: number;
+  expirationTopicRequestDuration: number;
+  expirationTeamUpDuration: number;
+  maxAttemptTimesToDefendCapstone: number;
+  maxAttemptTimesToReviewTopic: number
+}
 
 export interface User {
   name: string;
@@ -24,8 +32,6 @@ export interface DecodedToken extends User {
   aud: string;
   exp: number;
 }
-
-
 
 export type Campus = {
   id: string;
@@ -113,5 +119,6 @@ export interface RequestsOfTopic {
   gpa: number;
   leaderFullName: string;
   createdDate: string
-
 }
+
+

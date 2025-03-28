@@ -9,7 +9,7 @@ import { ProjectProgress } from "@/types/types";
 export interface Task {
   id: string;
   keyTask: string;
-  description: string;
+  description: string; 
   summary: string;
   assigneeId: string;
   reporterId: string;
