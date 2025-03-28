@@ -46,6 +46,9 @@ export default function NotificationsPage() {
       case "TopicApprovedEvent":
         router.push("/supervisor/topics");
         break;
+      case "TopicRequestCreatedEvent":
+        router.push("/supervisor/topics/my-request");
+        break;
       default:
         console.warn("No route defined for this notification type:", type);
     }
@@ -64,28 +67,31 @@ export default function NotificationsPage() {
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {notifications?.map((notification: any) => (
-            <div
-              key={notification?.id}
-              className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-200 group cursor-pointer"
-              onClick={() => handleNotificationClick(notification?.type)}
-            >
-              <div className="flex items-start gap-3">
-                <Bell className="h-5 w-5 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="font-semibold transition-all duration-200">
-                    {notification?.content}
-                  </p>
-                  {/* <p className="font-semibold transition-all duration-200">
-                    {notification?.type}
-                  </p> */}
-                  <p className="text-sm font-medium text-primary  transition-all duration-200">
-                    {getTimeElapsed(notification?.createdDate)}
-                  </p>
+          {notifications
+            ?.slice()
+            .reverse()
+            .map((notification: any) => (
+              <div
+                key={notification?.id}
+                className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-200 group cursor-pointer"
+                onClick={() => handleNotificationClick(notification?.type)}
+              >
+                <div className="flex items-start gap-3">
+                  <Bell className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="font-semibold transition-all duration-200">
+                      {notification?.content}
+                    </p>
+                    <p className="font-semibold transition-all duration-200">
+                      {notification?.type}
+                    </p>
+                    <p className="text-sm font-medium text-primary  transition-all duration-200">
+                      {getTimeElapsed(notification?.createdDate)}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           {!notifications ||
             (notifications.length === 0 && (
