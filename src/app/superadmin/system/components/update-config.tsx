@@ -50,7 +50,7 @@ export const InputGroup = ({ label, value, onSave, onCancel, icon }: InputGroupP
 
   return (
     <div className="flex items-center gap-4">
-      <div className="flex items-center gap-2 w-64">
+      <div className="flex items-center gap-2 w-full">
         {icon && <span>{icon}</span>}
         <label className="text-sm font-medium">{label}</label>
       </div>
