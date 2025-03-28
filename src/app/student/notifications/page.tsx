@@ -45,6 +45,8 @@ export default function NotificationsPage() {
         router.push("/student/workspace");
         break;
         case "GroupMemberStatusUpdateMessage":
+        case "JoinGroupRequestCreatedEvent":
+        case "JoinGroupRequestStatusUpdatedEvent":
           router.push("/student/groups/my-request");
         break;
       default:
