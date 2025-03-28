@@ -31,59 +31,26 @@ export const StudentProfileProvider: React.FC<{
   const { user } = useAuth();
   const { callApi } = useApi();
   const pathname = usePathname();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [businessAreas, setBusinessAreas] = useState<BusinessArea[]>([]);
   const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null);
 
   const fetchStudentProfile = async () => {
-    setLoading(true);
-    try {
-      if (user) {
-        const response = await callApi(
-          `fuc/User/student/${user["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"]}`
-        );
-
-        if (response?.isSuccess) {
-          setStudentProfile(response.value);
-        } else {
-          throw new Error(
-            response?.error?.message || "Failed to fetch student profile"
-          );
-        }
-      }
-    } catch (error) {
-      toast.error("Error getting student profile", {
-        description: `${error}`,
-      });
-      console.error("Error fetching student profile:", error);
-    } finally {
-      setLoading(false);
+    if (user) {
+      const response = await callApi(`fuc/User/student/${user["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"]}`);
+      setStudentProfile(response?.value);
     }
   };
 
   const fetchBusinessArea = async () => {
-    try {
-      const response = await callApi(`fuc/topics/business`);
-      if (response?.isSuccess) {
-        setBusinessAreas(response.value);
-      } else {
-        throw new Error(
-          response?.error?.message || "Failed to fetch business areas"
-        );
-      }
-    } catch (error) {
-      toast.error("Error getting business areas", {
-        description: `${error}`,
-      });
-      console.error("Error fetching business areas:", error);
-    }
+    const response = await callApi(`fuc/topics/business`);
+    setBusinessAreas(response?.value);
   };
 
   const updateStudentProfile = async (data: {
     businessAreaId: string;
     GPA: number;
   }) => {
-    setLoading(true);
     const response = await callApi(`fuc/User/student`, {
       method: "PUT",
       body: data,
@@ -98,15 +65,12 @@ export const StudentProfileProvider: React.FC<{
   };
 
   useEffect(() => {
-    const loadProfile = async () => {
-      await fetchStudentProfile();
-    };
-    loadProfile();
+    fetchStudentProfile();
   }, [user]);
 
   useEffect(() => {
     if (studentProfile) {
-      if (studentProfile.businessArea === "" && studentProfile.gpa === 0) {
+      if (studentProfile?.businessArea === "" && studentProfile?.gpa === 0) {
         router.push("/student/update-information");
       }
     }

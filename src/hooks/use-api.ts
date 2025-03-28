@@ -8,11 +8,11 @@ interface ApiOptions {
 }
 
 export const useApi = () => {
-    const { token } = useAuth();
+    const { token, refreshAccessToken } = useAuth();
+    const refreshToken = localStorage.getItem("refreshToken") || ""
 
     const getToken = () => {
-        return token
-        // return token || localStorage.getItem("token"); // Lấy token từ Context, nếu không có thì lấy từ localStorage
+        return token || localStorage.getItem("token") || ""
     };
 
     const callApi = async (endpoint: string, options: ApiOptions = {}) => {
@@ -21,7 +21,7 @@ export const useApi = () => {
 
         if (!currentToken) {
             console.error("Không tìm thấy token! Người dùng có thể chưa đăng nhập.");
-            throw new Error("Unauthorized - Token is missing");
+            toast.error("Unauthorized - Token is missing");
         }
 
         let headers: HeadersInit = {
@@ -38,18 +38,33 @@ export const useApi = () => {
         }
 
         try {
-            const response = await fetch(`https://localhost:8000/${endpoint}`, {
+            let response = await fetch(`https://localhost:8000/${endpoint}`, {
                 method,
                 headers,
                 body: requestBody,
             });
+
+            // Nếu token hết hạn (401), tự động refresh và gửi lại request
+            if (response.status === 401) {
+                console.log("Access token expired, refreshing...");
+                await refreshAccessToken(currentToken, refreshToken);
+
+                // Gửi lại request với token mới
+                response = await fetch(`https://localhost:8000/${endpoint}`, {
+                    method,
+                    headers,
+                    body: requestBody,
+                });
+            }
+
 
             // Nếu responseType là "blob", trả về blob thay vì JSON
             if (responseType === "blob") {
                 return await response.blob();
             }
 
-            const data = await response.json();
+            const text = await response.text();
+            const data = text ? JSON.parse(text) : null;
 
             if (data?.isSuccess !== true && data?.detail === "The specified result value is null.") {
                 console.log(data?.detail || "Something went wrong, please try again later");
@@ -60,7 +75,7 @@ export const useApi = () => {
             return data;
         } catch (error) {
             console.error("API call error:", error);
-            throw error;
+            toast.error(`${error}`);
         }
     };
 

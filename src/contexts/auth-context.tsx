@@ -13,11 +13,12 @@ interface AuthContextType {
     token: string | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
+    refreshAccessToken: (accessToken: string, refreshToken: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: string }> = ({ children, accessToken='' }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: string }> = ({ children, accessToken = '' }) => {
     const router = useRouter();
     const pathname = usePathname();
     const [user, setUser] = useState<User | null>(null);
@@ -59,7 +60,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: s
         }
     };
 
-    const handleSessionExpired = () => {
+    const handleSessionExpired = async () => {
+        await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        });
         setUser(null);
         setToken(null);
         localStorage.removeItem("token");
@@ -79,24 +84,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: s
         const data = await response.json();
         if (data?.isSuccess) {
             const decodedToken = jwtDecode<DecodedToken>(data.value.accessToken);
-            await fetch('/api/auth', {
+            await fetch('/api/auth/login', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data.value),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }).then(async (res) => {
-                const payload = await res.json()
-                const data = {
-                    status: res.status,
-                    payload
-                }
-                if (!res.ok) {
-                    throw data
-                } 
-                return data
             })
-            // setToken(data.value.accessToken);
             setUser(mapDecodedTokenToUser(decodedToken));
 
             localStorage.setItem("token", data.value.accessToken);
@@ -127,17 +119,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: s
             const data = await response.json();
 
             if (data?.isSuccess) {
-                const newAccessToken = data.value.accessToken;
-                const newRefreshToken = data.value.refreshToken;
-                const newRefreshTokenExpiryTime = data.value.refreshTokenExpiryTime;
+                await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data.value),
+                })
 
-                const decodedToken = jwtDecode<DecodedToken>(newAccessToken);
-                setToken(newAccessToken);
+                const decodedToken = jwtDecode<DecodedToken>(data.value.accessToken);
                 setUser(mapDecodedTokenToUser(decodedToken));
 
-                localStorage.setItem("token", newAccessToken);
-                localStorage.setItem("refreshToken", newRefreshToken);
-                localStorage.setItem("refreshTokenExpiryTime", newRefreshTokenExpiryTime);
+                localStorage.setItem("token", data.value.accessToken);
+                localStorage.setItem("refreshToken", data.value.refreshToken);
+                localStorage.setItem("refreshTokenExpiryTime", data.value.refreshTokenExpiryTime);
             } else {
                 handleSessionExpired();
             }
@@ -147,22 +140,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: s
     };
 
     const logout = async () => {
-        // const accessToken = localStorage.getItem("token");
         const accessToken = token;
         await stopSignalRConnection();
+
         await fetch("https://localhost:8000/identity/Auth/token/revoke", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ accessToken }),
         });
-
         await fetch("/api/auth/logout", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ accessToken }),
-          });
+            headers: { "Content-Type": "application/json" },
+        });
 
         setUser(null);
         setToken(null);
@@ -175,12 +164,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: s
     };
 
     useEffect(() => {
-        
+        const token = localStorage.getItem("token")
         const storedRefreshToken = localStorage.getItem("refreshToken");
         const refreshTokenExpiryTime = localStorage.getItem("refreshTokenExpiryTime");
 
-        if (accessToken) {
-          try {
+        if (token) {
+            try {
                 const decodedToken = jwtDecode<DecodedToken>(accessToken);
 
                 // Kiểm tra refreshTokenExpiryTime có hết hạn chưa
@@ -188,23 +177,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode, accessToken?: s
                     handleSessionExpired(); // Xóa token và yêu cầu đăng nhập lại
                     return;
                 }
-    
-            if (decodedToken?.exp * 1000 > Date.now()) {
+
+                if (decodedToken?.exp * 1000 > Date.now()) {
                     setToken(accessToken);
-              setUser(mapDecodedTokenToUser(decodedToken));
-                } else if (storedRefreshToken) {
-                    refreshAccessToken(accessToken, storedRefreshToken);
-            } else {
-              handleSessionExpired();
+                    setUser(mapDecodedTokenToUser(decodedToken));
+                } else if (token && storedRefreshToken) {
+                    refreshAccessToken(token, storedRefreshToken);
+                } else {
+                    handleSessionExpired();
+                }
+            } catch (error) {
+                handleSessionExpired();
             }
-          } catch (error) {
-            handleSessionExpired();
-          }
         }
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout }}>
+        <AuthContext.Provider value={{ user, token, login, logout, refreshAccessToken }}>
             {children}
         </AuthContext.Provider>
     );

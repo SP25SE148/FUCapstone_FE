@@ -1,14 +1,23 @@
-import { DecodedToken } from "@/types/types";
 import { jwtDecode } from "jwt-decode";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+import { DecodedToken } from "@/types/types";
+
 const rolePaths: Record<string, string> = {
   SuperAdmin: "/superadmin",
   Admin: "/admin",
-  Student: "/student",
-  Supervisor: "/supervisor",
   Manager: "/manager",
+  Supervisor: "/supervisor",
+  Student: "/student",
+};
+
+const rolePathsRedirect: Record<string, string> = {
+  SuperAdmin: "/superadmin",
+  Admin: "/admin",
+  Manager: "/manager",
+  Supervisor: "/supervisor/home",
+  Student: "/student/home",
 };
 
 export function middleware(request: NextRequest) {
@@ -21,19 +30,28 @@ export function middleware(request: NextRequest) {
 
   try {
     const decodedToken = jwtDecode<DecodedToken>(accessToken);
-    const role = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-    const rolePath = rolePaths[role];
 
+    // Kiểm tra quyền dựa vào role trong token
+    const role = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+    // Lấy ra path của role đó
+    const rolePath = rolePaths[role];
+    const rolePathRedirect = rolePathsRedirect[role];
+
+    // Nếu role không lệ thì đưa về login
     if (!rolePath) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
+    // Điều hướng người dùng theo role
     if (!pathname.startsWith(rolePath)) {
-      return NextResponse.redirect(new URL(rolePath, request.url));
+      return NextResponse.redirect(new URL(rolePathRedirect, request.url));
     }
   } catch (error) {
-    console.error("Error decoding token:", error);
-    return NextResponse.redirect(new URL("/", request.url));
+    // Token không hợp lệ => Xóa cookie và điều hướng đến login
+    const res = NextResponse.redirect(new URL("/login", request.url));
+    res.cookies.delete("accessToken");
+    return res;
   }
 
   return NextResponse.next();
