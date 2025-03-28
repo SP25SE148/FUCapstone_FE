@@ -12,7 +12,7 @@ interface SignalRContextProps {
 
 const SignalRContext = createContext<SignalRContextProps>({ connection: null, unreadedNoti: 0, resetUnreadedNoti: () => { } });
 
-export const SignalRProvider = ({ children }: { children: React.ReactNode }) => {
+export const SignalRProvider = ({ children, accessToken = '' }: { children: React.ReactNode, accessToken?: string }) => {
     const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
     const [unreadedNoti, setUnreadedNoti] = useState<number>(0);
 
@@ -21,9 +21,9 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            startSignalRConnection(token).then(setConnection);
+        // const token = localStorage.getItem("token");
+        if (accessToken) {
+            startSignalRConnection(accessToken).then(setConnection);
         }
 
         return () => {

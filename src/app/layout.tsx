@@ -31,7 +31,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <AuthProvider accessToken = {accessToken?.value}>
-          <SignalRProvider>
+          <SignalRProvider accessToken = {accessToken?.value}>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
