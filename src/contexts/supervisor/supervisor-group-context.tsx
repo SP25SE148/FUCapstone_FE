@@ -5,129 +5,11 @@ import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-
-export interface Group {
-  groupId: string,
-  semesterCode: string,
-  topicCode: string,
-  groupCode: string,
-  englishName: string
-}
-
-export interface Member {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentFullName: string;
-  studentEmail: string;
-  isLeader: boolean;
-  createdBy: string,
-  createdDate: string,
-  status: string;
-}
-
-export interface Topic {
-  id: string;
-  code: string;
-  campusId: string;
-  semesterId: string
-  capstoneId: string;
-  businessAreaName: string;
-  difficultyLevel: string;
-  englishName: string;
-  vietnameseName: string
-  abbreviation: string;
-  description: string;
-  mainSupervisorEmail: string
-  mainSupervisorName: string
-  coSupervisors: [];
-  fileName: string;
-  fileUrl: string
-  createdDate: string;
-  status: string;
-  topicAppraisals: [];
-}
-
-export interface GroupTopicInfo {
-  id: string,
-  semesterName: string,
-  majorName: string,
-  capstoneName: string,
-  campusName: string,
-  topicCode: string,
-  groupCode: string,
-  status: string,
-  groupMemberList: Member[];
-  topicResponse: Topic
-}
-
-export interface ProjectProgressWeek {
-  id: string,
-  weekNumber: number,
-  taskDescription: string,
-  status: number,
-  meetingLocation: string | null,
-  meetingContent: string | null,
-  summary: string | null,
-}
-
-export interface ProjectProgress {
-  id: string,
-  meetingDate: string,
-  slot: string,
-  projectProgressWeeks: ProjectProgressWeek[]
-}
-
-export interface Task {
-  id: string;
-  keyTask: string;
-  description: string;
-  summary: string;
-  assigneeId: string;
-  assigneeName: string;
-  reporterId: string;
-  reporterName: string;
-  status: number;
-  priority: number;
-  dueDate: string;
-  createdDate: string;
-  projectProgressId: string | null;
-  lastUpdatedDate: string | null;
-  completionDate: string | null;
-  fucTaskHistories: []
-}
-
-export interface EvaluationWeek {
-  weekNumber: number,
-  contributionPercentage: number,
-  summary: string | null,
-  meetingContent: string,
-  comments: string,
-  status: string
-}
-
-export interface EvaluationStudent {
-  studentCode: string,
-  studentName: string,
-  studentRole: string,
-  averageContributionPercentage: number,
-  evaluationWeeks: EvaluationWeek[]
-}
-
-export interface ResultDetail {
-  suggestion: string | undefined,
-  comment: string | undefined,
-  author: string
-}
-
-export interface ReviewResult {
-  attempt: number,
-  reviewCalendarResultDetailList: ResultDetail[]
-}
+import { EvaluationStudent, GroupFullInfo, GroupShortInfo, ProjectProgress, ReviewResult, Task } from "@/types/types";
 
 interface SupervisorGroupContextType {
-  groupList: Group[];
-  getTopicGroupInformation: (groupId: string) => Promise<GroupTopicInfo>;
+  groupList: GroupShortInfo[];
+  getTopicGroupInformation: (groupId: string) => Promise<GroupFullInfo>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   getProjectProgressTemplate: () => Promise<string>;
   importProjectProgress: (data: any) => Promise<void>;
@@ -151,7 +33,7 @@ export const SupervisorGroupProvider: React.FC<{
 }> = ({ children }) => {
   const { callApi } = useApi();
   const pathName = usePathname();
-  const [groupList, setGroupList] = useState<Group[]>([]);
+  const [groupList, setGroupList] = useState<GroupShortInfo[]>([]);
 
   const getGroupManageBySupervisor = async () => {
     const response = await callApi("fuc/group/manage");

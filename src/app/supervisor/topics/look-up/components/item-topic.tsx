@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, PenTool, School, Star, User2, Users } from "lucide-react";
 
+import { Topic } from "@/types/types";
 import { getDate } from "@/lib/utils";
-import { Topic } from "@/contexts/supervisor/supervisor-topic-lookup-context";
 
 import { Badge } from "@/components/ui/badge";
 import DownloadDocument from "./download-document";

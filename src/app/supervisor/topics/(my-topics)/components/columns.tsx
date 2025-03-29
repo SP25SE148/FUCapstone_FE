@@ -5,34 +5,13 @@ import { useRouter } from "next/navigation"
 import { MoreHorizontal } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
+import { Topic } from "@/types/types"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Topic = {
-    id: string;
-    code: string;
-    campusId: string;
-    semesterId: string
-    capstoneId: string;
-    businessAreaName: string;
-    difficultyLevel: string;
-    englishName: string;
-    vietnameseName: string
-    abbreviation: string;
-    description: string;
-    mainSupervisorEmail: string
-    mainSupervisorName: string
-    coSupervisors: [];
-    fileName: string;
-    fileUrl: string
-    createdDate: string;
-    status: string
-}
 
 export const columns: ColumnDef<Topic>[] = [
     {

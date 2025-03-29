@@ -5,7 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, PenTool, School, Star, Undo2, User2, Users } from "lucide-react";
 
 import { getDate } from "@/lib/utils";
-import { GroupTopicInfo, Member, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
+import { GroupFullInfo, Member } from "@/types/types";
+import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -62,7 +63,7 @@ export default function GroupInfoPage() {
     const router = useRouter();
     const params = useParams();
     const id: string = String(params.id);
-    const [groupTopicInfo, setGroupTopicInfo] = useState<GroupTopicInfo>();
+    const [groupTopicInfo, setGroupTopicInfo] = useState<GroupFullInfo>();
     const leaderInfo = groupTopicInfo?.groupMemberList?.find((x: Member) => x.isLeader == true)
     const memberList = groupTopicInfo?.groupMemberList?.filter((x: Member) => x.isLeader == false)
 

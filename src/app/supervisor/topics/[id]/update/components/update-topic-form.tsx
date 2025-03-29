@@ -7,7 +7,8 @@ import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 
-import { Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
+import { Topic } from "@/types/types";
+import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";

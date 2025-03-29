@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp, MessageCircleMore, MessageCirclePlus, RotateCw, User2 } from "lucide-react";
 
-import { ReviewResult } from "@/contexts/student/student-review-context";
+import { ReviewResult } from "@/types/types";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

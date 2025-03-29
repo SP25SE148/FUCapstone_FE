@@ -1,54 +1,11 @@
 "use client";
 
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { usePathname } from "next/navigation";
-
-interface Request {
-  topicRequestId: string;
-  groupCode: string,
-  groupId: string,
-  supervisorId: string,
-  supervisorFullName: string,
-  topicId: string,
-  topicCode: string,
-  topicEnglishName: string,
-  status: string,
-  requestedBy: string,
-  gpa: number,
-  leaderFullName: string,
-  createdDate: string
-}
-
-interface TopicRequest {
-  [key: string]: Request[];
-}
-
-interface Member {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentFullName: string;
-  studentEmail: string;
-  isLeader: boolean;
-  status: string;
-  gpa: number;
-}
-
-export interface Group {
-  id: string;
-  campusName: string;
-  semesterName: string;
-  majorName: string;
-  capstoneName: string;
-  groupCode: string;
-  topicCode: string;
-  averageGPA: number;
-  groupMemberList: Member[];
-  status: string;
-}
+import { TopicRequest } from "@/types/types";
 
 interface SupervisorTopicRequestContextType {
   requestList: TopicRequest;
@@ -92,7 +49,7 @@ export const SupervisorTopicRequestProvider: React.FC<{
     if (pathName == "/supervisor/topics/my-request") {
       getTopicRequest();
     }
-  }, []);
+  }, [pathName]);
 
   return (
     <SupervisorTopicRequestContext.Provider

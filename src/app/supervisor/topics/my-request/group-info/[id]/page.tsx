@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { BookUser, Undo2, User2, Users } from "lucide-react"
 
-import { Group, useSupervisorTopicRequest } from "@/contexts/supervisor/supervisor-topic-request-context"
+import { GroupFullInfo } from "@/types/types"
+import { useSupervisorTopicRequest } from "@/contexts/supervisor/supervisor-topic-request-context"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -48,7 +49,7 @@ export default function GroupInfoPage() {
     const id: string = String(params.id);
     const { getGroupById } = useSupervisorTopicRequest();
 
-    const [group, setGroup] = useState<Group>();
+    const [group, setGroup] = useState<GroupFullInfo>();
     const leaderInfo = group?.groupMemberList?.find((x) => x.isLeader == true)
     const memberList = group?.groupMemberList?.filter((x) => x.isLeader == false)
 

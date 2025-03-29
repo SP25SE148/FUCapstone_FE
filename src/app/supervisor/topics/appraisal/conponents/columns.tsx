@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { getDate } from "@/lib/utils"
-import { TopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context"
+import { TopicAppraisal } from "@/types/types"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"

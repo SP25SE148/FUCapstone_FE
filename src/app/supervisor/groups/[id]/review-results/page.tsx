@@ -3,7 +3,8 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { ReviewResult, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
+import { ReviewResult } from "@/types/types";
+import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import NoResult from "./components/no-result";
 import ResultDetails from "./components/result-details";

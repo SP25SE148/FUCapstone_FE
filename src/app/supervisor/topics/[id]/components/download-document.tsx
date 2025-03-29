@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Download } from "lucide-react";
 
-import { Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
+import { Topic } from "@/types/types";
+import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";

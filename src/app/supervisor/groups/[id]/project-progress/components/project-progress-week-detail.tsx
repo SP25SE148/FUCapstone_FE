@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Calendar1, Pencil, X } from "lucide-react";
 
+import { ProjectProgressWeek } from "@/types/types";
+
 import { Badge } from "@/components/ui/badge";
 import EvaluationWeek from "./evaluation-week";
 import { Button } from "@/components/ui/button";
@@ -8,7 +10,7 @@ import UpdateProjectProgressWeek from "./update-project-progress-week";
 
 interface ProjectProgressWeekProps {
     projectProgressId: string,
-    currentProjectProgressWeek: any,
+    currentProjectProgressWeek: ProjectProgressWeek,
     refresh: () => void
     onClose: () => void
 }

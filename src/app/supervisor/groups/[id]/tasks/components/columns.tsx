@@ -5,8 +5,8 @@ import { useParams } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
 import { User, Flag, Calendar, Hash, BarChart, ClipboardList } from "lucide-react";
 
+import { Task } from "@/types/types";
 import { getDate } from "@/lib/utils";
-import { Task } from "@/contexts/supervisor/supervisor-group-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";

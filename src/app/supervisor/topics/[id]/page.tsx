@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, FileX, PenTool, School, Star, Undo2, User2, Users } from "lucide-react";
 
+import { Topic } from "@/types/types";
 import { getDate } from "@/lib/utils";
-import { Topic, useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
+import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -220,7 +221,7 @@ export default function TopicDetailsPage() {
                                 </div>
                             </CardContent>
                         </Card>
-                        {topic?.coSupervisors?.map((supervisor: any, index) => (
+                        {topic?.coSupervisors?.map((supervisor: any, index: number) => (
                             <Card key={index} className="bg-primary/5">
                                 <CardContent className="p-4">
                                     <div className="flex items-center gap-3">

@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, ChevronRight, FileX, Filter, Search, Trash2 } from "lucide-react";
 
-import { useSupervisorTopicLookup, LookupProp, Topic } from "@/contexts/supervisor/supervisor-topic-lookup-context";
+import { LookupProp, Topic } from "@/types/types";
+import { useSupervisorTopicLookup } from "@/contexts/supervisor/supervisor-topic-lookup-context";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

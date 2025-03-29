@@ -4,7 +4,8 @@ import { Grid2x2X } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { EvaluationStudent, EvaluationWeek, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
+import { EvaluationStudent, EvaluationWeek } from "@/types/types";
+import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import ExportEvaluation from "./components/export-evaluation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

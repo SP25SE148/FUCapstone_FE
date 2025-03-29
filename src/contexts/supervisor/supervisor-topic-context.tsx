@@ -4,29 +4,8 @@ import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+import { Topic } from "@/types/types";
 import { useApi } from "../../hooks/use-api";
-
-export interface Topic {
-  id: string;
-  code: string;
-  campusId: string;
-  semesterId: string
-  capstoneId: string;
-  businessAreaName: string;
-  difficultyLevel: string;
-  englishName: string;
-  vietnameseName: string
-  abbreviation: string;
-  description: string;
-  mainSupervisorEmail: string
-  mainSupervisorName: string
-  coSupervisors: [];
-  fileName: string;
-  fileUrl: string
-  createdDate: string;
-  status: string;
-  topicAppraisals: [];
-}
 
 interface SupervisorTopicContextType {
   topicsOfSupervisor: Topic[];

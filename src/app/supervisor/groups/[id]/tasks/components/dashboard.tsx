@@ -4,13 +4,15 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { AlarmClockMinus, CheckCircle, ChevronDown, ChevronUp, Circle, Clock, Sigma, Undo2 } from "lucide-react"
 
+import { DashBoardTask } from "@/types/types"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-export default function Dashboard({ data }: { data: any }) {
+export default function Dashboard({ data }: { data: DashBoardTask }) {
     const router = useRouter();
-    const overallTasks = data.dashBoardFucTask
-    const studentTasks = data.dashBoardFucTasksStudents
+    const overallTasks = data?.dashBoardFucTask
+    const studentTasks = data?.dashBoardFucTasksStudents
     const [showMore, setShowMore] = useState<boolean>(false);
 
     return (

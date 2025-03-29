@@ -4,7 +4,8 @@ import { Send } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { GroupTopicInfo, Member, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
+import { EvaluationData, GroupFullInfo, Member } from "@/types/types";
+import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,19 +14,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog";
- 
+
 interface GroupInfoSheetProps {
     data: any;
     open: boolean;
     onClose: () => void;
     refresh: () => void;
-}
-
-interface EvaluationData {
-    studentId: string;
-    contributionPercentage: number;
-    comments: string;
-    status: number | null;
 }
 
 export default function EvaluationSheet({ data, open, onClose, refresh }: GroupInfoSheetProps) {
@@ -36,7 +30,7 @@ export default function EvaluationSheet({ data, open, onClose, refresh }: GroupI
     const [openConfirm, setOpenConfirm] = useState<boolean>(false);
     const [evaluations, setEvaluations] = useState<EvaluationData[]>([]);
     const [errors, setErrors] = useState<{ [key: number]: boolean }>({});
-    const [groupTopicInfo, setGroupTopicInfo] = useState<GroupTopicInfo>();
+    const [groupTopicInfo, setGroupTopicInfo] = useState<GroupFullInfo>();
     const leaderInfo = groupTopicInfo?.groupMemberList?.find((x: Member) => x.isLeader);
     const memberList = groupTopicInfo?.groupMemberList?.filter((x: Member) => !x.isLeader);
     const orderedMembers = leaderInfo ? [leaderInfo, ...(memberList || [])] : memberList || [];
