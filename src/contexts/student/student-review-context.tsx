@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
+import { usePathname } from "next/navigation";
 
 export interface ReviewCalendar {
     id: string,
@@ -18,11 +19,24 @@ export interface ReviewCalendar {
     slot: number,
     room: string,
     date: string,
-    reviewersCode: string[]
+    reviewersCode: string[],
+    status: string
+}
+
+export interface ResultDetail {
+    suggestion: string | undefined,
+    comment: string | undefined,
+    author: string
+}
+
+export interface ReviewResult {
+    attempt: number,
+    reviewCalendarResultDetailList: ResultDetail[]
 }
 
 interface StudentReviewContextType {
     reviewCalendar: ReviewCalendar[] | []
+    getReviewResult: () => Promise<ReviewResult[]>
 }
 
 const StudentReviewContext = createContext<StudentReviewContextType | undefined>(
@@ -33,6 +47,7 @@ export const StudentReviewProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const { callApi } = useApi();
+    const pathName = usePathname();
     const [reviewCalendar, setReviewCalendar] = useState<ReviewCalendar[]>([]);
 
     const getReviewCalendar = async () => {
@@ -40,14 +55,22 @@ export const StudentReviewProvider: React.FC<{ children: React.ReactNode }> = ({
         setReviewCalendar(response?.value);
     };
 
+    const getReviewResult = async () => {
+        const response = await callApi("fuc/user/review-calendar-result/student");
+        return (response?.value);
+    };
+
     useEffect(() => {
-        getReviewCalendar();
-    }, []);
+        if (pathName === "/student/reviews") {
+            getReviewCalendar();
+        }
+    }, [pathName]);
 
     return (
         <StudentReviewContext.Provider
             value={{
-                reviewCalendar
+                reviewCalendar,
+                getReviewResult
             }}
         >
             {children}

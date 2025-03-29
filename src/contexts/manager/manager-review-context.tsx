@@ -18,7 +18,8 @@ export interface ReviewCalendar {
     slot: number,
     room: string,
     date: string,
-    reviewersCode: string[]
+    reviewersCode: string[],
+    status: string
 }
 
 interface ManagerReviewContextProps {
