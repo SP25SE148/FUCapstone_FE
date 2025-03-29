@@ -57,24 +57,26 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
     ),
   },
   {
-    accessorKey: "reviewersCode[0]",
+    id: "reviewers",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Reviewer 1" />
+      <DataTableColumnHeader column={column} title="Reviewers" />
     ),
     cell: ({ row }) => {
-      const reviewer1 = row.original?.reviewersCode[0];
-      return reviewer1;
+      const reviewCalendar = row.original
+      return (
+        <div>
+          {reviewCalendar.reviewersCode?.map((reviewer, index) => (
+            <p key={index}>{reviewer}</p>
+          ))}
+        </div>
+      )
     },
   },
   {
-    accessorKey: "reviewersCode[1]",
+    accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Reviewer 2" />
+      <DataTableColumnHeader column={column} title="Status" />
     ),
-    cell: ({ row }) => {
-      const reviewer2 = row.original?.reviewersCode[1];
-      return reviewer2;
-    },
   },
   {
     id: "action",

@@ -18,11 +18,14 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
             className="cursor-pointer select-none hover:shadow-md transition-all"
             onClick={() => { setShowDetail(!showDetail) }}
         >
-            <div className="flex items-center justify-between border-b-[1px] bg-primary/20 rounded-t-lg">
+            <div className="flex items-center justify-between border-b-[1px] bg-primary/20 rounded-t-xl">
                 <CardHeader className="p-4">
                     <div className="flex items-center gap-2">
                         <RotateCw className="size-4 text-primary" />
                         <CardTitle className="font-semibold tracking-tight text-xl text-primary">Review {calendar?.attempt}</CardTitle>
+                        <Badge variant="outline" className="mr-4 bg-primary text-background font-medium">
+                            {calendar?.status}
+                        </Badge>
                     </div>
                 </CardHeader>
                 <Badge variant="outline" className="mr-4 bg-primary text-background font-medium">

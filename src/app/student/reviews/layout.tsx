@@ -6,6 +6,7 @@ import { StudentReviewProvider } from "@/contexts/student/student-review-context
 
 const items = [
   { label: "Reviews", href: "/student/reviews" },
+  { label: "Results", href: "/student/reviews/results" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

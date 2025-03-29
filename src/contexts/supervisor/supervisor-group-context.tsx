@@ -114,6 +114,17 @@ export interface EvaluationStudent {
   evaluationWeeks: EvaluationWeek[]
 }
 
+export interface ResultDetail {
+  suggestion: string | undefined,
+  comment: string | undefined,
+  author: string
+}
+
+export interface ReviewResult {
+  attempt: number,
+  reviewCalendarResultDetailList: ResultDetail[]
+}
+
 interface SupervisorGroupContextType {
   groupList: Group[];
   getTopicGroupInformation: (groupId: string) => Promise<GroupTopicInfo>;
@@ -127,6 +138,7 @@ interface SupervisorGroupContextType {
   evaluationWeeklyProgress: (data: any) => Promise<void>;
   getEvaluationWeeklyProgress: (groupId: string) => Promise<EvaluationStudent[]>;
   exportEvaluationWeeklyProgressFile: (groupId: string) => Promise<any>;
+  getReviewResultByGroupId: (groupId: string) => Promise<ReviewResult[]>
   updateGroupDecisionStatusBySupervisor: (data: any) => Promise<void>
 }
 
@@ -224,6 +236,11 @@ export const SupervisorGroupProvider: React.FC<{
     return (response);
   };
 
+  const getReviewResultByGroupId = async (groupId: string) => {
+    const response = await callApi(`fuc/user/review-calendar-result/${groupId}`);
+    return (response?.value);
+  };
+
   const updateGroupDecisionStatusBySupervisor = async (data: any) => {
     const response: any = await callApi("fuc/user/supervisor/update-group-decision-status", {
       method: "PUT",
@@ -257,6 +274,7 @@ export const SupervisorGroupProvider: React.FC<{
         evaluationWeeklyProgress,
         getEvaluationWeeklyProgress,
         exportEvaluationWeeklyProgressFile,
+        getReviewResultByGroupId,
         updateGroupDecisionStatusBySupervisor
       }}
     >
