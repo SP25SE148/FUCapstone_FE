@@ -4,73 +4,11 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-
-export interface ReviewCalendar {
-    id: string,
-    topicId: string,
-    topicCode: string,
-    groupId: string,
-    groupCode: string,
-    topicEnglishName: string,
-    mainSupervisorCode: string,
-    coSupervisorsCode: [],
-    attempt: number,
-    slot: number,
-    room: string,
-    date: string,
-    reviewersCode: string[]
-}
-
-export interface Member {
-    id: string;
-    groupId: string;
-    studentId: string;
-    studentFullName: string;
-    studentEmail: string;
-    isLeader: boolean;
-    createdBy: string,
-    createdDate: string,
-    status: string;
-}
-
-export interface Topic {
-    id: string;
-    code: string;
-    campusId: string;
-    semesterId: string
-    capstoneId: string;
-    businessAreaName: string;
-    difficultyLevel: string;
-    englishName: string;
-    vietnameseName: string
-    abbreviation: string;
-    description: string;
-    mainSupervisorEmail: string
-    mainSupervisorName: string
-    coSupervisors: [];
-    fileName: string;
-    fileUrl: string
-    createdDate: string;
-    status: string;
-    topicAppraisals: [];
-}
-
-export interface GroupTopicInfo {
-    id: string,
-    semesterName: string,
-    majorName: string,
-    capstoneName: string,
-    campusName: string,
-    topicCode: string,
-    groupCode: string,
-    status: string,
-    groupMemberList: Member[];
-    topicResponse: Topic
-}
+import { GroupFullInfo, ReviewCalendar } from "@/types/types";
 
 interface SupervisorReviewContextType {
     reviewCalendar: ReviewCalendar[] | []
-    getGroupById: (groupId: string) => Promise<GroupTopicInfo>;
+    getGroupById: (groupId: string) => Promise<GroupFullInfo>;
     updateReviewSuggestionAndComment: (data: any) => Promise<any>;
 }
 

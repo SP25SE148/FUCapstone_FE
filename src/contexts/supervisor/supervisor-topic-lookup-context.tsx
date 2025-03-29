@@ -1,95 +1,9 @@
 "use client";
 
-import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-
-interface Campus {
-  id: string,
-  name: string,
-  address: string,
-  phone: string,
-  email: string,
-  isDeleted: boolean,
-  createdDate: string,
-  updatedDate: string | null,
-  createdBy: string,
-  updatedBy: string | null,
-  deletedAt: string | null
-}
-
-interface Semester {
-  id: string,
-  name: string,
-  startDate: string,
-  endDate: string,
-  isDeleted: boolean,
-  createdDate: string,
-  updatedDate: string | null,
-  createdBy: string,
-  updatedBy: string | null,
-  deletedAt: string | null
-}
-
-interface Capstone {
-  id: string,
-  majorId: string,
-  name: string,
-  minMember: number,
-  maxMember: number,
-  reviewCount: number,
-  durationWeeks: number,
-  isDeleted: boolean,
-  deletedAt: string | null
-}
-
-interface BusinessArea {
-  id: string;
-  name: string;
-  description: string;
-}
-
-export interface Topic {
-  id: string;
-  code: string;
-  campusId: string;
-  semesterId: string
-  capstoneId: string;
-  businessAreaName: string;
-  difficultyLevel: string;
-  englishName: string;
-  vietnameseName: string
-  abbreviation: string;
-  description: string;
-  mainSupervisorEmail: string
-  mainSupervisorName: string
-  coSupervisors: [];
-  fileName: string;
-  fileUrl: string
-  createdDate: string;
-  status: string;
-  topicAppraisals: [];
-}
-
-export interface LookupProp {
-  mainSupervisorEmail: string,
-  searchTerm: string,
-  status: string,
-  difficultyLevel: string,
-  businessAreaId: string,
-  capstoneId: string,
-  semesterId: string,
-  campusId: string,
-  pageNumber: string,
-}
-
-interface LookupList {
-  items: Topic[],
-  totalNumberOfItems: number,
-  currentPage: number,
-  totalNumberOfPages: number,
-}
+import { BusinessArea, Campus, Capstone, LookupList, LookupProp, Semester } from "@/types/types";
 
 interface SupervisorTopicLookupContextType {
   lookupList: LookupList;

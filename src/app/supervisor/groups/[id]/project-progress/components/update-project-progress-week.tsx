@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { ProjectProgressWeek } from "@/types/types";
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import { Input } from "@/components/ui/input";
@@ -14,7 +15,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 interface UpdateProjectProgressWeekProps {
     projectProgressId: string,
-    currentProjectProgressWeek: any,
+    currentProjectProgressWeek: ProjectProgressWeek,
     refresh: () => void
     onClose: () => void
 }

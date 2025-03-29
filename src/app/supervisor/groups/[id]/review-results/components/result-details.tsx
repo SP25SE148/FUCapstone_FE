@@ -1,4 +1,4 @@
-import { ReviewResult } from "@/contexts/student/student-review-context";
+import { ReviewResult } from "@/types/types";
 
 import DetailItem from "./detail-item";
 import { CardContent } from "@/components/ui/card";

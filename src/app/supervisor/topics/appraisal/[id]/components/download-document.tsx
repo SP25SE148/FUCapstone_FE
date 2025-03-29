@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import { Download } from "lucide-react";
+
+import { Topic } from "@/types/types";
+import { useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
+
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Topic, useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
 
 export default function DownloadDocument({ topic }: { topic: Topic }) {
     const { getPresignedUrlTopicDocument } = useSupervisorTopicAppraisal();

@@ -1,11 +1,12 @@
 "use client"
 
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import { ClipboardX, Eye, LayoutList } from "lucide-react";
 
-import { ProjectProgress, ProjectProgressWeek, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
+import { ProjectProgress, ProjectProgressWeek } from "@/types/types";
+import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,6 @@ const getStatus = (status: number | undefined) => {
 export default function ProjectProgressPage() {
     const { getProjectProgressOfGroup } = useSupervisorGroup();
 
-    const router = useRouter();
     const params = useParams();
     const id: string = String(params.id);
     const [isRefresh, setIsRefresh] = useState<boolean>(false);

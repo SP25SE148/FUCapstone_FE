@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { AlignLeft, ClipboardList, Clock, History, Undo2 } from "lucide-react";
 
+import { Task } from "@/types/types";
 import { getDate } from "@/lib/utils";
-import { Task, useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
+import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

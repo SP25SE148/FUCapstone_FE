@@ -5,24 +5,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useAuth } from "../auth-context";
 import { useApi } from "../../hooks/use-api";
-
-interface BusinessArea {
-  id: string;
-  name: string;
-  description: string;
-}
-
-interface Capstone {
-  id: string,
-  majorId: string,
-  name: string,
-  minMember: number,
-  maxMember: number,
-  reviewCount: number,
-  durationWeeks: number,
-  isDeleted: boolean,
-  deletedAt: string | null
-}
+import { BusinessArea, Capstone } from "@/types/types";
 
 interface SupervisorTopicRegisterContextType {
   capstoneList: Capstone[];

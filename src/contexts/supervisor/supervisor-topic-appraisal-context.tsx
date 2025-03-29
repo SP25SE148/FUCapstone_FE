@@ -4,40 +4,7 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "@/hooks/use-api";
-
-export interface TopicAppraisal {
-    topicAppraisalId: string,
-    topicId: string,
-    supervisorId: string | null,
-    managerId: string | null,
-    topicEnglishName: string,
-    appraisalContent: string | null,
-    appraisalComment: string | null,
-    status: string,
-    appraisalDate: string | null
-}
-
-export interface Topic {
-  id: string;
-  code: string;
-  campusId: string;
-  semesterId: string
-  capstoneId: string;
-  businessAreaName: string;
-  difficultyLevel: string;
-  englishName: string;
-  vietnameseName: string
-  abbreviation: string;
-  description: string;
-  mainSupervisorEmail: string
-  mainSupervisorName: string
-  coSupervisors: [];
-  fileName: string;
-  fileUrl: string
-  createdDate: string;
-  status: string;
-  topicAppraisals: [];
-}
+import { TopicAppraisal } from "@/types/types";
 
 interface SupervisorTopicAppraisalContextType {
     topicAppraisals: TopicAppraisal[];
@@ -67,13 +34,12 @@ export const SupervisorTopicAppraisalProvider: React.FC<{
     const fetchTopicsById = async (id: string) => {
         const response = await callApi(`fuc/topics/${id}`);
         return (response?.value);
-      };
+    };
 
-      const getPresignedUrlTopicDocument = async (id: string) => {
+    const getPresignedUrlTopicDocument = async (id: string) => {
         const response = await callApi(`fuc/topics/presigned/${id}`);
         return (response?.value);
-      };
-    
+    };
 
     const submitAppraisalForSupervisor = async (data: any) => {
         const response = await callApi(`fuc/topics/appraisal`, {
