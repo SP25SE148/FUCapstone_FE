@@ -44,10 +44,18 @@ export default function NotificationsPage() {
       case "ProjectProgressCreatedEvent":
         router.push("/student/workspace");
         break;
-        case "GroupMemberStatusUpdateMessage":
-        case "JoinGroupRequestCreatedEvent":
-        case "JoinGroupRequestStatusUpdatedEvent":
-          router.push("/student/groups/my-request");
+      case "TopicRequestStatusUpdatedEvent":
+        router.push("/student/groups/my-topic");
+        break;
+      case "GroupMemberStatusUpdatedEvent":
+      case "GroupStatusUpdatedEvent": 
+        router.push("/student/groups");
+        break;
+      case "GroupMemberStatusUpdateMessage":
+      case "JoinGroupRequestCreatedEvent":
+      case "JoinGroupRequestStatusUpdatedEvent":
+      case "GroupMemberCreatedEvent":
+        router.push("/student/groups/my-request");
         break;
       default:
         console.warn("No route defined for this notification type:", type);
@@ -67,7 +75,7 @@ export default function NotificationsPage() {
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {notifications?.map((notification: any) => (
+          {notifications?.slice().reverse().map((notification: any) => (
             <div
               key={notification?.id}
               className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-20 cursor-pointer"
