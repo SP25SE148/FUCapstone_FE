@@ -9,6 +9,7 @@ import { GroupFullInfo, ReviewCalendar } from "@/types/types";
 interface SupervisorReviewContextType {
     reviewCalendar: ReviewCalendar[] | []
     getGroupById: (groupId: string) => Promise<GroupFullInfo>;
+    getReviewCriteria: (attempt: string) => Promise<any>;
     updateReviewSuggestionAndComment: (data: any) => Promise<any>;
 }
 
@@ -29,6 +30,11 @@ export const SupervisorReviewProvider: React.FC<{ children: React.ReactNode }> =
 
     const getGroupById = async (groupId: string) => {
         const response = await callApi(`fuc/group/${groupId}`);
+        return (response?.value);
+    };
+
+    const getReviewCriteria = async (attempt: string) => {
+        const response = await callApi(`fuc/user/review-criteria/${attempt}`);
         return (response?.value);
     };
 
@@ -53,6 +59,7 @@ export const SupervisorReviewProvider: React.FC<{ children: React.ReactNode }> =
             value={{
                 reviewCalendar,
                 getGroupById,
+                getReviewCriteria,
                 updateReviewSuggestionAndComment
             }}
         >

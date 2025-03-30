@@ -73,15 +73,17 @@ const getStatus = (status: string | undefined) => {
 }
 
 export default function DefenseTopicDetail() {
-  const { getGroupById, updateReviewSuggestionAndComment } = useSupervisorReview();
+  const { getGroupById, getReviewCriteria, updateReviewSuggestionAndComment } = useSupervisorReview();
 
   const router = useRouter();
   const params = useParams();
   const id: string = String(params.id);
   const searchParams = useSearchParams();
   const groupId = searchParams.get("groupId");
+  const attempt = searchParams.get("attempt");
   const [showMore, setShowMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [reviewCriteria, setReviewCriteria] = useState<any>();
   const [groupTopicInfo, setGroupTopicInfo] = useState<GroupFullInfo>();
   const leaderInfo = groupTopicInfo?.groupMemberList?.find((x: Member) => x.isLeader == true)
   const memberList = groupTopicInfo?.groupMemberList?.filter((x: Member) => x.isLeader == false)
@@ -114,8 +116,17 @@ export default function DefenseTopicDetail() {
 
   useEffect(() => {
     (async () => {
-      const groupTopicDetail = await getGroupById(groupId || "");
-      setGroupTopicInfo(groupTopicDetail)
+      try {
+        const [groupTopicDetail, reviewCriteriaDetail] = await Promise.all([
+          getGroupById(groupId || ""),
+          getReviewCriteria(attempt || "")
+        ]);
+
+        setGroupTopicInfo(groupTopicDetail);
+        setReviewCriteria(reviewCriteriaDetail)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     })();
   }, [])
 
