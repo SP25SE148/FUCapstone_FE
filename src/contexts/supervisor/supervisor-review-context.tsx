@@ -4,12 +4,13 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { GroupFullInfo, ReviewCalendar } from "@/types/types";
+import { GroupFullInfo, ReviewCalendar, ReviewCriteria, ReviewResult } from "@/types/types";
 
 interface SupervisorReviewContextType {
     reviewCalendar: ReviewCalendar[] | []
     getGroupById: (groupId: string) => Promise<GroupFullInfo>;
-    getReviewCriteria: (attempt: string) => Promise<any>;
+    getReviewResultByGroupId: (groupId: string) => Promise<ReviewResult[]>;
+    getReviewCriteria: (attempt: string) => Promise<ReviewCriteria[]>;
     updateReviewSuggestionAndComment: (data: any) => Promise<any>;
 }
 
@@ -30,6 +31,11 @@ export const SupervisorReviewProvider: React.FC<{ children: React.ReactNode }> =
 
     const getGroupById = async (groupId: string) => {
         const response = await callApi(`fuc/group/${groupId}`);
+        return (response?.value);
+    };
+
+    const getReviewResultByGroupId = async (groupId: string) => {
+        const response = await callApi(`fuc/user/review-calendar-result/${groupId}`);
         return (response?.value);
     };
 
@@ -59,6 +65,7 @@ export const SupervisorReviewProvider: React.FC<{ children: React.ReactNode }> =
             value={{
                 reviewCalendar,
                 getGroupById,
+                getReviewResultByGroupId,
                 getReviewCriteria,
                 updateReviewSuggestionAndComment
             }}

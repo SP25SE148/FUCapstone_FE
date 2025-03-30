@@ -1,29 +1,15 @@
 "use client"
 
-import { Check, MoreHorizontal } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
+import { Check, MoreHorizontal } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
+import { Student } from "@/types/types"
+import { getStudentStatus } from "@/utils/statusUtils"
+
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Student = {
-    id: string,
-    fullName: string,
-    majorId: string,
-    majorName: string,
-    capstoneId: string,
-    capstoneName: string,
-    campusId: string,
-    campusName: string,
-    email: string,
-    isEligible: boolean,
-    status: string
-}
 
 export const columns: ColumnDef<Student>[] = [
     {
@@ -79,45 +65,24 @@ export const columns: ColumnDef<Student>[] = [
         ),
     },
     {
-        accessorKey: "isEligible",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Eligible" />
-        ),
-        cell: ({ row }) => {
-            const student = row.original
-            return student.isEligible && <Check className="ml-2" />
-        },
-    },
-    {
         accessorKey: "status",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Status" />
         ),
         cell: ({ row }) => {
             const student = row.original
-            switch (student?.status) {
-                case "InProgress":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                            In Progress
-                        </Badge>
-                    );
-                case "Passed":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                            Passed
-                        </Badge>
-                    );
-                case "NotPassed":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                            Not Passed
-                        </Badge>
-                    );
-                default:
-                    return null;
-            }
+            return getStudentStatus(student?.status)
         }
+    },
+    {
+        accessorKey: "isHaveBeenJoinGroup",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="In Group" />
+        ),
+        cell: ({ row }) => {
+            const student = row.original
+            return student.isHaveBeenJoinGroup && <Check className="ml-2" />
+        },
     },
     {
         id: "actions",

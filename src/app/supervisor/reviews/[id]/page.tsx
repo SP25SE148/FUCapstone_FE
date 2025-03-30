@@ -8,7 +8,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { BadgeInfo, BookOpen, BookText, BookUser, BriefcaseBusiness, Calendar, ChevronDown, ChevronUp, FileCheck, Loader2, PenTool, Scale, School, Send, Star, Undo2, User2, Users } from "lucide-react";
 
 import { getDate } from "@/lib/utils";
-import { GroupFullInfo, Member } from "@/types/types";
+import { GroupFullInfo, Member, ReviewCriteria, ReviewResult } from "@/types/types";
 import { useSupervisorReview } from "@/contexts/supervisor/supervisor-review-context";
 
 import { Badge } from "@/components/ui/badge";
@@ -73,7 +73,7 @@ const getStatus = (status: string | undefined) => {
 }
 
 export default function DefenseTopicDetail() {
-  const { getGroupById, getReviewCriteria, updateReviewSuggestionAndComment } = useSupervisorReview();
+  const { getGroupById, getReviewResultByGroupId, getReviewCriteria, updateReviewSuggestionAndComment } = useSupervisorReview();
 
   const router = useRouter();
   const params = useParams();
@@ -83,8 +83,9 @@ export default function DefenseTopicDetail() {
   const attempt = searchParams.get("attempt");
   const [showMore, setShowMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [reviewCriteria, setReviewCriteria] = useState<any>();
+  // const [results, setResults] = useState<ReviewResult[]>();
   const [groupTopicInfo, setGroupTopicInfo] = useState<GroupFullInfo>();
+  const [reviewCriteria, setReviewCriteria] = useState<ReviewCriteria[]>([]);
   const leaderInfo = groupTopicInfo?.groupMemberList?.find((x: Member) => x.isLeader == true)
   const memberList = groupTopicInfo?.groupMemberList?.filter((x: Member) => x.isLeader == false)
 
@@ -117,12 +118,17 @@ export default function DefenseTopicDetail() {
   useEffect(() => {
     (async () => {
       try {
-        const [groupTopicDetail, reviewCriteriaDetail] = await Promise.all([
+        const [groupTopicDetail,
+          // resultDetails,
+          reviewCriteriaDetail
+        ] = await Promise.all([
           getGroupById(groupId || ""),
-          getReviewCriteria(attempt || "")
+          // getReviewResultByGroupId(groupId || ""),
+          getReviewCriteria(attempt || ""),
         ]);
 
         setGroupTopicInfo(groupTopicDetail);
+        // setResults(resultDetails);
         setReviewCriteria(reviewCriteriaDetail)
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -351,34 +357,33 @@ export default function DefenseTopicDetail() {
           </div>
         </div>}
 
+        {/* ReviewResult */}
+        {/* <div className="space-y-2">
+          <h3 className="font-semibold flex items-center gap-2">
+            <BookText className="size-4 text-primary" />
+            Review Results
+          </h3>
+        </div> */}
+
+        {/* Review Criteria */}
         <div className="space-y-2">
-          <h3
-            className="font-semibold flex items-center gap-2 cursor-pointer"
-            onClick={() => setShowMore(!showMore)}
-          >
+          <h3 className="font-semibold flex items-center gap-2">
             <BookText className="size-4 text-primary" />
             Review Criteria
           </h3>
           <Card className="bg-primary/5">
-            <CardContent className="p-6 space-y-2">
-              <div className="space-y-2">
-                <h3 className="text-sm text-muted-foreground">Description:</h3>
-                <p className="font-semibold tracking-tight text-justify">
-                  1. Tính cấp thiết của đề tài<br />
-                  - Đề tài có phù hợp với xu hướng hiện nay không?<br />
-                  - Đề tài có giải quyết một vấn đề thực tiễn quan trọng không?<br />
-                  - Có bằng chứng hoặc dữ liệu nào chứng minh rằng vấn đề này cần được giải quyết không?<br />
-                  <br />
-                  2. Mục tiêu và phạm vi nghiên cứu<br />
-                  - Mục tiêu nghiên cứu có rõ ràng, cụ thể và khả thi không?<br />
-                  - Phạm vi nghiên cứu có hợp lý, tránh quá rộng hoặc quá hẹp không?<br />
-                  - Đề tài có nêu rõ những giới hạn của nghiên cứu không?
+            <CardContent className="p-6 grid grid-cols-2 gap-4">
+              {reviewCriteria?.map((criteria: ReviewCriteria, index: number) => (
+                <p key={index} className="font-semibold tracking-tight text-justify">
+                  {index + 1}. {criteria?.name}: <span className="text-sm text-muted-foreground">{criteria?.description}</span><br />
+                  - {criteria?.requirement}
                 </p>
-              </div>
+              ))}
             </CardContent>
           </Card>
         </div>
 
+        {/* My Review */}
         <div className="space-y-2">
           <h3 className="font-semibold flex items-center gap-2">
             <Scale className="size-4 text-primary" />
