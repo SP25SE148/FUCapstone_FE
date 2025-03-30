@@ -1,5 +1,22 @@
 //#region Support Types
 
+export interface User {
+  name: string;
+  MajorId: string;
+  CampusId: string;
+  CapstoneId: string;
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
+}
+
+export interface DecodedToken extends User {
+  iss: string;
+  aud: string;
+  exp: number;
+}
+
 export interface Campus {
   id: string;
   name: string;
@@ -43,6 +60,22 @@ export interface BusinessArea {
   id: string;
   name: string;
   description: string;
+}
+
+export interface Student {
+  id: string;
+  fullName: string;
+  majorId: string;
+  majorName: string;
+  capstoneId: string;
+  capstoneName: string;
+  campusId: string;
+  campusName: string;
+  email: string;
+  status: string;
+  gpa: number;
+  businessArea: string;
+  isHaveBeenJoinGroup: boolean;
 }
 
 //#endregion
@@ -283,6 +316,14 @@ export interface ReviewCalendar {
   reviewersCode: string[]
 }
 
+export interface ReviewCriteria {
+  id: string,
+  attempt: number,
+  name: string,
+  description: string,
+  requirement: string
+}
+
 export interface ResultDetail {
   suggestion: string | undefined,
   comment: string | undefined,
@@ -306,37 +347,3 @@ export interface Decision {
 }
 
 //#endregion
-
-export interface User {
-  name: string;
-  MajorId: string;
-  CampusId: string;
-  CapstoneId: string;
-  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
-}
-
-export interface DecodedToken extends User {
-  iss: string;
-  aud: string;
-  exp: number;
-}
-
-export interface StudentProfile {
-  id: string;
-  fullName: string;
-  majorId: string;
-  majorName: string;
-  capstoneId: string;
-  capstoneName: string;
-  campusId: string;
-  campusName: string;
-  email: string;
-  isEligible: boolean;
-  status: string;
-  gpa: number;
-  businessArea: string;
-  isHaveBeenJoinGroup: boolean;
-}
