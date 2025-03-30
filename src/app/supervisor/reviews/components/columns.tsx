@@ -65,7 +65,7 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
       const reviewCalendar = row.original
       return (
         <div>
-          {reviewCalendar.reviewersCode?.map((reviewer, index) => (
+          {reviewCalendar.reviewers?.map((reviewer, index) => (
             <p key={index}>{reviewer}</p>
           ))}
         </div>
@@ -86,7 +86,10 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
         <Link
           href={{
             pathname: `/supervisor/reviews/${reviewCalendar?.id}`,
-            query: { groupId: `${reviewCalendar?.groupId}` }
+            query: {
+              groupId: `${reviewCalendar?.groupId}`,
+              attempt: `${reviewCalendar?.attempt}`
+            }
           }}
         >
           Review

@@ -296,6 +296,17 @@ export interface ReviewResult {
 
 //#endregion
 
+//#region Decision Types
+
+export interface Decision {
+  groupId: string,
+  groupCode: string,
+  decision: string,
+  comment: string | null
+}
+
+//#endregion
+
 export interface User {
   name: string;
   MajorId: string;
