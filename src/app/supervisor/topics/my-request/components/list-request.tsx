@@ -5,39 +5,14 @@ import { useEffect, useState } from "react";
 import { Inbox, Loader2, Users } from "lucide-react";
 
 import { getDate } from "@/lib/utils";
+import { getTopicRequestStatus } from "@/utils/statusUtils";
 import { useSupervisorTopicRequest } from "@/contexts/supervisor/supervisor-topic-request-context";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-
-const getStatus = (status: string | undefined) => {
-    switch (status) {
-        case "UnderReview":
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    Under Review
-                </Badge>
-            );
-        case "Accepted":
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    {status}
-                </Badge>
-            );
-        case "Rejected":
-            return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    {status}
-                </Badge>
-            );
-        default:
-            return null;
-    }
-}
 
 export default function ListRequest() {
     const { requestList, updateTopicRequestStatus } = useSupervisorTopicRequest();
@@ -89,7 +64,7 @@ export default function ListRequest() {
                                             </div>
                                         </div>
                                         <div className="text-right space-y-2">
-                                            {getStatus(request?.status)}
+                                            {getTopicRequestStatus(request?.status)}
                                             <p className="text-sm text-muted-foreground">{getDate(request?.createdDate)}</p>
                                         </div>
                                         <>

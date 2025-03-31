@@ -1,8 +1,8 @@
 "use client";
 
 import { getDate } from "@/lib/utils";
+import { ReviewCalendar } from "@/types/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { ReviewCalendar } from "@/contexts/manager/manager-review-context";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 export const columns: ColumnDef<ReviewCalendar>[] = [
@@ -61,7 +61,7 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
             const reviewCalendar = row.original
             return (
                 <div>
-                    {reviewCalendar.reviewersCode?.map((reviewer, index) => (
+                    {reviewCalendar.reviewers?.map((reviewer: string, index: number) => (
                         <p key={index}>{reviewer}</p>
                     ))}
                 </div>

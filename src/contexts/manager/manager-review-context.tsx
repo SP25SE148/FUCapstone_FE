@@ -4,23 +4,7 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "@/hooks/use-api";
-
-export interface ReviewCalendar {
-    id: string,
-    topicId: string,
-    topicCode: string,
-    groupId: string,
-    groupCode: string,
-    topicEnglishName: string,
-    mainSupervisorCode: string,
-    coSupervisorsCode: [],
-    attempt: number,
-    slot: number,
-    room: string,
-    date: string,
-    reviewers: string[],
-    status: string
-}
+import { ReviewCalendar } from "@/types/types";
 
 interface ManagerReviewContextProps {
     reviewCalendar: ReviewCalendar[] | []

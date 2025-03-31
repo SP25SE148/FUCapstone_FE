@@ -36,7 +36,7 @@ export default function DownloadDocument({ topic }: { topic: Topic }) {
             <Button
                 variant={"outline"}
                 onClick={handleClickPreview}
-                className="mr-6 h-12 border-primary text-primary hover:bg-primary hover:text-white"
+                className="mr-6 border-primary text-primary hover:bg-primary hover:text-white"
             >
                 <Download />
                 Document

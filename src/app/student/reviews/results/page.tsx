@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { ReviewResult, useStudentReview } from "@/contexts/student/student-review-context";
+import { ReviewResult } from "@/types/types";
+import { useStudentReview } from "@/contexts/student/student-review-context";
 
 import NoResult from "./components/no-result";
 import ResultDetails from "./components/result-details";

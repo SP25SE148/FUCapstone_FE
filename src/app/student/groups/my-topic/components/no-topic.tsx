@@ -2,7 +2,6 @@ import Link from "next/link";
 import { FileX } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-
 export default function NoTopic() {
     return (
         <Card className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-gradient-to-tr from-primary/20 to-background">

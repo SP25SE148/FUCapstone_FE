@@ -6,8 +6,8 @@ import { MoreHorizontal } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Topic } from "@/types/types"
+import { getTopicStatus } from "@/utils/statusUtils"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
@@ -105,34 +105,7 @@ export const columns: ColumnDef<Topic>[] = [
         ),
         cell: ({ row }) => {
             const topic = row.original;
-            switch (topic?.status) {
-                case "Pending":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                            {topic?.status}
-                        </Badge>
-                    );
-                case "Approved":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                            {topic?.status}
-                        </Badge>
-                    );
-                case "Considered":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                            {topic?.status}
-                        </Badge>
-                    );
-                case "Rejected":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                            {topic?.status}
-                        </Badge>
-                    );
-                default:
-                    return null;
-            }
+            return getTopicStatus(topic?.status)
         }
     },
     {

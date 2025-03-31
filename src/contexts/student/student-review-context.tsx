@@ -1,38 +1,10 @@
 "use client";
 
-import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { usePathname } from "next/navigation";
-
-export interface ReviewCalendar {
-    id: string,
-    topicId: string,
-    topicCode: string,
-    groupId: string,
-    groupCode: string,
-    topicEnglishName: string,
-    mainSupervisorCode: string,
-    coSupervisorsCode: [],
-    attempt: number,
-    slot: number,
-    room: string,
-    date: string,
-    reviewersCode: string[],
-    status: string
-}
-
-export interface ResultDetail {
-    suggestion: string | undefined,
-    comment: string | undefined,
-    author: string
-}
-
-export interface ReviewResult {
-    attempt: number,
-    reviewCalendarResultDetailList: ResultDetail[]
-}
+import { ReviewCalendar, ReviewResult } from "@/types/types";
 
 interface StudentReviewContextType {
     reviewCalendar: ReviewCalendar[] | []

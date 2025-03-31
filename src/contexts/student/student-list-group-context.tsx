@@ -4,58 +4,10 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-
-export interface Member {
-    id: string;
-    groupId: string;
-    studentId: string;
-    studentFullName: string;
-    studentEmail: string;
-    gpa: number;
-    isLeader: boolean;
-    createdBy: string,
-    createdDate: string,
-    status: string;
-}
-
-export interface Topic {
-    id: string;
-    code: string;
-    campusId: string;
-    semesterId: string
-    capstoneId: string;
-    businessAreaName: string;
-    difficultyLevel: string;
-    englishName: string;
-    vietnameseName: string
-    abbreviation: string;
-    description: string;
-    mainSupervisorEmail: string
-    mainSupervisorName: string
-    coSupervisors: [];
-    fileName: string;
-    fileUrl: string
-    createdDate: string;
-    status: string;
-    topicAppraisals: [];
-}
-
-export interface GroupTopicInfo {
-    id: string,
-    semesterName: string,
-    majorName: string,
-    capstoneName: string,
-    campusName: string,
-    topicCode: string,
-    groupCode: string,
-    averageGPA: number
-    status: string,
-    groupMemberList: Member[];
-    topicResponse: Topic
-}
+import { GroupFullInfo } from "@/types/types";
 
 interface StudentListGroupContextType {
-    listGroup: GroupTopicInfo[] | null;
+    listGroup: GroupFullInfo[] | null;
     createJoinGroupRequest: (data: { GroupId: string }) => Promise<any>
 }
 
@@ -67,7 +19,7 @@ export const StudentListGroupProvider: React.FC<{ children: React.ReactNode }> =
     children,
 }) => {
     const { callApi } = useApi();
-    const [listGroup, setListGroup] = useState<GroupTopicInfo[]>([]);
+    const [listGroup, setListGroup] = useState<GroupFullInfo[]>([]);
 
     const fetchGroupList = async () => {
         const response = await callApi("fuc/group/pending");

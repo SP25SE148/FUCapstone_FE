@@ -3,45 +3,16 @@ import { useRouter } from "next/navigation";
 import { Clock, Check, X, Inbox, User2 } from "lucide-react";
 
 import { cn, getDate } from "@/lib/utils";
-import { useStudentProfile } from "@/contexts/student/student-profile-context";
-import { useStudentGroupRequest, RequestMember } from "@/contexts/student/student-group-request-context";
+import { getGroupMemberStatus } from "@/utils/statusUtils";
 
-import { Badge } from "@/components/ui/badge";
+import { Member } from "@/types/types";
+import { useStudentProfile } from "@/contexts/student/student-profile-context";
+import { useStudentGroupRequest } from "@/contexts/student/student-group-request-context";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog"
-
-const getStatusBadge = (status: string) => {
-  switch (status.toLowerCase()) {
-    case "underreview":
-      return (
-        <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-          Under Review
-        </Badge>
-      );
-    case "accepted":
-      return (
-        <Badge variant="secondary" className="bg-green-100 text-green-800">
-          Accepted
-        </Badge>
-      );
-    case "rejected":
-      return (
-        <Badge variant="secondary" className="bg-red-100 text-red-800">
-          Rejected
-        </Badge>
-      );
-    case "cancelled":
-      return (
-        <Badge variant="secondary" className="bg-red-100 text-red-800">
-          Cancelled
-        </Badge>
-      );
-    default:
-      return null;
-  }
-};
 
 export default function InvitationReceived() {
   const router = useRouter();
@@ -83,7 +54,7 @@ export default function InvitationReceived() {
         (listRequest?.groupMemberRequested
           ?.slice()
           ?.reverse()
-          ?.map((request: RequestMember, index: number) => (
+          ?.map((request: Member, index: number) => (
             <div key={request.id}>
               <Card>
                 <CardContent className="flex items-center justify-between p-4">
@@ -104,7 +75,7 @@ export default function InvitationReceived() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {getStatusBadge(request.status)}
+                    {getGroupMemberStatus(request.status)}
                     {request.status.toLowerCase() === "underreview" && (
                       <>
                         <Button

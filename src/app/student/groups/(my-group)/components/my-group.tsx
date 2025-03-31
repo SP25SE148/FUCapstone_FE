@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { User2, X, Users, Send, BookUser, FileCheck, Calculator, School, Calendar, BriefcaseBusiness, BookOpen } from "lucide-react";
 
+import { getGroupMemberStatus, getGroupStatus } from "@/utils/statusUtils";
+
 import CreateGroup from "./create-group";
 import InviteMember from "./invite-member";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useStudentGroup } from "@/contexts/student/student-group-context";
@@ -37,74 +38,6 @@ export default function MyGroup() {
         }
     };
 
-    const getGroupStatusBadge = (status: string) => {
-        switch (status) {
-            case "Pending":
-                return (
-                    <Badge variant="secondary" className="text-sm select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                        Pending
-                    </Badge>
-                );
-            case "Rejected":
-                return (
-                    <Badge variant="secondary" className="text-sm select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                        Rejected
-                    </Badge>
-                );
-            case "InProgress":
-                return (
-                    <Badge variant="secondary" className="text-sm select-none bg-sky-200 text-sky-800 hover:bg-sky-200">
-                        In Progress
-                    </Badge>
-                );
-            case "Deleted":
-                return (
-                    <Badge variant="secondary" className="text-sm select-none bg-red-200 text-red-800 hover:bg-red-200">
-                        Deleted
-                    </Badge>
-                );
-            default:
-                return null;
-        }
-    };
-
-    const getMemberStatusBadge = (status: string) => {
-        switch (status) {
-            case "UnderReview":
-                return (
-                    <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                        Under Review
-                    </Badge>
-                );
-            case "Accepted":
-                return (
-                    <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                        Accepted
-                    </Badge>
-                );
-            case "Rejected":
-                return (
-                    <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                        Rejected
-                    </Badge>
-                );
-            case "LeftGroup":
-                return (
-                    <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                        Left Group
-                    </Badge>
-                );
-            case "Cancelled":
-                return (
-                    <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                        Cancelled
-                    </Badge>
-                );
-            default:
-                return null;
-        }
-    };
-
     const handleRegisterGroup = async () => {
         setIsLoading(true);
         try {
@@ -129,7 +62,7 @@ export default function MyGroup() {
                         <CardHeader>
                             <div className="flex items-center gap-4">
                                 <CardTitle className="font-semibold tracking-tight text-xl text-primary">My group</CardTitle>
-                                {getGroupStatusBadge(groupInfo?.status || "")}
+                                {getGroupStatus(groupInfo?.status || "")}
                             </div>
                             <CardDescription>Information about my group</CardDescription>
                         </CardHeader>
@@ -294,7 +227,7 @@ export default function MyGroup() {
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-2">
-                                                        {getMemberStatusBadge(member?.status)}
+                                                        {getGroupMemberStatus(member?.status)}
                                                         {studentProfile?.id == leaderInfo?.studentId && member?.status == "UnderReview" && <Button
                                                             variant="ghost"
                                                             size="icon"

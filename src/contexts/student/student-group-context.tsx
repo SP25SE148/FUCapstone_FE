@@ -5,58 +5,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
 import { useStudentProfile } from "./student-profile-context";
-import { ProjectProgress } from "@/types/types";
-
-
-export interface Member {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentFullName: string;
-  studentEmail: string;
-  gpa: number;
-  isLeader: boolean;
-  status: string;
-}
-
-export interface Topic {
-  id: string;
-  code: string;
-  mainSupervisorName: string;
-  mainSupervisorEmail: string;
-  englishName: string;
-  vietnameseName: string;
-  abbreviation: string;
-  description: string;
-  fileName: string;
-  fileUrl: undefined;
-  status: string;
-  difficultyLevel: string;
-  businessAreaName: string;
-  capstoneId: string;
-  semesterId: string;
-  campusId: string;
-  createdDate: string;
-  coSupervisors: [],
-  topicAppraisals: []
-}
-
-export interface Group {
-  id: string;
-  campusName: string;
-  semesterName: string;
-  majorName: string;
-  capstoneName: string;
-  groupCode: string;
-  topicCode: string;
-  averageGPA: number;
-  groupMemberList: Member[];
-  status: string;
-  topicResponse: Topic;
-}
+import { GroupFullInfo, ProjectProgress } from "@/types/types";
 
 interface StudentGroupContextType {
-  groupInfo: Group | null;
+  groupInfo: GroupFullInfo | null;
   createGroup: () => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
   inviteMember: (data: any) => Promise<void>;
@@ -76,7 +28,7 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
   const { callApi } = useApi();
   const { fetchStudentProfile } = useStudentProfile();
 
-  const [groupInfo, setGroupInfo] = useState<Group | null>(null);
+  const [groupInfo, setGroupInfo] = useState<GroupFullInfo | null>(null);
 
   const fetchGroupInfo = async () => {
     const response = await callApi("fuc/Group/information", {

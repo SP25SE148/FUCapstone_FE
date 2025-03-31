@@ -55,7 +55,7 @@ export default function RegisterTopicForm() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -273,12 +273,12 @@ export default function RegisterTopicForm() {
         <CardFooter className="justify-between">
           <Button
             variant={"outline"}
-            className="h-12 border-primary text-primary hover:bg-primary hover:text-white"
+            className="border-primary text-primary hover:bg-primary hover:text-white"
           >
             <Download />
             Template
           </Button>
-          <Button type="button" className="h-12" onClick={handleConfirm}>
+          <Button type="button" onClick={handleConfirm}>
             <Send />
             Register
           </Button>
