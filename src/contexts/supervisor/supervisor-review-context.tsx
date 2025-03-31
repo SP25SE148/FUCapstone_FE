@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
@@ -22,6 +23,7 @@ export const SupervisorReviewProvider: React.FC<{ children: React.ReactNode }> =
     children,
 }) => {
     const { callApi } = useApi();
+    const pathName = usePathname();
     const [reviewCalendar, setReviewCalendar] = useState<ReviewCalendar[]>([]);
 
     const getReviewCalendar = async () => {
@@ -57,8 +59,10 @@ export const SupervisorReviewProvider: React.FC<{ children: React.ReactNode }> =
     };
 
     useEffect(() => {
-        getReviewCalendar();
-    }, []);
+        if (pathName === "/supervisor/reviews") {
+            getReviewCalendar();
+        }
+    }, [pathName]);
 
     return (
         <SupervisorReviewContext.Provider

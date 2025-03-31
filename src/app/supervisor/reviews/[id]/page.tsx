@@ -8,10 +8,13 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { BadgeInfo, BookOpen, BookText, BookUser, BriefcaseBusiness, Calendar, ChevronDown, ChevronUp, FileCheck, Loader2, PenTool, Scale, School, Send, Star, Undo2, User2, Users } from "lucide-react";
 
 import { getDate } from "@/lib/utils";
+import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
+
 import { GroupFullInfo, Member, ReviewCriteria, ReviewResult } from "@/types/types";
 import { useSupervisorReview } from "@/contexts/supervisor/supervisor-review-context";
 
-import { Badge } from "@/components/ui/badge";
+import ResultDetails from "./components/result-details";
+
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -28,50 +31,6 @@ const formSchema = z.object({
     .optional(),
 });
 
-const getDifficultyStatus = (status: string | undefined) => {
-  switch (status) {
-    case "Easy":
-      return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">{status}</Badge>
-    case "Medium":
-      return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">{status}</Badge>
-    case "Hard":
-      return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">{status}</Badge>
-    default:
-      return null;
-  }
-}
-
-const getStatus = (status: string | undefined) => {
-  switch (status) {
-    case "Pending":
-      return (
-        <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-          {status}
-        </Badge>
-      );
-    case "Approved":
-      return (
-        <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-          {status}
-        </Badge>
-      );
-    case "Considered":
-      return (
-        <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-          {status}
-        </Badge>
-      );
-    case "Rejected":
-      return (
-        <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-          {status}
-        </Badge>
-      );
-    default:
-      return null;
-  }
-}
-
 export default function DefenseTopicDetail() {
   const { getGroupById, getReviewResultByGroupId, getReviewCriteria, updateReviewSuggestionAndComment } = useSupervisorReview();
 
@@ -82,8 +41,9 @@ export default function DefenseTopicDetail() {
   const groupId = searchParams.get("groupId");
   const attempt = searchParams.get("attempt");
   const [showMore, setShowMore] = useState<boolean>(false);
+  const [showReviewResults, setShowReviewResults] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [results, setResults] = useState<ReviewResult[]>();
+  const [results, setResults] = useState<ReviewResult[]>();
   const [groupTopicInfo, setGroupTopicInfo] = useState<GroupFullInfo>();
   const [reviewCriteria, setReviewCriteria] = useState<ReviewCriteria[]>([]);
   const leaderInfo = groupTopicInfo?.groupMemberList?.find((x: Member) => x.isLeader == true)
@@ -119,16 +79,16 @@ export default function DefenseTopicDetail() {
     (async () => {
       try {
         const [groupTopicDetail,
-          // resultDetails,
+          resultDetails,
           reviewCriteriaDetail
         ] = await Promise.all([
           getGroupById(groupId || ""),
-          // getReviewResultByGroupId(groupId || ""),
+          getReviewResultByGroupId(groupId || ""),
           getReviewCriteria(attempt || ""),
         ]);
 
         setGroupTopicInfo(groupTopicDetail);
-        // setResults(resultDetails);
+        setResults(resultDetails);
         setReviewCriteria(reviewCriteriaDetail)
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -138,23 +98,21 @@ export default function DefenseTopicDetail() {
 
   return (
     <Card className="min-h-[calc(100vh-60px)]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <Button className="ml-6" size={"icon"}
-            onClick={() => router.back()}
-          >
-            <Undo2 />
-          </Button>
-          <div
-            className="flex items-center cursor-pointer"
-            onClick={() => setShowMore(!showMore)}
-          >
-            <CardHeader>
-              <CardTitle className="font-semibold tracking-tight text-xl text-primary">{groupTopicInfo?.topicResponse?.englishName}</CardTitle>
-              <CardDescription>{groupTopicInfo?.topicResponse?.vietnameseName}</CardDescription>
-            </CardHeader>
-            {showMore ? <ChevronUp /> : <ChevronDown />}
-          </div>
+      <div className="flex items-center">
+        <Button className="ml-6" size={"icon"}
+          onClick={() => router.back()}
+        >
+          <Undo2 />
+        </Button>
+        <div
+          className="flex-1 flex items-center justify-between cursor-pointer"
+          onClick={() => setShowMore(!showMore)}
+        >
+          <CardHeader>
+            <CardTitle className="font-semibold tracking-tight text-xl text-primary">{groupTopicInfo?.topicResponse?.englishName}</CardTitle>
+            <CardDescription>{groupTopicInfo?.topicResponse?.vietnameseName}</CardDescription>
+          </CardHeader>
+          {showMore ? <ChevronUp className="mr-6" /> : <ChevronDown className="mr-6" />}
         </div>
       </div>
       <CardContent className="space-y-4">
@@ -246,7 +204,7 @@ export default function DefenseTopicDetail() {
                     <h3 className="text-sm text-muted-foreground">
                       Difficulty
                     </h3>
-                    {getDifficultyStatus(groupTopicInfo?.topicResponse?.difficultyLevel)}
+                    {getTopicDifficulty(groupTopicInfo?.topicResponse?.difficultyLevel || "")}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -257,7 +215,7 @@ export default function DefenseTopicDetail() {
                     <h3 className="text-sm text-muted-foreground">
                       Status
                     </h3>
-                    {getStatus(groupTopicInfo?.topicResponse?.status)}
+                    {getTopicStatus(groupTopicInfo?.topicResponse?.status || "")}
                   </div>
                 </div>
               </div>
@@ -358,12 +316,14 @@ export default function DefenseTopicDetail() {
         </div>}
 
         {/* ReviewResult */}
-        {/* <div className="space-y-2">
-          <h3 className="font-semibold flex items-center gap-2">
+        {results && <div className="space-y-2">
+          <h3 className="font-semibold flex items-center gap-2 cursor-pointer" onClick={() => { setShowReviewResults(!showReviewResults) }}>
             <BookText className="size-4 text-primary" />
             Review Results
+            {showReviewResults ? <ChevronUp className="mr-6" /> : <ChevronDown className="mr-6" />}
           </h3>
-        </div> */}
+          {showReviewResults && <ResultDetails results={results} />}
+        </div>}
 
         {/* Review Criteria */}
         <div className="space-y-2">
