@@ -85,7 +85,7 @@ export default function ProjectProgressPage() {
                     ?
                     <CardContent className="grid grid-cols-2 gap-4">
                         < div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] overflow-y-auto space-y-2 rounded-xl shadow" >
-                            <MeetingTime projectProgress={projectProgress} />
+                            <MeetingTime projectProgress={projectProgress} refresh={() => setIsRefresh(!isRefresh)} />
                             {
                                 projectProgress?.projectProgressWeeks?.map((projectProgressWeek: ProjectProgressWeek, index) => (
                                     <Card

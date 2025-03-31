@@ -3,28 +3,16 @@
 import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+import { Member } from "@/types/types";
 import { useApi } from "../../hooks/use-api";
-import { useStudentProfile } from "./student-profile-context";
 import { useStudentGroup } from "./student-group-context";
-
-export interface RequestMember {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentFullName: string;
-  studentEmail: string;
-  gpa: number;
-  isLeader: boolean;
-  createdBy: string;
-  createdDate: string;
-  status: string;
-}
+import { useStudentProfile } from "./student-profile-context";
 
 export interface Request {
-  groupMemberRequestSentByLeader: RequestMember[]; // invitation sent
-  groupMemberRequested: RequestMember[]; // invitation received
-  joinGroupRequestSentByMember: RequestMember[]; // application sent
-  joinGroupRequested: RequestMember[]; // application received
+  groupMemberRequestSentByLeader: Member[]; // invitation sent
+  groupMemberRequested: Member[]; // invitation received
+  joinGroupRequestSentByMember: Member[]; // application sent
+  joinGroupRequested: Member[]; // application received
 }
 
 interface StudentGroupRequestContextType {

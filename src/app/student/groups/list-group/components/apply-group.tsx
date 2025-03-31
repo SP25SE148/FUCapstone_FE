@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 
+import { GroupFullInfo } from "@/types/types";
 import { useStudentListGroup } from "@/contexts/student/student-list-group-context";
 
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog"
 
-export default function ApplyGroup({ group, onClose }: { group: any, onClose: () => void }) {
+export default function ApplyGroup({ group, onClose }: { group: GroupFullInfo, onClose: () => void }) {
     const { createJoinGroupRequest } = useStudentListGroup();
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);

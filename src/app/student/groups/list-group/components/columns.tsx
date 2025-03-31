@@ -4,64 +4,16 @@ import { useState } from "react"
 import { Eye } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { GroupFullInfo } from "@/types/types"
+import { getGroupStatus } from "@/utils/statusUtils"
+
 import GroupInfoSheet from "./group-info-sheet"
+
+import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export interface Member {
-    id: string;
-    groupId: string;
-    studentId: string;
-    studentFullName: string;
-    studentEmail: string;
-    gpa: number;
-    isLeader: boolean;
-    createdBy: string,
-    createdDate: string,
-    status: string;
-}
-
-export interface Topic {
-    id: string;
-    code: string;
-    campusId: string;
-    semesterId: string
-    capstoneId: string;
-    businessAreaName: string;
-    difficultyLevel: string;
-    englishName: string;
-    vietnameseName: string
-    abbreviation: string;
-    description: string;
-    mainSupervisorEmail: string
-    mainSupervisorName: string
-    coSupervisors: [];
-    fileName: string;
-    fileUrl: string
-    createdDate: string;
-    status: string;
-    topicAppraisals: [];
-}
-
-export interface GroupTopicInfo {
-    id: string,
-    semesterName: string,
-    majorName: string,
-    capstoneName: string,
-    campusName: string,
-    topicCode: string,
-    groupCode: string,
-    averageGPA: number
-    status: string,
-    groupMemberList: Member[];
-    topicResponse: Topic
-}
-
-export const columns: ColumnDef<GroupTopicInfo>[] = [
+export const columns: ColumnDef<GroupFullInfo>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -139,16 +91,7 @@ export const columns: ColumnDef<GroupTopicInfo>[] = [
         ),
         cell: ({ row }) => {
             const group = row.original;
-            switch (group?.status) {
-                case "Pending":
-                    return (
-                        <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                            {group?.status}
-                        </Badge>
-                    );
-                default:
-                    return null;
-            }
+            return getGroupStatus(group?.status)
         }
     },
     {

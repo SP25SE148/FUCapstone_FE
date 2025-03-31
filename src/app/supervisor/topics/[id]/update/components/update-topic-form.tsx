@@ -200,7 +200,7 @@ export default function UpdateTopicForm() {
                 </CardContent>
                 <CardFooter className="justify-between">
                     {topic && <DownloadDocument topic={topic} />}
-                    <Button type="button" className="h-12" onClick={handleConfirm}>
+                    <Button type="button" onClick={handleConfirm}>
                         <Send />
                         Update
                     </Button>

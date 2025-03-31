@@ -4,58 +4,15 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, PenTool, School, Star, Undo2, User2, Users } from "lucide-react";
 
-import { getDate } from "@/lib/utils";
 import { GroupFullInfo, Member } from "@/types/types";
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
-import { Badge } from "@/components/ui/badge";
+import { getDate } from "@/lib/utils";
+import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
+
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-const getDifficultyStatus = (status: string | undefined) => {
-    switch (status) {
-        case "Easy":
-            return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">{status}</Badge>
-        case "Medium":
-            return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">{status}</Badge>
-        case "Hard":
-            return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">{status}</Badge>
-        default:
-            return null;
-    }
-}
-
-const getStatus = (status: string | undefined) => {
-    switch (status) {
-        case "Pending":
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    {status}
-                </Badge>
-            );
-        case "Approved":
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    {status}
-                </Badge>
-            );
-        case "Considered":
-            return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                    {status}
-                </Badge>
-            );
-        case "Rejected":
-            return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    {status}
-                </Badge>
-            );
-        default:
-            return null;
-    }
-}
 
 export default function GroupInfoPage() {
     const { getTopicGroupInformation } = useSupervisorGroup();
@@ -178,7 +135,7 @@ export default function GroupInfoPage() {
                                         <h3 className="text-sm text-muted-foreground">
                                             Difficulty
                                         </h3>
-                                        {getDifficultyStatus(groupTopicInfo?.topicResponse?.difficultyLevel)}
+                                        {getTopicDifficulty(groupTopicInfo?.topicResponse?.difficultyLevel || "")}
                                     </div>
                                 </div>
                                 <div className="flex items-center space-x-2">
@@ -189,7 +146,7 @@ export default function GroupInfoPage() {
                                         <h3 className="text-sm text-muted-foreground">
                                             Status
                                         </h3>
-                                        {getStatus(groupTopicInfo?.topicResponse?.status)}
+                                        {getTopicStatus(groupTopicInfo?.topicResponse?.status || "")}
                                     </div>
                                 </div>
                             </div>
@@ -217,7 +174,7 @@ export default function GroupInfoPage() {
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <p className="font-semibold"> {groupTopicInfo?.topicResponse?.mainSupervisorName}</p>
+                                        <p className="font-semibold text-primary"> {groupTopicInfo?.topicResponse?.mainSupervisorName}</p>
                                         <p className="text-sm text-muted-foreground">{groupTopicInfo?.topicResponse?.mainSupervisorEmail}</p>
                                     </div>
                                 </div>
@@ -233,7 +190,7 @@ export default function GroupInfoPage() {
                                             </AvatarFallback>
                                         </Avatar>
                                         <div>
-                                            <p className="font-semibold">
+                                            <p className="font-semibold text-primary">
                                                 {supervisor?.SupervisorName}
                                             </p>
                                             <p className="text-sm text-muted-foreground">
@@ -263,7 +220,7 @@ export default function GroupInfoPage() {
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <p className="font-semibold">{leaderInfo?.studentFullName} - {leaderInfo?.studentId}</p>
+                                        <p className="font-semibold text-primary">{leaderInfo?.studentFullName} - {leaderInfo?.studentId} - GPA: {leaderInfo?.gpa}</p>
                                         <p className="text-sm text-muted-foreground">{leaderInfo?.isLeader ? "Leader" : "Member"} - {leaderInfo?.studentEmail}</p>
                                     </div>
                                 </div>
@@ -279,7 +236,7 @@ export default function GroupInfoPage() {
                                             </AvatarFallback>
                                         </Avatar>
                                         <div>
-                                            <p className="font-semibold">{member.studentFullName} - {member.studentId}</p>
+                                            <p className="font-semibold text-primary">{member.studentFullName} - {member.studentId} - GPA: {member?.gpa}</p>
                                             <p className="text-sm text-muted-foreground">{member?.isLeader ? "Leader" : "Member"} - {member.studentEmail}</p>
                                         </div>
                                     </div>

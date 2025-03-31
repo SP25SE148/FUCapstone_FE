@@ -2,14 +2,16 @@
 
 import { Users, BookUser, User2, Calculator, BookOpen, BriefcaseBusiness, Calendar, School } from "lucide-react";
 
-import { Member } from "./columns";
+import { GroupFullInfo, Member } from "@/types/types";
+
 import ApplyGroup from "./apply-group";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, } from "@/components/ui/sheet";
 
 interface GroupInfoSheetProps {
-    group: any;
+    group: GroupFullInfo;
     open: boolean;
     onClose: () => void;
 }

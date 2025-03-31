@@ -2,44 +2,15 @@ import React, { useState } from "react";
 import { Clock, Inbox, User2 } from "lucide-react";
 
 import { getDate } from "@/lib/utils";
-import { useStudentGroupRequest, RequestMember } from "@/contexts/student/student-group-request-context";
+import { getJoinGroupStatus } from "@/utils/statusUtils";
 
-import { Badge } from "@/components/ui/badge";
+import { Member } from "@/types/types";
+import { useStudentGroupRequest } from "@/contexts/student/student-group-request-context";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog"
-
-const getStatusBadge = (status: string) => {
-  switch (status) {
-    case "Pending":
-      return (
-        <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-          {status}
-        </Badge>
-      );
-    case "Approved":
-      return (
-        <Badge variant="secondary" className="bg-green-100 text-green-800">
-          {status}
-        </Badge>
-      );
-    case "Rejected":
-      return (
-        <Badge variant="secondary" className="bg-red-100 text-red-800">
-          {status}
-        </Badge>
-      );
-    case "Cancelled":
-      return (
-        <Badge variant="secondary" className="bg-red-100 text-red-800">
-          Cancelled
-        </Badge>
-      );
-    default:
-      return null;
-  }
-};
 
 export default function ApplicationSent() {
   const { listRequest, updateJoinGroupRequest } = useStudentGroupRequest();
@@ -75,7 +46,7 @@ export default function ApplicationSent() {
         (listRequest?.joinGroupRequestSentByMember
           ?.slice()
           ?.reverse()
-          ?.map((request: RequestMember, index: number) => (
+          ?.map((request: Member, index: number) => (
             <div key={index}>
               <Card>
                 <CardContent className="flex items-center justify-between p-4">
@@ -96,7 +67,7 @@ export default function ApplicationSent() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {getStatusBadge(request.status)}
+                    {getJoinGroupStatus(request.status)}
                     {request.status === "Pending" && (
                       <Button
                         size="sm"

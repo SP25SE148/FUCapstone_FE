@@ -5,58 +5,15 @@ import { useParams, useRouter } from "next/navigation";
 import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, FileX, PenTool, School, Star, Undo2, User2, Users } from "lucide-react";
 
 import { Topic } from "@/types/types";
-import { getDate } from "@/lib/utils";
 import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
-import { Badge } from "@/components/ui/badge";
+import { getDate } from "@/lib/utils";
+import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
+
 import { Button } from "@/components/ui/button";
 import DownloadDocument from "./components/download-document";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-const getDifficultyStatus = (status: string | undefined) => {
-    switch (status) {
-        case "Easy":
-            return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">{status}</Badge>
-        case "Medium":
-            return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">{status}</Badge>
-        case "Hard":
-            return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">{status}</Badge>
-        default:
-            return null;
-    }
-}
-
-const getStatus = (status: string | undefined) => {
-    switch (status) {
-        case "Pending":
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    {status}
-                </Badge>
-            );
-        case "Approved":
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    {status}
-                </Badge>
-            );
-        case "Considered":
-            return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                    {status}
-                </Badge>
-            );
-        case "Rejected":
-            return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-                    {status}
-                </Badge>
-            );
-        default:
-            return null;
-    }
-}
 
 export default function TopicDetailsPage() {
     const router = useRouter();
@@ -177,7 +134,7 @@ export default function TopicDetailsPage() {
                                         <h3 className="text-sm text-muted-foreground">
                                             Difficulty
                                         </h3>
-                                        {getDifficultyStatus(topic?.difficultyLevel)}
+                                        {getTopicDifficulty(topic?.difficultyLevel)}
                                     </div>
                                 </div>
                                 <div className="flex items-center space-x-2">
@@ -188,7 +145,7 @@ export default function TopicDetailsPage() {
                                         <h3 className="text-sm text-muted-foreground">
                                             Status
                                         </h3>
-                                        {getStatus(topic?.status)}
+                                        {getTopicStatus(topic?.status)}
                                     </div>
                                 </div>
                             </div>

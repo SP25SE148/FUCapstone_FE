@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { Download } from "lucide-react";
 
+import { Topic } from "@/types/types";
+import { useStudentGroup } from "@/contexts/student/student-group-context";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Topic, useStudentGroup } from "@/contexts/student/student-group-context";
 
 export default function DownloadDocument(
     { topic }: { topic: Topic }

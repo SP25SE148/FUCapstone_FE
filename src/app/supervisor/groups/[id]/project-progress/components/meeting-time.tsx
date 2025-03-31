@@ -25,7 +25,7 @@ const formSchema = z.object({
     }),
 });
 
-export default function MeetingTime({ projectProgress }: { projectProgress: ProjectProgress }) {
+export default function MeetingTime({ projectProgress, refresh }: { projectProgress: ProjectProgress, refresh: any }) {
     const { updateProjectProgress } = useSupervisorGroup();
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -50,6 +50,7 @@ export default function MeetingTime({ projectProgress }: { projectProgress: Proj
             if (res?.isSuccess) {
                 form.reset();
                 setOpen(false);
+                refresh();
             }
         } finally {
             setIsLoading(false);
