@@ -313,7 +313,8 @@ export interface ReviewCalendar {
   slot: number,
   room: string,
   date: string,
-  reviewersCode: string[]
+  reviewers: string[]
+  status: string
 }
 
 export interface ReviewCriteria {

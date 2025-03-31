@@ -8,11 +8,13 @@ import { ClipboardX, Eye, LayoutList } from "lucide-react";
 import { ProjectProgress, ProjectProgressWeek } from "@/types/types";
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
+import MeetingTime from "./components/meeting-time";
+import UploadProjectProgress from "./components/upload-project-progress";
+import ProjectProgressWeekDetail from "./components/project-progress-week-detail";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import UploadProjectProgress from "./components/upload-project-progress";
-import ProjectProgressWeekDetail from "./components/project-progress-week-detail";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const getStatus = (status: number | undefined) => {
@@ -83,10 +85,7 @@ export default function ProjectProgressPage() {
                     ?
                     <CardContent className="grid grid-cols-2 gap-4">
                         < div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] overflow-y-auto space-y-2 rounded-xl shadow" >
-                            <div className="sticky top-0 z-10 p-2 font-semibold bg-primary text-background rounded-xl grid grid-cols-2 gap-2">
-                                <span>Meeting date: {projectProgress?.meetingDate}</span>
-                                <span>Slot: {projectProgress?.slot}</span>
-                            </div>
+                            <MeetingTime projectProgress={projectProgress} />
                             {
                                 projectProgress?.projectProgressWeeks?.map((projectProgressWeek: ProjectProgressWeek, index) => (
                                     <Card

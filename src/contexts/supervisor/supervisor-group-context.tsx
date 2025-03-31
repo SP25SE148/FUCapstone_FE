@@ -13,6 +13,7 @@ interface SupervisorGroupContextType {
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   getProjectProgressTemplate: () => Promise<string>;
   importProjectProgress: (data: any) => Promise<void>;
+  updateProjectProgress: (data: any) => Promise<void>;
   updateProjectProgressWeek: (data: any) => Promise<void>;
   dashboardFUCTaskOfGroup: (projectProgressId: string) => Promise<any>;
   getProjectProgressTasks: (projectProgressId: string) => Promise<Task[]>;
@@ -64,6 +65,18 @@ export const SupervisorGroupProvider: React.FC<{
 
     if (response?.isSuccess === true) {
       toast.success("Upload project progress successfully");
+    }
+    return response
+  };
+
+  const updateProjectProgress = async (data: any) => {
+    const response: any = await callApi("fuc/group/progress", {
+      method: "PUT",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Update project progress successfully");
     }
     return response
   };
@@ -155,6 +168,7 @@ export const SupervisorGroupProvider: React.FC<{
         getProjectProgressOfGroup,
         getProjectProgressTemplate,
         importProjectProgress,
+        updateProjectProgress,
         updateProjectProgressWeek,
         dashboardFUCTaskOfGroup,
         getProjectProgressTasks,

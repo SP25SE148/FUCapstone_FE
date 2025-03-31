@@ -4,7 +4,7 @@ import { useState } from "react"
 import { getDate } from "@/lib/utils"
 import { CalendarIcon, Clock, MapPin, Users, RotateCw, User2 } from "lucide-react"
 
-import type { ReviewCalendar } from "@/contexts/student/student-review-context"
+import { ReviewCalendar } from "@/types/types"
 
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -88,7 +88,7 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                             Reviewer(s)
                         </h3>
                         <div className="grid grid-cols-2 gap-3">
-                            {calendar?.reviewersCode?.map((reviewer: string, index: number) => (
+                            {calendar?.reviewers?.map((reviewer: string, index: number) => (
                                 <Card key={index} className="bg-primary/5">
                                     <CardContent className="p-4">
                                         <div className="flex items-center gap-3">

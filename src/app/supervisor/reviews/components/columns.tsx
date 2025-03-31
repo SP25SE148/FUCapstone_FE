@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { getDate } from "@/lib/utils";
-import { ReviewCalendar } from "@/contexts/manager/manager-review-context";
+import { ReviewCalendar } from "@/types/types";
 
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
