@@ -1,74 +1,32 @@
-"use client";
+"use client"
 
-import { MoreHorizontal } from "lucide-react";
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+import { ArrowRight } from "lucide-react"
+import type { ColumnDef } from "@tanstack/react-table"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
+import type { DefenseCalendarItem } from "@/contexts/supervisor/supervisor-defense-context"
+import { useRouter } from "next/navigation"
+import { getDate } from "@/lib/utils"
 
-interface DefendCapstoneProjectCouncilMember {
-  id: string;
-  name: string;
-  isPresident: boolean;
-  isSecretary: boolean;
-}
+const ActionsCell = ({ defendInfo }: { defendInfo: DefenseCalendarItem }) => {
+  const router = useRouter()
 
-interface DefendCapstoneProjectInformation {
-  id: string;
-  topic: {
-    id: string;
-    code: string;
-    englishName: string;
-    vietnameseName: string;
-    mainSupervisorName: string;
-    mainSupervisorEmail: string;
-  };
-  defendAttempt: boolean;
-  semesterName: string;
-  roomNo: string;
-  date: string;
-  isActive: boolean;
-  councilMembers: DefendCapstoneProjectCouncilMember[];
-}
+  const handleNavigateToDetail = () => {
+    router.push(`/supervisor/defenses/${defendInfo.id}`)
+  }
 
-const ActionsCell = ({ defendInfo }: { defendInfo: DefendCapstoneProjectInformation }) => {
   return (
     <div className="flex items-center justify-center">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(defendInfo.id)}
-          >
-            Copy Defend Info ID
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href={`/supervisor/defenses/${defendInfo.id}`}>
-              View More
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button variant="ghost" size="icon" onClick={handleNavigateToDetail} className="h-8 w-8 p-0">
+        <ArrowRight className="h-4 w-4" />
+        <span className="sr-only">View details</span>
+      </Button>
     </div>
-  );
-};
+  )
+}
 
-export const columns: ColumnDef<DefendCapstoneProjectInformation>[] = [
+export const columns: ColumnDef<DefenseCalendarItem>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -89,79 +47,38 @@ export const columns: ColumnDef<DefendCapstoneProjectInformation>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "topic.englishName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Topic Name" />
-    ),
-    cell: ({ row }) => row.original.topic.englishName,
+    accessorKey: "defenseDate",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Defense Date" />,
+    cell: ({ row }) => <span>{getDate(row.original.defenseDate)}</span>,
   },
   {
-    accessorKey: "topic.code",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Topic Code" />
-    ),
-    cell: ({ row }) => row.original.topic.code,
+    accessorKey: "topicCode",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Topic Code" />,
+    cell: ({ row }) => <span>{row.original.topicCode}</span>,
   },
   {
-    accessorKey: "topic.mainSupervisorName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Supervisor" />
-    ),
-    cell: ({ row }) => row.original.topic.mainSupervisorName,
+    accessorKey: "groupCode",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Group Code" />,
+    cell: ({ row }) => <span>{row.original.groupCode}</span>,
   },
   {
-    accessorKey: "semesterName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Semester" />
-    ),
+    accessorKey: "defendAttempt",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Defend Attempt" />,
+    cell: ({ row }) => <span>{row.original.defendAttempt}</span>,
   },
   {
-    accessorKey: "roomNo",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Room No" />
-    ),
+    accessorKey: "slot",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Slot" />,
+    cell: ({ row }) => <span>{row.original.slot}</span>,
   },
   {
-    accessorKey: "date",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
-    ),
-    cell: ({ row }) => {
-      const date = new Date(row.original.date);
-      return date.toLocaleDateString();
-    },
-  },
-  {
-    accessorKey: "isActive",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => {
-      const status = row.original.isActive ? "Active" : "Inactive";
-      return (
-        <Badge
-          className={`${
-            status === "Active"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {status}
-        </Badge>
-      );
-    },
+    accessorKey: "location",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Location" />,
+    cell: ({ row }) => <span>{row.original.location}</span>,
   },
   {
     id: "actions",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <ActionsCell defendInfo={row.original} />
-        <Link href={`/supervisor/defenses/${row.original.id}`}>
-          <Button variant="outline" size="sm">
-            View More
-          </Button>
-        </Link>
-      </div>
-    ),
+    cell: ({ row }) => <ActionsCell defendInfo={row.original} />,
   },
-];
+]
+

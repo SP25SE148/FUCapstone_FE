@@ -9,7 +9,7 @@ export interface DefendCapstoneProjectCouncilMember {
 
 export interface DefendCapstoneProjectInformation {
   id: string;
-  topic: Topic; // Update to use Topic type
+  topic: Topic; 
   defendAttempt: boolean;
   semesterName: string;
   roomNo: string;
