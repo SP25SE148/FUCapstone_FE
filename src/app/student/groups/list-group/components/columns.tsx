@@ -85,6 +85,12 @@ export const columns: ColumnDef<GroupFullInfo>[] = [
         }
     },
     {
+        accessorKey: "currentNumberOfGroupPerMax",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Member" />
+        ),
+    },
+    {
         accessorKey: "status",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Status" />

@@ -32,8 +32,18 @@ const items = [
     },
     {
         title: "Groups",
-        url: "/manager/groups",
+        url: "#",
         icon: Users,
+        children: [
+            {
+                title: "List groups",
+                url: "/manager/groups",
+            },
+            {
+                title: "Remain students",
+                url: "/manager/groups/remain-students",
+            },
+        ]
     },
     {
         title: "Reviews",

@@ -4,17 +4,8 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { useApi } from "@/hooks/use-api";
+import { Supervisor } from "@/types/types";
 import { useAuth } from "@/contexts/auth-context";
-
-interface Supervisor {
-  id: string;
-  fullName: string;
-  majorId: string;
-  majorName: string;
-  campusId: string;
-  campusName: string;
-  email: string;
-}
 
 interface AssignAppraisalContextProps {
   supervisors: Supervisor[];

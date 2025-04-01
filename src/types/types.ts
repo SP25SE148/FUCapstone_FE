@@ -62,6 +62,16 @@ export interface BusinessArea {
   description: string;
 }
 
+export interface Supervisor {
+  id: string;
+  fullName: string;
+  majorId: string;
+  majorName: string;
+  campusId: string;
+  campusName: string;
+  email: string;
+}
+
 export interface Student {
   id: string;
   fullName: string;
@@ -205,6 +215,7 @@ export interface GroupFullInfo {
   groupCode: string;
   topicCode: string;
   averageGPA: number;
+  currentNumberOfGroupPerMax: string;
   status: string;
   groupMemberList: Member[];
   topicResponse: Topic
