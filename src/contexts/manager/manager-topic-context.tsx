@@ -3,29 +3,8 @@
 import { toast } from "sonner";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+import { Topic } from "@/types/types";
 import { useApi } from "@/hooks/use-api";
-
-export interface Topic {
-  id: string;
-  code: string;
-  mainSupervisorName: string;
-  mainSupervisorEmail: string;
-  englishName: string;
-  vietnameseName: string;
-  abbreviation: string;
-  description: string;
-  fileName: string;
-  fileUrl: string;
-  status: string;
-  difficultyLevel: string;
-  businessAreaName: string;
-  capstoneId: string;
-  semesterId: string;
-  campusId: string;
-  createdDate: string;
-  coSupervisors: any[];
-  topicAppraisals: any[];
-}
 
 interface TopicContextProps {
   topics: Topic[];
