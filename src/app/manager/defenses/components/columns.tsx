@@ -1,94 +1,14 @@
-"use client";
+"use client"
 
-import { MoreHorizontal } from "lucide-react";
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { MoreHorizontal } from "lucide-react"
+import type { ColumnDef } from "@tanstack/react-table"
+import { Checkbox } from "@/components/ui/checkbox"
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
+import type { DefenseCalendarItem } from "@/contexts/supervisor/supervisor-defense-context"
+import { getDate } from "@/lib/utils"
 
-interface DefendCapstoneProjectInformation {
-    id: string;
-    topicName: string;
-    capstoneName: string;
-    defendAttempt: boolean;
-    semesterName: string;
-    roomNo: string;
-    date: string;
-    isActive: boolean;
-}
 
-const ActionsCell = ({ defendInfo }: { defendInfo: DefendCapstoneProjectInformation }) => {
-  const [open, setOpen] = useState(false);
-  const [updateOpen, setUpdateOpen] = useState(false);
-
-  return (
-    <div className="flex items-center justify-center">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(defendInfo.id)}
-          >
-            Copy Defend Info ID
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            Remove
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirm Removal</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to remove the defend information for {defendInfo.capstoneName}?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={async () => {}}
-            >
-              Yes, Remove
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-   </div>
-  );
-};
-
-export const columns: ColumnDef<DefendCapstoneProjectInformation>[] = [
+export const columns: ColumnDef<DefenseCalendarItem>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -109,67 +29,34 @@ export const columns: ColumnDef<DefendCapstoneProjectInformation>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "topicName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Topic" />
-    ),
+    accessorKey: "defenseDate",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Defense Date" />,
+    cell: ({ row }) => <span>{getDate(row.original.defenseDate)}</span>,
   },
   {
-    accessorKey: "capstoneName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Capstone" />
-    ),
+    accessorKey: "topicCode",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Topic Code" />,
+    cell: ({ row }) => <span>{row.original.topicCode}</span>,
   },
   {
-    accessorKey: "semesterName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Semester" />
-    ),
+    accessorKey: "groupCode",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Group Code" />,
+    cell: ({ row }) => <span>{row.original.groupCode}</span>,
   },
   {
     accessorKey: "defendAttempt",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Attempt" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Defend Attempt" />,
+    cell: ({ row }) => <span>{row.original.defendAttempt}</span>,
   },
   {
-    accessorKey: "roomNo",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Room No" />
-    ),
+    accessorKey: "slot",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Slot" />,
+    cell: ({ row }) => <span>{row.original.slot}</span>,
   },
   {
-    accessorKey: "date",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
-    ),
-    cell: ({ row }) => {
-      const date = new Date(row.original.date);
-      return date.toLocaleDateString();
-    },
-  },
-  {
-    accessorKey: "isActive",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => {
-      const status = row.original.isActive ? "Active" : "Inactive";
-      return (
-        <Badge
-          className={`${
-            status === "Active"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {status}
-        </Badge>
-      );
-    },
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => <ActionsCell defendInfo={row.original} />,
-  },
-];
+    accessorKey: "location",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Location" />,
+    cell: ({ row }) => <span>{row.original.location}</span>,
+  }
+]
+

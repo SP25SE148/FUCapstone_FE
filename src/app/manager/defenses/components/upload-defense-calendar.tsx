@@ -47,7 +47,7 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         try {
-            const file = values.file[0]; // Lấy file đầu tiên
+            const file = values.file[0]; 
             const formData = new FormData();
             formData.append("GroupId", id)
             formData.append("File", file);
