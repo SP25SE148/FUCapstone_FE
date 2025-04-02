@@ -1,6 +1,7 @@
+import { AdminStudentProvider } from "@/contexts/admin/admin-student-context";
+
 import StudentTable from "./components/student-table";
 import StudentOverall from "./components/student-overall";
-import { AdminStudentProvider } from "@/contexts/admin/admin-student-context";
 
 export default function AdminManageStudentsPage() {
     return (

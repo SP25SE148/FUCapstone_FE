@@ -1,6 +1,7 @@
+import { AdminManagerProvider } from "@/contexts/admin/admin-manager-context";
+
 import ManagerTable from "./components/manager-table";
 import ManagerOverall from "./components/manager-overall";
-import { AdminManagerProvider } from "@/contexts/admin/admin-manager-context";
 
 export default function AdminManageManagersPage() {
     return (

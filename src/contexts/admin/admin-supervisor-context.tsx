@@ -4,21 +4,11 @@ import { toast } from 'sonner';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@/hooks/use-api';
-
-interface Supervisor {
-  id: string
-  fullName: string
-  email: string
-  majorId: string
-  majorName: string
-  campusId: string
-  campusName: string
-}
+import { Major, Supervisor } from '@/types/types';
 
 interface AdminSupervisorContextProps {
-  isLoading: boolean;
   supervisors: Supervisor[];
-  fetchMajorList: () => Promise<[]>;
+  fetchMajorList: () => Promise<Major[]>;
   fetchSupervisorList: () => Promise<void>;
   addSupervisor: (data: any) => Promise<void>;
   getSupervisorsTemplate: () => Promise<string>;
@@ -29,7 +19,6 @@ const AdminSupervisorContext = createContext<AdminSupervisorContextProps | undef
 
 export const AdminSupervisorProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
 
   const fetchSupervisorList = async () => {
@@ -78,17 +67,12 @@ export const AdminSupervisorProvider = ({ children }: { children: React.ReactNod
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    try {
-      fetchSupervisorList();
-    } finally {
-      setIsLoading(false)
-    }
+    fetchSupervisorList();
   }, []);
 
   return (
     <AdminSupervisorContext.Provider
-      value={{ supervisors, isLoading, fetchSupervisorList, addSupervisor, getSupervisorsTemplate, importSupervisor, fetchMajorList }}
+      value={{ supervisors, fetchSupervisorList, addSupervisor, getSupervisorsTemplate, importSupervisor, fetchMajorList }}
     >
       {children}
     </AdminSupervisorContext.Provider>

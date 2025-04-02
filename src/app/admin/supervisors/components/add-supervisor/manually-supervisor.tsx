@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import { CirclePlus, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Major } from "@/types/types";
+import { useAdminSupervisor } from "@/contexts/admin/admin-supervisor-context";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useAdminSupervisor } from "@/contexts/admin/admin-supervisor-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,9 +27,10 @@ const formSchema = z.object({
 });
 
 export default function ManuallySupervisor({ onClose }: { onClose: () => void }) {
-    const [majorList, setMajorList] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
     const { addSupervisor, fetchMajorList } = useAdminSupervisor();
+
+    const [majorList, setMajorList] = useState<Major[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,7 +56,7 @@ export default function ManuallySupervisor({ onClose }: { onClose: () => void })
 
     useEffect(() => {
         (async function getMajors() {
-            const majors: any = await fetchMajorList();
+            const majors: Major[] = await fetchMajorList();
             setMajorList(majors)
         })();
     }, [])
@@ -108,7 +111,7 @@ export default function ManuallySupervisor({ onClose }: { onClose: () => void })
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {majorList?.map((major: any, index) => (
+                                            {majorList?.map((major: Major, index) => (
                                                 <SelectItem key={index} value={major?.id}><strong>{major?.id}</strong> - <span className="text-muted-foreground text-xs">{major?.name}</span></SelectItem>
                                             ))}
                                         </SelectContent>

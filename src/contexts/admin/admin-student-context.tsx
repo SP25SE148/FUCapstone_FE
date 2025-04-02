@@ -4,30 +4,16 @@ import { toast } from 'sonner';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { useApi } from '@/hooks/use-api';
-
-interface Student {
-  id: string,
-  fullName: string,
-  majorId: string,
-  majorName: string,
-  capstoneId: string,
-  capstoneName: string,
-  campusId: string,
-  campusName: string,
-  email: string,
-  isEligible: boolean,
-  status: string
-}
+import { Capstone, Major, Student } from '@/types/types';
 
 interface AdminStudentContextProps {
-  isLoading: boolean;
   students: Student[];
-  fetchMajorList: () => Promise<[]>;
   fetchStudentList: () => Promise<void>;
+  fetchMajorList: () => Promise<Major[]>;
   addStudent: (data: any) => Promise<void>;
   getStudentsTemplate: () => Promise<string>;
   importStudent: (data: any) => Promise<void>;
-  fetchCapstoneListByMajor: (majorId: string) => Promise<[]>;
+  fetchCapstoneListByMajor: (majorId: string) => Promise<Capstone[]>;
 }
 
 const AdminStudentContext = createContext<AdminStudentContextProps | undefined>(undefined);
@@ -35,7 +21,6 @@ const AdminStudentContext = createContext<AdminStudentContextProps | undefined>(
 export const AdminStudentProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [students, setStudents] = useState<Student[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchStudentList = async () => {
     const response = await callApi("fuc/User/get-all-student");
@@ -88,17 +73,12 @@ export const AdminStudentProvider = ({ children }: { children: React.ReactNode }
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    try {
-      fetchStudentList();
-    } finally {
-      setIsLoading(false)
-    }
+    fetchStudentList();
   }, []);
 
   return (
     <AdminStudentContext.Provider
-      value={{ students, isLoading, fetchStudentList, addStudent, getStudentsTemplate, importStudent, fetchMajorList, fetchCapstoneListByMajor }}
+      value={{ students, fetchStudentList, addStudent, getStudentsTemplate, importStudent, fetchMajorList, fetchCapstoneListByMajor }}
     >
       {children}
     </AdminStudentContext.Provider>

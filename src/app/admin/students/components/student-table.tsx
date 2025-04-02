@@ -3,20 +3,17 @@
 import { useAuth } from "@/contexts/auth-context";
 import { useAdminStudent } from "@/contexts/admin/admin-student-context";
 
-import { columns } from "./columns";
 import AddStudent from "./add-student/add-student";
-import { Skeleton } from "@/components/ui/skeleton";
+
+import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function StudentTable() {
     const { user } = useAuth();
-    const { students, isLoading } = useAdminStudent();
+    const { students } = useAdminStudent();
 
-    return isLoading
-        ?
-        <StudentTable.Skeleton />
-        :
+    return (
         <Card>
             <div className="flex items-center justify-between">
                 <CardHeader>
@@ -29,30 +26,5 @@ export default function StudentTable() {
                 <DataTable columns={columns} data={students || []} />
             </CardContent>
         </Card>
-        ;
-}
-
-StudentTable.Skeleton = () => {
-    return (
-        <Card>
-            <div className="flex items-center justify-between">
-                <CardHeader>
-                    <Skeleton className="h-7 w-24" />
-                    <Skeleton className="h-5 w-24" />
-                </CardHeader>
-                <Skeleton className="mr-6 h-9 w-20" />
-            </div>
-            <CardContent>
-                <div className="flex items-center justify-between py-4">
-                    <Skeleton className="h-9 w-80" />
-                    <Skeleton className="h-8 w-20" />
-                </div>
-                <Skeleton className="h-[440px] w-full" />
-                <div className="flex items-center justify-between py-4">
-                    <Skeleton className="h-5 w-36" />
-                    <Skeleton className="h-8 w-[480px]" />
-                </div>
-            </CardContent>
-        </Card>
-    )
+    );
 }

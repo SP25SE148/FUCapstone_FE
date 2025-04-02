@@ -1,25 +1,19 @@
 "use client"
 
 import { useAuth } from "@/contexts/auth-context";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Overall({
-    items,
-    isLoading
+    items
 }: {
     items?: {
         title: string;
         value: string | number;
     }[];
-    isLoading: boolean
 }) {
     const { user } = useAuth();
 
-    return isLoading
-        ?
-        <Overall.Skeleton />
-        :
+    return (
         <Card>
             <CardHeader>
                 <CardTitle className="font-semibold tracking-tight text-xl">Overall</CardTitle>
@@ -34,19 +28,5 @@ export default function Overall({
                 ))}
             </CardContent>
         </Card>
-        ;
+    );
 }
-
-Overall.Skeleton = () => {
-    return (
-        <Card>
-            <CardHeader>
-                <Skeleton className="h-7 w-24" />
-                <Skeleton className="h-5 w-24" />
-            </CardHeader>
-            <CardContent>
-                <Skeleton className="h-16 w-full" />
-            </CardContent>
-        </Card>
-    )
-};

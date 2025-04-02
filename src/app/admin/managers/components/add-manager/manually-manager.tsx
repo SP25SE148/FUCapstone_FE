@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import { CirclePlus, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Capstone } from "@/types/types";
+import { useAdminManager } from "@/contexts/admin/admin-manager-context";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useAdminManager } from "@/contexts/admin/admin-manager-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,9 +27,10 @@ const formSchema = z.object({
 });
 
 export default function ManuallyManager({ onClose }: { onClose: () => void }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [capstoneList, setCapstoneList] = useState([]);
     const { addManager, fetchCapstoneList } = useAdminManager();
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [capstoneList, setCapstoneList] = useState<Capstone[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,7 +56,7 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
 
     useEffect(() => {
         (async function getCapstones() {
-            const capstones: any = await fetchCapstoneList();
+            const capstones: Capstone[] = await fetchCapstoneList();
             setCapstoneList(capstones)
         })();
     }, [])
@@ -108,7 +111,7 @@ export default function ManuallyManager({ onClose }: { onClose: () => void }) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {capstoneList?.map((capstone: any, index) => (
+                                            {capstoneList?.map((capstone: Capstone, index) => (
                                                 <SelectItem key={index} value={capstone?.id}><strong>{capstone?.id}</strong> - <span className="text-muted-foreground text-xs">{capstone?.name}</span></SelectItem>
                                             ))}
                                         </SelectContent>

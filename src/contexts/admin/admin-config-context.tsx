@@ -4,16 +4,7 @@ import { toast } from 'sonner';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 import { useApi } from '@/hooks/use-api';
-
-interface TimeConfig {
-  id: string,
-  teamUpDate: string,
-  teamUpExpirationDate: string,
-  registTopicDate: string,
-  registTopicExpiredDate: string,
-  isActived: boolean,
-  campusId: string
-}
+import { TimeConfig } from '@/types/types';
 
 interface AdminConfigContextProps {
   timeConfigs: TimeConfig[],
