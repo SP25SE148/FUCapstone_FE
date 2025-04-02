@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import { CirclePlus, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Capstone, Major } from "@/types/types";
+import { useAdminStudent } from "@/contexts/admin/admin-student-context";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useAdminStudent } from "@/contexts/admin/admin-student-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,10 +32,12 @@ const formSchema = z.object({
 });
 
 export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
-    const [majorList, setMajorList] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [capstoneList, setCapstoneList] = useState([]);
     const { addStudent, fetchMajorList, fetchCapstoneListByMajor } = useAdminStudent();
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const [majorList, setMajorList] = useState<Major[]>([]);
+    const [capstoneList, setCapstoneList] = useState<Capstone[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -66,7 +70,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
 
     useEffect(() => {
         (async function getMajors() {
-            const majors: any = await fetchMajorList();
+            const majors: Major[] = await fetchMajorList();
             setMajorList(majors)
         })();
     }, [])
@@ -141,7 +145,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {majorList?.map((major: any, index) => (
+                                            {majorList?.map((major: Major, index) => (
                                                 <SelectItem key={index} value={major?.id}><strong>{major?.id}</strong> - <span className="text-muted-foreground text-xs">{major?.name}</span></SelectItem>
                                             ))}
                                         </SelectContent>
@@ -163,7 +167,7 @@ export default function ManuallyStudent({ onClose }: { onClose: () => void }) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {capstoneList?.map((capstone: any, index) => (
+                                            {capstoneList?.map((capstone: Capstone, index) => (
                                                 <SelectItem key={index} value={capstone?.id}><strong>{capstone?.id}</strong> - <span className="text-muted-foreground text-xs">{capstone?.name}</span></SelectItem>
                                             ))}
                                         </SelectContent>

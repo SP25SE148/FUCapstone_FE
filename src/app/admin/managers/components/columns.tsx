@@ -3,22 +3,12 @@
 import { MoreHorizontal } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
+import { Manager } from "@/types/types"
+
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Manager = {
-    userId: string
-    fullName: string
-    userCode: string
-    email: string
-    campusId: string
-    majorId: string
-    capstoneId: string
-}
 
 export const columns: ColumnDef<Manager>[] = [
     {

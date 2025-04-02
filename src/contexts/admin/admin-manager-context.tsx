@@ -4,21 +4,11 @@ import { toast } from 'sonner';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 import { useApi } from '@/hooks/use-api';
-
-interface Manager {
-  userId: string
-  fullName: string
-  userCode: string
-  email: string
-  campusId: string
-  majorId: string
-  capstoneId: string
-}
+import { Capstone, Manager } from '@/types/types';
 
 interface AdminManagerContextProps {
-  isLoading: boolean;
   managers: Manager[];
-  fetchCapstoneList: () => Promise<[]>;
+  fetchCapstoneList: () => Promise<Capstone[]>;
   fetchManagerList: () => Promise<void>;
   addManager: (data: any) => Promise<void>;
 }
@@ -28,7 +18,6 @@ const AdminManagerContext = createContext<AdminManagerContextProps | undefined>(
 export const AdminManagerProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
   const [managers, setManagers] = useState<Manager[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchManagerList = async () => {
     const response = await callApi("identity/Users/get-all-manager");
@@ -53,17 +42,12 @@ export const AdminManagerProvider = ({ children }: { children: React.ReactNode }
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    try {
-      fetchManagerList();
-    } finally {
-      setIsLoading(false)
-    }
+    fetchManagerList();
   }, []);
 
   return (
     <AdminManagerContext.Provider
-      value={{ managers, isLoading, fetchManagerList, addManager, fetchCapstoneList }}
+      value={{ managers, fetchManagerList, addManager, fetchCapstoneList }}
     >
       {children}
     </AdminManagerContext.Provider>

@@ -44,6 +44,15 @@ export interface Semester {
   deletedAt: string | null
 }
 
+export interface Major {
+  id: string,
+  majorGroupId: string,
+  name: string,
+  description: string,
+  isDeleted: boolean,
+  deletedAt: string | null
+}
+
 export interface Capstone {
   id: string,
   majorId: string,
@@ -60,6 +69,16 @@ export interface BusinessArea {
   id: string;
   name: string;
   description: string;
+}
+
+export interface Manager {
+  userId: string
+  fullName: string
+  userCode: string
+  email: string
+  campusId: string
+  majorId: string
+  capstoneId: string
 }
 
 export interface Supervisor {
@@ -101,7 +120,17 @@ export interface SystemConfig {
   maxAttemptTimesToReviewTopic: number
 }
 
-//#region 
+export interface TimeConfig {
+  id: string,
+  teamUpDate: string,
+  teamUpExpirationDate: string,
+  registTopicDate: string,
+  registTopicExpiredDate: string,
+  isActived: boolean,
+  campusId: string
+}
+
+//#endregion 
 
 //#region Topic Types
 

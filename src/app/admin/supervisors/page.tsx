@@ -1,6 +1,7 @@
+import { AdminSupervisorProvider } from "@/contexts/admin/admin-supervisor-context";
+
 import SupervisorTable from "./components/supervisor-table";
 import SupervisorOverall from "./components/supervisor-overall";
-import { AdminSupervisorProvider } from "@/contexts/admin/admin-supervisor-context";
 
 export default function AdminManageSupervisorsPage() {
     return (
