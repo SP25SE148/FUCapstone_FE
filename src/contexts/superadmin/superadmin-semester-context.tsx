@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
 
-interface Semester {
+export type Semester = {
   id: string;
   name: string;
   startDate: string;
@@ -15,7 +15,7 @@ interface Semester {
   createdBy: string;
   updatedBy: string | null;
   deletedAt: string | null;
-}
+};
 
 interface SemesterContextProps {
   semesters: Semester[];
@@ -32,7 +32,6 @@ export const SuperadminSemesterProvider = ({ children }: { children: React.React
 
   const fetchSemesterList = async () => {
     setLoading(true);
-    try {
       const response = await callApi("fuc/AcademicManagement/semester", {
         method: "GET",
       });
@@ -41,13 +40,6 @@ export const SuperadminSemesterProvider = ({ children }: { children: React.React
         setSemesters(response || []);
         setLoading(false);
       }, 1000);
-    } catch (error) {
-      toast.error("Error fetching semester data", {
-        description: `${error}`,
-      });
-      console.error("Error fetching semester data:", error);
-      setLoading(false);
-    }
   };
 
   useEffect(() => {

@@ -1,6 +1,5 @@
 "use client";
 
-import { columns } from "@/app/superadmin/semesters/components/semester-table-columns";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import {
@@ -11,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useSemester } from "@/contexts/superadmin/superadmin-semester-context";
+import { semesterColumns } from "@/app/superadmin/semesters/components/semester-table-columns";
 
 export default function SemesterTable() {
   const { semesters } = useSemester();
@@ -31,7 +31,7 @@ export default function SemesterTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={semesters} />
+        <DataTable columns={semesterColumns} data={semesters} />
       </CardContent>
     </Card>
   );
