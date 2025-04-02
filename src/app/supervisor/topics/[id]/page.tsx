@@ -10,8 +10,9 @@ import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-conte
 import { getDate } from "@/lib/utils";
 import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
 
-import { Button } from "@/components/ui/button";
 import DownloadDocument from "./components/download-document";
+
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -47,6 +48,7 @@ export default function TopicDetailsPage() {
                 <DownloadDocument topic={topic} />
             </div>
             <CardContent className="space-y-4">
+                {/* general info */}
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
                         <h3 className="font-semibold flex items-center gap-2">
@@ -157,6 +159,7 @@ export default function TopicDetailsPage() {
                     </Card>
                 </div>
 
+                {/* supervisors */}
                 <div className="space-y-2">
                     <h3 className="font-semibold flex items-center gap-2">
                         <Users className="size-4 text-primary" />
@@ -189,10 +192,10 @@ export default function TopicDetailsPage() {
                                         </Avatar>
                                         <div>
                                             <p className="font-semibold">
-                                                {supervisor?.SupervisorName}
+                                                {supervisor?.supervisorName}
                                             </p>
                                             <p className="text-sm text-muted-foreground">
-                                                {supervisor?.SupervisorEmail}
+                                                {supervisor?.supervisorEmail}
                                             </p>
                                         </div>
                                     </div>

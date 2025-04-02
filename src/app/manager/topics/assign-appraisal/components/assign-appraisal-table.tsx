@@ -2,8 +2,9 @@
 
 import { useAssignAppraisal } from "@/contexts/manager/manager-assign-appraisal-context";
 
-import { columns } from "./columns";
 import AddSupervisor from "./add-supervisor";
+
+import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 

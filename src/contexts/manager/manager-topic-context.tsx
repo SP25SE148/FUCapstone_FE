@@ -1,18 +1,23 @@
 "use client";
 
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-import { Topic } from "@/types/types";
 import { useApi } from "@/hooks/use-api";
+import { Supervisor, Topic } from "@/types/types";
 
 interface TopicContextProps {
-  topics: Topic[];
+  topics: Topic[] | [];
+  supervisors: Supervisor[] | [];
   fetchTopics: () => Promise<void>;
-  submitAppraisal: (data: any) => Promise<any>;
+  fetchTopicsById: (id: string) => Promise<Topic>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
-  fetchAssignSupervisor: () => Promise<any>;
   assignTopicAppraisalForSpecificSupervisor: (data: { TopicId: string; SupervisorId: string }) => Promise<any>;
+  fetchSupervisorList: () => Promise<void>;
+  assignNewSupervisorForTopic: (data: { TopicId: string; SupervisorId: string }) => Promise<any>;
+  addNewCoSupervisorForTopicByManager: (data: { TopicId: string; SupervisorId: string }) => Promise<any>;
+  removeCosupervisorForTopic: (data: { TopicId: string; SupervisorId: string }) => Promise<any>;
 }
 
 const ManagerTopicContext = createContext<TopicContextProps | undefined>(
@@ -25,33 +30,23 @@ export const ManagerTopicProvider = ({
   children: React.ReactNode;
 }) => {
   const { callApi } = useApi();
+  const pathName = usePathname();
   const [topics, setTopics] = useState<Topic[]>([]);
+  const [supervisors, setSupervisors] = useState<Supervisor[]>([]);
 
   const fetchTopics = async () => {
     const response = await callApi("fuc/topics/manager");
     setTopics(response.value || []);
   };
 
-  const fetchAssignSupervisor = async () => {
-    const response = await callApi("fuc/User/get-all-supervisor");
-    return response?.value;
+  const fetchTopicsById = async (id: string) => {
+    const response = await callApi(`fuc/topics/${id}`);
+    return (response?.value);
   };
 
   const getPresignedUrlTopicDocument = async (id: string) => {
     const response = await callApi(`fuc/topics/presigned/${id}`);
     return response?.value;
-  };
-
-  const submitAppraisal = async (data: any) => {
-    const response = await callApi("fuc/topics/appraisal/final", {
-      method: "POST",
-      body: data,
-    });
-    if (response?.isSuccess === true) {
-      toast.success("Appraisal submitted successfully");
-      fetchTopics();
-    }
-    return response;
   };
 
   const assignTopicAppraisalForSpecificSupervisor = async (data: { TopicId: string; SupervisorId: string }) => {
@@ -66,19 +61,66 @@ export const ManagerTopicProvider = ({
     return response;
   };
 
+  const fetchSupervisorList = async () => {
+    const response = await callApi("fuc/User/get-all-supervisor");
+    setSupervisors(response?.value);
+  };
+
+  const assignNewSupervisorForTopic = async (data: { TopicId: string; SupervisorId: string }) => {
+    const response = await callApi("fuc/topics/assign/supervisor", {
+      method: "PUT",
+      body: data,
+    });
+    if (response?.isSuccess) {
+      toast.success("Change supervisor successfully!");
+      fetchTopics();
+    }
+    return response;
+  };
+
+  const addNewCoSupervisorForTopicByManager = async (data: { TopicId: string; SupervisorId: string }) => {
+    const response = await callApi("fuc/topics/cosupervisor", {
+      method: "POST",
+      body: data,
+    });
+    if (response?.isSuccess) {
+      toast.success("Add cosupervisor successfully!");
+      fetchTopics();
+    }
+    return response;
+  };
+
+  const removeCosupervisorForTopic = async (data: { TopicId: string; SupervisorId: string }) => {
+    const response = await callApi("fuc/topics/cosupervisor", {
+      method: "DELETE",
+      body: data,
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Remove cosupervisor successfully");
+      fetchTopics();
+    }
+    return response;
+  };
+
   useEffect(() => {
-    fetchTopics();
-  }, []);
+    if (pathName == "/manager/topics") {
+      fetchTopics();
+    }
+  }, [pathName]);
 
   return (
     <ManagerTopicContext.Provider
       value={{
         topics,
+        supervisors,
         fetchTopics,
-        submitAppraisal,
-        fetchAssignSupervisor,
+        fetchTopicsById,
         getPresignedUrlTopicDocument,
-        assignTopicAppraisalForSpecificSupervisor
+        assignTopicAppraisalForSpecificSupervisor,
+        fetchSupervisorList,
+        assignNewSupervisorForTopic,
+        addNewCoSupervisorForTopicByManager,
+        removeCosupervisorForTopic,
       }}
     >
       {children}

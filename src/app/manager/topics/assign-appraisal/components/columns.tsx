@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
+import { Supervisor } from "@/types/types";
 import { useAssignAppraisal } from "@/contexts/manager/manager-assign-appraisal-context";
 
 import { Button } from "@/components/ui/button";
@@ -11,17 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
-export type Topic = {
-  id: string;
-  fullName: string;
-  majorName: string;
-  campusName: string;
-  email: string;
-};
-
-const ActionsCell = ({ topic }: { topic: Topic }) => {
-  const router = useRouter();
-
+const ActionsCell = ({ supervisor }: { supervisor: Supervisor }) => {
   return (
     <div className="flex items-center justify-center">
       <DropdownMenu>
@@ -35,14 +25,9 @@ const ActionsCell = ({ topic }: { topic: Topic }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(topic.id)}
+            onClick={() => navigator.clipboard.writeText(supervisor.id)}
           >
             Copy Supervisor ID
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => router.push(`/manager/topics/appraisal/${topic.id}`)}
-          >
-            View details
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -50,7 +35,7 @@ const ActionsCell = ({ topic }: { topic: Topic }) => {
   );
 };
 
-export const columns: ColumnDef<Topic>[] = [
+export const columns: ColumnDef<Supervisor>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -106,8 +91,8 @@ export const columns: ColumnDef<Topic>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const topic = row.original;
-      return <ActionsCell topic={topic} />;
+      const supervisor = row.original;
+      return <ActionsCell supervisor={supervisor} />;
     },
   },
 ];

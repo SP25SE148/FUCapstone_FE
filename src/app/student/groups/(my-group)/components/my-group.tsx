@@ -228,7 +228,7 @@ export default function MyGroup() {
                                                     </div>
                                                     <div className="flex items-center gap-2">
                                                         {getGroupMemberStatus(member?.status)}
-                                                        {studentProfile?.id == leaderInfo?.studentId && member?.status == "UnderReview" && <Button
+                                                        {studentProfile?.id === leaderInfo?.studentId && member?.status === "Accepted" && groupInfo?.status === "InProgress" && <Button
                                                             variant="ghost"
                                                             size="icon"
                                                             onClick={() => {
@@ -236,7 +236,7 @@ export default function MyGroup() {
                                                                     "id": member?.id,
                                                                     "groupId": member?.groupId,
                                                                     "memberId": member?.studentId,
-                                                                    "status": 4
+                                                                    "status": 3
                                                                 })
                                                                 setOpenDelete(true);
                                                             }}

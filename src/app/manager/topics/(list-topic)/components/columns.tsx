@@ -5,12 +5,13 @@ import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, UserCheck } from "lucide-react";
 
-import { Topic } from "@/contexts/manager/manager-topic-context";
+import { Topic } from "@/types/types";
+import { getTopicAppraisalStatus, getTopicStatus } from "@/utils/statusUtils";
 
-import { Badge } from "@/components/ui/badge";
+import AssignSupervisor from "@/app/manager/topics/(list-topic)/components/add-assign-appraisal";
+
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import AssignSupervisor from "@/app/manager/topics/(list-topic)/components/add-assign-appraisal";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
 const ActionsCell = ({ topic }: { topic: Topic }) => {
@@ -62,68 +63,6 @@ const AssignAppraisalCell = ({ topic }: { topic: Topic }) => {
   );
 };
 
-const getTopicStatusBadge = (status: string) => {
-  switch (status) {
-    case "Pending":
-      return (
-        <Badge className="bg-yellow-100 text-yellow-600 hover:bg-yellow-100">
-          Pending
-        </Badge>
-      );
-    case "Approved":
-      return (
-        <Badge className="bg-green-100 text-green-600 hover:bg-green-100">
-          Approved
-        </Badge>
-      );
-    case "Considered":
-      return (
-        <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100">
-          Considered
-        </Badge>
-      );
-    case "Rejected":
-      return (
-        <Badge className="bg-red-100 text-red-600 hover:bg-red-100">
-          Rejected
-        </Badge>
-      );
-    default:
-      return null;
-  }
-};
-
-const getAppraisalStatusBadge = (status: number) => {
-  switch (status) {
-    case 0:
-      return (
-        <Badge className="bg-yellow-100 text-yellow-600 hover:bg-yellow-100">
-          Pending
-        </Badge>
-      );
-    case 1:
-      return (
-        <Badge className="bg-green-100 text-green-600 hover:bg-green-100">
-          Accepted
-        </Badge>
-      );
-    case 2:
-      return (
-        <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100">
-          Considered
-        </Badge>
-      );
-    case 3:
-      return (
-        <Badge className="bg-red-100 text-red-600 hover:bg-red-100">
-          Rejected
-        </Badge>
-      );
-    default:
-      return null;
-  }
-};
-
 export const columns: ColumnDef<Topic>[] = [
   {
     accessorKey: "englishName",
@@ -150,7 +89,7 @@ export const columns: ColumnDef<Topic>[] = [
     cell: ({ row }) => {
       const appraisal = row.original.topicAppraisals[0];
       if (!appraisal) return <span>N/A</span>;
-      return <div>{appraisal.supervisorId} - {getAppraisalStatusBadge(appraisal.status)}</div>;
+      return <div>{appraisal.supervisorId} - {getTopicAppraisalStatus(appraisal.status)}</div>;
     },
   },
   {
@@ -161,7 +100,7 @@ export const columns: ColumnDef<Topic>[] = [
     cell: ({ row }) => {
       const appraisal = row.original.topicAppraisals[1];
       if (!appraisal) return <span>N/A</span>;
-      return <div>{appraisal.supervisorId} - {getAppraisalStatusBadge(appraisal.status)}</div>;
+      return <div>{appraisal.supervisorId} - {getTopicAppraisalStatus(appraisal.status)}</div>;
     },
   },
   {
@@ -171,7 +110,7 @@ export const columns: ColumnDef<Topic>[] = [
     ),
     cell: ({ row }) => {
       const status = row.original.status;
-      return getTopicStatusBadge(status);
+      return getTopicStatus(status);
     },
   },
   {

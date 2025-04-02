@@ -41,7 +41,7 @@ export function getGroupStatus(status: string) {
             );
         case "InProgress":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-sky-200 text-sky-800 hover:bg-sky-200">
+                <Badge variant="secondary" className="text-sm select-none bg-blue-400 text-white hover:bg-blue-400">
                     In Progress
                 </Badge>
             );
