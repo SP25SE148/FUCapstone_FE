@@ -24,7 +24,7 @@ export default function DownloadDocument({ topic }: { topic: Topic }) {
         if (!urlPreview) return;
         const a = document.createElement("a");
         a.href = urlPreview;
-        a.download = topic?.englishName; // Đặt tên file khi tải về
+        a.download = topic?.englishName;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

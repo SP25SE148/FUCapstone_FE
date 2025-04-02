@@ -26,26 +26,20 @@ export interface DefenseCalendarItem {
   defenseDate: string;
   location: string;
   slot: number;
+  status: string;
   councilMembers: CouncilMember[];
 }
 
-// export interface DefenseCalendar {
-//   defenseDate: string;
-//   calendars: DefenseCalendarItem[];
-// }
 
 export interface DefenseCalendar {
-  [key: string]: DefenseCalendarItem[]
+  [key: string]: DefenseCalendarItem[];
 }
-
-
-
-
 
 interface SupervisorDefenseContextProps {
   defenseCalendar: DefenseCalendar[] | [];
   getThesisPresignedUrl: (calendarId: string) => Promise<string>;
   importThesisDefendCapstoneMinute: (data: any) => Promise<void>;
+  getDefendCapstoneCalendarById: (id: string) => Promise<any>;
   updatePresidentDecisionForGroupStatus: (data: {
     IsReDefendCapstoneProject: boolean;
     CalendarId: string;
@@ -61,7 +55,7 @@ export const SupervisorDefenseProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { callApi } = useApi(); 
+  const { callApi } = useApi();
   const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar[]>([]);
 
   const getThesisPresignedUrl = async (calendarId: string) => {
@@ -87,8 +81,16 @@ export const SupervisorDefenseProvider = ({
     );
     if (response?.isSuccess === true) {
       toast.success("Update President Decision For Group Status successfully");
+      
     }
     return response;
+  };
+
+  const getDefendCapstoneCalendarById = async (id: string): Promise<any> => {
+    const response = await callApi(`fuc/user/defend/calendar/${id}`, {
+      method: "GET",
+    });
+    return response?.value;
   };
 
   const importThesisDefendCapstoneMinute = async (data: any) => {
@@ -99,6 +101,7 @@ export const SupervisorDefenseProvider = ({
 
     if (response?.isSuccess === true) {
       toast.success("Import Thesis Defend Capstone Minute successfully");
+      getDefenseCalendar();
     }
     return response;
   };
@@ -112,8 +115,9 @@ export const SupervisorDefenseProvider = ({
       value={{
         defenseCalendar,
         getThesisPresignedUrl,
+        getDefendCapstoneCalendarById,
         importThesisDefendCapstoneMinute,
-        updatePresidentDecisionForGroupStatus
+        updatePresidentDecisionForGroupStatus,
       }}
     >
       {children}

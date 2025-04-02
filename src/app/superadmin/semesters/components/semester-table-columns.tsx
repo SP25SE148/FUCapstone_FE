@@ -4,7 +4,7 @@ import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,46 +14,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
+import { Semester } from "@/contexts/superadmin/superadmin-semester-context";
 
-export type Semester = {
-  id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  isDeleted: boolean;
-  createdDate: string;
-  updatedDate: string | null;
-  createdBy: string;
-  updatedBy: string | null;
-  deletedAt: string | null;
-};
-
-export const columns: ColumnDef<Semester>[] = [
+export const semesterColumns: ColumnDef<Semester>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ID" />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
+    cell: ({ row }) => <span>{row.original.id}</span>,
   },
   {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
+    cell: ({ row }) => <span>{row.original.name}</span>,
   },
   {
     accessorKey: "startDate",
@@ -74,6 +50,13 @@ export const columns: ColumnDef<Semester>[] = [
       const endDate = new Date(row.original.endDate).toLocaleDateString();
       return <span>{endDate}</span>;
     },
+  },
+  {
+    accessorKey: "createdBy",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Created By" />
+    ),
+    cell: ({ row }) => <span>{row.original.createdBy}</span>,
   },
   {
     accessorKey: "isDeleted",

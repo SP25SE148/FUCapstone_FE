@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import type { DefenseCalendarItem } from "@/contexts/supervisor/supervisor-defense-context"
 import { useRouter } from "next/navigation"
-import { getDate } from "@/lib/utils"
+import { getDate, getDateNoTime } from "@/lib/utils"
 
 const ActionsCell = ({ defendInfo }: { defendInfo: DefenseCalendarItem }) => {
   const router = useRouter()
@@ -17,12 +17,20 @@ const ActionsCell = ({ defendInfo }: { defendInfo: DefenseCalendarItem }) => {
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <Button variant="ghost" size="icon" onClick={handleNavigateToDetail} className="h-8 w-8 p-0">
-        <ArrowRight className="h-4 w-4" />
+    <div className="flex items-center justify-end">
+    {defendInfo.status !== "Done" && (
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleNavigateToDetail}
+        className="h-8 px-2 text-primary hover:text-primary hover:bg-primary/10 flex items-center gap-1"
+      >
+        View
+        <ArrowRight className="h-3.5 w-3.5 ml-1" />
         <span className="sr-only">View details</span>
       </Button>
-    </div>
+    )}
+  </div>
   )
 }
 
@@ -49,7 +57,7 @@ export const columns: ColumnDef<DefenseCalendarItem>[] = [
   {
     accessorKey: "defenseDate",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Defense Date" />,
-    cell: ({ row }) => <span>{getDate(row.original.defenseDate)}</span>,
+    cell: ({ row }) => <span>{getDateNoTime(row.original.defenseDate)}</span>,
   },
   {
     accessorKey: "topicCode",

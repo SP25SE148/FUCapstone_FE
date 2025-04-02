@@ -12,8 +12,9 @@ import {
 import { useManagerDefense } from "@/contexts/manager/manager-defense-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { getDate } from "@/lib/utils";
+import { cn, getDateNoTime } from "@/lib/utils";
 import UploadDefenseCalendar from "@/app/manager/defenses/components/upload-defense-calendar";
+import { Calendar, Clock } from "lucide-react";
 
 export default function DefensesPage() {
   const { defenseCalendar } = useManagerDefense();
@@ -45,13 +46,23 @@ export default function DefensesPage() {
             value={activeTab || defenseDates[0]}
             onValueChange={setActiveTab}
           >
-            <TabsList className="mb-4">
-              {defenseDates.map((date) => (
-                <TabsTrigger key={date} value={date}>
-                  {getDate(date)}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <div className="mb-6">
+              <TabsList className="w-full h-auto justify-start overflow-x-auto gap-6">
+                {defenseDates.map((date) => (
+                  <TabsTrigger
+                    key={date}
+                    value={date}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-3 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none",
+                      "data-[state=active]:shadow-none data-[state=active]:bg-transparent data-[state=active]:text-primary font-medium"
+                    )}
+                  >
+                    <Calendar className="h-4 w-4" />
+                    {getDateNoTime(date)}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
 
             {defenseDates.map((date) => (
               <TabsContent key={date} value={date}>
