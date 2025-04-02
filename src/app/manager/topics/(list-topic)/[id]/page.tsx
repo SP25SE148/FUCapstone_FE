@@ -1,70 +1,53 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { BookOpen, School, Calendar, FileCheck, PenTool, BriefcaseBusiness, Star, BadgeInfo, FileX, Undo2, BookUser, Users, User2, ChartColumn, } from "lucide-react";
+import { BookOpen, School, Calendar, FileCheck, PenTool, BriefcaseBusiness, Star, BadgeInfo, FileX, Undo2, BookUser, Users, User2, ChartColumn, Replace, X, } from "lucide-react";
+
+import { Topic } from "@/types/types";
+import { useManagerTopics } from "@/contexts/manager/manager-topic-context";
 
 import { getDate } from "@/lib/utils";
-import { useManagerTopics } from "@/contexts/manager/manager-topic-context";
+import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
+
+import ChangeSupervisor from "./components/change-supervisor";
+import DownloadDocument from "./components/download-document";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, } from "@/components/ui/card";
-import DownloadDocument from "@/app/manager/topics/(list-topic)/[id]/components/download-document";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
-const getDifficultyStatus = (status: string | undefined) => {
-  switch (status) {
-    case "Easy":
-      return <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">{status}</Badge>
-    case "Medium":
-      return <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">{status}</Badge>
-    case "Hard":
-      return <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">{status}</Badge>
-    default:
-      return null;
-  }
-}
-
-const getStatus = (status: string | undefined) => {
-  switch (status) {
-    case "Pending":
-      return (
-        <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-          {status}
-        </Badge>
-      );
-    case "Approved":
-      return (
-        <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-          {status}
-        </Badge>
-      );
-    case "Considered":
-      return (
-        <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-          {status}
-        </Badge>
-      );
-    case "Rejected":
-      return (
-        <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
-          {status}
-        </Badge>
-      );
-    default:
-      return null;
-  }
-}
 export default function TopicDetail() {
-  const { topics } = useManagerTopics();
+  const { fetchTopicsById, removeCosupervisorForTopic } = useManagerTopics();
   const router = useRouter();
   const params = useParams();
   const id: string = String(params.id);
-  const topic = topics.find((t) => t.id === id);
-
+  const [topic, setTopic] = useState<Topic>();
+  const [isRemoveLoading, setIsRemoveLoading] = useState<boolean>(false);
   const supervisorAppraisals = topic?.topicAppraisals.filter(
     (appraisal: any) => appraisal.supervisorId
   );
+
+  const handleRemoveCosupervisor = async (supervisorId: string) => {
+    try {
+      setIsRemoveLoading(true);
+      await removeCosupervisorForTopic({
+        SupervisorId: supervisorId,
+        TopicId: id
+      })
+    } finally {
+      setIsRemoveLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const topicDetail = await fetchTopicsById(id);
+      setTopic(topicDetail)
+    })();
+  }, [id])
 
   return topic
     ?
@@ -85,6 +68,7 @@ export default function TopicDetail() {
       </div>
 
       <CardContent className="space-y-4">
+        {/* general info */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold flex items-center gap-2">
@@ -172,7 +156,7 @@ export default function TopicDetail() {
                     <h3 className="text-sm text-muted-foreground">
                       Difficulty
                     </h3>
-                    {getDifficultyStatus(topic?.difficultyLevel)}
+                    {getTopicDifficulty(topic?.difficultyLevel)}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -183,7 +167,7 @@ export default function TopicDetail() {
                     <h3 className="text-sm text-muted-foreground">
                       Status
                     </h3>
-                    {getStatus(topic?.status)}
+                    {getTopicStatus(topic?.status)}
                   </div>
                 </div>
               </div>
@@ -195,11 +179,15 @@ export default function TopicDetail() {
           </Card>
         </div>
 
+        {/* supervisors */}
         <div className="space-y-2">
-          <h3 className="font-semibold flex items-center gap-2">
-            <Users className="size-4 text-primary" />
-            Supervisor(s):
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Users className="size-4 text-primary" />
+              Supervisor(s):
+            </h3>
+            <ChangeSupervisor topic={topic} />
+          </div>
           <div className="grid grid-cols-2 gap-2">
             <Card className="bg-primary/5">
               <CardContent className="p-4">
@@ -218,7 +206,7 @@ export default function TopicDetail() {
             </Card>
             {topic?.coSupervisors?.map((supervisor: any, index) => (
               <Card key={index} className="bg-primary/5">
-                <CardContent className="p-4">
+                <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Avatar className="size-12 border-2 border-primary">
                       <AvatarFallback className="bg-primary/10">
@@ -227,19 +215,37 @@ export default function TopicDetail() {
                     </Avatar>
                     <div>
                       <p className="font-semibold">
-                        {supervisor?.SupervisorName}
+                        {supervisor?.supervisorName}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {supervisor?.SupervisorEmail}
+                        {supervisor?.supervisorEmail}
                       </p>
                     </div>
                   </div>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant={"ghost"} size={"icon"}><X /></Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Remove CoSupervisor</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Remove cosupervisor of topic. This action cannot undo.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isRemoveLoading}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction disabled={isRemoveLoading} onClick={() => handleRemoveCosupervisor(supervisor?.supervisorCode)}>Remove</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </CardContent>
               </Card>
             ))}
           </div>
         </div>
 
+        {/* evaluations */}
         <div className="space-y-2">
           <h3 className="font-semibold flex items-center gap-2">
             <ChartColumn className="size-4 text-primary" />

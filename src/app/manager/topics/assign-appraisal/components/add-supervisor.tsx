@@ -6,7 +6,7 @@ import { CirclePlus } from "lucide-react";
 import { useAssignAppraisal } from "@/contexts/manager/manager-assign-appraisal-context";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export default function AddSupervisor() {
   const { selectedSupervisors, assignAppraisalTopic, clearSelectedSupervisors } = useAssignAppraisal();
@@ -19,24 +19,23 @@ export default function AddSupervisor() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
         <Button className="bg-primary hover:bg-primary/90" disabled={selectedSupervisors.length < 2}>
           <CirclePlus />
           Assign
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Confirm Assignment</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-2">
-          <p>Are you sure you want to assign the selected supervisors?</p>
-          <Button className="w-full mt-4" onClick={handleAssign}>
-            Confirm
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Confirm Assignment</AlertDialogTitle>
+          <AlertDialogDescription>Are you sure you want to assign the selected supervisors?</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleAssign}>Confirm</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

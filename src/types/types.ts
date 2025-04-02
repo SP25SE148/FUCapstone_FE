@@ -153,7 +153,11 @@ export interface Topic {
   semesterId: string;
   campusId: string;
   createdDate: string;
-  coSupervisors: any[];
+  coSupervisors: {
+    supervisorCode: string,
+    supervisorName: string,
+    supervisorEmail: string
+  }[];
   topicAppraisals: any[];
 }
 
