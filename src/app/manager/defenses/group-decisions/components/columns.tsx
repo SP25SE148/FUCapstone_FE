@@ -19,6 +19,12 @@ export const columns: ColumnDef<Decision>[] = [
         )
     },
     {
+        accessorKey: "supervisorName",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Supervisor" />
+        )
+    },
+    {
         accessorKey: "decision",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Decision" />

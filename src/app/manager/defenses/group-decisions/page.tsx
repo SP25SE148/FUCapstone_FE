@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from "react";
-import { FileDown, Search } from "lucide-react";
+import { Search } from "lucide-react";
 
 import { Decision } from "@/types/types";
 import { useManagerDefense } from "@/contexts/manager/manager-defense-context";
+
+import ExportDecision from "./components/export-decision";
 
 import { columns } from "./components/columns";
 import { Button } from "@/components/ui/button";
@@ -31,15 +33,9 @@ export default function GroupDecisionsPage() {
                     </CardTitle>
                     <CardDescription>Information about group decisions and export to file.</CardDescription>
                 </CardHeader>
-                <Button className="mr-6" disabled={groupDecisionsList?.length <= 0}>
-                    <FileDown className="h-4 w-4" />
-                    Export
-                </Button>
-            </div>
-            <CardContent>
                 <div className="flex items-center gap-2">
                     <Select onValueChange={(value) => setDecision(value)} defaultValue="1">
-                        <SelectTrigger className="w-[320px]" >
+                        <SelectTrigger className="w-[280px]" >
                             <SelectValue placeholder="Decision" />
                         </SelectTrigger>
                         <SelectContent>
@@ -53,7 +49,10 @@ export default function GroupDecisionsPage() {
                         <Search />
                         Results
                     </Button>
+                    <ExportDecision decision={decision} groupDecisionsList={groupDecisionsList} />
                 </div>
+            </div>
+            <CardContent>
                 <DataTable columns={columns} data={groupDecisionsList || []} />
             </CardContent>
         </Card>
