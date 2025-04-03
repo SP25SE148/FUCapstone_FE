@@ -51,7 +51,7 @@ export const SupervisorDefenseProvider = ({
     );
     if (response?.isSuccess === true) {
       toast.success("Update President Decision For Group Status successfully");
-      
+      getDefenseCalendar();
     }
     return response;
   };
@@ -71,7 +71,6 @@ export const SupervisorDefenseProvider = ({
 
     if (response?.isSuccess === true) {
       toast.success("Import Thesis Defend Capstone Minute successfully");
-      getDefenseCalendar();
     }
     return response;
   };

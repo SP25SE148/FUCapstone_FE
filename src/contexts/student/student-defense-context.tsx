@@ -2,35 +2,10 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApi } from "@/hooks/use-api";
-
-
-export interface CouncilMember {
-  id: string;
-  supervisorId: string;
-  defendCapstoneProjectInformationCalendarId: string;
-  supervisorName: string;
-  isPresident: boolean;
-  isSecretary: boolean;
-}
-
-export interface DefenseCalendarItem {
-  id: string;
-  topicId: string;
-  topicCode: string;
-  groupId: string;
-  groupCode: string;
-  campusId: string;
-  semesterId: string;
-  defendAttempt: number;
-  defenseDate: string;
-  location: string;
-  slot: number;
-  status: string;
-  councilMembers: CouncilMember[];
-}
+import { DefenseCalendarItem } from "@/types/types";
 
 interface StudentDefenseContextProps {
-  defenseCalendar: DefenseCalendarItem;
+  defenseCalendar: DefenseCalendarItem[] | [];
 }
 
 const StudentDefenseContext = createContext<
@@ -43,11 +18,10 @@ export const StudentDefenseProvider = ({
   children: React.ReactNode;
 }) => {
   const { callApi } = useApi(); 
-  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendarItem>({});
-  
+  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendarItem[]>([]);
 
   const getDefenseCalendar = async () => {
-    const response = await callApi("fuc/user/student/defend-calendar");
+    const response = await callApi("fuc/user/defend/calendar");
     setDefenseCalendar(response?.value);
   };
 

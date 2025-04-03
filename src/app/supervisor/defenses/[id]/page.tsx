@@ -20,7 +20,6 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
-import { defenseData } from "@/app/manager/defenses/data";
 import { useParams } from "next/navigation";
 import DownloadDocument from "@/app/supervisor/defenses/[id]/components/download-document";
 import { useState, useEffect } from "react";
@@ -48,9 +47,7 @@ export default function DefenseTopicDetail() {
     fetchDefenseInfo();
   }, [id, getDefendCapstoneCalendarById]);
 
-  const defense = defenseInfo || defenseData.find((d) => d.id === id);
-
-  if (!defense) {
+  if (!defenseInfo) {
     return <p className="text-center text-red-500">Defense not found.</p>;
   }
 
@@ -334,10 +331,10 @@ export default function DefenseTopicDetail() {
       </CardContent>
 
       <CardFooter className="flex justify-end gap-4">
-        {isSecretary && <UploadMinutes defendCapstoneCalendarId={defense.id} />}
+        {isSecretary && <UploadMinutes defendCapstoneCalendarId={defenseInfo.id} />}
 
         {isPresident && (
-          <ContinueDefense defendCapstoneCalendarId={defense.id} />
+          <ContinueDefense defendCapstoneCalendarId={defenseInfo.id} />
         )}
       </CardFooter>
     </Card>

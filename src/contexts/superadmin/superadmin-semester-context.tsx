@@ -2,20 +2,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useApi } from "@/hooks/use-api";
-import { toast } from "sonner";
+import { Semester } from "@/types/types";
 
-export type Semester = {
-  id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  isDeleted: boolean;
-  createdDate: string;
-  updatedDate: string | null;
-  createdBy: string;
-  updatedBy: string | null;
-  deletedAt: string | null;
-};
 
 interface SemesterContextProps {
   semesters: Semester[];
@@ -37,7 +25,7 @@ export const SuperadminSemesterProvider = ({ children }: { children: React.React
       });
 
       setTimeout(() => {
-        setSemesters(response || []);
+        setSemesters(response?.value || []);
         setLoading(false);
       }, 1000);
   };

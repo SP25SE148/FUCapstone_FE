@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/card";
 import { useManagerDefense } from "@/contexts/manager/manager-defense-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn, getDateNoTime } from "@/lib/utils";
 import UploadDefenseCalendar from "@/app/manager/defenses/components/upload-defense-calendar";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 export default function DefensesPage() {
   const { defenseCalendar } = useManagerDefense();
@@ -24,9 +24,11 @@ export default function DefensesPage() {
     (a, b) => new Date(b).getTime() - new Date(a).getTime()
   );
 
-  if (defenseDates.length > 0 && !activeTab) {
-    setActiveTab(defenseDates[0]);
-  }
+  useEffect(() => {
+    if (defenseDates.length > 0 && !activeTab) {
+      setActiveTab(defenseDates[0]); 
+    }
+  }, [defenseDates, activeTab]);
 
   return (
     <Card className="min-h-[calc(100vh-60px)]">
