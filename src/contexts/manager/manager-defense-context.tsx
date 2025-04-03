@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "@/hooks/use-api";
+import { Decision } from "@/types/types";
 // import { DefenseCalendar } from "@/types/types";
 
 export interface CouncilMember {
@@ -25,7 +26,7 @@ export interface DefenseCalendarItem {
   defendAttempt: number;
   location: string;
   slot: number;
-  defenseDate: string; 
+  defenseDate: string;
   councilMembers: CouncilMember[];
 }
 
@@ -35,7 +36,8 @@ export interface DefenseCalendar {
 }
 
 interface ManagerDefenseContextProps {
-  defenseCalendar: DefenseCalendar[] | []
+  defenseCalendar: DefenseCalendar[] | [];
+  getGroupDecisionByManager: (status: any) => Promise<Decision[]>;
   getDefensesCalendarTemplate: () => Promise<string>;
   importDefenseCalendar: (data: any) => Promise<void>;
 }
@@ -50,17 +52,22 @@ export const ManagerDefenseProvider = ({
   children: React.ReactNode;
 }) => {
   const { callApi } = useApi();
-    const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar[]>([]);
+  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar[]>([]);
+
+  const getGroupDecisionByManager = async (status: any) => {
+    const response = await callApi(`fuc/group/group-decision/${status}`);
+    return response?.value;
+  };
 
   const getDefensesCalendarTemplate = async () => {
     const response = await callApi("fuc/Documents/defense-calendar");
     return response?.value;
   };
 
-    const getDefenseCalendar = async () => {
-      const response = await callApi("fuc/user/defend/calendar/manager");
-      setDefenseCalendar(response?.value);
-    };
+  const getDefenseCalendar = async () => {
+    const response = await callApi("fuc/user/defend/calendar/manager");
+    setDefenseCalendar(response?.value);
+  };
 
   const importDefenseCalendar = async (data: any) => {
     const response: any = await callApi("fuc/user/defend/calendar", {
@@ -83,6 +90,7 @@ export const ManagerDefenseProvider = ({
     <ManagerDefenseContext.Provider
       value={{
         defenseCalendar,
+        getGroupDecisionByManager,
         getDefensesCalendarTemplate,
         importDefenseCalendar,
       }}

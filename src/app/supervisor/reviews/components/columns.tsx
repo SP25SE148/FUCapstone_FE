@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { getDate } from "@/lib/utils";
 import { ReviewCalendar } from "@/types/types";
+import { getReviewCalendarStatus } from "@/utils/statusUtils";
 
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
@@ -77,12 +78,13 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
+    cell: ({ row }) => getReviewCalendarStatus(row.original?.status),
   },
   {
     id: "action",
     cell: ({ row }) => {
       const reviewCalendar = row.original;
-      return <Button asChild size={"sm"}>
+      return reviewCalendar?.status !== "Done" && <Button asChild size={"sm"}>
         <Link
           href={{
             pathname: `/supervisor/reviews/${reviewCalendar?.id}`,

@@ -253,3 +253,32 @@ export function getTopicRequestStatus(status: string) {
 }
 
 //#endregion
+
+//#region Review Status
+
+export function getReviewCalendarStatus(status: string) {
+    switch (status) {
+        case "Pending":
+            return (
+                <Badge variant="secondary" className="text-sm select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                    Pending
+                </Badge>
+            );
+        case "InProgress":
+            return (
+                <Badge variant="secondary" className="text-sm select-none bg-blue-400 text-white hover:bg-blue-400">
+                    In Progress
+                </Badge>
+            );
+        case "Done":
+            return (
+                <Badge variant="secondary" className="text-sm select-none bg-green-200 text-green-800 hover:bg-green-200">
+                    Done
+                </Badge>
+            );
+        default:
+            return null;
+    }
+}
+
+//#endregion

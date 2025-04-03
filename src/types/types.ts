@@ -387,6 +387,8 @@ export interface ReviewResult {
 export interface Decision {
   groupId: string,
   groupCode: string,
+  topicId: string,
+  topicCode: string,
   decision: string,
   comment: string | null
 }

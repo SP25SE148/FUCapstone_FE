@@ -2,6 +2,8 @@
 
 import { getDate } from "@/lib/utils";
 import { ReviewCalendar } from "@/types/types";
+import { getReviewCalendarStatus } from "@/utils/statusUtils";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
@@ -73,5 +75,6 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Status" />
         ),
+        cell: ({ row }) => getReviewCalendarStatus(row.original?.status)
     },
 ];

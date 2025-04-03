@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { EvaluationStudent, GroupFullInfo, GroupShortInfo, ProjectProgress, ReviewResult, Task } from "@/types/types";
+import { Decision, EvaluationStudent, GroupFullInfo, GroupShortInfo, ProjectProgress, ReviewResult, Task } from "@/types/types";
 
 interface SupervisorGroupContextType {
   groupList: GroupShortInfo[];
@@ -23,7 +23,7 @@ interface SupervisorGroupContextType {
   getEvaluationWeeklyProgress: (groupId: string) => Promise<EvaluationStudent[]>;
   exportEvaluationWeeklyProgressFile: (groupId: string) => Promise<any>;
   getReviewResultByGroupId: (groupId: string) => Promise<ReviewResult[]>;
-  getGroupDecisionResponse: (groupId: string) => Promise<any>;
+  getGroupDecisionResponse: (groupId: string) => Promise<Decision>;
   updateGroupDecisionStatusBySupervisor: (data: any) => Promise<void>
 }
 

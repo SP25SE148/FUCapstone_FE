@@ -235,7 +235,6 @@ export default function MyGroup() {
                                                                 setDeleteInfo({
                                                                     "id": member?.id,
                                                                     "groupId": member?.groupId,
-                                                                    "memberId": member?.studentId,
                                                                     "status": 3
                                                                 })
                                                                 setOpenDelete(true);
