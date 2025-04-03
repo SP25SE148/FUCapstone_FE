@@ -381,7 +381,38 @@ export interface ReviewResult {
 }
 
 //#endregion
+//#region Defense Types
 
+export interface CouncilMember {
+  id: string;
+  supervisorId: string;
+  defendCapstoneProjectInformationCalendarId: string;
+  supervisorName: string;
+  isPresident: boolean;
+  isSecretary: boolean;
+}
+
+export interface DefenseCalendarItem {
+  id: string;
+  topicId: string;
+  topicCode: string;
+  groupId: string;
+  groupCode: string;
+  campusId: string;
+  semesterId: string;
+  defendAttempt: number;
+  defenseDate: string;
+  location: string;
+  slot: number;
+  status: string;
+  councilMembers: CouncilMember[];
+}
+
+export interface DefenseCalendar {
+  [key: string]: DefenseCalendarItem[];
+}
+
+//#endregion
 //#region Decision Types
 
 export interface Decision {

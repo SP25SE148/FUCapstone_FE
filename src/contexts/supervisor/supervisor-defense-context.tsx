@@ -3,37 +3,7 @@
 import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApi } from "@/hooks/use-api";
-// import { DefenseCalendar } from "@/types/types";
-
-export interface CouncilMember {
-  id: string;
-  supervisorId: string;
-  defendCapstoneProjectInformationCalendarId: string;
-  supervisorName: string;
-  isPresident: boolean;
-  isSecretary: boolean;
-}
-
-export interface DefenseCalendarItem {
-  id: string;
-  topicId: string;
-  topicCode: string;
-  groupId: string;
-  groupCode: string;
-  campusId: string;
-  semesterId: string;
-  defendAttempt: number;
-  defenseDate: string;
-  location: string;
-  slot: number;
-  status: string;
-  councilMembers: CouncilMember[];
-}
-
-
-export interface DefenseCalendar {
-  [key: string]: DefenseCalendarItem[];
-}
+import { DefenseCalendar } from "@/types/types";
 
 interface SupervisorDefenseContextProps {
   defenseCalendar: DefenseCalendar[] | [];
