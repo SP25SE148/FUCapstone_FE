@@ -15,6 +15,8 @@ import { semesterColumns } from "@/app/superadmin/semesters/components/semester-
 export default function SemesterTable() {
   const { semesters } = useSemester();
 
+console.log(semesters)
+
   return (
     <Card>
       <CardHeader>

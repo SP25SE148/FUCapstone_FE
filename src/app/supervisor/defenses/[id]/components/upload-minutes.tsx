@@ -84,8 +84,8 @@ const UploadMinutes: React.FC<UploadMinutesProps> = ({ defendCapstoneCalendarId 
   return (
     <>
       <Button onClick={() => setOpen(true)} className="flex items-center gap-2 px-4" variant="default">
-        <Upload className="h-4 w-4 mr-2" />
-        Upload Minutes
+        <Upload className="h-4 w-4" />
+        Minutes
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -151,7 +151,7 @@ const UploadMinutes: React.FC<UploadMinutesProps> = ({ defendCapstoneCalendarId 
 
             <Button className="w-full h-11" onClick={handleUpload} disabled={!selectedFile || isUploading}>
               <Upload className="mr-2 h-4 w-4" />
-              {isUploading ? "Uploading..." : "Upload Minutes"}
+              {isUploading ? "Uploading..." : "Upload"}
             </Button>
           </div>
         </DialogContent>

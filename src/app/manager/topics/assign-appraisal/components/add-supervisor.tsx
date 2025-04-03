@@ -7,14 +7,17 @@ import { useAssignAppraisal } from "@/contexts/manager/manager-assign-appraisal-
 
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
 
 export default function AddSupervisor() {
   const { selectedSupervisors, assignAppraisalTopic, clearSelectedSupervisors } = useAssignAppraisal();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const handleAssign = async () => {
     await assignAppraisalTopic();
     setOpen(false);
+    router.push("/manager/topics");
     clearSelectedSupervisors();
   };
 

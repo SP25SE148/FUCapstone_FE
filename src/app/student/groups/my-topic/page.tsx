@@ -21,7 +21,7 @@ export default function MyTopicPage() {
   const memberList = groupInfo?.groupMemberList?.filter(
     (x: Member) => x.isLeader == false
   );
-  const noTopic = groupInfo?.topicCode === null;
+  const noTopic = !groupInfo || groupInfo?.topicCode === null  ;
 
   return noTopic
     ?

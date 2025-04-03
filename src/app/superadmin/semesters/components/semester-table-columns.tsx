@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Semester } from "@/contexts/superadmin/superadmin-semester-context";
+import { Semester } from "@/types/types";
 
 export const semesterColumns: ColumnDef<Semester>[] = [
   {
