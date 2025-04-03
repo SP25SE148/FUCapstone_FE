@@ -419,6 +419,7 @@ export interface Decision {
   groupId: string,
   groupCode: string,
   topicId: string,
+  supervisorName: string,
   topicCode: string,
   decision: string,
   comment: string | null

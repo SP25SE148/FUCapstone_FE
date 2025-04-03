@@ -10,6 +10,7 @@ import { Decision, DefenseCalendar } from "@/types/types";
 interface ManagerDefenseContextProps {
   defenseCalendar: DefenseCalendar[] | [];
   getGroupDecisionByManager: (status: any) => Promise<Decision[]>;
+  exportGroupDecisionByStatus: (status: any) => Promise<any>;
   getDefensesCalendarTemplate: () => Promise<string>;
   importDefenseCalendar: (data: any) => Promise<void>;
 }
@@ -29,6 +30,14 @@ export const ManagerDefenseProvider = ({
   const getGroupDecisionByManager = async (status: any) => {
     const response = await callApi(`fuc/group/group-decision/${status}`);
     return response?.value;
+  };
+
+  const exportGroupDecisionByStatus = async (status: any) => {
+    const response = await callApi(`fuc/user/export/defend-calendar/${status}`, {
+      responseType: "blob"
+    }
+    );
+    return (response);
   };
 
   const getDefensesCalendarTemplate = async () => {
@@ -63,6 +72,7 @@ export const ManagerDefenseProvider = ({
       value={{
         defenseCalendar,
         getGroupDecisionByManager,
+        exportGroupDecisionByStatus,
         getDefensesCalendarTemplate,
         importDefenseCalendar,
       }}
