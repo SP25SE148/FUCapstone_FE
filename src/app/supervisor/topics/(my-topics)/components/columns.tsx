@@ -6,6 +6,9 @@ import { MoreHorizontal } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Topic } from "@/types/types"
+import { useAuth } from "@/contexts/auth-context"
+
+import { getDate } from "@/lib/utils"
 import { getTopicStatus } from "@/utils/statusUtils"
 
 import { Button } from "@/components/ui/button"
@@ -78,24 +81,7 @@ export const columns: ColumnDef<Topic>[] = [
         ),
         cell: ({ row }) => {
             const topic = row.original;
-            const date = new Date(topic?.createdDate);
-            // Chuyển sang giờ Việt Nam (GMT+7)
-            const vnDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
-
-            const day = vnDate.getDate().toString().padStart(2, '0');
-            const month = (vnDate.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
-            const year = vnDate.getFullYear();
-
-            const hours = vnDate.getHours().toString().padStart(2, '0');
-            const minutes = vnDate.getMinutes().toString().padStart(2, '0');
-            const seconds = vnDate.getSeconds().toString().padStart(2, '0');
-
-            return (
-                <div className="flex items-center gap-2">
-                    <span>{`${day}/${month}/${year}`}</span>
-                    <span className="text-muted-foreground">{`${hours}:${minutes}:${seconds}`}</span>
-                </div>
-            )
+            return <span className="text-muted-foreground">{getDate(topic?.createdDate)}</span>
         },
     },
     {
@@ -111,9 +97,9 @@ export const columns: ColumnDef<Topic>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
+            const { user } = useAuth();
             const router = useRouter();
             const topic = row.original;
-
             return (
                 <div className="flex items-center justify-center">
                     <DropdownMenu >
@@ -131,7 +117,7 @@ export const columns: ColumnDef<Topic>[] = [
                             >
                                 View details
                             </DropdownMenuItem>
-                            {topic?.status == "Considered" && <DropdownMenuItem
+                            {topic?.status == "Considered" && topic?.mainSupervisorName == user?.name && <DropdownMenuItem
                                 onClick={() => router.push(`topics/${topic.id}/update`)}
                             >
                                 Update topic

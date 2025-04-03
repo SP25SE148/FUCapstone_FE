@@ -1,41 +1,15 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
+import React, { createContext, useContext, useState, useEffect } from "react";
+
 import { useApi } from "../../hooks/use-api";
-import { RequestsOfTopic, Topic } from "@/types/types";
-
-
-interface GroupInfo {
-  id: string;
-  semesterName: string;
-  majorName: string;
-  capstoneName: string;
-  campusName: string;
-  topicCode: string | null;
-  groupCode: string;
-  status: string;
-  groupMemberList: {
-    id: string;
-    groupId: string;
-    studentId: string;
-    studentEmail: string;
-    studentFullName: string;
-    isLeader: boolean;
-    createdBy: string | null;
-    createdDate: string;
-    status: string;
-  }[];
-}
-
-interface TopicRequest {
-  [key: string]: RequestsOfTopic[];
-}
+import { GroupFullInfo, Topic, TopicRequest } from "@/types/types";
 
 interface StudentTopicContextProps {
   topics: Topic[];
   topicRequest: TopicRequest | null;
-  groupInfo: GroupInfo | null;
+  groupInfo: GroupFullInfo | null;
   fetchPassedTopic: () => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   getGroupInfoByStudentId: () => Promise<any>;
@@ -56,14 +30,14 @@ export const useStudentTopics = () => {
 export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { callApi } = useApi();
   const [topics, setTopics] = useState<Topic[]>([]);
+  const [groupInfo, setGroupInfo] = useState<GroupFullInfo | null>(null);
   const [topicRequest, setTopicRequest] = useState<TopicRequest | null>(null);
-  const [groupInfo, setGroupInfo] = useState<GroupInfo | null>(null);
 
   const fetchPassedTopic = async () => {
     const response = await callApi("fuc/group/get-available-topics");
-      if (response?.isSuccess) {
-        setTopics(response?.value?.items);
-      }
+    if (response?.isSuccess) {
+      setTopics(response?.value?.items);
+    }
   };
 
   const getPresignedUrlTopicDocument = async (id: string) => {
@@ -73,10 +47,7 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const getGroupInfoByStudentId = async () => {
     const response = await callApi("fuc/Group/information");
-    // if (response?.isSuccess) {
-      setGroupInfo(response.value);
-      // return response.value;
-    // } 
+    setGroupInfo(response.value);
   };
 
   const createTopicRequest = async (topicId: string, groupId: string) => {
@@ -91,7 +62,6 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
-
   const fetchTopicRequest = async () => {
     const response = await callApi("fuc/Group/get-topic-request");
     if (response?.isSuccess) {
@@ -100,7 +70,6 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setTopicRequest(null);
     }
   }
-
 
   useEffect(() => {
     fetchPassedTopic();

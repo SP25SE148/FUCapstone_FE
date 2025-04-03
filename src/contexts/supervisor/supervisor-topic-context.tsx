@@ -9,6 +9,7 @@ import { useApi } from "../../hooks/use-api";
 
 interface SupervisorTopicContextType {
   topicsOfSupervisor: Topic[];
+  topicsOfCoSupervisor: Topic[];
   fetchTopicsOfSupervisor: () => Promise<void>;
   fetchTopicsById: (id: string) => Promise<Topic>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
@@ -25,10 +26,16 @@ export const SupervisorTopicProvider: React.FC<{
   const { callApi } = useApi();
   const pathName = usePathname();
   const [topicsOfSupervisor, setTopicsOfSupervisor] = useState<Topic[]>([]);
+  const [topicsOfCoSupervisor, setTopicsOfCoSupervisor] = useState<Topic[]>([]);
 
   const fetchTopicsOfSupervisor = async () => {
     const response = await callApi("fuc/topics/supervisor");
     setTopicsOfSupervisor(response?.value);
+  };
+
+  const getTopicsByCoSupervisor = async () => {
+    const response = await callApi("fuc/topics/cosupervisor");
+    setTopicsOfCoSupervisor(response?.value);
   };
 
   const fetchTopicsById = async (id: string) => {
@@ -55,6 +62,7 @@ export const SupervisorTopicProvider: React.FC<{
   useEffect(() => {
     if (pathName === "/supervisor/topics") {
       fetchTopicsOfSupervisor();
+      getTopicsByCoSupervisor();
     }
   }, []);
 
@@ -62,6 +70,7 @@ export const SupervisorTopicProvider: React.FC<{
     <SupervisorTopicContext.Provider
       value={{
         topicsOfSupervisor,
+        topicsOfCoSupervisor,
         fetchTopicsById,
         fetchTopicsOfSupervisor,
         getPresignedUrlTopicDocument,

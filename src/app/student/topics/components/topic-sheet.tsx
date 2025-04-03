@@ -4,100 +4,25 @@ import { useEffect, useState } from "react";
 import { BookOpen, BriefcaseBusiness, BadgeInfo, Users, FileCheck, BookUser, School, Calendar, PenTool, Star, User2, X } from "lucide-react";
 
 import { getDate } from "@/lib/utils";
+import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
+
+import { Topic } from "@/types/types";
 import { useAuth } from "@/contexts/auth-context";
 import { useStudentTopics } from "@/contexts/student/student-topic-context";
 
-import { Badge } from "@/components/ui/badge";
+import RegisterTopic from "@/app/student/topics/components/register-topic";
+import DownloadDocument from "@/app/student/topics/components/download-document";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import RegisterTopic from "@/app/student/topics/components/register-topic";
-import DownloadDocument from "@/app/student/topics/components/download-document";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from "@/components/ui/sheet";
-import { Topic } from "@/types/types";
 
 interface TopicSheetProps {
   topic: Topic;
   open: boolean;
   onClose: () => void;
 }
-
-const getDifficultyStatus = (status: string | undefined) => {
-  switch (status) {
-    case "Easy":
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400"
-        >
-          {status}
-        </Badge>
-      );
-    case "Medium":
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-green-400 text-green-800 hover:bg-green-400"
-        >
-          {status}
-        </Badge>
-      );
-    case "Hard":
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-red-400 text-red-800 hover:bg-red-400"
-        >
-          {status}
-        </Badge>
-      );
-    default:
-      return null;
-  }
-};
-
-const getStatus = (status: string | undefined) => {
-  switch (status) {
-    case "Pending":
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200"
-        >
-          {status}
-        </Badge>
-      );
-    case "Approved":
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-green-200 text-green-800 hover:bg-green-200"
-        >
-          {status}
-        </Badge>
-      );
-    case "Considered":
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200"
-        >
-          {status}
-        </Badge>
-      );
-    case "Rejected":
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-red-200 text-red-800 hover:bg-red-200"
-        >
-          {status}
-        </Badge>
-      );
-    default:
-      return null;
-  }
-};
 
 export default function TopicSheet({ topic, open, onClose }: TopicSheetProps) {
   const { user } = useAuth();
@@ -215,7 +140,7 @@ export default function TopicSheet({ topic, open, onClose }: TopicSheetProps) {
                     </div>
                     <div>
                       <h3 className="text-sm text-muted-foreground">Difficulty</h3>
-                      {getDifficultyStatus(topic?.difficultyLevel)}
+                      {getTopicDifficulty(topic?.difficultyLevel)}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -224,7 +149,7 @@ export default function TopicSheet({ topic, open, onClose }: TopicSheetProps) {
                     </div>
                     <div>
                       <h3 className="text-sm text-muted-foreground">Status</h3>
-                      {getStatus(topic?.status)}
+                      {getTopicStatus(topic?.status)}
                     </div>
                   </div>
                 </div>
@@ -273,8 +198,8 @@ export default function TopicSheet({ topic, open, onClose }: TopicSheetProps) {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-semibold text-primary">{supervisor?.SupervisorName}</p>
-                          <p className="text-sm text-muted-foreground">{supervisor?.SupervisorEmail}</p>
+                          <p className="font-semibold text-primary">{supervisor?.supervisorName}</p>
+                          <p className="text-sm text-muted-foreground">{supervisor?.supervisorEmail}</p>
                         </div>
                       </div>
                     </CardContent>
