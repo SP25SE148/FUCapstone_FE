@@ -1,9 +1,8 @@
 "use client";
 
-import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApi } from "@/hooks/use-api";
-// import { DefenseCalendar } from "@/types/types";
+
 
 export interface CouncilMember {
   id: string;
@@ -26,15 +25,12 @@ export interface DefenseCalendarItem {
   defenseDate: string;
   location: string;
   slot: number;
+  status: string;
   councilMembers: CouncilMember[];
 }
 
-export interface DefenseCalendar {
-  [key: string]: DefenseCalendarItem[]
-}
-
 interface StudentDefenseContextProps {
-  defenseCalendar: DefenseCalendar[] | [];
+  defenseCalendar: DefenseCalendarItem;
 }
 
 const StudentDefenseContext = createContext<
@@ -47,10 +43,11 @@ export const StudentDefenseProvider = ({
   children: React.ReactNode;
 }) => {
   const { callApi } = useApi(); 
-  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar[]>([]);
+  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendarItem>({});
+  
 
   const getDefenseCalendar = async () => {
-    const response = await callApi("fuc/user/defend/calendar");
+    const response = await callApi("fuc/user/student/defend-calendar");
     setDefenseCalendar(response?.value);
   };
 

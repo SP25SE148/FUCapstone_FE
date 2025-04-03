@@ -4,36 +4,8 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "@/hooks/use-api";
-import { Decision } from "@/types/types";
-// import { DefenseCalendar } from "@/types/types";
+import { Decision, DefenseCalendar } from "@/types/types";
 
-export interface CouncilMember {
-  id: string;
-  supervisorId: string;
-  supervisorName: string;
-  isPresident: boolean;
-  isSecretary: boolean;
-}
-
-export interface DefenseCalendarItem {
-  id: string;
-  topicId: string;
-  topicCode: string;
-  groupId: string;
-  groupCode: string;
-  campusId: string;
-  semesterId: string;
-  defendAttempt: number;
-  location: string;
-  slot: number;
-  defenseDate: string;
-  councilMembers: CouncilMember[];
-}
-
-export interface DefenseCalendar {
-  defenseDate: string;
-  calendars: DefenseCalendarItem[];
-}
 
 interface ManagerDefenseContextProps {
   defenseCalendar: DefenseCalendar[] | [];

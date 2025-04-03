@@ -1,62 +1,49 @@
 "use client"
 
-import { MoreHorizontal } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import type { DefenseCalendarItem } from "@/contexts/supervisor/supervisor-defense-context"
-import { getDate } from "@/lib/utils"
+import { getDateNoTime } from "@/lib/utils"
+import { Building2, Calendar, Clock, Clock1, Group, Hash, Locate, LocateFixedIcon, LocateIcon, LocateOff, PlayCircle, TicketMinus, Users2 } from 'lucide-react'
 
 
 export const columns: ColumnDef<DefenseCalendarItem>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "defenseDate",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Defense Date" />,
-    cell: ({ row }) => <span>{getDate(row.original.defenseDate)}</span>,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Defense Date" icon={<Calendar className="h-4 w-4"/>} />,
+    cell: ({ row }) => <span>{getDateNoTime(row.original.defenseDate)}</span>,
   },
   {
     accessorKey: "topicCode",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Topic Code" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Topic Code" icon={<Hash className="h-4 w-4"/>}/>,
     cell: ({ row }) => <span>{row.original.topicCode}</span>,
   },
   {
     accessorKey: "groupCode",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Group Code" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Group Code" icon ={<Users2 className="h-4 w-4" />}/>,
     cell: ({ row }) => <span>{row.original.groupCode}</span>,
   },
   {
     accessorKey: "defendAttempt",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Defend Attempt" />,
-    cell: ({ row }) => <span>{row.original.defendAttempt}</span>,
+    header: ({ column }) => (
+      <div className="flex justify-center w-full">
+        <DataTableColumnHeader column={column} title="Defend Attempt" icon = {<TicketMinus className="h-4 w-4" />} />
+      </div>
+    ),
+    cell: ({ row }) => <div className="text-center">{row.original.defendAttempt}</div>,
   },
   {
     accessorKey: "slot",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Slot" />,
-    cell: ({ row }) => <span>{row.original.slot}</span>,
+    header: ({ column }) => (
+      <div className="flex justify-center w-full">
+        <DataTableColumnHeader column={column} title="Slot" icon= {<Clock className="h-4 w-4" /> }/>
+      </div>
+    ),
+    cell: ({ row }) => <div className="text-center">{row.original.slot}</div>,
   },
   {
     accessorKey: "location",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Location" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Location" icon = {<Building2 className="h-4 w-4" />}/>,
     cell: ({ row }) => <span>{row.original.location}</span>,
   }
 ]
-
