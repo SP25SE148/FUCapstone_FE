@@ -39,6 +39,7 @@ export default function MyDecisionPage() {
     const params = useParams();
     const groupId: string = String(params.id);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isRefresh, setIsRefresh] = useState<boolean>(false);
     const [makeDecision, setMakeDecision] = useState<boolean>(false);
     const [decision, setDecision] = useState<Decision>();
     const [disagreeMember, setDisagreeMember] = useState<string[]>([]);
@@ -63,6 +64,7 @@ export default function MyDecisionPage() {
             const res: any = await updateGroupDecisionStatusBySupervisor(data);
             if (res?.isSuccess) {
                 form.reset();
+                setIsRefresh(!isRefresh);
             }
         } finally {
             setIsLoading(false);
@@ -80,7 +82,7 @@ export default function MyDecisionPage() {
             const decisionDetail = await getGroupDecisionResponse(groupId);
             setDecision(decisionDetail)
         })();
-    }, [])
+    }, [isRefresh])
 
     useEffect(() => {
         (async () => {
@@ -219,7 +221,7 @@ export default function MyDecisionPage() {
                                                     </FormItem>
                                                     <FormItem className="flex items-center space-x-3 space-y-0">
                                                         <FormControl>
-                                                            <RadioGroupItem value="3" />
+                                                            <RadioGroupItem value="0" />
                                                         </FormControl>
                                                         <FormLabel className="font-normal flex gap-2">
                                                             <XCircle className="size-4 text-red-500" />

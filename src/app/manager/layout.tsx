@@ -54,6 +54,16 @@ const items = [
         title: "Defenses",
         url: "/manager/defenses",
         icon: ShieldCheck,
+        children: [
+            {
+                title: "Group decisions",
+                url: "/manager/defenses/group-decisions",
+            },
+            {
+                title: "Defense calendars",
+                url: "/manager/defenses",
+            },
+        ]
     },
 ]
 
