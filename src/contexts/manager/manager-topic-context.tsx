@@ -73,7 +73,6 @@ export const ManagerTopicProvider = ({
     });
     if (response?.isSuccess) {
       toast.success("Change supervisor successfully!");
-      fetchTopics();
     }
     return response;
   };
@@ -85,7 +84,6 @@ export const ManagerTopicProvider = ({
     });
     if (response?.isSuccess) {
       toast.success("Add cosupervisor successfully!");
-      fetchTopics();
     }
     return response;
   };
@@ -97,7 +95,6 @@ export const ManagerTopicProvider = ({
     });
     if (response?.isSuccess === true) {
       toast.success("Remove cosupervisor successfully");
-      fetchTopics();
     }
     return response;
   };

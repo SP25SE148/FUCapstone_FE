@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
 
-export default function ChangeSupervisor({ topic }: { topic: Topic }) {
+export default function ChangeSupervisor({ topic, refresh }: { topic: Topic, refresh: () => void }) {
     const { supervisors, fetchSupervisorList, assignNewSupervisorForTopic, addNewCoSupervisorForTopicByManager, } = useManagerTopics();
 
     const [open, setOpen] = useState<boolean>(false);
@@ -23,26 +23,32 @@ export default function ChangeSupervisor({ topic }: { topic: Topic }) {
     );
 
     const handleChangeMain = async (supervisorId: string) => {
-        setLoading(true); // Toàn bộ modal bị vô hiệu hóa
+        setLoading(true);
         try {
-            await assignNewSupervisorForTopic({
+            const res = await assignNewSupervisorForTopic({
                 TopicId: topic?.id,
                 SupervisorId: supervisorId
             });
-            setOpen(false); // Đóng modal sau khi thêm thành công
+            if (res?.isSuccess) {
+                setOpen(false);
+                refresh();
+            }
         } finally {
             setLoading(false);
         }
     };
 
     const handleAddCosupervisor = async (supervisorId: string) => {
-        setLoading(true); // Toàn bộ modal bị vô hiệu hóa
+        setLoading(true);
         try {
-            await addNewCoSupervisorForTopicByManager({
+            const res = await addNewCoSupervisorForTopicByManager({
                 TopicId: topic?.id,
                 SupervisorId: supervisorId
             });
-            setOpen(false); // Đóng modal sau khi thêm thành công
+            if (res?.isSuccess) {
+                setOpen(false);
+                refresh();
+            }
         } finally {
             setLoading(false);
         }

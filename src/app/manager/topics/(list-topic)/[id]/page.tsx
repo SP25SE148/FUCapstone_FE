@@ -25,18 +25,22 @@ export default function TopicDetail() {
   const params = useParams();
   const id: string = String(params.id);
   const [topic, setTopic] = useState<Topic>();
+  const [isRefresh, setIsRefresh] = useState<boolean>(false);
   const [isRemoveLoading, setIsRemoveLoading] = useState<boolean>(false);
   const supervisorAppraisals = topic?.topicAppraisals.filter(
     (appraisal: any) => appraisal.supervisorId
   );
 
   const handleRemoveCosupervisor = async (supervisorId: string) => {
+    setIsRemoveLoading(true);
     try {
-      setIsRemoveLoading(true);
-      await removeCosupervisorForTopic({
+      const res = await removeCosupervisorForTopic({
         SupervisorId: supervisorId,
         TopicId: id
       })
+      if (res?.isSuccess) {
+        setIsRefresh(!isRefresh);
+      }
     } finally {
       setIsRemoveLoading(false);
     }
@@ -47,7 +51,7 @@ export default function TopicDetail() {
       const topicDetail = await fetchTopicsById(id);
       setTopic(topicDetail)
     })();
-  }, [id])
+  }, [id, isRefresh])
 
   return topic
     ?
@@ -186,7 +190,7 @@ export default function TopicDetail() {
               <Users className="size-4 text-primary" />
               Supervisor(s):
             </h3>
-            <ChangeSupervisor topic={topic} />
+            <ChangeSupervisor topic={topic} refresh={() => { setIsRefresh(!isRefresh) }} />
           </div>
           <div className="grid grid-cols-2 gap-2">
             <Card className="bg-primary/5">

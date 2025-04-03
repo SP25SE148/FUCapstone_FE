@@ -9,6 +9,7 @@ import { EvaluationStudent, GroupFullInfo, GroupShortInfo, ProjectProgress, Revi
 
 interface SupervisorGroupContextType {
   groupList: GroupShortInfo[];
+  coGroupList: GroupShortInfo[];
   getTopicGroupInformation: (groupId: string) => Promise<GroupFullInfo>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   getProjectProgressTemplate: () => Promise<string>;
@@ -36,10 +37,16 @@ export const SupervisorGroupProvider: React.FC<{
   const { callApi } = useApi();
   const pathName = usePathname();
   const [groupList, setGroupList] = useState<GroupShortInfo[]>([]);
+  const [coGroupList, setCoGroupList] = useState<GroupShortInfo[]>([]);
 
   const getGroupManageBySupervisor = async () => {
     const response = await callApi("fuc/group/manage");
     setGroupList(response?.value);
+  };
+
+  const getGroupOfCoSupervisor = async () => {
+    const response = await callApi("fuc/group/co-manage");
+    setCoGroupList(response?.value);
   };
 
   const getTopicGroupInformation = async (groupId: string) => {
@@ -157,6 +164,7 @@ export const SupervisorGroupProvider: React.FC<{
   useEffect(() => {
     if (pathName === "/supervisor/groups") {
       getGroupManageBySupervisor();
+      getGroupOfCoSupervisor();
     }
   }, [pathName]);
 
@@ -164,6 +172,7 @@ export const SupervisorGroupProvider: React.FC<{
     <SupervisorGroupContext.Provider
       value={{
         groupList,
+        coGroupList,
         getTopicGroupInformation,
         getProjectProgressOfGroup,
         getProjectProgressTemplate,
