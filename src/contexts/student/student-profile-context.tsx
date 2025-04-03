@@ -6,10 +6,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useAuth } from "../auth-context";
 import { useApi } from "../../hooks/use-api";
-import { BusinessArea, StudentProfile } from "@/types/types";
+import { BusinessArea, Student } from "@/types/types";
 
 interface StudentProfileContextType {
-  studentProfile: StudentProfile | null;
+  studentProfile: Student | null;
   businessAreas: BusinessArea[];
   loading: boolean;
   fetchStudentProfile: () => Promise<void>;
@@ -33,7 +33,7 @@ export const StudentProfileProvider: React.FC<{
   const pathname = usePathname();
   const [loading, setLoading] = useState<boolean>(false);
   const [businessAreas, setBusinessAreas] = useState<BusinessArea[]>([]);
-  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null);
+  const [studentProfile, setStudentProfile] = useState<Student | null>(null);
 
   const fetchStudentProfile = async () => {
     if (user) {

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Download } from "lucide-react";
 
-import { Topic, useStudentTopics } from "@/contexts/student/student-topic-context";
+import { Topic } from "@/types/types";
+import { useStudentTopics } from "@/contexts/student/student-topic-context";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";

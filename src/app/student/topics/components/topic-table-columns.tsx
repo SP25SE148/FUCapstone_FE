@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { Info } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
+
+import { Topic } from "@/types/types";
+import { getTopicDifficulty } from "@/utils/statusUtils";
+
 import { Button } from "@/components/ui/button";
 import TopicSheet from "@/app/student/topics/components/topic-sheet";
-import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Topic } from "@/contexts/student/student-topic-context";
-import { Info } from "lucide-react";
 
 const InfoCell = ({ topic }: { topic: Topic }) => {
   const [open, setOpen] = useState(false);
@@ -20,16 +22,6 @@ const InfoCell = ({ topic }: { topic: Topic }) => {
       <TopicSheet topic={topic} open={open} onClose={() => setOpen(false)} />
     </div>
   );
-};
-
-const DifficultyLevelCell = ({ level }: { level: string }) => {
-  const color =
-    level === "Easy"
-      ? "bg-green-100 text-green-500 hover:bg-green-100"
-      : level === "Medium"
-      ? "bg-yellow-100 text-yellow-500 hover:bg-yellow-100"
-      : "bg-red-100 text-red-500 hover:bg-red-100";
-  return <Badge className={color}>{level}</Badge>;
 };
 
 export const columns: ColumnDef<Topic>[] = [
@@ -62,7 +54,7 @@ export const columns: ColumnDef<Topic>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Difficulty Level" />
     ),
-    cell: ({ row }) => <DifficultyLevelCell level={row.original.difficultyLevel} />,
+    cell: ({ row }) => getTopicDifficulty(row.original.difficultyLevel || ""),
   },
   {
     accessorKey: "businessAreaName",

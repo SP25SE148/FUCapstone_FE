@@ -244,10 +244,10 @@ export default function TopicAppraisalDetail() {
                     </Avatar>
                     <div>
                       <p className="font-semibold">
-                        {supervisor?.SupervisorName}
+                        {supervisor?.supervisorName}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {supervisor?.SupervisorEmail}
+                        {supervisor?.supervisorEmail}
                       </p>
                     </div>
                   </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
 import { useState } from "react";
 import { Send } from "lucide-react";
 
@@ -23,10 +22,6 @@ export default function RegisterTopic({ topicId, groupId }: RegisterTopicProps) 
     setLoading(true);
     try {
       await createTopicRequest(topicId, groupId);
-    } catch (error) {
-      toast.error("Failed to register topic", {
-        description: `${error}`,
-      });
     } finally {
       setLoading(false);
       setOpen(false);
@@ -49,7 +44,7 @@ export default function RegisterTopic({ topicId, groupId }: RegisterTopicProps) 
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="outline" onClick={() => setOpen(false)} disabled={loading}>
             No
           </Button>
           <Button onClick={handleRegister} disabled={loading}>
