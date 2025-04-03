@@ -15,17 +15,22 @@ import TaskHistory from "@/app/student/workspace/tasks/components/task-history";
 import AddTask from "@/app/student/workspace/tasks/components/add-task";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
 import { DataTable } from "@/components/ui/data-table";
+import { ProjectProgress } from "@/types/types";
+import NoProgress from "@/app/student/workspace/tasks/components/no-progress";
 
 export default function TasksTable() {
   const { tasks, fetchProgressTask, groupInfo, getProjectProgressOfGroup } =
     useStudentTasks();
   const [showHistory, setShowHistory] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
+    const [projectProgress, setProjectProgress] = useState<ProjectProgress>();
+  
 
   useEffect(() => {
     const fetchTasks = async () => {
       if (groupInfo?.id) {
         const projectProgress = await getProjectProgressOfGroup(groupInfo.id);
+        setProjectProgress(projectProgress);
         if (projectProgress?.id) {
           await fetchProgressTask(projectProgress.id);
         }
@@ -35,6 +40,9 @@ export default function TasksTable() {
     fetchTasks();
   }, [groupInfo]);
 
+  const noProgress = !projectProgress;
+
+
   const handleShowHistory = () => {
     setShowHistory(true);
   };
@@ -43,7 +51,7 @@ export default function TasksTable() {
     setShowCreateTask(true);
   };
 
-  return (
+  return noProgress ? <NoProgress/> :
     <Card className="min-h-[calc(100vh-16px)]">
       <CardHeader>
         <div className="flex items-center justify-between">
@@ -73,5 +81,5 @@ export default function TasksTable() {
       {showHistory && <TaskHistory onClose={() => setShowHistory(false)} />}
       {showCreateTask && <AddTask onClose={() => setShowCreateTask(false)} />}
     </Card>
-  );
+  
 }
