@@ -129,7 +129,7 @@ export default function DefenseTopicDetail() {
           </div>
           <Card className="bg-primary/5">
             <CardContent className="p-6 space-y-2">
-              <div className="grid grid-cols-4 gap-6 text-sm border-b pb-4 mb-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-sm border-b pb-4 mb-4">
                 <div className="flex items-center space-x-2">
                   <div className="bg-muted rounded-md p-2">
                     <School className="size-5 text-primary" />
@@ -233,7 +233,7 @@ export default function DefenseTopicDetail() {
             <Users className="size-4 text-primary" />
             Supervisor(s):
           </h3>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
             <Card className="bg-primary/5">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -279,7 +279,7 @@ export default function DefenseTopicDetail() {
             <Users className="size-4 text-primary" />
             Member(s)
           </h3>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
             <Card className="bg-primary/5">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">

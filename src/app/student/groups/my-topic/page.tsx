@@ -8,9 +8,10 @@ import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
 import { Member } from "@/types/types";
 import { useStudentGroup } from "@/contexts/student/student-group-context";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import NoTopic from "@/app/student/groups/my-topic/components/no-topic";
 import DownloadDocument from "@/app/student/groups/my-topic/components/download-document";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 
 export default function MyTopicPage() {
@@ -21,7 +22,7 @@ export default function MyTopicPage() {
   const memberList = groupInfo?.groupMemberList?.filter(
     (x: Member) => x.isLeader == false
   );
-  const noTopic = !groupInfo || groupInfo?.topicCode === null  ;
+  const noTopic = !groupInfo || groupInfo?.topicCode === null;
 
   return noTopic
     ?
@@ -56,7 +57,7 @@ export default function MyTopicPage() {
           </div>
           <Card className="bg-primary/5">
             <CardContent className="p-6 space-y-2">
-              <div className="grid grid-cols-4 gap-6 text-sm border-b pb-4 mb-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-sm border-b pb-4 mb-4">
                 <div className="flex items-center space-x-2">
                   <div className="bg-muted rounded-md p-2">
                     <School className="size-5 text-primary" />

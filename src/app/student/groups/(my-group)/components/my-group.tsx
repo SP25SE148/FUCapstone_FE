@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User2, X, Users, Send, BookUser, FileCheck, Calculator, School, Calendar, BriefcaseBusiness, BookOpen } from "lucide-react";
+import { User2, X, Users, Send, BookUser, FileCheck, Calculator, School, Calendar, BriefcaseBusiness, BookOpen, BadgeInfoIcon } from "lucide-react";
 
 import { getGroupMemberStatus, getGroupStatus } from "@/utils/statusUtils";
 
@@ -60,10 +60,7 @@ export default function MyGroup() {
                     {/* Header */}
                     <div className="flex items-center justify-between">
                         <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <CardTitle className="font-semibold tracking-tight text-xl text-primary">My group</CardTitle>
-                                {getGroupStatus(groupInfo?.status || "")}
-                            </div>
+                            <CardTitle className="font-semibold tracking-tight text-xl text-primary">My group</CardTitle>
                             <CardDescription>Information about my group</CardDescription>
                         </CardHeader>
                         {studentProfile?.id == leaderInfo?.studentId && groupInfo?.status == "Pending" &&
@@ -103,7 +100,7 @@ export default function MyGroup() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-4 gap-6 text-sm">
+                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
                                             <div className="flex items-center space-x-2">
                                                 <div className="rounded-md p-2">
                                                     <Users className="size-5 text-primary" />
@@ -179,6 +176,15 @@ export default function MyGroup() {
                                                     <p className="font-semibold tracking-tight">
                                                         {groupInfo?.capstoneName}
                                                     </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <div className="rounded-md p-2">
+                                                    <BadgeInfoIcon className="size-5 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-sm text-muted-foreground">Status</h3>
+                                                    {getGroupStatus(groupInfo?.status || "")}
                                                 </div>
                                             </div>
                                         </div>

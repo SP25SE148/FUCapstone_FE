@@ -6,19 +6,19 @@ export function getStudentStatus(status: string) {
     switch (status) {
         case "InProgress":
             return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
                     In Progress
                 </Badge>
             );
         case "Completed":
             return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     Completed
                 </Badge>
             );
         case "InCompleted":
             return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
+                <Badge style={{ backgroundColor: "#ef4444", color: "white" }}>
                     Incompleted
                 </Badge>
             );
@@ -35,31 +35,31 @@ export function getGroupStatus(status: string) {
     switch (status) {
         case "Pending":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     Pending
                 </Badge>
             );
         case "InProgress":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-sky-200 text-sky-800 hover:bg-sky-200">
+                <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
                     In Progress
                 </Badge>
             );
         case "Completed":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-green-200 text-green-800 hover:bg-green-200">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     Completed
                 </Badge>
             );
         case "InCompleted":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
+                <Badge style={{ backgroundColor: "#ef4444", color: "white" }}>
                     Incompleted
                 </Badge>
             );
         case "Deleted":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-red-200 text-red-800 hover:bg-red-200">
+                <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
                     Deleted
                 </Badge>
             );
@@ -72,31 +72,31 @@ export function getGroupMemberStatus(status: string) {
     switch (status) {
         case "UnderReview":
             return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     Under Review
                 </Badge>
             );
         case "Accepted":
             return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     Accepted
                 </Badge>
             );
         case "Rejected":
             return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
+                <Badge style={{ backgroundColor: "#ef4444", color: "white" }}>
                     Rejected
                 </Badge>
             );
         case "LeftGroup":
             return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
+                <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
                     Left Group
                 </Badge>
             );
         case "Cancelled":
             return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
+                <Badge style={{ backgroundColor: "#ef4444", color: "white" }}>
                     Cancelled
                 </Badge>
             );
@@ -109,25 +109,25 @@ export function getJoinGroupStatus(status: string) {
     switch (status) {
         case "Pending":
             return (
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Approved":
             return (
-                <Badge variant="secondary" className="bg-green-100 text-green-800">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Rejected":
             return (
-                <Badge variant="secondary" className="bg-red-100 text-red-800">
+                <Badge style={{ backgroundColor: "#ef4444", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Cancelled":
             return (
-                <Badge variant="secondary" className="bg-red-100 text-red-800">
+                <Badge style={{ backgroundColor: "#ef4444", color: "white" }}>
                     Cancelled
                 </Badge>
             );
@@ -144,25 +144,25 @@ export function getTopicStatus(status: string) {
     switch (status) {
         case "Pending":
             return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Approved":
             return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Considered":
             return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
+                <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Rejected":
             return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
+                <Badge style={{ backgroundColor: "#ef4444", color: "white" }}>
                     {status}
                 </Badge>
             );
@@ -175,19 +175,19 @@ export function getTopicDifficulty(status: string) {
     switch (status) {
         case "Easy":
             return (
-                <Badge variant="secondary" className="select-none bg-blue-400 text-blue-800 hover:bg-blue-400">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     {status}
                 </Badge>
             )
         case "Medium":
             return (
-                <Badge variant="secondary" className="select-none bg-green-400 text-green-800 hover:bg-green-400">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     {status}
                 </Badge>
             )
         case "Hard":
             return (
-                <Badge variant="secondary" className="select-none bg-red-400 text-red-800 hover:bg-red-400">
+                <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
                     {status}
                 </Badge>
             )
@@ -200,25 +200,25 @@ export function getTopicAppraisalStatus(status: string) {
     switch (status) {
         case "Pending":
             return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Accepted":
             return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Considered":
             return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
+                <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Rejected":
             return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
+                <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
                     {status}
                 </Badge>
             );
@@ -231,19 +231,19 @@ export function getTopicRequestStatus(status: string) {
     switch (status) {
         case "UnderReview":
             return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     Under Review
                 </Badge>
             );
         case "Rejected":
             return (
-                <Badge variant="secondary" className="select-none bg-red-200 text-red-800 hover:bg-red-200">
+                <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
                     {status}
                 </Badge>
             );
         case "Accepted":
             return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     {status}
                 </Badge>
             );
@@ -260,13 +260,13 @@ export function getProjectProgressWeekStatus(status: number) {
     switch (status) {
         case 1:
             return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     To do
                 </Badge>
             );
         case 0:
             return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     Done
                 </Badge>
             );
@@ -283,19 +283,19 @@ export function getReviewCalendarStatus(status: string) {
     switch (status) {
         case "Pending":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
                     Pending
                 </Badge>
             );
         case "InProgress":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-blue-400 text-white hover:bg-blue-400">
+                <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
                     In Progress
                 </Badge>
             );
         case "Done":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-green-200 text-green-800 hover:bg-green-200">
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
                     Done
                 </Badge>
             );
