@@ -56,7 +56,7 @@ export const ManagerAssignAppraisalProvider = ({ children }: { children: React.R
 
   useEffect(() => {
     fetchAssignSupervisor();
-  }, [user]);
+  }, []);
 
   return (
     <ManagerAssignAppraisalContext.Provider

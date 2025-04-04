@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { useSemester } from "@/contexts/superadmin/superadmin-semester-context";
 import { semesterColumns } from "@/app/superadmin/semesters/components/semester-table-columns";
+import AddSemester from "@/app/superadmin/semesters/components/add-semester";
 
 export default function SemesterTable() {
   const { semesters } = useSemester();
@@ -27,9 +28,7 @@ console.log(semesters)
             </CardTitle>
             <CardDescription>List of FPT University semesters</CardDescription>
           </div>
-          <Button className="bg-primary hover:bg-primary/90">
-            Add Semester
-          </Button>
+          <AddSemester />
         </div>
       </CardHeader>
       <CardContent>

@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import TaskHistory from "@/app/student/workspace/tasks/components/task-history";
 import AddTask from "@/app/student/workspace/tasks/components/add-task";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
@@ -42,11 +42,6 @@ export default function TasksTable() {
 
   const noProgress = !projectProgress;
 
-
-  const handleShowHistory = () => {
-    setShowHistory(true);
-  };
-
   const handleCreateTask = () => {
     setShowCreateTask(true);
   };
@@ -64,10 +59,6 @@ export default function TasksTable() {
             </CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleShowHistory}>
-              <Clock className="mr-2 h-4 w-4" />
-              History
-            </Button>
             <Button variant="outline" onClick={handleCreateTask}>
               <Plus className="mr-2 h-4 w-4" />
               Create

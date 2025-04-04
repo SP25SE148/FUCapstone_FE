@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, UserCheck } from "lucide-react";
+import { UserCheck } from "lucide-react";
 
 import { Topic } from "@/types/types";
 import { getTopicAppraisalStatus, getTopicStatus } from "@/utils/statusUtils";
@@ -12,36 +12,6 @@ import AssignSupervisor from "@/app/manager/topics/(list-topic)/components/add-a
 
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
-
-const ActionsCell = ({ topic }: { topic: Topic }) => {
-  return (
-    <div className="flex items-center justify-center">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(topic.id)}
-          >
-            Copy Topic ID
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href={`/manager/topics/${topic.id}`}>
-              View Details
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-};
 
 const AssignAppraisalCell = ({ topic }: { topic: Topic }) => {
   const [open, setOpen] = useState(false);
@@ -82,25 +52,62 @@ export const columns: ColumnDef<Topic>[] = [
     },
   },
   {
-    accessorKey: "topicAppraisals[0]",
+    accessorKey: "code",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Appraisal 1" />
+      <DataTableColumnHeader column={column} title="Topic Code" />
     ),
     cell: ({ row }) => {
-      const appraisal = row.original.topicAppraisals[0];
-      if (!appraisal) return <span>N/A</span>;
-      return <div>{appraisal.supervisorId} - {getTopicAppraisalStatus(appraisal.status)}</div>;
+      const topic = row.original;
+      return (
+        <span className="font-medium text-sm">{topic.code}</span>
+      );
     },
   },
   {
-    accessorKey: "topicAppraisals[1]",
+    accessorKey: "code",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Appraisal 2" />
+      <DataTableColumnHeader column={column} title="Registrant" />
     ),
     cell: ({ row }) => {
-      const appraisal = row.original.topicAppraisals[1];
-      if (!appraisal) return <span>N/A</span>;
-      return <div>{appraisal.supervisorId} - {getTopicAppraisalStatus(appraisal.status)}</div>;
+      const topic = row.original;
+      return (
+        <span className="font-medium text-sm">{topic.mainSupervisorName}</span>
+      );
+    },
+  },
+  {
+    accessorKey: "appraisals",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Appraisals" />
+    ),
+    cell: ({ row }) => {
+      const topic = row.original;
+
+      const maxAttemptTime = Math.max(
+        ...topic.topicAppraisals.map((appraisal) => appraisal.attemptTime)
+      );
+
+      const latestAppraisals = topic.topicAppraisals.filter(
+        (appraisal) => appraisal.attemptTime === maxAttemptTime
+      );
+
+      return (
+        <div className="space-y-2">
+          {latestAppraisals.map((appraisal) => (
+            <div
+              key={appraisal.topicAppraisalId}
+              className="flex items-center justify-start gap-2"
+            >
+              <span className="font-medium text-sm">
+                {appraisal.supervisorId}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {getTopicAppraisalStatus(appraisal.status)}
+              </span>
+            </div>
+          ))}
+        </div>
+      );
     },
   },
   {
@@ -119,16 +126,8 @@ export const columns: ColumnDef<Topic>[] = [
     cell: ({ row }) => {
       const topic = row.original;
       const missingAssign =
-        topic.status === "Pending" &&
-        topic.topicAppraisals.length === 1;
+        topic.status === "Pending" && topic.topicAppraisals.length === 1;
       return missingAssign && <AssignAppraisalCell topic={row.original} />;
-    },
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const topic = row.original;
-      return <ActionsCell topic={topic} />;
     },
   },
 ];

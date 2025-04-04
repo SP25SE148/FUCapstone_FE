@@ -3,11 +3,24 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useApi } from "@/hooks/use-api";
 import { Semester } from "@/types/types";
+import { toast } from "sonner";
 
 
 interface SemesterContextProps {
   semesters: Semester[];
   loading: boolean;
+  createSemester: (semester: {
+    id: string;
+    name: string;
+    startDate: string;
+    endDate: string;
+  }) => Promise<void>;
+  updateSemester: (semester: {
+    id: string;
+    name: string;
+    startDate: string;
+    endDate: string;
+  }) => Promise<void>;
   fetchSemesterList: () => Promise<void>;
 }
 
@@ -30,6 +43,40 @@ export const SuperadminSemesterProvider = ({ children }: { children: React.React
       }, 1000);
   };
 
+  const createSemester = async (semester: {
+    id: string;
+    name: string;
+    startDate: string;
+    endDate: string;
+  }) => {
+    const response = await callApi("fuc/AcademicManagement/semester", {
+      method: "POST",
+      body: semester,
+    });
+
+    if (response?.isSuccess) {
+      toast.success("Semester created successfully!");
+      fetchSemesterList(); 
+    }
+  };
+
+  const updateSemester = async (semester: {
+    id: string;
+    name: string;
+    startDate: string;
+    endDate: string;
+  }) => {
+    const response = await callApi("fuc/AcademicManagement/semester", {
+      method: "PUT",
+      body: semester,
+    });
+  
+    if (response?.isSuccess) {
+      toast.success("Semester updated successfully!");
+      fetchSemesterList(); // Refresh the semester list after updating
+    } 
+  };
+
   useEffect(() => {
     fetchSemesterList();
   }, []);
@@ -39,6 +86,8 @@ export const SuperadminSemesterProvider = ({ children }: { children: React.React
       value={{
         semesters,
         loading,
+        updateSemester,
+        createSemester,
         fetchSemesterList,
       }}
     >

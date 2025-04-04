@@ -118,6 +118,7 @@ export default function ProjectProgressView() {
                         data={{
                           projectProgressId: projectProgress?.id,
                           projectProgressWeekId: currentProjectProgressWeek?.id,
+                          projectProgressWeek: currentProjectProgressWeek?.weekNumber
                         }}
                         refresh={() => setIsRefresh(!isRefresh)}
                       />

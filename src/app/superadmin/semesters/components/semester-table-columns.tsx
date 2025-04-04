@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -10,11 +11,38 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Semester } from "@/types/types";
+import UpdateSemester from "@/app/superadmin/semesters/components/update-semester";
+
+const ActionsCell = ({ semester }: { semester: Semester }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex items-center justify-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={() => navigator.clipboard.writeText(semester.id)}
+          >
+            Copy Semester ID
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpen(true)}>Edit</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <UpdateSemester semester={semester} open={open} setOpen={setOpen} />
+    </div>
+  );
+}
 
 export const semesterColumns: ColumnDef<Semester>[] = [
   {
@@ -80,31 +108,6 @@ export const semesterColumns: ColumnDef<Semester>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const semester = row.original;
-
-      return (
-        <div className="flex items-center justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(semester.id)}
-              >
-                Copy Semester ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View details</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
+    cell: ({ row }) => <ActionsCell semester={row.original} />,
   },
 ];
