@@ -305,3 +305,32 @@ export function getReviewCalendarStatus(status: string) {
 }
 
 //#endregion
+
+//#region Decision Status
+
+export function getDecisionStatus(status: string) {
+    switch (status) {
+        case "Disagree_to_defense":
+            return (
+                <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+                    Disagree to defense
+                </Badge>
+            );
+        case "Agree_to_defense":
+            return (
+                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+                    Agree to defense
+                </Badge>
+            );
+        case "Revised_for_the_second_defense":
+            return (
+                <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
+                    Revised for the second defense
+                </Badge>
+            );
+        default:
+            return null;
+    }
+}
+
+//#endregion

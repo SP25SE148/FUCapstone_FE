@@ -381,6 +381,28 @@ export interface ReviewResult {
 }
 
 //#endregion
+
+//#region Decision Types
+
+export interface StudentDecision {
+  studentId: string,
+  studentFullName: string,
+  decision: string
+}
+
+export interface Decision {
+  groupId: string,
+  groupCode: string,
+  topicId: string,
+  supervisorName: string,
+  topicCode: string,
+  decision: string,
+  comment: string | null,
+  studentDecisionList: StudentDecision[]
+}
+
+//#endregion
+
 //#region Defense Types
 
 export interface CouncilMember {
@@ -410,19 +432,6 @@ export interface DefenseCalendarItem {
 
 export interface DefenseCalendar {
   [key: string]: DefenseCalendarItem[];
-}
-
-//#endregion
-//#region Decision Types
-
-export interface Decision {
-  groupId: string,
-  groupCode: string,
-  topicId: string,
-  supervisorName: string,
-  topicCode: string,
-  decision: string,
-  comment: string | null
 }
 
 //#endregion

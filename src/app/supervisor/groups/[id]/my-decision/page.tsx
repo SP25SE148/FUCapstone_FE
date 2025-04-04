@@ -10,7 +10,8 @@ import { CheckCircle2, Loader2, MessageCircleMore, RefreshCw, Scale, Send, XCirc
 import { Decision, Member } from "@/types/types";
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
-import { Badge } from "@/components/ui/badge";
+import DecisionDetail from "./components/decision-detail";
+
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -105,42 +106,7 @@ export default function MyDecisionPage() {
             </CardHeader>
             {decision
                 ?
-                <CardContent className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] flex items-center justify-center">
-                    <Card className="w-full max-w-md shadow-lg bg-primary/5">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-xl font-bold text-center">Decision Record</CardTitle>
-                            <CardDescription className="text-center">Defense agreement details</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="grid grid-cols-3 gap-2 py-2 border-b">
-                                <span className="text-sm font-medium text-muted-foreground">Group ID:</span>
-                                <span className="col-span-2 text-sm font-mono">{decision.groupId}</span>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-2 py-2 border-b">
-                                <span className="text-sm font-medium text-muted-foreground">Group Code:</span>
-                                <span className="col-span-2 text-sm font-semibold">{decision.groupCode}</span>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-2 py-2 border-b">
-                                <span className="text-sm font-medium text-muted-foreground">Decision:</span>
-                                <div className="col-span-2">
-                                    <Badge className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-100 dark:hover:bg-green-800">
-                                        <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
-                                        {decision.decision.replace(/_/g, " ")}
-                                    </Badge>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-2 py-2">
-                                <span className="text-sm font-medium text-muted-foreground">Comment:</span>
-                                <span className="col-span-2 text-sm italic text-muted-foreground">
-                                    {decision.comment || "No comment provided"}
-                                </span>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </CardContent>
+                <DecisionDetail decision={decision} />
                 :
                 <CardContent className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)]">
                     {!makeDecision

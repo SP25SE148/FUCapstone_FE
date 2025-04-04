@@ -217,7 +217,7 @@ export default function TopicAppraisalDetail() {
             <Users className="size-4 text-primary" />
             Supervisor(s):
           </h3>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
             <Card className="bg-primary/5">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
