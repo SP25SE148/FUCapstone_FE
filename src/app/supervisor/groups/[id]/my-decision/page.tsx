@@ -148,7 +148,7 @@ export default function MyDecisionPage() {
                         <div className="h-full flex flex-col items-center justify-center gap-8">
                             <Scale className="size-20 text-primary" />
                             <div className="space-y-2">
-                                <p className="text-xl font-bold text-center">
+                                <p className="text-xl font-bold text-center text-primary">
                                     No decision have been made yet.
                                 </p>
                                 <p className="text-muted-foreground text-center text-sm">

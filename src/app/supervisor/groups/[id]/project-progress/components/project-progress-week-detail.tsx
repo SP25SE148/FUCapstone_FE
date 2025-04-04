@@ -2,36 +2,18 @@ import { useEffect, useState } from "react";
 import { Calendar1, Pencil, X } from "lucide-react";
 
 import { ProjectProgressWeek } from "@/types/types";
+import { getProjectProgressWeekStatus } from "@/utils/statusUtils";
 
-import { Badge } from "@/components/ui/badge";
 import EvaluationWeek from "./evaluation-week";
-import { Button } from "@/components/ui/button";
 import UpdateProjectProgressWeek from "./update-project-progress-week";
+
+import { Button } from "@/components/ui/button";
 
 interface ProjectProgressWeekProps {
     projectProgressId: string,
     currentProjectProgressWeek: ProjectProgressWeek,
     refresh: () => void
     onClose: () => void
-}
-
-const getStatus = (status: number | undefined) => {
-    switch (status) {
-        case 1:
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    To do
-                </Badge>
-            );
-        case 0:
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Done
-                </Badge>
-            );
-        default:
-            return null;
-    }
 }
 
 export default function ProjectProgressWeekDetail({ projectProgressId, currentProjectProgressWeek, refresh, onClose }: ProjectProgressWeekProps) {
@@ -48,7 +30,7 @@ export default function ProjectProgressWeekDetail({ projectProgressId, currentPr
                 <h3 className="font-semibold flex items-center gap-2">
                     <Calendar1 className="size-4 text-primary" />
                     Week: {currentProjectProgressWeek?.weekNumber}
-                    {getStatus(currentProjectProgressWeek?.status)}
+                    {getProjectProgressWeekStatus(currentProjectProgressWeek?.status)}
                 </h3>
                 {!openEditWeek && <div className="flex items-center gap-2">
                     {currentProjectProgressWeek?.status !== 0 &&

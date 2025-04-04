@@ -243,7 +243,7 @@ export default function DefenseTopicDetail() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold"> {groupTopicInfo?.topicResponse?.mainSupervisorName}</p>
+                    <p className="font-semibold text-primary"> {groupTopicInfo?.topicResponse?.mainSupervisorName}</p>
                     <p className="text-sm text-muted-foreground">{groupTopicInfo?.topicResponse?.mainSupervisorEmail}</p>
                   </div>
                 </div>
@@ -259,11 +259,11 @@ export default function DefenseTopicDetail() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-semibold">
-                        {supervisor?.SupervisorName}
+                      <p className="font-semibold text-primary">
+                        {supervisor?.supervisorName}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {supervisor?.SupervisorEmail}
+                        {supervisor?.supervisorEmail}
                       </p>
                     </div>
                   </div>
@@ -289,7 +289,7 @@ export default function DefenseTopicDetail() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold">{leaderInfo?.studentFullName} - {leaderInfo?.studentId}</p>
+                    <p className="font-semibold text-primary">{leaderInfo?.studentFullName} - {leaderInfo?.studentId}</p>
                     <p className="text-sm text-muted-foreground">{leaderInfo?.isLeader ? "Leader" : "Member"} - {leaderInfo?.studentEmail}</p>
                   </div>
                 </div>
@@ -305,7 +305,7 @@ export default function DefenseTopicDetail() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-semibold">{member.studentFullName} - {member.studentId}</p>
+                      <p className="font-semibold text-primary">{member.studentFullName} - {member.studentId}</p>
                       <p className="text-sm text-muted-foreground">{member?.isLeader ? "Leader" : "Member"} - {member.studentEmail}</p>
                     </div>
                   </div>
