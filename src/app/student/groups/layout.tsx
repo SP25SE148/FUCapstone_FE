@@ -9,6 +9,7 @@ const items = [
   { label: "List Group", href: "/student/groups/list-group" },
   { label: "My Request", href: "/student/groups/my-request" },
   { label: "My Topic", href: "/student/groups/my-topic" },
+  { label: "Defense Decision", href: "/student/groups/defense-decision" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

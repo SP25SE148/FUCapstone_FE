@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ClipboardX, Eye, LayoutList } from "lucide-react";
 
+import { getProjectProgressWeekStatus } from "@/utils/statusUtils";
 import { ProjectProgress, ProjectProgressWeek } from "@/types/types";
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
@@ -12,29 +13,9 @@ import MeetingTime from "./components/meeting-time";
 import UploadProjectProgress from "./components/upload-project-progress";
 import ProjectProgressWeekDetail from "./components/project-progress-week-detail";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-const getStatus = (status: number | undefined) => {
-    switch (status) {
-        case 1:
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    To do
-                </Badge>
-            );
-        case 0:
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Done
-                </Badge>
-            );
-        default:
-            return null;
-    }
-}
 
 export default function ProjectProgressPage() {
     const { getProjectProgressOfGroup } = useSupervisorGroup();
@@ -107,7 +88,7 @@ export default function ProjectProgressPage() {
                                                         <p className="font-semibold">Week: {projectProgressWeek?.weekNumber}</p>
                                                         <p className="text-xs text-muted-foreground">Click to view task description</p>
                                                     </div>
-                                                    {getStatus(projectProgressWeek?.status)}
+                                                    {getProjectProgressWeekStatus(projectProgressWeek?.status)}
                                                 </div>
                                             </div>
                                         </CardContent>

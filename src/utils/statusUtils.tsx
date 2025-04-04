@@ -41,7 +41,7 @@ export function getGroupStatus(status: string) {
             );
         case "InProgress":
             return (
-                <Badge variant="secondary" className="text-sm select-none bg-blue-400 text-white hover:bg-blue-400">
+                <Badge variant="secondary" className="text-sm select-none bg-sky-200 text-sky-800 hover:bg-sky-200">
                     In Progress
                 </Badge>
             );
@@ -245,6 +245,29 @@ export function getTopicRequestStatus(status: string) {
             return (
                 <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
                     {status}
+                </Badge>
+            );
+        default:
+            return null;
+    }
+}
+
+//#endregion
+
+//#region Project Progress Status
+
+export function getProjectProgressWeekStatus(status: number) {
+    switch (status) {
+        case 1:
+            return (
+                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
+                    To do
+                </Badge>
+            );
+        case 0:
+            return (
+                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
+                    Done
                 </Badge>
             );
         default:
