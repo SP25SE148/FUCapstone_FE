@@ -1,78 +1,101 @@
 "use client"
 
-import { z } from "zod"
 import * as XLSX from "xlsx";
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Download, Loader2, Upload } from "lucide-react"
+import { useRef, useState } from "react"
+import { Download, FileSpreadsheet, Loader2, Upload, X } from "lucide-react"
 
 import { useManagerReview } from "@/contexts/manager/manager-review-context";
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
 
-const formSchema = z.object({
-    file: z
-        .any()
-        .refine((files) => files?.length === 1, "Please select a file.")
-        .refine((files) => {
-            const allowedType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; // MIME type của Excel
-            return files && files[0]?.type === allowedType;
-        }, "Only accept Excel files (.xlsx)"),
-});
-
-export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
+export default function UploadReviewCalendar() {
     const { importReview, getReviewsCalendarTemplate } = useManagerReview();
 
     const [open, setOpen] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [fileData, setFileData] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [isDragging, setIsDragging] = useState<boolean>(false);
+    const [isUploading, setIsUploading] = useState<boolean>(false);
     const [openPreview, setOpenPreview] = useState<boolean>(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            file: undefined,
-        },
-    });
-
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-        setIsLoading(true);
-        try {
-            const file = values.file[0]; // Lấy file đầu tiên
-            const formData = new FormData();
-            formData.append("file", file);
-            const res: any = await importReview(formData);
-            if (res?.isSuccess) {
-                form.reset();
-                setOpen(false);
-                // refresh();
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (file) {
+            if (file.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                setErrorMessage("Only Excel files (.xlsx) are accepted")
+                return
             }
-        } finally {
-            setIsLoading(false);
+
+            setErrorMessage("")
+            setSelectedFile(file)
+
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target?.result as ArrayBuffer)
+                const workbook = XLSX.read(data, { type: "array" })
+                const sheetName = workbook.SheetNames[0]
+                const sheet = workbook.Sheets[sheetName]
+                const jsonData = XLSX.utils.sheet_to_json(sheet)
+                setFileData(jsonData)
+            }
+            reader.readAsArrayBuffer(file)
         }
     }
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const data = new Uint8Array(e.target?.result as ArrayBuffer);
-                const workbook = XLSX.read(data, { type: "array" });
-                const sheetName = workbook.SheetNames[0]; // Lấy sheet đầu tiên
-                const sheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(sheet); // Chuyển sheet thành JSON
-                setFileData(jsonData);
-            };
-            reader.readAsArrayBuffer(file);
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        setIsDragging(true)
+    }
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        setIsDragging(false)
+    }
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        setIsDragging(false)
+
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            const file = e.dataTransfer.files[0]
+            if (file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                setErrorMessage("")
+                setSelectedFile(file)
+
+                const reader = new FileReader()
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target?.result as ArrayBuffer)
+                    const workbook = XLSX.read(data, { type: "array" })
+                    const sheetName = workbook.SheetNames[0]
+                    const sheet = workbook.Sheets[sheetName]
+                    const jsonData = XLSX.utils.sheet_to_json(sheet)
+                    setFileData(jsonData)
+                }
+                reader.readAsArrayBuffer(file)
+            } else {
+                setErrorMessage("Only Excel files (.xlsx) are accepted")
+            }
         }
-        setOpenPreview(true);
-    };
+    }
+
+    const clearSelectedFile = () => {
+        setSelectedFile(null)
+        setErrorMessage("")
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ""
+        }
+    }
+
+    const formatFileSize = (bytes: number) => {
+        if (bytes < 1024) return bytes + " bytes"
+        else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB"
+        else return (bytes / 1048576).toFixed(1) + " MB"
+    }
 
     async function handleDownload() {
         const url = await getReviewsCalendarTemplate();
@@ -85,13 +108,42 @@ export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
         document.body.removeChild(a);
     }
 
+    const handlePreview = (e: React.MouseEvent) => {
+        e.preventDefault()
+        if (fileData.length > 0) {
+            setOpenPreview(true)
+        }
+    }
+
+    const handleUpload = async () => {
+        if (!selectedFile) {
+            setErrorMessage("Please select a file before uploading.")
+            return
+        }
+
+        setIsUploading(true)
+        try {
+            const formData = new FormData()
+            formData.append("file", selectedFile)
+            const res: any = await importReview(formData);
+            if (res?.isSuccess) {
+                setOpen(false);
+            }
+        } catch (error) {
+            console.error("Error uploading file:", error)
+            setErrorMessage("Failed to upload file. Please try again.")
+        } finally {
+            setIsUploading(false)
+        }
+    }
+
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                     <Button className="mr-6">
                         <Upload />
-                        Upload 
+                        Upload
                     </Button>
                 </DialogTrigger>
                 <DialogContent >
@@ -101,50 +153,82 @@ export default function UploadReviewCalendar({ refresh }: { refresh?: any }) {
                             Download template and upload review calendar for capstone.
                         </DialogDescription>
                     </DialogHeader>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                            <FormField
-                                control={form.control}
-                                name="file"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>File Excel</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="file"
-                                                accept=".xlsx"
-                                                disabled={isLoading}
-                                                onChange={(e) => {
-                                                    field.onChange(e.target.files);
-                                                    handleFileChange(e);
-                                                }}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <div className="grid grid-cols-2 gap-2">
-                                <Button variant={"outline"} type="button" disabled={isLoading} onClick={handleDownload}>
-                                    <Download />
-                                    Template
-                                </Button>
-                                <Button type="submit" disabled={isLoading}>
-                                    {isLoading ? (
-                                        <>
-                                            <Loader2 className="animate-spin" />
-                                            Uploading...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Upload />
-                                            Upload
-                                        </>
-                                    )}
+                    {!selectedFile
+                        ?
+                        (<div
+                            className={`border-2 border-dashed rounded-lg p-8 text-center ${isDragging ? "border-primary bg-primary/5" : "border-muted-foreground/25"}`}
+                            onDrop={handleDrop}
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                        >
+                            <div className="flex flex-col items-center justify-center gap-3">
+                                <div className="rounded-full bg-muted p-3">
+                                    <FileSpreadsheet className="h-6 w-6 text-muted-foreground" />
+                                </div>
+                                <div>
+                                    <p className="font-medium">Drag and drop your Excel file here</p>
+                                    <p className="text-xs text-muted-foreground mt-1">or click to browse files (XLSX only)</p>
+                                </div>
+                                <Input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept=".xlsx"
+                                    className="hidden"
+                                    onChange={handleFileChange}
+                                    id="file-upload"
+                                />
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="mt-2"
+                                >
+                                    Select File
                                 </Button>
                             </div>
-                        </form>
-                    </Form>
+                        </div>)
+                        :
+                        (<div className="border rounded-lg p-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                    <div className="rounded-md bg-primary/10 p-2">
+                                        <FileSpreadsheet className="h-5 w-5 text-primary" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-sm font-medium line-clamp-1">{selectedFile.name}</p>
+                                        <p className="text-xs text-muted-foreground">{formatFileSize(selectedFile.size)}</p>
+                                    </div>
+                                </div>
+                                <Button variant="ghost" size="icon" type="button" onClick={clearSelectedFile} className="h-8 w-8">
+                                    <X className="h-4 w-4" />
+                                </Button>
+                            </div>
+                            {fileData.length > 0 && (
+                                <Button variant="link" className="text-xs mt-2 h-auto p-0" onClick={handlePreview} type="button">
+                                    Preview file contents
+                                </Button>
+                            )}
+                        </div>)}
+                    {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
+                    <div className="grid grid-cols-2 gap-2">
+                        <Button variant={"outline"} type="button" disabled={isUploading} onClick={handleDownload}>
+                            <Download />
+                            Template
+                        </Button>
+                        <Button type="submit" disabled={isUploading} onClick={handleUpload}>
+                            {isUploading ? (
+                                <>
+                                    <Loader2 className="animate-spin" />
+                                    Uploading...
+                                </>
+                            ) : (
+                                <>
+                                    <Upload />
+                                    Upload
+                                </>
+                            )}
+                        </Button>
+                    </div>
                 </DialogContent>
             </Dialog >
 
