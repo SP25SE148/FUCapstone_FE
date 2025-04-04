@@ -1,41 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar1, ClipboardX, LayoutList, X } from "lucide-react";
+import { Calendar1, CalendarIcon, ClipboardX, ClockIcon, LayoutList, X } from "lucide-react";
 
+import { getProjectProgressWeekStatus } from "@/utils/statusUtils";
 import { ProjectProgress, ProjectProgressWeek } from "@/types/types";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
+
+import LeaderEvaluationWeek from "@/app/student/workspace/(project-progress)/components/leader-evaluation-week";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
-import LeaderEvaluationWeek from "@/app/student/workspace/(project-progress)/components/leader-evaluation-week";
-
-const getStatus = (status: number | undefined) => {
-  switch (status) {
-    case 1:
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200"
-        >
-          To do
-        </Badge>
-      );
-    case 0:
-      return (
-        <Badge
-          variant="secondary"
-          className="select-none bg-green-200 text-green-800 hover:bg-green-200"
-        >
-          Done
-        </Badge>
-      );
-    default:
-      return null;
-  }
-};
 
 export default function ProjectProgressView() {
   const { getProjectProgressOfGroup } = useStudentTasks();
@@ -70,10 +47,36 @@ export default function ProjectProgressView() {
         ?
         <CardContent className="grid grid-cols-2 gap-4">
           <div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] overflow-y-auto space-y-2 rounded-xl shadow" >
-            <div className="sticky top-0 z-10 p-2 font-semibold bg-primary text-background rounded-xl grid grid-cols-2 gap-2">
-              <span>Meeting date: {projectProgress?.meetingDate}</span>
-              <span>Slot: {projectProgress?.slot}</span>
-            </div>
+            <Card className="sticky top-0 z-10 border-none shadow-md bg-gradient-to-r from-primary to-primary/90 text-primary-foreground">
+              <CardContent className="p-2 flex items-center justify-between gap-2">
+                <div className="flex-1 grid grid-cols-2 gap-2">
+                  <div className="flex items-center gap-2">
+                    <CalendarIcon className="size-4" />
+                    <span className="font-medium flex items-center gap-2">
+                      Meeting date:
+                      <Badge
+                        variant="outline"
+                        className="font-semibold bg-primary-foreground/10 text-primary-foreground border-primary-foreground/20"
+                      >
+                        {projectProgress?.meetingDate || "Not scheduled"}
+                      </Badge>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <ClockIcon className="size-4" />
+                    <span className="font-medium flex items-center gap-2">
+                      Slot:
+                      <Badge
+                        variant="outline"
+                        className="font-semibold bg-primary-foreground/10 text-primary-foreground border-primary-foreground/20"
+                      >
+                        {projectProgress?.slot || "Not assigned"}
+                      </Badge>
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             {
               projectProgress?.projectProgressWeeks?.map((projectProgressWeek: ProjectProgressWeek, index) => (
                 <Card
@@ -95,7 +98,7 @@ export default function ProjectProgressView() {
                           <p className="font-semibold">Week: {projectProgressWeek?.weekNumber}</p>
                           <p className="text-xs text-muted-foreground">Click to view task description</p>
                         </div>
-                        {getStatus(projectProgressWeek?.status)}
+                        {getProjectProgressWeekStatus(projectProgressWeek?.status)}
                       </div>
                     </div>
                   </CardContent>
@@ -110,6 +113,7 @@ export default function ProjectProgressView() {
                 <h3 className="font-semibold flex items-center gap-2">
                   <Calendar1 className="size-4 text-primary" />
                   Week: {currentProjectProgressWeek?.weekNumber}
+                  {getProjectProgressWeekStatus(currentProjectProgressWeek?.status)}
                 </h3>
                 <div className="flex items-center gap-2">
                   {currentProjectProgressWeek?.status === 1 &&

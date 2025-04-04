@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { BookOpen, BookUser, BriefcaseBusiness, Calculator, Calendar, FileCheck, School, Undo2, User2, Users } from "lucide-react"
+import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calculator, Calendar, FileCheck, School, Undo2, User2, Users } from "lucide-react"
 
 import { GroupFullInfo } from "@/types/types"
 import { getGroupStatus } from "@/utils/statusUtils"
@@ -40,7 +40,6 @@ export default function GroupInfoPage() {
                 <CardHeader>
                     <div className="flex items-center gap-4">
                         <CardTitle className="font-semibold tracking-tight text-xl text-primary">Group Information</CardTitle>
-                        {getGroupStatus(group?.status || "")}
                     </div>
                     <CardDescription>Detailed information about group members</CardDescription>
                 </CardHeader>
@@ -70,7 +69,7 @@ export default function GroupInfoPage() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-4 gap-6 text-sm">
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
                                     <div className="flex items-center space-x-2">
                                         <div className="rounded-md p-2">
                                             <Users className="size-5 text-primary" />
@@ -148,6 +147,15 @@ export default function GroupInfoPage() {
                                             </p>
                                         </div>
                                     </div>
+                                    <div className="flex items-center space-x-2">
+                                        <div className="rounded-md p-2">
+                                            <BadgeInfo className="size-5 text-primary" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-muted-foreground">Status</h3>
+                                            {getGroupStatus(group?.status || "")}
+                                        </div>
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>
@@ -160,7 +168,7 @@ export default function GroupInfoPage() {
                                 <Users className="size-4 text-primary" />
                                 Member(s)
                             </h3>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                                 <Card className="bg-primary/5">
                                     <CardContent className="p-4">
                                         <div className="flex items-center gap-3">

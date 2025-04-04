@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 
 import { SupervisorTopicProvider } from "@/contexts/supervisor/supervisor-topic-context";
 
-import { Button } from "@/components/ui/button";
 import UpdateTopicForm from "./components/update-topic-form";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function UpdateTopicPage() {
