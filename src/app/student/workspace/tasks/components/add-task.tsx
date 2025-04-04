@@ -114,7 +114,7 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
                       <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">{dueDate ? format(dueDate, "PPP") : "Pick a date"}</span>
                     </div>
-                    <Calendar mode="single" selected={dueDate} onSelect={setDueDate} className="p-3" />
+                    <Calendar mode="single" selected={dueDate} onSelect={setDueDate} className="p-3" disabled={(date) => date < new Date()}/>
                   </div>
                 </div>
 

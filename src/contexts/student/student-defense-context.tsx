@@ -21,7 +21,7 @@ export const StudentDefenseProvider = ({
   const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendarItem[]>([]);
 
   const getDefenseCalendar = async () => {
-    const response = await callApi("fuc/user/defend/calendar");
+    const response = await callApi("fuc/user/student/defend-calendar");
     setDefenseCalendar(response?.value);
   };
 
