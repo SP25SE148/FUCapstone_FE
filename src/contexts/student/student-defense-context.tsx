@@ -1,11 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
+
 import { useApi } from "@/hooks/use-api";
-import { DefenseCalendarItem } from "@/types/types";
+import { DefenseCalendarItem, DefenseResult } from "@/types/types";
 
 interface StudentDefenseContextProps {
   defenseCalendar: DefenseCalendarItem[] | [];
+  getDefendResultByGroupId: (groupId: string) => Promise<DefenseResult[]>;
 }
 
 const StudentDefenseContext = createContext<
@@ -17,7 +20,8 @@ export const StudentDefenseProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { callApi } = useApi(); 
+  const { callApi } = useApi();
+  const pathName = usePathname();
   const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendarItem[]>([]);
 
   const getDefenseCalendar = async () => {
@@ -25,15 +29,22 @@ export const StudentDefenseProvider = ({
     setDefenseCalendar(response?.value);
   };
 
-  
+  const getDefendResultByGroupId = async (groupId: string) => {
+    const response = await callApi(`fuc/user/defend-calendar/result/${groupId}`);
+    return (response?.value);
+  };
+
   useEffect(() => {
-    getDefenseCalendar();
-  }, []);
+    if (pathName == "/student/defenses") {
+      getDefenseCalendar();
+    }
+  }, [pathName]);
 
   return (
     <StudentDefenseContext.Provider
       value={{
-        defenseCalendar
+        defenseCalendar,
+        getDefendResultByGroupId
       }}
     >
       {children}
