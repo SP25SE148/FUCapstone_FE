@@ -434,4 +434,9 @@ export interface DefenseCalendar {
   [key: string]: DefenseCalendarItem[];
 }
 
+export interface DefenseResult extends DefenseCalendarItem {
+  groupStatus: string,
+  isReDefendCapstone: boolean,
+}
+
 //#endregion

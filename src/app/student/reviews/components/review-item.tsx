@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { getDate } from "@/lib/utils"
-import { CalendarIcon, Clock, MapPin, Users, RotateCw, User2 } from "lucide-react"
+import { CalendarIcon, Clock, MapPin, Users, RotateCw, User2, ChevronUp, ChevronDown } from "lucide-react"
 
 import { ReviewCalendar } from "@/types/types"
 
@@ -28,9 +28,7 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                         </Badge>
                     </div>
                 </CardHeader>
-                <Badge variant="outline" className="mr-4 bg-primary text-background font-medium">
-                    Room {calendar?.room}
-                </Badge>
+                {showDetail ? <ChevronUp className="size-4 text-primary mr-4" /> : <ChevronDown className="size-4 text-primary mr-4" />}
             </div>
             <CardContent className="p-4">
                 <div className="grid gap-4">

@@ -15,6 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         { label: "My Evaluation", href: `/supervisor/groups/${groupId}/my-evaluation` },
         { label: "Review Results", href: `/supervisor/groups/${groupId}/review-results` },
         { label: "My Decision", href: `/supervisor/groups/${groupId}/my-decision` },
+        { label: "Defense Results", href: `/supervisor/groups/${groupId}/defense-results` },
     ];
 
     return (
