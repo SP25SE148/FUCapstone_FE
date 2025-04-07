@@ -5,7 +5,7 @@ import type React from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { File, FileText, Upload, X } from "lucide-react"
+import { File, FileSpreadsheet, FileText, Upload, X } from "lucide-react"
 import { useState, useRef } from "react"
 import { useSupervisorDefense } from "@/contexts/supervisor/supervisor-defense-context"
 
@@ -89,7 +89,7 @@ const UploadMinutes: React.FC<UploadMinutesProps> = ({ defendCapstoneCalendarId 
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="min-w-96 max-w-3xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold flex items-center">
               <FileText className="mr-2 h-5 w-5" />
@@ -132,17 +132,25 @@ const UploadMinutes: React.FC<UploadMinutesProps> = ({ defendCapstoneCalendarId 
               </div>
             ) : (
               <div className="border rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="rounded-md bg-primary/10 p-2">
-                      <FileText className="h-5 w-5 text-primary" />
+                <div className="flex items-center justify-between max-w-2xl">
+                  <div className="flex items-center space-x-3 min-w-0 flex-1">
+                    <div className="rounded-md bg-primary/10 p-2 flex-shrink-0">
+                      <FileSpreadsheet className="h-5 w-5 text-primary" />
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium line-clamp-1">{selectedFile.name}</p>
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <p className="text-sm font-medium truncate" title={selectedFile.name}>
+                        {selectedFile.name}
+                      </p>
                       <p className="text-xs text-muted-foreground">{formatFileSize(selectedFile.size)}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={clearSelectedFile} className="h-8 w-8">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
+                    onClick={clearSelectedFile}
+                    className="h-8 w-8 flex-shrink-0 ml-2"
+                  >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>

@@ -6,12 +6,15 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "@/hooks/use-api";
 import { useAuth } from "../auth-context";
-import { GroupFullInfo, Student } from "@/types/types";
+import { GroupFullInfo, Student, Topic } from "@/types/types";
 
 interface ManagerGroupContextProps {
     groupList: GroupFullInfo[] | [],
     remainStudentList: Student[] | [],
+    topics: Topic[] | [];
+    fetchTopics: () => Promise<any>,
     mergeRemainStudentsIntoGroup: () => Promise<void>,
+    assignPendingTopicForGroup: (data: { TopicId: string; GroupId: string }) => Promise<void>;
     assignRemainStudentForGroup: (data: { GroupId: string, StudentId: string }) => Promise<void>
 }
 
@@ -21,6 +24,7 @@ export const ManagerGroupProvider = ({ children }: { children: React.ReactNode }
     const { user } = useAuth();
     const { callApi } = useApi();
     const pathName = usePathname();
+    const [topics, setTopics] = useState<Topic[]>([]);
     const [groupList, setGroupList] = useState<GroupFullInfo[]>([]);
     const [remainStudentList, setRemainStudentList] = useState<Student[]>([]);
 
@@ -32,6 +36,16 @@ export const ManagerGroupProvider = ({ children }: { children: React.ReactNode }
     const getRemainStudents = async () => {
         const response = await callApi(`fuc/User/get-remain-students`);
         setRemainStudentList(response?.value);
+    };
+
+    const fetchTopics = async () => {
+        const response = await callApi("fuc/topics/manager");
+        if (response?.isSuccess) {
+            const pendingTopics = response.value.filter((topic: any) => topic.status === "Approved");
+            setTopics(pendingTopics || []);
+            return pendingTopics;
+        }
+
     };
 
     const mergeRemainStudentsIntoGroup = async () => {
@@ -60,6 +74,20 @@ export const ManagerGroupProvider = ({ children }: { children: React.ReactNode }
         return response
     };
 
+    const assignPendingTopicForGroup = async (data: { TopicId: string; GroupId: string }) => {
+        const response = await callApi("fuc/group/assign/pending-topic", {
+          method: "POST",
+          body: data,
+        });
+      
+        if (response?.isSuccess) {
+          toast.success("Topic assigned successfully!");
+          getAllGroupByCapstone();
+        } 
+      
+        return response;
+      };
+
     useEffect(() => {
         if (pathName === "/manager/groups") {
             getAllGroupByCapstone();
@@ -73,8 +101,11 @@ export const ManagerGroupProvider = ({ children }: { children: React.ReactNode }
     return (
         <ManagerGroupContext.Provider
             value={{
+                topics,
                 groupList,
+                fetchTopics,
                 remainStudentList,
+                assignPendingTopicForGroup,
                 mergeRemainStudentsIntoGroup,
                 assignRemainStudentForGroup
             }}

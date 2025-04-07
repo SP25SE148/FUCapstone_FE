@@ -4,17 +4,21 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { GroupFullInfo, Topic, TopicRequest } from "@/types/types";
+import { BusinessArea, GroupFullInfo, PassedTopic, PassedTopicProp, Topic, TopicRequest } from "@/types/types";
+
+
 
 interface StudentTopicContextProps {
-  topics: Topic[];
+  passedTopicList: PassedTopic;
+  businessAreaList: BusinessArea[];
   topicRequest: TopicRequest | null;
   groupInfo: GroupFullInfo | null;
-  fetchPassedTopic: () => Promise<void>;
+  fetchPassedTopic: (data: PassedTopicProp) => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   getGroupInfoByStudentId: () => Promise<any>;
   createTopicRequest: (topicId: string, groupId: string) => Promise<void>;
   fetchTopicRequest: () => Promise<void>;
+  fetchBusinessArea: () => Promise<void>;
 }
 
 const StudentTopicContext = createContext<StudentTopicContextProps | undefined>(undefined);
@@ -29,15 +33,27 @@ export const useStudentTopics = () => {
 
 export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { callApi } = useApi();
-  const [topics, setTopics] = useState<Topic[]>([]);
+  const [passedTopicList, setPassedTopicList] = useState<PassedTopic>({
+    items: [],
+    totalNumberOfItems: 0,
+    currentPage: 0,
+    totalNumberOfPages: 0,
+  });
   const [groupInfo, setGroupInfo] = useState<GroupFullInfo | null>(null);
   const [topicRequest, setTopicRequest] = useState<TopicRequest | null>(null);
+  const [businessAreaList, setBusinessAreaList] = useState<BusinessArea[]>([]);
 
-  const fetchPassedTopic = async () => {
-    const response = await callApi("fuc/group/get-available-topics");
+  const fetchPassedTopic = async (data: PassedTopicProp) => {
+    const response = await callApi(`fuc/group/get-available-topics?MainSupervisorEmail=${data?.mainSupervisorEmail}&SearchTerm=${data?.searchTerm}&DifficultyLevel=${data?.difficultyLevel}&BusinessAreaId=${data?.businessAreaId}&PageNumber=${data?.pageNumber}&PageSize=10`);
     if (response?.isSuccess) {
-      setTopics(response?.value?.items);
+      setPassedTopicList(response?.value);
+      return response
     }
+  };
+
+  const fetchBusinessArea = async () => {
+    const response = await callApi(`fuc/topics/business`);
+    setBusinessAreaList(response.value);
   };
 
   const getPresignedUrlTopicDocument = async (id: string) => {
@@ -57,7 +73,13 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
     });
     if (response?.isSuccess === true) {
       toast.success("Register Topic successfully");
-      fetchPassedTopic();
+      fetchPassedTopic({
+        mainSupervisorEmail: "all",
+        searchTerm: "",
+        difficultyLevel: "all",
+        businessAreaId: "all",
+        pageNumber: "1",
+      });
       fetchTopicRequest();
     }
   };
@@ -72,18 +94,20 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }
 
   useEffect(() => {
-    fetchPassedTopic();
     fetchTopicRequest();
+    fetchBusinessArea();
     getGroupInfoByStudentId();
   }, []);
 
   return (
     <StudentTopicContext.Provider
       value={{
-        topics,
+        passedTopicList,
         topicRequest,
         groupInfo,
+        businessAreaList,
         fetchPassedTopic,
+        fetchBusinessArea,
         getPresignedUrlTopicDocument,
         getGroupInfoByStudentId,
         createTopicRequest,

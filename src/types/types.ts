@@ -134,6 +134,21 @@ export interface TimeConfig {
 
 //#region Topic Types
 
+export interface PassedTopic {
+  items: Topic[],
+  totalNumberOfItems: number,
+  currentPage: number,
+  totalNumberOfPages: number,
+}
+
+export interface PassedTopicProp {
+  mainSupervisorEmail: string,
+  searchTerm: string,
+  difficultyLevel: string,
+  businessAreaId: string,
+  pageNumber: string,
+}
+
 export interface Topic {
   id: string;
   code: string;

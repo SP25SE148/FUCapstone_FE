@@ -58,24 +58,24 @@ const ContinueDefense: React.FC<ContinueDefenseProps> = ({ defendCapstoneCalenda
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[900px] p-0 overflow-hidden">
-          <DialogHeader className="px-6 pt-6 pb-2">
+          <DialogHeader className="px-4 pt-4 pb-2">
             <DialogTitle className="text-xl font-semibold flex items-center">
               <FileText className="mr-2 h-5 w-5" />
               Defense decision
             </DialogTitle>
           </DialogHeader>
 
-          <div className="flex flex-col space-y-4 p-6 pt-2">
+          <div className="flex flex-col space-y-2 p-4 pt-2">
             <div className="border rounded-lg overflow-hidden bg-muted/30">
               <iframe
-                className="w-full h-[65vh] min-h-[500px]"
+                className="w-full h-[65vh] min-h-[440px]"
                 src={`https://docs.google.com/gview?url=${encodeURIComponent(urlPreview)}&embedded=true`}
               />
             </div>
 
             <div className="space-y-4">
               <h3 className="text-sm font-medium">Select Decision:</h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant="outline"
                   className={cn(
@@ -104,7 +104,7 @@ const ContinueDefense: React.FC<ContinueDefenseProps> = ({ defendCapstoneCalenda
                 </Button>
               </div>
 
-              <Button className="w-full h-11 mt-4" onClick={handleSave} disabled={isSaving}>
+              <Button className="w-full h-10 mt-4" onClick={handleSave} disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save Decision"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
