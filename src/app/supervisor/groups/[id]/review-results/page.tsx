@@ -8,6 +8,7 @@ import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-conte
 
 import NoResult from "./components/no-result";
 import ResultDetails from "./components/result-details";
+
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ReviewResultsPage() {
@@ -30,7 +31,7 @@ export default function ReviewResultsPage() {
                 <CardTitle className="font-semibold tracking-tight text-xl text-primary">Review Results</CardTitle>
                 <CardDescription>All informations about review result.</CardDescription>
             </CardHeader>
-            {results
+            {results && results?.length > 0
                 ?
                 <ResultDetails results={results} />
                 :
