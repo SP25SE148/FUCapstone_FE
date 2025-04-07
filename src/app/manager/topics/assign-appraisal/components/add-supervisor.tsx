@@ -16,8 +16,8 @@ export default function AddSupervisor() {
 
   const handleAssign = async () => {
     await assignAppraisalTopic();
-    setOpen(false);
     router.push("/manager/topics");
+    setOpen(false);
     clearSelectedSupervisors();
   };
 

@@ -64,7 +64,7 @@ export const columns: ColumnDef<Topic>[] = [
     },
   },
   {
-    accessorKey: "code",
+    accessorKey: "mainSupervisorName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Registrant" />
     ),
