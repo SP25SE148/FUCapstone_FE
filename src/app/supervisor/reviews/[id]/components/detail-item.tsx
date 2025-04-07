@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp, MessageCircleMore, MessageCirclePlus, RotateCw, User2 } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { ReviewResult } from "@/types/types";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -14,7 +15,12 @@ export default function DetailItem({ result }: { result: ReviewResult }) {
             className="cursor-pointer select-none hover:shadow-md transition-all"
             onClick={() => { setShowDetail(!showDetail) }}
         >
-            <div className="flex items-center justify-between bg-primary/20 rounded-xl">
+            <div
+                className={cn(
+                    `flex items-center justify-between bg-primary/20 rounded-t-xl`,
+                    !showDetail && "rounded-xl"
+                )}
+            >
                 <CardHeader className="p-4">
                     <div className="flex items-center gap-2">
                         <RotateCw className="size-4 text-primary" />

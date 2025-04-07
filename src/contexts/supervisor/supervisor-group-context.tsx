@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
-import { Decision, EvaluationStudent, GroupFullInfo, GroupShortInfo, ProjectProgress, ReviewResult, Task } from "@/types/types";
+import { Decision, DefenseResult, EvaluationStudent, GroupFullInfo, GroupShortInfo, ProjectProgress, ReviewResult, Task } from "@/types/types";
 
 interface SupervisorGroupContextType {
   groupList: GroupShortInfo[];
@@ -24,7 +24,8 @@ interface SupervisorGroupContextType {
   exportEvaluationWeeklyProgressFile: (groupId: string) => Promise<any>;
   getReviewResultByGroupId: (groupId: string) => Promise<ReviewResult[]>;
   getGroupDecisionResponse: (groupId: string) => Promise<Decision>;
-  updateGroupDecisionStatusBySupervisor: (data: any) => Promise<void>
+  updateGroupDecisionStatusBySupervisor: (data: any) => Promise<void>;
+  getDefendResultByGroupId: (groupId: string) => Promise<DefenseResult[]>;
 }
 
 const SupervisorGroupContext = createContext<
@@ -161,6 +162,11 @@ export const SupervisorGroupProvider: React.FC<{
     return response
   };
 
+  const getDefendResultByGroupId = async (groupId: string) => {
+    const response = await callApi(`fuc/user/defend-calendar/result/${groupId}`);
+    return (response?.value);
+  };
+
   useEffect(() => {
     if (pathName === "/supervisor/groups") {
       getGroupManageBySupervisor();
@@ -187,7 +193,8 @@ export const SupervisorGroupProvider: React.FC<{
         exportEvaluationWeeklyProgressFile,
         getReviewResultByGroupId,
         getGroupDecisionResponse,
-        updateGroupDecisionStatusBySupervisor
+        updateGroupDecisionStatusBySupervisor,
+        getDefendResultByGroupId
       }}
     >
       {children}
