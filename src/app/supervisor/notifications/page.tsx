@@ -44,6 +44,7 @@ export default function NotificationsPage() {
         router.push("/supervisor/topics/appraisal");
         break;
       case "TopicApprovedEvent":
+      case "TopicStatusUpdatedEvent":
         router.push("/supervisor/topics");
         break;
       case "TopicRequestCreatedEvent":
@@ -82,11 +83,12 @@ export default function NotificationsPage() {
                     <p className="font-semibold transition-all duration-200">
                       {notification?.content}
                     </p>
-                    {/* <p className="font-semibold transition-all duration-200">
+                    <p className="font-semibold transition-all duration-200">
                       {notification?.type}
-                    </p> */}
+                    </p>
                     <p className="text-sm font-medium text-primary  transition-all duration-200">
-                      {getTimeElapsed(notification?.createdDate)}
+                      {/* {getTimeElapsed(notification?.createdDate)} */}
+                      {notification?.createdDate}
                     </p>
                   </div>
                 </div>

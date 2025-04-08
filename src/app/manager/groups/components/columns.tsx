@@ -31,7 +31,6 @@ function ActionsCell(row: Row<GroupFullInfo>) {
   const noRegisterTopic =
     group.topicCode === "undefined" && group.groupCode !== "";
   const [open, setOpen] = useState(false);
-  const [openAddTopic, setOpenAddTopic] = useState(false);
 
   return (
     <div className="flex items-center justify-center">

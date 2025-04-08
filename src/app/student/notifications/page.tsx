@@ -41,22 +41,37 @@ export default function NotificationsPage() {
       case "FucTaskCreatedEvent":
         router.push("/student/workspace/tasks");
         break;
+
       case "ProjectProgressCreatedEvent":
         router.push("/student/workspace");
         break;
+
       case "TopicRequestStatusUpdatedEvent":
         router.push("/student/groups/my-topic");
         break;
+
+      // case "GroupMemberStatusUpdateMessage":
+        
+      case "JoinGroupRequestStatusUpdatedEvent":
+        router.push("/student/groups/my-request?tab=application-sent");
+        break;
+
+      case "JoinGroupRequestCreatedEvent":
+        router.push("/student/groups/my-request?tab=application-received");
+        break;
+
+      case "GroupMemberCreatedEvent":
+        router.push("/student/groups/my-request?tab=invitation-received");
+        break;
+
       case "GroupMemberStatusUpdatedEvent":
-      case "GroupStatusUpdatedEvent": 
+        router.push("/student/groups/my-request?tab=invitation-sent");
+        break;
+
+      case "GroupStatusUpdatedEvent":
         router.push("/student/groups");
         break;
-      case "GroupMemberStatusUpdateMessage":
-      case "JoinGroupRequestCreatedEvent":
-      case "JoinGroupRequestStatusUpdatedEvent":
-      case "GroupMemberCreatedEvent":
-        router.push("/student/groups/my-request");
-        break;
+
       default:
         console.warn("No route defined for this notification type:", type);
     }
@@ -75,28 +90,31 @@ export default function NotificationsPage() {
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {notifications?.slice().reverse().map((notification: any) => (
-            <div
-              key={notification?.id}
-              className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-20 cursor-pointer"
-              onClick={() => handleNotificationClick(notification?.type)}
-            >
-              <div className="flex items-start gap-3">
-                <Bell className="h-5 w-5 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="font-semibold transition-all duration-200">
-                    {notification?.content}
-                  </p>
-                  {/* <p className="font-semibold transition-all duration-200">
-                    {notification?.type}
-                  </p> */}
-                  <p className="text-sm font-medium text-primary  transition-all duration-200">
-                    {getTimeElapsed(notification?.createdDate)}
-                  </p>
+          {notifications
+            ?.slice()
+            .reverse()
+            .map((notification: any) => (
+              <div
+                key={notification?.id}
+                className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-20 cursor-pointer"
+                onClick={() => handleNotificationClick(notification?.type)}
+              >
+                <div className="flex items-start gap-3">
+                  <Bell className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="font-semibold transition-all duration-200">
+                      {notification?.content}
+                    </p>
+                    <p className="font-semibold transition-all duration-200">
+                      {notification?.type}
+                    </p>
+                    <p className="text-sm font-medium text-primary  transition-all duration-200">
+                      {getTimeElapsed(notification?.createdDate)}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           {!notifications ||
             (notifications.length === 0 && (
