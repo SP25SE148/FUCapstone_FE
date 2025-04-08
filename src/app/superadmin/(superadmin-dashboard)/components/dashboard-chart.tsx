@@ -1,41 +1,17 @@
 "use client";
-import React from "react";
 
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Label,
-  Pie,
-  PieChart,
-  XAxis,
-} from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import React from "react";
+import { Bar, BarChart, CartesianGrid, Label, Pie, PieChart, XAxis, } from "recharts";
+
+import { useSuperadminDashboard } from "@/contexts/superadmin/superadmin-dashboard-context";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, } from "@/components/ui/chart";
 
 export default function DashBoardCharts() {
-  const topicgroupData = [
-    { name: "Ho Chi Minh", shortName: "HCM", topic: 401, group: 120 },
-    { name: "Hoa Lac", shortName: "HL", topic: 398, group: 122 },
-    { name: "Da Nang", shortName: "DN", topic: 190, group: 80 },
-    { name: "Quy Nho", shortName: "QN", topic: 200, group: 76 },
-    { name: "Can Tho", shortName: "CT", topic: 122, group: 67 },
-  ];
+  const { dashboard } = useSuperadminDashboard();
 
-  const supervisortData = [
-    { campus: "Ho Chi Minh", supervisor: 80, fill: "var(--color-HCM)" },
-    { campus: "Hoa Lac", supervisor: 83, fill: "var(--color-HL)" },
-    { campus: "Da Nang", supervisor: 63, fill: "var(--color-DN)" },
-    { campus: "Quy Nhon", supervisor: 34, fill: "var(--color-QN)" },
-    { campus: "Can Tho", supervisor: 44, fill: "var(--color-CT)" },
-  ];
+  // Topic Group Chart
   const chartConfig = {
     topic: {
       label: "Topic",
@@ -47,74 +23,132 @@ export default function DashBoardCharts() {
     },
   } satisfies ChartConfig;
 
-  const piechartConfig = {
-    supervisorts: {
-      label: "Supervisor",
-    },
-    HCM: {
-      label: "Ho Chi Minh",
-      color: "#86efac",
-    },
-    HL: {
-      label: "HL",
-      color: "#fcd34d",
-    },
-    DN: {
-      label: "DN",
-      color: "#d8b4fe",
-    },
-    QN: {
-      label: "QN",
-      color: "#93c5fd",
-    },
-    CT: {
-      label: "CT",
-      color: "#fca5a5",
-    },
-  } satisfies ChartConfig;
+  const topicGroupPerCampusData = React.useMemo(() => {
+    const raw = dashboard?.dataPerCampus as Record<
+      string,
+      { students: number; supervisors: number; topics: number; groups: number }
+    > ?? {};
 
-  const totalSupervisorss = React.useMemo(() => {
-    return supervisortData.reduce((acc, curr) => acc + curr.supervisor, 0);
-  }, []);
+    return Object.entries(raw).map(([campus, value]) => ({
+      campus,
+      topic: value.topics,
+      group: value.groups,
+    }));
+  }, [dashboard?.dataPerCampus]);
+
+  // PieChart Config
+  const generateChartConfig = (keys: string[]): ChartConfig => {
+    const colors = [
+      "hsl(var(--chart-1))",
+      "hsl(var(--chart-2))",
+      "hsl(var(--chart-3))",
+      "hsl(var(--chart-4))",
+      "hsl(var(--chart-5))",
+    ];
+
+    return keys.reduce((acc, key, index) => {
+      acc[key] = {
+        label: key,
+        color: colors[index % colors.length],
+      };
+      return acc;
+    }, {} as ChartConfig);
+  };
+
+  // Supervisor Chart
+  const supervisorsPerCampusConfig: ChartConfig = React.useMemo(() => {
+    const raw = dashboard?.dataPerCampus as Record<string, number> || {};
+    return generateChartConfig(Object.keys(raw));
+  }, [dashboard?.dataPerCampus]);
+
+  const supervisorsPerCampusData = React.useMemo(() => {
+    const raw = dashboard?.dataPerCampus || {};
+
+    return Object.entries(raw).map(([campus, value]) => {
+      const campusData = value as {
+        students: number;
+        supervisors: number;
+        topics: number;
+        groups: number;
+      };
+
+      return {
+        campus,
+        value: campusData.supervisors,
+        fill: supervisorsPerCampusConfig[campus]?.color || "hsl(var(--muted))",
+      };
+    });
+  }, [dashboard?.dataPerCampus, supervisorsPerCampusConfig]);
+
+  const totalSupervisors = React.useMemo(() => {
+    return supervisorsPerCampusData.reduce((acc, curr) => acc + curr.value, 0);
+  }, [supervisorsPerCampusData]);
+
+  // Student Chart
+  const studentsPerCampusConfig: ChartConfig = React.useMemo(() => {
+    const raw = dashboard?.dataPerCampus as Record<string, number> || {};
+    return generateChartConfig(Object.keys(raw));
+  }, [dashboard?.dataPerCampus]);
+
+  const studentsPerCampusData = React.useMemo(() => {
+    const raw = dashboard?.dataPerCampus || {};
+
+    return Object.entries(raw).map(([campus, value]) => {
+      const campusData = value as {
+        students: number;
+        supervisors: number;
+        topics: number;
+        groups: number;
+      };
+
+      return {
+        campus,
+        value: campusData.students,
+        fill: studentsPerCampusConfig[campus]?.color || "hsl(var(--muted))",
+      };
+    });
+  }, [dashboard?.dataPerCampus, studentsPerCampusConfig]);
+
+  const totalStudents = React.useMemo(() => {
+    return studentsPerCampusData.reduce((acc, curr) => acc + curr.value, 0);
+  }, [studentsPerCampusData]);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-      <Card className="col-span-4">
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2">
+      {/* topics/groups chart */}
+      <Card className="col-span-2">
         <CardHeader>
-          <CardTitle>Topics/Groups this semester</CardTitle>
+          <CardTitle>Topics & Groups per Campus</CardTitle>
+          <CardDescription>In this semester</CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={topicgroupData}>
+            <BarChart accessibilityLayer data={topicGroupPerCampusData}>
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="shortName"
-                tickLine={true}
+                dataKey="campus"
+                tickLine={false}
                 tickMargin={10}
-                axisLine={true}
-                tickFormatter={(value) => {
-                  const campus = topicgroupData.find(
-                    (item) => item.shortName === value
-                  );
-                  return campus ? campus.name : value;
-                }}
+                axisLine={false}
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <ChartLegend content={<ChartLegendContent />} />
-              <Bar dataKey="topic" fill="var(--color-topic)" radius={4} />
-              <Bar dataKey="group" fill="var(--color-group)" radius={4} />
+              <Bar dataKey="topic" fill={chartConfig.topic.color} radius={4} />
+              <Bar dataKey="group" fill={chartConfig.group.color} radius={4} />
             </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>
 
-      <Card className="col-span-3">
+      {/* Pie Chart 1: Supervisors */}
+      <Card>
         <CardHeader>
-          <CardTitle>Supervisor Overview</CardTitle>
+          <CardTitle>Supervisors Overview</CardTitle>
+          <CardDescription>In this semester</CardDescription>
         </CardHeader>
-        <CardContent className="flex-1 pb-0">
+        <CardContent>
           <ChartContainer
-            config={piechartConfig}
+            config={supervisorsPerCampusConfig}
             className="mx-auto aspect-square max-h-[350px]"
           >
             <PieChart>
@@ -123,8 +157,8 @@ export default function DashBoardCharts() {
                 content={<ChartTooltipContent hideLabel />}
               />
               <Pie
-                data={supervisortData}
-                dataKey="supervisor"
+                data={supervisorsPerCampusData}
+                dataKey="value"
                 nameKey="campus"
                 innerRadius={60}
                 strokeWidth={5}
@@ -144,14 +178,72 @@ export default function DashBoardCharts() {
                             y={viewBox.cy}
                             className="fill-foreground text-3xl font-bold"
                           >
-                            {totalSupervisorss.toLocaleString()}
+                            {totalSupervisors?.toLocaleString()}
                           </tspan>
                           <tspan
                             x={viewBox.cx}
                             y={(viewBox.cy || 0) + 24}
                             className="fill-muted-foreground"
                           >
-                            Supervisor
+                            Supervisor(s)
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+
+      {/* Pie Chart 2: Students */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Students Overview</CardTitle>
+          <CardDescription>In this semester</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={studentsPerCampusConfig}
+            className="mx-auto aspect-square max-h-[350px]"
+          >
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={studentsPerCampusData}
+                dataKey="value"
+                nameKey="campus"
+                innerRadius={60}
+                strokeWidth={5}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                        >
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-3xl font-bold"
+                          >
+                            {totalStudents?.toLocaleString()}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            Student(s)
                           </tspan>
                         </text>
                       );

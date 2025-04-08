@@ -2,14 +2,18 @@
 
 import { Users, UserPen, User, FileText } from "lucide-react";
 
+import { useManagerDashboard } from "@/contexts/manager/manager-dashboard-context";
+
 import DashboardOverall from "@/components/layout/dashboard-overall";
 
 export default function ManagerDashBoardOverall() {
+    const { dashboard } = useManagerDashboard();
+
     const items = [
-        { title: "Supervisors", stat: 20, icon: UserPen },
-        { title: "Students", stat: 400, icon: User },
-        { title: "Groups", stat: 100, icon: Users },
-        { title: "Topics", stat: 120, icon: FileText },
+        { title: "Supervisors", stat: dashboard?.supervisors || 0, icon: UserPen },
+        { title: "Students", stat: dashboard?.students || 0, icon: User },
+        { title: "Groups", stat: dashboard?.groups || 0, icon: Users },
+        { title: "Topics", stat: dashboard?.topics || 0, icon: FileText },
     ];
 
     return DashboardOverall({ items });

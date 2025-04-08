@@ -1,87 +1,81 @@
 "use client";
 
 import React from "react";
+import { Label, Pie, PieChart } from "recharts";
 
-import { Bar, BarChart, CartesianGrid, Label, Pie, PieChart, XAxis, } from "recharts";
+import { useManagerDashboard } from "@/contexts/manager/manager-dashboard-context";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, } from "@/components/ui/chart";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 export default function ManagerDashBoardCharts() {
-  const supervisorsStudentsData = [
-    { semester: "Spring", supervisors: 20, students: 350 },
-    { semester: "Summer", supervisors: 20, students: 400 },
-    { semester: "Fall", supervisors: 20, students: 400 },
+  const { dashboard } = useManagerDashboard();
+
+  // supervisorsStudentsChart
+  const supervisorsStudentsPieData = [
+    { role: "Supervisors", value: dashboard?.supervisors || 0, fill: "var(--color-Supervisors)" },
+    { role: "Students", value: dashboard?.students || 0, fill: "var(--color-Students)" },
   ];
 
-  const topicsData = [
-    { status: "Assigned", topics: 100, fill: "var(--color-Assigned)" },
-    { status: "Available", topics: 20, fill: "var(--color-Available)" },
-  ];
-
-  const chartConfig = {
-    supervisors: {
+  const supervisorsStudentsPieConfig = {
+    Supervisors: {
       label: "Supervisors",
       color: "hsl(var(--chart-1))",
     },
-    students: {
+    Students: {
       label: "Students",
       color: "hsl(var(--chart-2))",
     },
   } satisfies ChartConfig;
 
-  const piechartConfig = {
+  const totalSupervisorsStudents = React.useMemo(() => {
+    return supervisorsStudentsPieData.reduce((acc, curr) => acc + curr.value, 0);
+  }, [supervisorsStudentsPieData]);
+
+  // topicsChart
+  const topicsPieData = [
+    { status: "Pending", topics: dashboard?.topicsInEachStatus?.Pending || 0, fill: "var(--color-Pending)" },
+    { status: "Approved", topics: dashboard?.topicsInEachStatus?.Approved || 0, fill: "var(--color-Approved)" },
+    { status: "Considered", topics: dashboard?.topicsInEachStatus?.Considered || 0, fill: "var(--color-Considered)" },
+    { status: "Rejected", topics: dashboard?.topicsInEachStatus?.Rejected || 0, fill: "var(--color-Rejected)" },
+  ];
+
+  const topicsPieConfig = {
     topics: {
       label: "Topics",
     },
-    Assigned: {
-      label: "Assigned",
+    Pending: {
+      label: "Pending",
+      color: "hsl(var(--chart-1))",
+    },
+    Approved: {
+      label: "Approved",
       color: "hsl(var(--chart-2))",
     },
-    Available: {
-      label: "Available",
+    Considered: {
+      label: "Considered",
       color: "hsl(var(--chart-3))",
+    },
+    Rejected: {
+      label: "Rejected",
+      color: "hsl(var(--chart-4))",
     },
   } satisfies ChartConfig;
 
   const totalTopics = React.useMemo(() => {
-    return topicsData.reduce((acc, curr) => acc + curr.topics, 0);
-  }, []);
+    return topicsPieData.reduce((acc, curr) => acc + curr.topics, 0);
+  }, [topicsPieData]);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-      <Card className="col-span-4">
+    <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+      <Card>
         <CardHeader>
-          <CardTitle>Supervisors - Students</CardTitle>
-          <CardDescription>Year 2025</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={supervisorsStudentsData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="semester"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <ChartLegend content={<ChartLegendContent />} />
-              <Bar dataKey="supervisors" fill="var(--color-supervisors)" radius={4} />
-              <Bar dataKey="students" fill="var(--color-students)" radius={4} />
-            </BarChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-
-      <Card className="col-span-3">
-        <CardHeader>
-          <CardTitle>Topic(s) Overview</CardTitle>
-          <CardDescription>in this semester</CardDescription>
+          <CardTitle>Supervisors - Students Overview</CardTitle>
+          <CardDescription>In this semester</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0">
           <ChartContainer
-            config={piechartConfig}
+            config={supervisorsStudentsPieConfig}
             className="mx-auto aspect-square max-h-[350px]"
           >
             <PieChart>
@@ -90,7 +84,63 @@ export default function ManagerDashBoardCharts() {
                 content={<ChartTooltipContent hideLabel />}
               />
               <Pie
-                data={topicsData}
+                data={supervisorsStudentsPieData}
+                dataKey="value"
+                nameKey="role"
+                innerRadius={60}
+                strokeWidth={5}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                        >
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-3xl font-bold"
+                          >
+                            {totalSupervisorsStudents.toLocaleString()}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            Total
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Topic(s) Overview</CardTitle>
+          <CardDescription>In this semester</CardDescription>
+        </CardHeader>
+        <CardContent className="flex-1 pb-0">
+          <ChartContainer
+            config={topicsPieConfig}
+            className="mx-auto aspect-square max-h-[350px]"
+          >
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={topicsPieData}
                 dataKey="topics"
                 nameKey="status"
                 innerRadius={60}
