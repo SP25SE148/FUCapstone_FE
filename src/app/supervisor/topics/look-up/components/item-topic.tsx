@@ -187,10 +187,10 @@ export default function ItemTopic({ topic }: { topic: Topic }) {
                                                 </Avatar>
                                                 <div>
                                                     <p className="font-semibold">
-                                                        {supervisor?.SupervisorName}
+                                                        {supervisor?.supervisorName}
                                                     </p>
                                                     <p className="text-sm text-muted-foreground">
-                                                        {supervisor?.SupervisorEmail}
+                                                        {supervisor?.supervisorEmail}
                                                     </p>
                                                 </div>
                                             </div>

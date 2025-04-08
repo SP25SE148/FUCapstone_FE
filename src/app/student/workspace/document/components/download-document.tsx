@@ -17,7 +17,7 @@ export default function DownloadDocument() {
             if (!url) return;
             const a = document.createElement("a");
             a.href = url;
-            a.download = "Template_Import_Student"; // Đặt tên file khi tải về
+            a.download = `Group_Documents_${groupInfo?.groupCode}`; // Đặt tên file khi tải về
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

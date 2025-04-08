@@ -1,6 +1,8 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import RegisterTopicForm from "@/app/supervisor/topics/register-topic/components/register-topic-form";
 import { SupervisorTopicRegisterProvider } from "@/contexts/supervisor/supervisor-topic-register-context";
+
+import RegisterTopicForm from "@/app/supervisor/topics/register-topic/components/register-topic-form";
+
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function RegisterTopicPage() {
   return (

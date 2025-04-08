@@ -48,6 +48,16 @@ export const SupervisorTopicProvider: React.FC<{
     return (response?.value);
   };
 
+  const reAppraisalTopicForMainSupervisor = async (topicId: string) => {
+    const response = await callApi(`fuc/topics/re-appraisal/${topicId}`, {
+      method: "POST",
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Reappraisal topic successfully");
+    }
+    return response;
+  };
+
   const updateTopic = async (topicId: string, data: FormData) => {
     const response = await callApi(`fuc/topics/${topicId}`, {
       method: "PUT",
@@ -55,6 +65,7 @@ export const SupervisorTopicProvider: React.FC<{
     });
     if (response?.isSuccess === true) {
       toast.success("Update topic successfully");
+      await reAppraisalTopicForMainSupervisor(topicId);
     }
     return response;
   };
