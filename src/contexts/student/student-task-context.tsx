@@ -1,75 +1,15 @@
 "use client";
 
+import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
+
 import { useApi } from "@/hooks/use-api";
 import { useAuth } from "@/contexts/auth-context";
-import { toast } from "sonner";
-import { ProjectProgress } from "@/types/types";
-
-export interface Task {
-  id: string;
-  keyTask: string;
-  description: string; 
-  summary: string;
-  assigneeId: string;
-  reporterId: string;
-  comment: string | null;
-  status: number;
-  priority: number;
-  dueDate: string;
-  createdDate: string;
-  projectProgressId: string | null;
-}
-
-export interface TaskRequest {
-  KeyTask: string;
-  Description: string;
-  Summary: string;
-  AssigneeId: string;
-  ProjectProgressId: string;
-  Priority: number;
-  DueDate: string;
-}
-
-export interface TaskUpdate {
-  TaskId: string;
-  ProjectProgressId: string;
-  KeyTask: string;
-  Description: string;
-  Summary: string;
-  Comment: string;
-  AssigneeId: string;
-  Status: number;
-  Priority: number;
-  DueDate: string;
-}
-
-export interface Member {
-  id: string;
-  groupId: string;
-  studentId: string;
-  studentFullName: string;
-  studentEmail: string;
-  isLeader: boolean;
-  status: string;
-}
-
-export interface Group {
-  id: string;
-  campusName: string;
-  semesterName: string;
-  majorName: string;
-  capstoneName: string;
-  groupCode: string;
-  topicCode: string;
-  groupMemberList: Member[];
-  status: string;
-}
-
+import { GroupFullInfo, ProjectProgress, Task, TaskRequest } from "@/types/types";
 
 interface StudentTaskContextProps {
   tasks: Task[];
-  groupInfo: Group | null;
+  groupInfo: GroupFullInfo | null;
   createTask: (task: TaskRequest) => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
   updateTask: (updatedTask: Task) => Promise<void>;
@@ -78,6 +18,7 @@ interface StudentTaskContextProps {
   submitSummaryWeekForLeader: (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => Promise<void>;
   getTaskDetail: (taskId: string) => Promise<Task | null>;
   uploadGroupDocument: (data: any) => Promise<void>;
+  getPresignUrlOfGroupDocument: (groupId: string) => Promise<string>;
 }
 
 const StudentTaskContext = createContext<StudentTaskContextProps | undefined>(undefined);
@@ -93,7 +34,7 @@ export const useStudentTasks = () => {
 export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { callApi } = useApi();
   const { user } = useAuth();
-  const [groupInfo, setGroupInfo] = useState<Group | null>(null);
+  const [groupInfo, setGroupInfo] = useState<GroupFullInfo | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const fetchGroupInfo = async () => {
@@ -133,7 +74,6 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
         id: response.value.id,
         keyTask: response.value.keyTask,
         summary: response.value.summary,
-        comment: null,
         description: response.value.description,
         assigneeId: response.value.assigneeId,
         reporterId: response.value.reporterId,
@@ -141,7 +81,12 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
         priority: response.value.priority,
         dueDate: response.value.dueDate,
         createdDate: response.value.createdDate,
-        projectProgressId: null
+        projectProgressId: null,
+        assigneeName: "",
+        reporterName: "",
+        lastUpdatedDate: null,
+        completionDate: null,
+        fucTaskHistories: []
       };
 
       setTasks((prevTasks) => [...prevTasks, newTask]);
@@ -209,9 +154,15 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
     });
 
     if (response?.isSuccess === true) {
+      fetchGroupInfo();
       toast.success("Upload document successfully");
     }
     return response
+  };
+
+  const getPresignUrlOfGroupDocument = async (groupId: string) => {
+    const response = await callApi(`fuc/group/documents/${groupId}`);
+    return (response?.value);
   };
 
   useEffect(() => {
@@ -230,7 +181,8 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
         fetchProgressTask,
         submitSummaryWeekForLeader,
         getTaskDetail,
-        uploadGroupDocument
+        uploadGroupDocument,
+        getPresignUrlOfGroupDocument
       }}
     >
       {children}

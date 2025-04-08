@@ -1,24 +1,19 @@
 "use client"
 
+import { toast } from "sonner"
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 import { useState, useEffect } from "react"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+
+import { useStudentTasks } from "@/contexts/student/student-task-context"
+
+import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
-import { CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
-import { useStudentTasks } from "@/contexts/student/student-task-context"
-import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 
 export default function AddTask({ onClose }: { onClose: () => void }) {
   const { groupInfo, getProjectProgressOfGroup, createTask } = useStudentTasks()
@@ -27,7 +22,7 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
   const [summary, setSummary] = useState("")
   const [assigneeId, setAssigneeId] = useState("")
   const [projectProgressId, setProjectProgressId] = useState("")
-  const [priority, setPriority] = useState("1") 
+  const [priority, setPriority] = useState("1")
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -114,7 +109,7 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
                       <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">{dueDate ? format(dueDate, "PPP") : "Pick a date"}</span>
                     </div>
-                    <Calendar mode="single" selected={dueDate} onSelect={setDueDate} className="p-3" disabled={(date) => date < new Date()}/>
+                    <Calendar mode="single" selected={dueDate} onSelect={setDueDate} className="p-3" disabled={(date) => date < new Date()} />
                   </div>
                 </div>
 
@@ -128,9 +123,8 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
                         {priority && (
                           <div className="flex items-center gap-2">
                             <div
-                              className={`w-3 h-3 rounded-full ${
-                                priority === "0" ? "bg-red-500" : priority === "1" ? "bg-yellow-500" : "bg-green-500"
-                              }`}
+                              className={`w-3 h-3 rounded-full ${priority === "0" ? "bg-red-500" : priority === "1" ? "bg-yellow-500" : "bg-green-500"
+                                }`}
                             ></div>
                             <span>{priority === "0" ? "High" : priority === "1" ? "Medium" : "Low"}</span>
                           </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+
+import { Task } from "@/types/types";
+import { useStudentTasks } from "@/contexts/student/student-task-context";
+
 import { Badge } from "@/components/ui/badge";
-import { Task, useStudentTasks } from "@/contexts/student/student-task-context";
+import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface UpdateStatusProps {
   task: Task;

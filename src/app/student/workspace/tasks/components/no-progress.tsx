@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FileX } from "lucide-react";
+
 import { Card } from "@/components/ui/card";
 
 export default function NoProgress() {

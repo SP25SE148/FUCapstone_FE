@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
-import { Task } from "@/contexts/student/student-task-context";
+
+import { Task } from "@/types/types";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
+
+import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface AssignTaskProps {
   task: Task;

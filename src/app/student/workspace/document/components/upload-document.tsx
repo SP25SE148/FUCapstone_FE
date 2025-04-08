@@ -76,8 +76,8 @@ export default function UploadDocument({ refresh }: { refresh?: () => void }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="m-6">
-                    <Upload className="mr-2 h-4 w-4" />
+                <Button className="mr-6">
+                    <Upload className="h-4 w-4" />
                     Upload
                 </Button>
             </DialogTrigger>
