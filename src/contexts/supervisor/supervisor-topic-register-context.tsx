@@ -10,6 +10,7 @@ import { BusinessArea, Capstone } from "@/types/types";
 interface SupervisorTopicRegisterContextType {
   capstoneList: Capstone[];
   businessAreaList: BusinessArea[];
+  getTopicRegistrationTemplate: () => Promise<string>;
   registerTopic: (data: FormData) => Promise<any>;
 }
 
@@ -32,6 +33,11 @@ export const SupervisorTopicRegisterProvider: React.FC<{
   const fetchCapstoneListByMajor = async () => {
     const response = await callApi(`fuc/AcademicManagement/capstone/by-major/${user?.MajorId}`);
     setCapstoneList(response.value);
+  };
+
+  const getTopicRegistrationTemplate = async () => {
+    const response = await callApi("fuc/Documents/topic-registration");
+    return (response?.value);
   };
 
   const registerTopic = async (data: FormData) => {
@@ -58,6 +64,7 @@ export const SupervisorTopicRegisterProvider: React.FC<{
       value={{
         capstoneList,
         businessAreaList,
+        getTopicRegistrationTemplate,
         registerTopic,
       }}
     >

@@ -51,7 +51,7 @@ const formSchema = z.object({
 
 export default function RegisterTopicForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { businessAreaList, capstoneList, registerTopic } = useSupervisorTopicRegister();
+  const { businessAreaList, capstoneList, getTopicRegistrationTemplate, registerTopic } = useSupervisorTopicRegister();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -116,6 +116,17 @@ export default function RegisterTopicForm() {
       setIsConfirmOpen(true);
     }
   };
+
+  async function handleDownload() {
+    const url = await getTopicRegistrationTemplate();
+    if (!url) return;
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Template_Register_Topic"; // Đặt tên file khi tải về
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
   return (
     <Form {...form}>
@@ -272,8 +283,10 @@ export default function RegisterTopicForm() {
         </CardContent>
         <CardFooter className="justify-between">
           <Button
+            type="button"
             variant={"outline"}
             className="border-primary text-primary hover:bg-primary hover:text-white"
+            onClick={handleDownload}
           >
             <Download />
             Template

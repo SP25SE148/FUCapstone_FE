@@ -30,7 +30,7 @@ export default function RemainStudentsPage() {
                     <CardTitle className="font-semibold tracking-tight text-xl text-primary">Remain Students</CardTitle>
                     <CardDescription>Remain students and information.</CardDescription>
                 </CardHeader>
-                <Button className="mr-6" onClick={handleRandomGroup} disabled={isLoading}>
+                <Button className="mr-6" onClick={handleRandomGroup} disabled={isLoading || remainStudentList?.length <= 0}>
                     {isLoading ? <Loader2 className="animate-spin" /> : <Dices />}
                     {isLoading ? "Please wait ..." : "Random Group"}
                 </Button>

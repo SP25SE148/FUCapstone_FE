@@ -10,12 +10,13 @@ import { useParams, useRouter } from "next/navigation";
 import { Topic } from "@/types/types";
 import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
+import DownloadDocument from "../../components/download-document";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CardContent, CardFooter } from "@/components/ui/card";
-import DownloadDocument from "../../components/download-document";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
