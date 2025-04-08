@@ -3,21 +3,31 @@
 import { LucideProps } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
+import { cn } from "@/lib/utils";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function DashboardOverall({
-  items,
-}: {
-  items: {
-    title: string;
-    stat: number;
-    icon: ForwardRefExoticComponent<
-      Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-    >;
-  }[];
-}) {
+type DashboardOverallItem = {
+  title: string;
+  stat: number;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+};
+
+type DashboardOverallProps = {
+  items: DashboardOverallItem[];
+  classnames?: string;
+};
+
+export default function DashboardOverall({ items, classnames }: DashboardOverallProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div
+      className={cn(
+        "grid gap-4 md:grid-cols-2 lg:grid-cols-4",
+        classnames
+      )}
+    >
       {items?.map((item, index) => (
         <Card key={index}>
           <CardHeader className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
