@@ -262,6 +262,7 @@ export interface GroupFullInfo {
   capstoneName: string;
   groupCode: string;
   topicCode: string;
+  isUploadGroupDocument: true;
   averageGPA: number;
   currentNumberOfGroupPerMax: string;
   status: string;
@@ -317,6 +318,16 @@ export interface EvaluationStudent {
 //#endregion
 
 //#region Task Types
+
+export interface TaskRequest {
+  KeyTask: string;
+  Description: string;
+  Summary: string;
+  AssigneeId: string;
+  ProjectProgressId: string;
+  Priority: number;
+  DueDate: string;
+}
 
 export interface Task {
   id: string;

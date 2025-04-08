@@ -1,17 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { format, isBefore, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { format, isBefore, startOfDay } from "date-fns";
+
 import { cn } from "@/lib/utils";
+import { Task } from "@/types/types";
+import { useStudentTasks } from "@/contexts/student/student-task-context";
+
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Task, useStudentTasks } from "@/contexts/student/student-task-context";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface UpdateDueDateProps {
   task: Task;
@@ -45,7 +44,7 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
 
   const isDateDisabled = (date: Date) => {
     const today = startOfDay(new Date());
-    return isBefore(date, today); 
+    return isBefore(date, today);
   };
 
   return (
@@ -68,7 +67,7 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
           selected={date}
           onSelect={handleDateChange}
           initialFocus
-          disabled={(date) => isDateDisabled(date)} 
+          disabled={(date) => isDateDisabled(date)}
         />
       </PopoverContent>
     </Popover>

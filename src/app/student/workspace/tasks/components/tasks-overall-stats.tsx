@@ -1,8 +1,8 @@
 "use client";
 
-import OverallStats from "@/components/layout/overall-stats";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
 
+import OverallStats from "@/components/layout/overall-stats";
 
 export default function TasksOverallStats() {
   const { tasks } = useStudentTasks();

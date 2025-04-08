@@ -2,25 +2,28 @@
 
 import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import type { Task } from "@/contexts/student/student-task-context";
+import { User, Flag, Calendar, Hash, BarChart, ClipboardList } from "lucide-react";
+
+import { Task } from "@/types/types";
+
 import AssignTask from "@/app/student/workspace/tasks/components/assign-task";
 import UpdateStatus from "@/app/student/workspace/tasks/components/update-status";
 import UpdatePriority from "@/app/student/workspace/tasks/components/update-priority";
 import UpdateDueDate from "@/app/student/workspace/tasks/components/update-duedate";
-import { User, Flag, Calendar, Hash, BarChart, ClipboardList } from "lucide-react";
+
+import { Checkbox } from "@/components/ui/checkbox";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 const UpdateStatusCell = ({ task }: { task: Task }) => {
-  return <UpdateStatus task={task} onClose={() => {}} />;
+  return <UpdateStatus task={task} onClose={() => { }} />;
 };
 
 const UpdatePriorityCell = ({ task }: { task: Task }) => {
-  return <UpdatePriority task={task} onClose={() => {}} />;
+  return <UpdatePriority task={task} onClose={() => { }} />;
 };
 
 const UpdateDueDateCell = ({ task }: { task: Task }) => {
-  return <UpdateDueDate task={task} onClose={() => {}} />;
+  return <UpdateDueDate task={task} onClose={() => { }} />;
 };
 
 const KeyTaskCell = ({ task }: { task: Task }) => {
@@ -80,7 +83,7 @@ export const columns: ColumnDef<Task>[] = [
       <AssignTask
         task={row.original}
         onAssign={(assignedTo) => {
-          row.original.assigneeId = assignedTo; 
+          row.original.assigneeId = assignedTo;
         }}
       />
     ),

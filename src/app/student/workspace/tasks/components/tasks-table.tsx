@@ -1,30 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { columns } from "@/app/student/workspace/tasks/components/tasks-table-columns";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import TaskHistory from "@/app/student/workspace/tasks/components/task-history";
-import AddTask from "@/app/student/workspace/tasks/components/add-task";
-import { useStudentTasks } from "@/contexts/student/student-task-context";
-import { DataTable } from "@/components/ui/data-table";
+import { useEffect, useState } from "react";
+
 import { ProjectProgress } from "@/types/types";
+import { useStudentTasks } from "@/contexts/student/student-task-context";
+
+import AddTask from "@/app/student/workspace/tasks/components/add-task";
 import NoProgress from "@/app/student/workspace/tasks/components/no-progress";
+import TaskHistory from "@/app/student/workspace/tasks/components/task-history";
+
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "@/app/student/workspace/tasks/components/tasks-table-columns";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 
 export default function TasksTable() {
   const { tasks, fetchProgressTask, groupInfo, getProjectProgressOfGroup } =
     useStudentTasks();
   const [showHistory, setShowHistory] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
-    const [projectProgress, setProjectProgress] = useState<ProjectProgress>();
-  
+  const [projectProgress, setProjectProgress] = useState<ProjectProgress>();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -46,7 +42,7 @@ export default function TasksTable() {
     setShowCreateTask(true);
   };
 
-  return noProgress ? <NoProgress/> :
+  return noProgress ? <NoProgress /> :
     <Card className="min-h-[calc(100vh-16px)]">
       <CardHeader>
         <div className="flex items-center justify-between">
@@ -72,5 +68,5 @@ export default function TasksTable() {
       {showHistory && <TaskHistory onClose={() => setShowHistory(false)} />}
       {showCreateTask && <AddTask onClose={() => setShowCreateTask(false)} />}
     </Card>
-  
+
 }
