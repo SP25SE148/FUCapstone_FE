@@ -17,14 +17,12 @@ export function ListRequest() {
   const tabParam = searchParams.get("tab")
   const [activeTab, setActiveTab] = useState<string>("invitation-sent")
 
-  // Set default tab in URL if not present
   useEffect(() => {
     if (pathname === "/student/groups/my-request" && !tabParam) {
       router.replace(`${pathname}?tab=invitation-sent`, { scroll: false })
     }
   }, [pathname, tabParam, router])
 
-  // Set the active tab based on URL parameter or default to "invitation-sent"
   useEffect(() => {
     const validTabs = ["invitation-sent", "invitation-received", "application-sent", "application-received"]
     if (tabParam && validTabs.includes(tabParam)) {
@@ -32,15 +30,14 @@ export function ListRequest() {
     }
   }, [tabParam])
 
-  // Update URL when tab changes
   const handleTabChange = (value: string) => {
     setActiveTab(value)
 
-    // Create a new URLSearchParams object
+    // tạo URLSearchParams 
     const params = new URLSearchParams(searchParams.toString())
     params.set("tab", value)
 
-    // Update the URL without refreshing the page
+    // sửa URL mà không f5 lại trang
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
   }
 
