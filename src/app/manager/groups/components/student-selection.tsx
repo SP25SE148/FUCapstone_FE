@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User2 } from "lucide-react";
+import { Plus, User2 } from "lucide-react";
 
 import { Student } from "@/types/types";
 import { useManagerGroup } from "@/contexts/manager/manager-group-context";
@@ -28,7 +28,7 @@ export default function StudentSelection({ groupId, open, setOpen }: Props) {
                 GroupId: groupId,
                 StudentId: studentId
             });
-            setOpen(); // Đóng modal sau khi thêm thành công
+            // setOpen(); // Đóng modal sau khi thêm thành công
         } finally {
             setLoading(false);
         }
@@ -69,11 +69,11 @@ export default function StudentSelection({ groupId, open, setOpen }: Props) {
                                     </div>
                                 </div>
                                 <Button
-                                    size={"sm"}
+                                    size={"icon"}
                                     onClick={() => handleAddStudent(student.id)}
                                     disabled={loading}
                                 >
-                                    Add
+                                    <Plus />
                                 </Button>
                             </CardContent>
                         </Card>

@@ -153,7 +153,13 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
 
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={() => {
+          clearSelectedFile();
+          setOpen(!open);
+        }}
+      >
         <DialogTrigger asChild>
           <Button className="mr-6 flex items-center gap-2 px-4">
             <Upload className="h-4 w-4 mr-1" />
@@ -173,9 +179,8 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
             <div>
               {!selectedFile ? (
                 <div
-                  className={`border-2 border-dashed rounded-lg p-8 text-center ${
-                    isDragging ? "border-primary bg-primary/5" : "border-muted-foreground/25"
-                  }`}
+                  className={`border-2 border-dashed rounded-lg p-8 text-center ${isDragging ? "border-primary bg-primary/5" : "border-muted-foreground/25"
+                    }`}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
