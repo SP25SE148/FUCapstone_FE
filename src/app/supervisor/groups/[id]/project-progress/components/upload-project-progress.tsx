@@ -145,7 +145,13 @@ export default function UploadProjectProgress({ refresh }: { refresh: any }) {
 
     return (
         <>
-            <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog
+                open={open}
+                onOpenChange={() => {
+                    clearSelectedFile();
+                    setOpen(!open);
+                }}
+            >
                 <DialogTrigger asChild>
                     <Button className="m-6">
                         <Upload />

@@ -139,7 +139,13 @@ export default function UploadReviewCalendar() {
 
     return (
         <>
-            <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog
+                open={open}
+                onOpenChange={() => {
+                    clearSelectedFile();
+                    setOpen(!open);
+                }}
+            >
                 <DialogTrigger asChild>
                     <Button className="mr-6">
                         <Upload />

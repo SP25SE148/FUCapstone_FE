@@ -15,7 +15,8 @@ interface ManagerGroupContextProps {
     fetchTopics: () => Promise<any>,
     mergeRemainStudentsIntoGroup: () => Promise<void>,
     assignPendingTopicForGroup: (data: { TopicId: string; GroupId: string }) => Promise<void>;
-    assignRemainStudentForGroup: (data: { GroupId: string, StudentId: string }) => Promise<void>
+    assignRemainStudentForGroup: (data: { GroupId: string, StudentId: string }) => Promise<void>;
+    exportGroup: () => Promise<any>;
 }
 
 const ManagerGroupContext = createContext<ManagerGroupContextProps | undefined>(undefined);
@@ -76,17 +77,25 @@ export const ManagerGroupProvider = ({ children }: { children: React.ReactNode }
 
     const assignPendingTopicForGroup = async (data: { TopicId: string; GroupId: string }) => {
         const response = await callApi("fuc/group/assign/pending-topic", {
-          method: "POST",
-          body: data,
+            method: "POST",
+            body: data,
         });
-      
+
         if (response?.isSuccess) {
-          toast.success("Topic assigned successfully!");
-          getAllGroupByCapstone();
-        } 
-      
+            toast.success("Topic assigned successfully!");
+            getAllGroupByCapstone();
+        }
+
         return response;
-      };
+    };
+
+    const exportGroup = async () => {
+        const response = await callApi(`fuc/user/group/export`, {
+            responseType: "blob"
+        }
+        );
+        return (response);
+    };
 
     useEffect(() => {
         if (pathName === "/manager/groups") {
@@ -107,7 +116,8 @@ export const ManagerGroupProvider = ({ children }: { children: React.ReactNode }
                 remainStudentList,
                 assignPendingTopicForGroup,
                 mergeRemainStudentsIntoGroup,
-                assignRemainStudentForGroup
+                assignRemainStudentForGroup,
+                exportGroup
             }}
         >
             {children}
