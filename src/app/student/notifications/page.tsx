@@ -105,9 +105,9 @@ export default function NotificationsPage() {
                     <p className="font-semibold transition-all duration-200">
                       {notification?.content}
                     </p>
-                    <p className="font-semibold transition-all duration-200">
+                    {/* <p className="font-semibold transition-all duration-200">
                       {notification?.type}
-                    </p>
+                    </p> */}
                     <p className="text-sm font-medium text-primary  transition-all duration-200">
                       {getTimeElapsed(notification?.createdDate)}
                     </p>
