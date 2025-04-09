@@ -126,7 +126,7 @@ export const columns: ColumnDef<Topic>[] = [
     cell: ({ row }) => {
       const topic = row.original;
       const missingAssign =
-        topic.status === "Pending" && topic.topicAppraisals.length === 1;
+        topic.status === "Pending" && topic.topicAppraisals.length <= 1;
       return missingAssign && <AssignAppraisalCell topic={row.original} />;
     },
   },
