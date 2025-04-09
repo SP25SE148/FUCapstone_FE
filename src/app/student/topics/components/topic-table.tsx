@@ -157,7 +157,7 @@ export default function TopicTable() {
     groupInfo?.status !== "InProgress" ? (
     <NotAllow />
   ) : (
-    <Card className="min-h-[calc(100vh-60px)]">
+    <Card className="min-h-[calc(100vh-16px)]">
       <CardHeader>
         <CardTitle className="font-semibold tracking-tight text-xl text-primary flex items-center gap-2">
           <BookOpen className="h-6 w-6" />
@@ -350,9 +350,9 @@ export default function TopicTable() {
                     .map((request) => (
                       <div
                         key={request.topicRequestId}
-                        className="grid grid-cols-4 gap-4 p-2 rounded-lg"
+                        className="grid grid-cols-2 lg:grid-cols-5  gap-4 p-2 rounded-lg"
                       >
-                        <div className="col-span-1 flex items-center gap-4">
+                        <div className="col-span-1 lg:col-span-2 flex items-center gap-4">
                           <div className="bg-primary/10 p-2 rounded-full">
                             <BookOpen className="size-5 text-primary" />
                           </div>

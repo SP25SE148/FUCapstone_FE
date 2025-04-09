@@ -200,7 +200,8 @@ export default function MyGroup() {
                                 <div className="space-y-4">
                                     <h3 className="font-semibold flex items-center gap-2">
                                         <Users className="size-4 text-primary" />
-                                        Invited Student(s)
+                                        Invited Student(s):
+                                        <span className="text-sm text-muted-foreground">{groupInfo?.currentNumberOfGroupPerMax}</span>
                                     </h3>
                                     <div className="space-y-2">
                                         <Card className="bg-primary/5">
