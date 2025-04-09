@@ -20,7 +20,7 @@ export default function GroupTable() {
                     <CardTitle className="font-semibold tracking-tight text-xl">Group(s)</CardTitle>
                     <CardDescription>{user?.CapstoneId}</CardDescription>
                 </CardHeader>
-                {groupList.length > 0 && <ExportGroup groupList={groupList}/>}
+                <ExportGroup groupList={groupList} />
             </div>
             <CardContent>
                 <DataTable columns={columns} data={groupList || []} />
