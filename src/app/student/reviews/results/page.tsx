@@ -7,6 +7,7 @@ import { useStudentReview } from "@/contexts/student/student-review-context";
 
 import NoResult from "./components/no-result";
 import ResultDetails from "./components/result-details";
+
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ResultsPage() {

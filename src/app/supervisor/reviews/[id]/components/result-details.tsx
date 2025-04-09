@@ -5,7 +5,7 @@ import DetailItem from "./detail-item";
 export default function ResultDetails({ results }: { results: ReviewResult[] }) {
     return (
         <div className="space-y-4">
-            {results?.reverse().map((result, index) => (
+            {results?.sort((a, b) => b.attempt - a.attempt)?.map((result, index) => (
                 <DetailItem key={index} result={result} />
             ))}
         </div>
