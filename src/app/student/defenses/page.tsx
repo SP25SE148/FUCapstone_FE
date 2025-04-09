@@ -122,7 +122,7 @@ export default function DefensesPage() {
                           </div>
                           <div className="min-w-0">
                             <p className="font-medium text-sm truncate">{member.supervisorName}</p>
-                            <p className="text-xs text-muted-foreground">
+                            <div className="text-xs text-muted-foreground">
                               {member.isPresident ? (
                                 <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 mt-1">
                                   President
@@ -139,7 +139,7 @@ export default function DefensesPage() {
                                   Member
                                 </Badge>
                               )}
-                            </p>
+                            </div>
                           </div>
                         </div>
                       ))}

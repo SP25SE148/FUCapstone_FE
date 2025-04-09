@@ -71,7 +71,7 @@ export const StudentProfileProvider: React.FC<{
   useEffect(() => {
     if (studentProfile) {
       if (studentProfile?.businessArea === "" && studentProfile?.gpa === 0) {
-        router.push("/student/update-information");
+        router.push("/student/home");
       }
     }
   }, [studentProfile, router, pathname]);
