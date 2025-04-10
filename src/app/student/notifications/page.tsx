@@ -90,10 +90,7 @@ export default function NotificationsPage() {
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {notifications
-            ?.slice()
-            .reverse()
-            .map((notification: any) => (
+          {notifications?.map((notification: any) => (
               <div
                 key={notification?.id}
                 className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-20 cursor-pointer"

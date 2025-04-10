@@ -331,7 +331,7 @@ export default function DefenseTopicDetail() {
       </CardContent>
 
       <CardFooter className="flex justify-end gap-4">
-        {isSecretary && <UploadMinutes defendCapstoneCalendarId={defenseInfo.id} />}
+        {(isSecretary || isPresident) && <UploadMinutes defendCapstoneCalendarId={defenseInfo.id} />}
 
         {isPresident && (
           <ContinueDefense defendCapstoneCalendarId={defenseInfo.id} />
