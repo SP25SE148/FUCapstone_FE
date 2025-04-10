@@ -251,6 +251,7 @@ export interface TopicAppraisal {
   appraisalContent: string | null,
   appraisalComment: string | null,
   status: string,
+  attemptTime: number,
   appraisalDate: string | null
 }
 

@@ -339,6 +339,37 @@ export function getTopicAppraisalStatus(status: string) {
   }
 }
 
+export function getTopicAppraisalStatus2(status: number) {
+  switch (status) {
+    case 0:
+      return (
+        <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
+          {"Pending"}
+        </Badge>
+      );
+    case 1:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          {"Accepted"}
+        </Badge>
+      );
+    case 2:
+      return (
+        <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
+          {"Considered"}
+        </Badge>
+      );
+    case 3:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          {"Rejected"}
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
 export function getTopicRequestStatus(status: string) {
   switch (status) {
     case "UnderReview":
