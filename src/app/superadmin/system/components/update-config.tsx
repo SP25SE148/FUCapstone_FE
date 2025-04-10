@@ -1,12 +1,13 @@
 "use client"
 
 import type React from "react"
-
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Check, X } from "lucide-react"
+import { useEffect, useState } from "react"
+
 import { cn } from "@/lib/utils"
+
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 interface InputGroupProps {
   label: string
@@ -18,9 +19,9 @@ interface InputGroupProps {
 
 export const InputGroup = ({ label, value, onSave, onCancel, icon }: InputGroupProps) => {
   const [editMode, setEditMode] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [currentValue, setCurrentValue] = useState(value)
   const [originalValue, setOriginalValue] = useState(value) // Store original value
-  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setOriginalValue(value)

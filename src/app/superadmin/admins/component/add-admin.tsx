@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { CirclePlus } from "lucide-react";
 
+import ImportAdmin from "@/app/superadmin/admins/component/add-admin/import-admin";
+import ManuallyAdmin from "@/app/superadmin/admins/component/add-admin/manually-admin";
+
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import ManuallyAdmin from "@/app/superadmin/admins/component/add-admin/manually-admin";
-import ImportAdmin from "@/app/superadmin/admins/component/add-admin/import-admin";
 
 export default function AddAdmin() {
   const [open, setOpen] = useState(false);
@@ -15,10 +16,10 @@ export default function AddAdmin() {
       <DialogTrigger asChild>
         <Button className="m-6">
           <CirclePlus />
-          Add Admin
+          Add
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[800px]">
+      <DialogContent className="max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Add new admins</DialogTitle>
           <DialogDescription>

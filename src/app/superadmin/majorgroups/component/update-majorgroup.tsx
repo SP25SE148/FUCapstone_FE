@@ -1,19 +1,21 @@
 "use client";
 
+import { Pencil } from "lucide-react";
 import { useState, useEffect } from "react";
+
+import { MajorGroup } from "@/types/types";
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
-import { MajorGroup } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
-
 
 export default function UpdateMajorGroup({ majorGroup, open, setOpen }: { majorGroup: MajorGroup, open: boolean, setOpen: (open: boolean) => void }) {
   const { updateMajorGroup } = useMajorGroup();
+  const [isFormValid, setIsFormValid] = useState(false);
   const [majorGroupName, setMajorGroupName] = useState(majorGroup.name);
   const [description, setDescription] = useState(majorGroup.description);
-  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     if (majorGroupName && description) {
@@ -63,6 +65,7 @@ export default function UpdateMajorGroup({ majorGroup, open, setOpen }: { majorG
           </div>
         </div>
         <Button className="w-full mt-4" onClick={handleUpdateMajorGroup} disabled={!isFormValid}>
+          <Pencil />
           Update
         </Button>
       </DialogContent>

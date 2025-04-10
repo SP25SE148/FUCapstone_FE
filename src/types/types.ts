@@ -44,6 +44,14 @@ export interface Semester {
   deletedAt: string | null
 }
 
+export interface MajorGroup {
+  id: string;
+  name: string;
+  description: string;
+  isDeleted: boolean;
+  deletedAt: string | null;
+};
+
 export interface Major {
   id: string,
   majorGroupId: string,
@@ -70,6 +78,16 @@ export interface BusinessArea {
   name: string;
   description: string;
 }
+
+export interface Admin {
+  userId: string;
+  userCode: string;
+  fullName: string;
+  email: string;
+  majorId: string;
+  campusId: string;
+  capstoneId: string;
+};
 
 export interface Manager {
   userId: string
@@ -105,6 +123,20 @@ export interface Student {
   gpa: number;
   businessArea: string;
   isHaveBeenJoinGroup: boolean;
+}
+
+//#endregion
+
+//#region Template Types
+
+export interface Template {
+  id: string;
+  fileUrl: string;
+  fileName: string;
+  isActive: boolean;
+  isFile: boolean;
+  createdBy: string;
+  createdDate: string;
 }
 
 //#endregion

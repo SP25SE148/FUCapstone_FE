@@ -1,25 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-interface MajorGroup {
-  id: string;
-  name: string;
-  description: string;
-  isDeleted: boolean;
-  deletedAt: string | null;
-}
-
-interface Major {
-  id: string;
-  majorGroupId: string;
-  name: string;
-  description: string;
-  isDeleted: boolean;
-  deletedAt: string | null;
-}
+import { useApi } from "@/hooks/use-api";
+import { Major, MajorGroup } from "@/types/types";
 
 interface MajorGroupContextProps {
   majorGroups: MajorGroup[];
@@ -44,8 +29,8 @@ export const SuperadminMajorGroupProvider = ({
   children: React.ReactNode;
 }) => {
   const { callApi } = useApi();
-  const [majorGroups, setMajorGroups] = useState<MajorGroup[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [majorGroups, setMajorGroups] = useState<MajorGroup[]>([]);
 
   const fetchMajorGroupList = async () => {
     setLoading(true);
@@ -56,7 +41,7 @@ export const SuperadminMajorGroupProvider = ({
       setTimeout(() => {
         setMajorGroups(response?.value || []);
         setLoading(false);
-      }, 1000); 
+      }, 1000);
     } catch (error) {
       console.error("Error fetching major group data:", error);
       setLoading(false);
@@ -110,7 +95,7 @@ export const SuperadminMajorGroupProvider = ({
 
     if (response?.isSuccess === true) {
       toast.success("Major updated successfully");
-      getMajorsByMajorGroupId( data.majorGroupId);
+      getMajorsByMajorGroupId(data.majorGroupId);
     }
     return response;
   };

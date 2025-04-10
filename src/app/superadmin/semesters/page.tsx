@@ -1,6 +1,7 @@
-import SemesterOverallStats from "@/app/superadmin/semesters/components/semester-overall-stats";
-import SemesterTable from "@/app/superadmin/semesters/components/semester-table";
 import { SuperadminSemesterProvider } from "@/contexts/superadmin/superadmin-semester-context";
+
+import SemesterTable from "@/app/superadmin/semesters/components/semester-table";
+import SemesterOverallStats from "@/app/superadmin/semesters/components/semester-overall-stats";
 
 export default function SemesterPage() {
   return (

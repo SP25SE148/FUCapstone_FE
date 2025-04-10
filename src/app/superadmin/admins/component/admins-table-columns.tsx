@@ -3,48 +3,13 @@
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { Admin } from "@/types/types";
 
-export type Admin = {
-  userId: string;
-  userCode: string;
-  fullName: string;
-  email: string;
-  majorId: string;
-  campusId: string;
-  capstoneId: string;
-};
+import { Button } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export const columns: ColumnDef<Admin>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "userCode",
     header: ({ column }) => (
@@ -64,15 +29,15 @@ export const columns: ColumnDef<Admin>[] = [
     ),
   },
   {
-    accessorKey: "majorId",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Major ID" />
-    ),
-  },
-  {
     accessorKey: "campusId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Campus ID" />
+    ),
+  },
+  {
+    accessorKey: "majorId",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Major ID" />
     ),
   },
   {
@@ -97,15 +62,12 @@ export const columns: ColumnDef<Admin>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(admin.userId)}
               >
                 Copy Admin ID
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View Admin</DropdownMenuItem>
-              <DropdownMenuItem>Edit Admin</DropdownMenuItem>
-              <DropdownMenuItem>Delete Admin</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

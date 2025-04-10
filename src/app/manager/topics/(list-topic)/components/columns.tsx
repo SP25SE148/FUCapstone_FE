@@ -35,6 +35,18 @@ const AssignAppraisalCell = ({ topic }: { topic: Topic }) => {
 
 export const columns: ColumnDef<Topic>[] = [
   {
+    accessorKey: "code",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Topic Code" />
+    ),
+    cell: ({ row }) => {
+      const topic = row.original;
+      return (
+        <span className="font-medium text-sm">{topic.code}</span>
+      );
+    },
+  },
+  {
     accessorKey: "englishName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="English Name" />
@@ -48,18 +60,6 @@ export const columns: ColumnDef<Topic>[] = [
         >
           {topic.englishName}
         </Link>
-      );
-    },
-  },
-  {
-    accessorKey: "code",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Topic Code" />
-    ),
-    cell: ({ row }) => {
-      const topic = row.original;
-      return (
-        <span className="font-medium text-sm">{topic.code}</span>
       );
     },
   },

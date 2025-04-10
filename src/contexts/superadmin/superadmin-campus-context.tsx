@@ -1,22 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-interface Campus {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-  isDeleted: boolean;
-  createdDate: string;
-  updatedDate: string | null;
-  createdBy: string;
-  updatedBy: string | null;
-  deletedAt: string | null;
-}
+import { Campus } from "@/types/types";
+import { useApi } from "@/hooks/use-api";
 
 interface CampusContextProps {
   campuses: Campus[];
@@ -31,8 +19,8 @@ const SuperadminCampusContext = createContext<CampusContextProps | undefined>(un
 
 export const SuperadminCampusProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
-  const [campuses, setCampuses] = useState<Campus[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [campuses, setCampuses] = useState<Campus[]>([]);
 
   const fetchCampusList = async () => {
     setLoading(true);
@@ -73,7 +61,7 @@ export const SuperadminCampusProvider = ({ children }: { children: React.ReactNo
       body: data,
     });
 
-    if (response?.isSuccess === true) { 
+    if (response?.isSuccess === true) {
       toast.success("Campus updated successfully");
       fetchCampusList();
     }

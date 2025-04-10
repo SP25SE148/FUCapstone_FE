@@ -1,7 +1,9 @@
 "use client";
 
 import { Download, Upload } from "lucide-react";
+
 import { useApi } from "@/hooks/use-api";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -36,7 +38,7 @@ export default function ImportAdmin() {
       <CardFooter className="grid w-full grid-cols-2 gap-4">
         <Button variant={"outline"}>
           <Download />
-          Download template
+          Template
         </Button>
         <Button onClick={importAdminHandler}>
           <Upload />

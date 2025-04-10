@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { CirclePlus } from "lucide-react";
 import { z } from "zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { CirclePlus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useCampus } from "@/contexts/superadmin/superadmin-campus-context";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useCampus } from "@/contexts/superadmin/superadmin-campus-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const formSchema = z.object({
   campusName: z.string().min(1, "Campus Name is required"),
@@ -49,8 +50,8 @@ export default function AddCampus() {
       deletedAt: null,
     };
     await addCampus(data);
-    setOpen(false); 
-    form.reset(); 
+    setOpen(false);
+    form.reset();
   }
 
   function handleDialogClose() {
@@ -74,9 +75,9 @@ export default function AddCampus() {
       }
     }}>
       <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90">
+        <Button className="mr-6">
           <CirclePlus />
-          Add Campus
+          Add
         </Button>
       </DialogTrigger>
       <DialogContent>

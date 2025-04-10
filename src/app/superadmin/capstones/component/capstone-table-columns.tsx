@@ -1,34 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
+import { Capstone } from "@/types/types";
+import { getCapstoneStatus } from "@/utils/statusUtils";
 import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-context";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
 import UpdateCapstone from "@/app/superadmin/capstones/component/update-capstone";
 
-export type Capstone = {
-  id: string;
-  majorId: string;
-  name: string;
-  minMember: number;
-  maxMember: number;
-  reviewCount: number;
-  isDeleted: boolean;
-  deletedAt: string | null;
-};
+import { Button } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
 const ActionsCell = ({ capstone }: { capstone: Capstone }) => {
   const { removeCapstone } = useCapstone();
@@ -49,13 +34,13 @@ const ActionsCell = ({ capstone }: { capstone: Capstone }) => {
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(capstone.id)}
           >
-            Copy Capstone ID
+            Copy capstone ID
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
-            Edit
+            Edit capstone
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
-            Remove
+            Remove capstone
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -97,34 +82,15 @@ const ActionsCell = ({ capstone }: { capstone: Capstone }) => {
 
 export const columns: ColumnDef<Capstone>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Capstone Code" />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
   },
   {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
-    ),
-  },
-  {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Capstone Code" />
     ),
   },
   {
@@ -152,25 +118,18 @@ export const columns: ColumnDef<Capstone>[] = [
     ),
   },
   {
+    accessorKey: "durationWeeks",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Duration Weeks" />
+    ),
+  },
+  {
     accessorKey: "isDeleted",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const capstone = row.original;
-      const status = capstone.isDeleted ? "Inactive" : "Active";
-
-      return (
-        <Badge
-          className={`${
-            status === "Active"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {status}
-        </Badge>
-      );
+      return getCapstoneStatus(row?.original?.isDeleted)
     },
   },
   {

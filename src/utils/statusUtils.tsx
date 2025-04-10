@@ -1,6 +1,117 @@
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle } from "lucide-react";
 
+//#region Campus Status
+
+export function getCampusStatus(status: boolean) {
+  switch (status) {
+    case true:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          Inactive
+        </Badge>
+      );
+    case false:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Active
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
+//#endregion
+
+//#region Semester Status
+
+export function getSemesterStatus(status: boolean) {
+  switch (status) {
+    case true:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          Deleted
+        </Badge>
+      );
+    case false:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Active
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
+//#endregion
+
+//#region Major Status
+
+export function getMajorGroupStatus(status: boolean) {
+  switch (status) {
+    case true:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          Inactive
+        </Badge>
+      );
+    case false:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Active
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
+export function getMajorStatus(status: boolean) {
+  switch (status) {
+    case true:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          Inactive
+        </Badge>
+      );
+    case false:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Active
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
+//#endregion
+
+//#region Capstone Status
+
+export function getCapstoneStatus(status: boolean) {
+  switch (status) {
+    case true:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          Inactive
+        </Badge>
+      );
+    case false:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Active
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
+//#endregion
+
 //#region Student Status
 
 export function getStudentStatus(status: string) {
@@ -377,47 +488,47 @@ export function getDecisionStatus(status: string) {
 //#region Defense Status
 
 export function getDefenseStatus(status: string) {
-    switch (status) {
-        case "NotStarted":
-            return (
-                <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
-                    Not Started
-                </Badge>
-            );
-        case "InProgress":
-            return (
-                <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
-                    In Progress
-                </Badge>
-            );
-        case "Done":
-            return (
-                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
-                    Done
-                </Badge>
-            );
-        default:
-            return null;
-    }
+  switch (status) {
+    case "NotStarted":
+      return (
+        <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
+          Not Started
+        </Badge>
+      );
+    case "InProgress":
+      return (
+        <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
+          In Progress
+        </Badge>
+      );
+    case "Done":
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Done
+        </Badge>
+      );
+    default:
+      return null;
+  }
 }
 
 export function getReDefenseStatus(status: boolean) {
-    switch (status) {
-        case true:
-            return (
-                <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
-                    <CheckCircle className="size-5 mr-2"  />Need redefend
-                </Badge>
-            );
-        case false:
-            return (
-                <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
-                    <XCircle className="size-5 mr-2" />No need
-                </Badge>
-            );
-        default:
-            return null;
-    }
+  switch (status) {
+    case true:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          <CheckCircle className="size-5 mr-2" />Need redefend
+        </Badge>
+      );
+    case false:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          <XCircle className="size-5 mr-2" />No need
+        </Badge>
+      );
+    default:
+      return null;
+  }
 }
 
 //#endregion

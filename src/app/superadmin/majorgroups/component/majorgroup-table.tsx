@@ -1,34 +1,28 @@
 "use client";
 
 import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
-import { DataTable } from "@/components/ui/data-table";
-import { columns } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import AddMajorGroup from "@/app/superadmin/majorgroups/component/add-majorgroup";
+
+import { DataTable } from "@/components/ui/data-table";
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
+import { columns } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 
 export default function MajorGroupTable() {
   const { majorGroups, loading } = useMajorGroup();
 
   return (
     <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="font-semibold tracking-tight text-xl">
-              Major Groups
-            </CardTitle>
-            <CardDescription>List of FPT University Major Groups</CardDescription>
-          </div>
-          <AddMajorGroup />
-        </div>
-      </CardHeader>
+      <div className="flex items-center justify-between">
+        <CardHeader>
+          <CardTitle className="font-semibold tracking-tight text-xl">
+            Major Groups
+          </CardTitle>
+          <CardDescription>List of FPT University Major Groups</CardDescription>
+        </CardHeader>
+        <AddMajorGroup />
+      </div>
       <CardContent>
         {loading ? (
           <SkeletonLoader />

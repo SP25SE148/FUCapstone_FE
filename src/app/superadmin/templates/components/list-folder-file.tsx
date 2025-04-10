@@ -1,5 +1,6 @@
+import { Template } from "@/types/types";
+
 import ItemFolderFile from "./item-folder-file";
-import { Template } from "@/contexts/superadmin/superadmin-template-context";
 
 export default function ListFolderFile({ list }: { list: Template[] }) {
     return (

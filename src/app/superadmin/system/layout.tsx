@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+
 import { SuperadminSystemProvider } from "@/contexts/superadmin/superadmin-system-context";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

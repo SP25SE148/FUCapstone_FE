@@ -6,43 +6,20 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Manager } from "@/types/types"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 
 export const columns: ColumnDef<Manager>[] = [
     {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
+        accessorKey: "userCode",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="User code" />
         ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
     },
     {
         accessorKey: "fullName",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Full name" />
-        ),
-    },
-    {
-        accessorKey: "userCode",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="User code" />
         ),
     },
     {

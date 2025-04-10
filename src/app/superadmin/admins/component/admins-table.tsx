@@ -1,17 +1,13 @@
 "use client";
 
-import { DataTable } from "@/components/ui/data-table";
-import { columns } from "@/app/superadmin/admins/component/admins-table-columns";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import AddAdmin from "@/app/superadmin/admins/component/add-admin";
 import { useAdmin } from "@/contexts/superadmin/superadmin-admin-context";
+
+import AddAdmin from "@/app/superadmin/admins/component/add-admin";
+
+import { DataTable } from "@/components/ui/data-table";
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
+import { columns } from "@/app/superadmin/admins/component/admins-table-columns";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 
 export default function AdminsTable() {
   const { admins, loading } = useAdmin();

@@ -1,43 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import UpdateCampus from "./update-campus";
+
+import { Campus } from "@/types/types";
+import { getCampusStatus } from "@/utils/statusUtils";
 import { useCampus } from "@/contexts/superadmin/superadmin-campus-context";
 
-export type Campus = {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-  isDeleted: boolean;
-  createdDate: string;
-  updatedDate: string | null;
-  createdBy: string;
-  updatedBy: string | null;
-  deletedAt: string | null;
-};
+import UpdateCampus from "./update-campus";
+
+import { Button } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const ActionsCell = ({ campus }: { campus: Campus }) => {
   const { removeCampus } = useCampus();
@@ -58,13 +34,13 @@ const ActionsCell = ({ campus }: { campus: Campus }) => {
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(campus.id)}
           >
-            Copy Campus ID
+            Copy campus ID
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
-            Edit
+            Edit campus
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
-            Remove
+            Remove campus
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -106,34 +82,15 @@ const ActionsCell = ({ campus }: { campus: Campus }) => {
 
 export const columns: ColumnDef<Campus>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Code" />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
   },
   {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
-    ),
-  },
-  {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
     ),
   },
   {
@@ -161,19 +118,7 @@ export const columns: ColumnDef<Campus>[] = [
     ),
     cell: ({ row }) => {
       const campus = row.original;
-      const status = campus.isDeleted ? "Inactive" : "Active";
-
-      return (
-        <Badge
-          className={`${
-            status === "Active"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {status}
-        </Badge>
-      );
+      return getCampusStatus(campus?.isDeleted)
     },
   },
   {

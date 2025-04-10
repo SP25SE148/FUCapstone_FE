@@ -1,15 +1,16 @@
 "use client";
 
-import { CirclePlus } from "lucide-react";
 import { z } from "zod";
+import { CirclePlus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-context";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const formSchema = z.object({
   capstoneId: z.string().min(1, "Capstone ID is required"),
@@ -51,14 +52,15 @@ export default function AddCapstone() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90">
+        <Button className="mr-6">
           <CirclePlus />
-          Add Capstone
+          Add
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add new capstone</DialogTitle>
+          <DialogDescription>Fill information to add new capstone</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
