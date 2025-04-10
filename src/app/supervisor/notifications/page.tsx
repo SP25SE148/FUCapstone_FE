@@ -18,7 +18,7 @@ export default function NotificationsPage() {
   const { user } = useAuth();
   const { connection, unreadedNoti } = useSignalR();
   const [notifications, setNotifications] = useState<any>();
-  const router = useRouter(); // Sử dụng useRouter để chuyển hướng
+  const router = useRouter(); 
 
   useEffect(() => {
     if (!connection || connection.state !== "Connected") return;
@@ -43,13 +43,17 @@ export default function NotificationsPage() {
       case "AssignedAvailableSupervisorForAppraisalEvent":
         router.push("/supervisor/topics/appraisal");
         break;
+
       case "TopicApprovedEvent":
       case "TopicStatusUpdatedEvent":
+      case "NewSupervisorAssignedForTopicEvent":  
         router.push("/supervisor/topics");
         break;
+
       case "TopicRequestCreatedEvent":
         router.push("/supervisor/topics/my-request");
         break;
+
       default:
         console.warn("No route defined for this notification type:", type);
     }
@@ -68,10 +72,7 @@ export default function NotificationsPage() {
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {notifications
-            ?.slice()
-            .reverse()
-            .map((notification: any) => (
+          {notifications?.map((notification: any) => (
               <div
                 key={notification?.id}
                 className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-200 group cursor-pointer"
@@ -83,9 +84,9 @@ export default function NotificationsPage() {
                     <p className="font-semibold transition-all duration-200">
                       {notification?.content}
                     </p>
-                    {/* <p className="font-semibold transition-all duration-200">
+                    <p className="font-semibold transition-all duration-200">
                       {notification?.type}
-                    </p> */}
+                    </p>
                     <p className="text-sm font-medium text-primary  transition-all duration-200">
                       {getTimeElapsed(notification?.createdDate)}
                     </p>

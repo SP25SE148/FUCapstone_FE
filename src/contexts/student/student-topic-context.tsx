@@ -8,7 +8,7 @@ import { BusinessArea, GroupFullInfo, PassedTopic, PassedTopicProp, Topic, Topic
 
 
 
-interface StudentTopicContextProps {
+interface StudentTopicContextProps { 
   passedTopicList: PassedTopic;
   businessAreaList: BusinessArea[];
   topicRequest: TopicRequest | null;
