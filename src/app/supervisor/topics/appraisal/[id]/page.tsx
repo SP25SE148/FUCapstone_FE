@@ -5,7 +5,24 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { BookOpen, Loader2, Send, School, Calendar, FileCheck, PenTool, BriefcaseBusiness, Star, BadgeInfo, FileX, Undo2, BookUser, Users, User2, Scale } from "lucide-react";
+import {
+  BookOpen,
+  Loader2,
+  Send,
+  School,
+  Calendar,
+  FileCheck,
+  PenTool,
+  BriefcaseBusiness,
+  Star,
+  BadgeInfo,
+  FileX,
+  Undo2,
+  BookUser,
+  Users,
+  User2,
+  Scale,
+} from "lucide-react";
 
 import { Topic } from "@/types/types";
 import { useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
@@ -16,18 +33,40 @@ import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import DownloadDocument from "@/app/supervisor/topics/appraisal/[id]/components/download-document";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import GetStatistics from "@/app/supervisor/topics/appraisal/[id]/components/get-statistics";
+import SematicTopic from "@/app/supervisor/topics/appraisal/[id]/components/sematic-topic";
 
 const formSchema = z.object({
-  appraisalContent: z.string()
+  appraisalContent: z
+    .string()
     // .min(10, "Appraisal content must be at least 10 characters long.")
     .max(500, "Appraisal content must not exceed 500 characters.")
     .optional(),
 
-  appraisalComment: z.string()
+  appraisalComment: z
+    .string()
     // .min(5, "Appraisal comment must be at least 5 characters long.")
     .max(200, "Appraisal comment must not exceed 200 characters.")
     .optional(),
@@ -42,11 +81,15 @@ export default function TopicAppraisalDetail() {
   const params = useParams();
   const searchParams = useSearchParams();
   const topicId: string = String(params.id);
-  const topicAppraisalId = searchParams.get('topicAppraisalId');
+  const topicAppraisalId = searchParams.get("topicAppraisalId");
 
   const [topic, setTopic] = useState<Topic>();
   const [isLoading, setIsLoading] = useState(false);
-  const { getTopicAppraisalBySelf, submitAppraisalForSupervisor, fetchTopicsById } = useSupervisorTopicAppraisal();
+  const {
+    getTopicAppraisalBySelf,
+    submitAppraisalForSupervisor,
+    fetchTopicsById,
+  } = useSupervisorTopicAppraisal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,17 +103,17 @@ export default function TopicAppraisalDetail() {
     setIsLoading(true);
     try {
       const data = {
-        "topicAppraisalId": topicAppraisalId,
-        "topicId": topicId,
-        "appraisalContent": values?.appraisalContent,
-        "appraisalComment": values?.appraisalComment,
-        "status": Number(values?.status),
-      }
+        topicAppraisalId: topicAppraisalId,
+        topicId: topicId,
+        appraisalContent: values?.appraisalContent,
+        appraisalComment: values?.appraisalComment,
+        status: Number(values?.status),
+      };
       const res: any = await submitAppraisalForSupervisor(data);
       if (res?.isSuccess) {
         getTopicAppraisalBySelf();
         form.reset();
-        router.back()
+        router.back();
       }
     } finally {
       setIsLoading(false);
@@ -80,26 +123,29 @@ export default function TopicAppraisalDetail() {
   useEffect(() => {
     (async () => {
       const topicDetail = await fetchTopicsById(topicId);
-      setTopic(topicDetail)
+      setTopic(topicDetail);
     })();
-  }, [topicId, topicAppraisalId])
+  }, [topicId, topicAppraisalId]);
 
-  return topic
-    ?
+  return topic ? (
     <Card className="min-h-[calc(100vh-60px)]">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Button className="ml-6" size={"icon"}
-            onClick={() => router.back()}
-          >
+          <Button className="ml-6" size={"icon"} onClick={() => router.back()}>
             <Undo2 />
           </Button>
           <CardHeader>
-            <CardTitle className="font-semibold tracking-tight text-xl text-primary">{topic?.englishName}</CardTitle>
+            <CardTitle className="font-semibold tracking-tight text-xl text-primary">
+              {topic?.englishName}
+            </CardTitle>
             <CardDescription>{topic?.vietnameseName}</CardDescription>
           </CardHeader>
         </div>
-        <DownloadDocument topic={topic} />
+        <div className="flex items-center gap-2">
+          <GetStatistics />
+          <SematicTopic />
+          <DownloadDocument topic={topic} />
+        </div>
       </div>
       <CardContent className="space-y-4">
         <div className="space-y-2">
@@ -120,10 +166,10 @@ export default function TopicAppraisalDetail() {
                     <School className="size-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-sm text-muted-foreground">
-                      Campus
-                    </h3>
-                    <p className="font-semibold tracking-tight">{topic?.campusId}</p>
+                    <h3 className="text-sm text-muted-foreground">Campus</h3>
+                    <p className="font-semibold tracking-tight">
+                      {topic?.campusId}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -131,10 +177,10 @@ export default function TopicAppraisalDetail() {
                     <Calendar className="size-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-sm text-muted-foreground">
-                      Semester
-                    </h3>
-                    <p className="font-semibold tracking-tight">{topic?.semesterId}</p>
+                    <h3 className="text-sm text-muted-foreground">Semester</h3>
+                    <p className="font-semibold tracking-tight">
+                      {topic?.semesterId}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -142,10 +188,10 @@ export default function TopicAppraisalDetail() {
                     <BookOpen className="size-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-sm text-muted-foreground">
-                      Capstone
-                    </h3>
-                    <p className="font-semibold tracking-tight">{topic?.capstoneId}</p>
+                    <h3 className="text-sm text-muted-foreground">Capstone</h3>
+                    <p className="font-semibold tracking-tight">
+                      {topic?.capstoneId}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -156,7 +202,9 @@ export default function TopicAppraisalDetail() {
                     <h3 className="text-sm text-muted-foreground">
                       Topic code
                     </h3>
-                    <p className="font-semibold tracking-tight">{topic?.code}</p>
+                    <p className="font-semibold tracking-tight">
+                      {topic?.code}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -167,7 +215,9 @@ export default function TopicAppraisalDetail() {
                     <h3 className="text-sm text-muted-foreground">
                       Abbreviation
                     </h3>
-                    <p className="font-semibold tracking-tight">{topic?.abbreviation}</p>
+                    <p className="font-semibold tracking-tight">
+                      {topic?.abbreviation}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -178,7 +228,9 @@ export default function TopicAppraisalDetail() {
                     <h3 className="text-sm text-muted-foreground">
                       Business area
                     </h3>
-                    <p className="font-semibold tracking-tight">{topic?.businessAreaName}</p>
+                    <p className="font-semibold tracking-tight">
+                      {topic?.businessAreaName}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -197,16 +249,16 @@ export default function TopicAppraisalDetail() {
                     <BadgeInfo className="size-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-sm text-muted-foreground">
-                      Status
-                    </h3>
+                    <h3 className="text-sm text-muted-foreground">Status</h3>
                     {getTopicStatus(topic?.status)}
                   </div>
                 </div>
               </div>
               <div className="space-y-2">
                 <h3 className="text-sm text-muted-foreground">Description:</h3>
-                <p className="font-semibold tracking-tight text-justify italic">{topic?.description}</p>
+                <p className="font-semibold tracking-tight text-justify italic">
+                  {topic?.description}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -227,8 +279,13 @@ export default function TopicAppraisalDetail() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold"> {topic?.mainSupervisorName}</p>
-                    <p className="text-sm text-muted-foreground">{topic?.mainSupervisorEmail}</p>
+                    <p className="font-semibold">
+                      {" "}
+                      {topic?.mainSupervisorName}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {topic?.mainSupervisorEmail}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -269,16 +326,26 @@ export default function TopicAppraisalDetail() {
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={isLoading}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select evaluation" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value={"1"}><strong className="text-green-600">Accepted</strong></SelectItem>
-                        <SelectItem value={"2"}><strong className="text-blue-600">Considered</strong></SelectItem>
-                        <SelectItem value={"3"}><strong className="text-red-600">Rejected</strong></SelectItem>
+                        <SelectItem value={"1"}>
+                          <strong className="text-green-600">Accepted</strong>
+                        </SelectItem>
+                        <SelectItem value={"2"}>
+                          <strong className="text-blue-600">Considered</strong>
+                        </SelectItem>
+                        <SelectItem value={"3"}>
+                          <strong className="text-red-600">Rejected</strong>
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -326,7 +393,7 @@ export default function TopicAppraisalDetail() {
         </div>
       </CardContent>
     </Card>
-    :
+  ) : (
     <Card className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-gradient-to-tr from-primary/20 to-background">
       <div className="flex flex-col items-center justify-center gap-8">
         <FileX className="size-20 text-primary" />
@@ -340,4 +407,5 @@ export default function TopicAppraisalDetail() {
         </div>
       </div>
     </Card>
+  );
 }

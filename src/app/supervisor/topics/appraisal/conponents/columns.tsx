@@ -10,6 +10,7 @@ import { getTopicAppraisalStatus } from "@/utils/statusUtils"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
+import { Badge } from "@/components/ui/badge"
 
 export const columns: ColumnDef<TopicAppraisal>[] = [
     {
@@ -39,6 +40,20 @@ export const columns: ColumnDef<TopicAppraisal>[] = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="English name" />
         ),
+    },
+    {
+        accessorKey: "attemptTime",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Attempt Time" />
+        ),
+        cell: ({ row }) => {
+            const topicAppraisal = row.original;
+            return topicAppraisal?.attemptTime &&
+                <Badge variant="secondary" className="text-xs font-medium w-1/2 justify-center">
+                    {topicAppraisal?.attemptTime}
+                </Badge>
+            
+        },
     },
     {
         accessorKey: "status",

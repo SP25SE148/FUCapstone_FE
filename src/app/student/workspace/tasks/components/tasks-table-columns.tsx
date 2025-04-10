@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
-import { User, Flag, Calendar, Hash, BarChart, ClipboardList } from "lucide-react";
+import { User, Flag, Calendar, Hash, BarChart, ClipboardList, UserCog2 } from "lucide-react";
 
 import { Task } from "@/types/types";
 
@@ -72,6 +72,12 @@ export const columns: ColumnDef<Task>[] = [
     accessorKey: "summary",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Summary" icon={<ClipboardList className="mr-2 h-4 w-4" />} />
+    ),
+  },
+  {
+    accessorKey: "reporterName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Reporter" icon={<UserCog2 className="mr-2 h-4 w-4" />} />
     ),
   },
   {

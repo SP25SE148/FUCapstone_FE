@@ -14,7 +14,7 @@ interface SupervisorTopicContextType {
   fetchTopicsById: (id: string) => Promise<Topic>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   updateTopic: (topicId: string, data: FormData) => Promise<any>;
-  getStatistics: (id: string) => Promise<Statistic[]>;
+  getStatistics: (id: string) => Promise<Statistic[]>; 
 }
 
 const SupervisorTopicContext = createContext<
@@ -68,6 +68,7 @@ export const SupervisorTopicProvider: React.FC<{
     }
     return response;
   };
+
 
   const updateTopic = async (topicId: string, data: FormData) => {
     const response = await callApi(`fuc/topics/${topicId}`, {

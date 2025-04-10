@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { UserCheck } from "lucide-react";
 
 import { Topic } from "@/types/types";
-import { getTopicAppraisalStatus, getTopicStatus } from "@/utils/statusUtils";
+import { getTopicAppraisalStatus2, getTopicStatus } from "@/utils/statusUtils";
 
 import AssignSupervisor from "@/app/manager/topics/(list-topic)/components/add-assign-appraisal";
 
@@ -92,7 +92,7 @@ export const columns: ColumnDef<Topic>[] = [
       );
 
       return (
-        <div className="space-y-2">
+        <div className="space-y-2 pr-3">
           {latestAppraisals.map((appraisal) => (
             <div
               key={appraisal.topicAppraisalId}
@@ -101,8 +101,9 @@ export const columns: ColumnDef<Topic>[] = [
               <span className="font-medium text-sm">
                 {appraisal.supervisorId}
               </span>
+              -
               <span className="text-sm text-muted-foreground">
-                {getTopicAppraisalStatus(appraisal.status)}
+                {getTopicAppraisalStatus2(appraisal.status)}
               </span>
             </div>
           ))}
