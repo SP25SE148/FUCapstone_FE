@@ -1,21 +1,18 @@
 "use client"
 
 import { z } from "zod"
+import { format } from "date-fns"
+import { Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
+
+import { useSemester } from "@/contexts/superadmin/superadmin-semester-context"
+
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Calendar } from "@/components/ui/calendar"
-import { useSemester } from "@/contexts/superadmin/superadmin-semester-context"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, } from "@/components/ui/dialog"
 
 const formSchema = z
   .object({
@@ -34,7 +31,7 @@ const formSchema = z
     path: ["endDate"],
   })
 
-  export default function UpdateSemester({ semester, open, setOpen }: { semester: any, open: boolean, setOpen: (open: boolean) => void }) {
+export default function UpdateSemester({ semester, open, setOpen }: { semester: any, open: boolean, setOpen: (open: boolean) => void }) {
   const { updateSemester } = useSemester()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -81,11 +78,8 @@ const formSchema = z
         }
       }}
     >
-      {/* <DialogTrigger asChild>
-        <Button variant="ghost" className="px-2 py-1 font-medium">Edit</Button>
-      </DialogTrigger> */}
       <DialogContent className="sm:max-w-[700px] p-6">
-      <DialogHeader>
+        <DialogHeader>
           <DialogTitle className="text-xl font-semibold">Update Semester</DialogTitle>
           <DialogDescription>Update the details of the selected semester.</DialogDescription>
         </DialogHeader>
@@ -128,12 +122,14 @@ const formSchema = z
                   <FormItem className="flex flex-col">
                     <FormLabel className="font-medium">Start Date</FormLabel>
                     <FormControl>
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        initialFocus
-                      />
+                      <div className="border rounded-md p-2 flex justify-center">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          initialFocus
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                     {field.value && (
@@ -149,12 +145,14 @@ const formSchema = z
                   <FormItem className="flex flex-col">
                     <FormLabel className="font-medium">End Date</FormLabel>
                     <FormControl>
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        initialFocus
-                      />
+                      <div className="border rounded-md p-2 flex justify-center">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          initialFocus
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                     {field.value && (
@@ -166,7 +164,8 @@ const formSchema = z
             </div>
 
             <Button className="w-full mt-6" type="submit">
-              Update Semester
+              <Pencil />
+              Update
             </Button>
           </form>
         </Form>

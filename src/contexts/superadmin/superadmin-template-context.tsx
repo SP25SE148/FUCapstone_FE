@@ -1,18 +1,10 @@
 "use client";
 
 import { toast } from "sonner";
-import { useApi } from "@/hooks/use-api";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-export interface Template {
-  id: string;
-  fileUrl: string;
-  fileName: string;
-  isActive: boolean;
-  isFile: boolean;
-  createdBy: string;
-  createdDate: string;
-}
+import { useApi } from "@/hooks/use-api";
+import { Template } from "@/types/types";
 
 interface SuperadminTemplateContextProps {
   isLoading: boolean;

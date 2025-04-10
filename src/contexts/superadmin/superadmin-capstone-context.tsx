@@ -1,26 +1,17 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useApi } from '@/hooks/use-api';
 import { toast } from 'sonner';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface Capstone {
-  id: string;
-  majorId: string;
-  name: string;
-  minMember: number;
-  maxMember: number;
-  reviewCount: number;
-  isDeleted: boolean;
-  deletedAt: string | null;
-}
+import { useApi } from '@/hooks/use-api';
+import { Capstone } from '@/types/types';
 
 interface CapstoneContextProps {
   capstones: Capstone[];
   loading: boolean;
   fetchCapstoneList: () => Promise<void>;
   addCapstone: (data: Capstone) => Promise<void>;
-  updateCapstone: (data: Capstone) => Promise<void>;
+  updateCapstone: (data: any) => Promise<void>;
   removeCapstone: (id: string) => Promise<void>;
 }
 
@@ -28,8 +19,8 @@ const SuperadminCapstoneContext = createContext<CapstoneContextProps | undefined
 
 export const SuperadminCapstoneProvider = ({ children }: { children: React.ReactNode }) => {
   const { callApi } = useApi();
-  const [capstones, setCapstones] = useState<Capstone[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [capstones, setCapstones] = useState<Capstone[]>([]);
 
   const fetchCapstoneList = async () => {
     setLoading(true);
@@ -41,7 +32,7 @@ export const SuperadminCapstoneProvider = ({ children }: { children: React.React
       setTimeout(() => {
         setCapstones(response?.value || []);
         setLoading(false);
-      }, 1000); 
+      }, 1000);
     } catch (error) {
       toast.error("Error fetching capstone data", {
         description: `${error}`,
@@ -64,7 +55,7 @@ export const SuperadminCapstoneProvider = ({ children }: { children: React.React
     return response;
   };
 
-  const updateCapstone = async (data: Capstone) => {
+  const updateCapstone = async (data: any) => {
     const response = await callApi("fuc/AcademicManagement/capstone", {
       method: "PUT",
       body: data,

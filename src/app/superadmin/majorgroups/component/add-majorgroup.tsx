@@ -1,20 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { CirclePlus } from "lucide-react";
+import { useState, useEffect } from "react";
+
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function AddMajorGroup() {
-  const { addMajorGroup } = useMajorGroup(); 
+  const { addMajorGroup } = useMajorGroup();
+
+  const [open, setOpen] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  const [description, setDescription] = useState("");
   const [majorGroupId, setMajorGroupId] = useState("");
   const [majorGroupName, setMajorGroupName] = useState("");
-  const [description, setDescription] = useState("");
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (majorGroupId && majorGroupName && description) {
@@ -39,14 +43,15 @@ export default function AddMajorGroup() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90">
+        <Button className="mr-6">
           <CirclePlus />
-          Add Major Group
+          Add
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add new major group</DialogTitle>
+          <DialogDescription>Fill information to add new major group</DialogDescription>
         </DialogHeader>
         <div className="space-y-2">
           <div className="space-y-1">

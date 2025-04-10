@@ -1,55 +1,27 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
+
+import { Major, MajorGroup } from "@/types/types";
+import { getMajorGroupStatus, getMajorStatus } from "@/utils/statusUtils";
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
+
+import UpdateMajor from "@/app/superadmin/majorgroups/component/update-major";
+import UpdateMajorGroup from "@/app/superadmin/majorgroups/component/update-majorgroup";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
-import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import UpdateMajorGroup from "@/app/superadmin/majorgroups/component/update-majorgroup";
-import UpdateMajor from "@/app/superadmin/majorgroups/component/update-major";
-
-export type MajorGroup = {
-  id: string;
-  name: string;
-  description: string;
-  isDeleted: boolean;
-  deletedAt: string | null;
-};
-
-export type Major = {
-  id: string;
-  majorGroupId: string;
-  name: string;
-  description: string;
-  isDeleted: boolean;
-  deletedAt: string | null;
-};
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
 const ActionsCell = ({ majorGroup }: { majorGroup: MajorGroup }) => {
+  const router = useRouter();
   const { removeMajorGroup } = useMajorGroup();
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
-  const router = useRouter();
 
   return (
     <div className="flex items-center justify-center">
@@ -65,20 +37,20 @@ const ActionsCell = ({ majorGroup }: { majorGroup: MajorGroup }) => {
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(majorGroup.id)}
           >
-            Copy Major Group ID
+            Copy major group ID
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
-            Edit
+            Edit major group
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
-            Remove
+            Remove major group
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
               router.push(`/superadmin/majorgroups/${majorGroup.id}`)
             }
           >
-            View More
+            View more
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -126,7 +98,6 @@ const MajorActionsCell = ({ major }: { major: Major }) => {
   const { removeMajorGroup } = useMajorGroup();
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
-  // const router = useRouter();
 
   return (
     <div className="flex items-center justify-center">
@@ -142,15 +113,15 @@ const MajorActionsCell = ({ major }: { major: Major }) => {
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(major.id)}
           >
-            Copy Major Group ID
+            Copy major ID
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => setUpdateOpen(true)}
+            onClick={() => setUpdateOpen(true)}
           >
-            Edit
+            Edit major
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
-            Remove
+            Remove major
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -192,34 +163,15 @@ const MajorActionsCell = ({ major }: { major: Major }) => {
 
 export const columns: ColumnDef<MajorGroup>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Code" />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
   },
   {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
-    ),
-  },
-  {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
     ),
   },
   {
@@ -244,20 +196,7 @@ export const columns: ColumnDef<MajorGroup>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const majorGroup = row.original;
-      const status = majorGroup.isDeleted ? "Inactive" : "Active";
-
-      return (
-        <Badge
-          className={`${
-            status === "Active"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {status}
-        </Badge>
-      );
+      return getMajorGroupStatus(row?.original?.isDeleted);
     },
   },
   {
@@ -304,20 +243,7 @@ export const majorColumns: ColumnDef<Major>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const major = row.original;
-      const status = major.isDeleted ? "Inactive" : "Active";
-
-      return (
-        <Badge
-          className={`${
-            status === "Active"
-              ? "bg-green-100 text-green-600 hover:bg-green-100"
-              : "bg-red-100 text-red-600 hover:bg-red-100"
-          }`}
-        >
-          {status}
-        </Badge>
-      );
+      return getMajorStatus(row?.original?.isDeleted)
     },
   },
   {

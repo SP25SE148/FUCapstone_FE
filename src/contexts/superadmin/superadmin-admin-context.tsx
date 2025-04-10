@@ -1,18 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-interface Admin {
-  userId: string;
-  userCode: string;
-  fullName: string;
-  email: string;
-  majorId: string;
-  campusId: string;
-  capstoneId: string;
-}
+import { Admin } from "@/types/types";
+import { useApi } from "@/hooks/use-api";
 
 interface AdminContextProps {
   admins: Admin[];

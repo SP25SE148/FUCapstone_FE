@@ -5,11 +5,12 @@ import { useForm } from "react-hook-form";
 import { CirclePlus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useAdmin } from "@/contexts/superadmin/superadmin-admin-context";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAdmin } from "@/contexts/superadmin/superadmin-admin-context";
 
 const formSchema = z.object({
   email: z.string()
@@ -37,10 +38,10 @@ export default function ManuallyAdmin({ setOpen }: { setOpen: (open: boolean) =>
     console.log(values);
     const adminData = {
       ...values,
-      userId: "", 
-      userCode: "", 
-      majorId: "", 
-      capstoneId: "" 
+      userId: "",
+      userCode: "",
+      majorId: "",
+      capstoneId: ""
     };
     await addAdmin(adminData);
     setOpen(false);
@@ -57,7 +58,7 @@ export default function ManuallyAdmin({ setOpen }: { setOpen: (open: boolean) =>
               Fill in admin information as required below
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-4">
+          <CardContent className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
               name="email"
@@ -97,7 +98,7 @@ export default function ManuallyAdmin({ setOpen }: { setOpen: (open: boolean) =>
                 </FormItem>
               )}
             />
-          </CardContent> 
+          </CardContent>
           <CardFooter>
             <Button className="w-full" type="submit">
               <CirclePlus />

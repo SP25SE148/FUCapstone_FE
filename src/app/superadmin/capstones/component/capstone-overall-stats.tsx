@@ -1,7 +1,8 @@
 "use client";
 
-import OverallStats from "@/components/layout/overall-stats";
 import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-context";
+
+import OverallStats from "@/components/layout/overall-stats";
 
 export default function CapstoneOverallStats() {
   const { capstones } = useCapstone();

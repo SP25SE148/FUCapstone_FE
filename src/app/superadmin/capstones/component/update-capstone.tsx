@@ -1,25 +1,17 @@
 "use client";
 
 import { z } from "zod";
+import { Pencil } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Capstone } from "@/types/types";
+import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-context";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useCapstone } from "@/contexts/superadmin/superadmin-capstone-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-
-interface Capstone {
-  id: string;
-  majorId: string;
-  name: string;
-  minMember: number;
-  maxMember: number;
-  reviewCount: number;
-  isDeleted: boolean;
-  deletedAt: string | null;
-}
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const formSchema = z.object({
   capstoneName: z.string().min(1, "Capstone Name is required"),
@@ -143,7 +135,8 @@ export default function UpdateCapstone({
                 )}
               />
             </div>
-            <Button type="submit" className="mt-4">
+            <Button type="submit" className="w-full mt-4">
+              <Pencil />
               Update
             </Button>
           </form>

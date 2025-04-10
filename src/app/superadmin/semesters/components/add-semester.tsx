@@ -1,25 +1,19 @@
 "use client"
 
-import { useState } from "react"
-import { CirclePlus } from "lucide-react"
 import { z } from "zod"
+import { useState } from "react"
+import { format } from "date-fns"
+import { CirclePlus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
+
+import { useSemester } from "@/contexts/superadmin/superadmin-semester-context"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogDescription,
-} from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Calendar } from "@/components/ui/calendar"
-import { useSemester } from "@/contexts/superadmin/superadmin-semester-context"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, } from "@/components/ui/dialog"
 
 const today = new Date()
 today.setHours(0, 0, 0, 0)
@@ -89,9 +83,9 @@ export default function AddSemester() {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90 gap-2">
+        <Button className="mr-6">
           <CirclePlus className="h-4 w-4" />
-          Add Semester
+          Add
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] p-6">
@@ -138,7 +132,7 @@ export default function AddSemester() {
                   <FormItem className="flex flex-col">
                     <FormLabel className="font-medium">Start Date</FormLabel>
                     <FormControl>
-                      <div className="border rounded-md p-2">
+                      <div className="border rounded-md p-2 flex justify-center">
                         <Calendar
                           mode="single"
                           selected={field.value}
@@ -164,7 +158,7 @@ export default function AddSemester() {
                   <FormItem className="flex flex-col">
                     <FormLabel className="font-medium">End Date</FormLabel>
                     <FormControl>
-                      <div className="border rounded-md p-2">
+                      <div className="border rounded-md p-2 flex justify-center">
                         <Calendar
                           mode="single"
                           selected={field.value}
@@ -187,9 +181,9 @@ export default function AddSemester() {
               />
             </div>
 
-            <Button className="w-full mt-6 gap-2 bg-primary hover:bg-primary/90 py-6 text-lg" type="submit">
+            <Button className="w-full" type="submit">
               <CirclePlus className="h-5 w-5" />
-              Add Semester
+              Add
             </Button>
           </form>
         </Form>

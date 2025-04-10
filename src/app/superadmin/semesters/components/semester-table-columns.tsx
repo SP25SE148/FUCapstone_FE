@@ -4,18 +4,15 @@ import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Semester } from "@/types/types";
+import { getDateNoTime } from "@/lib/utils";
+import { getSemesterStatus } from "@/utils/statusUtils";
+
 import UpdateSemester from "@/app/superadmin/semesters/components/update-semester";
+
+import { Button } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
 const ActionsCell = ({ semester }: { semester: Semester }) => {
   const [open, setOpen] = useState(false);
@@ -33,9 +30,11 @@ const ActionsCell = ({ semester }: { semester: Semester }) => {
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(semester.id)}
           >
-            Copy Semester ID
+            Copy semester ID
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            Edit semester
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -65,8 +64,7 @@ export const semesterColumns: ColumnDef<Semester>[] = [
       <DataTableColumnHeader column={column} title="Start Date" />
     ),
     cell: ({ row }) => {
-      const startDate = new Date(row.original.startDate).toLocaleDateString();
-      return <span>{startDate}</span>;
+      return getDateNoTime(row?.original?.startDate);
     },
   },
   {
@@ -75,8 +73,7 @@ export const semesterColumns: ColumnDef<Semester>[] = [
       <DataTableColumnHeader column={column} title="End Date" />
     ),
     cell: ({ row }) => {
-      const endDate = new Date(row.original.endDate).toLocaleDateString();
-      return <span>{endDate}</span>;
+      return getDateNoTime(row?.original?.endDate);
     },
   },
   {
@@ -92,18 +89,7 @@ export const semesterColumns: ColumnDef<Semester>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const isDeleted = row.original.isDeleted;
-      return (
-        <Badge
-          className={`${
-            isDeleted
-              ? "bg-red-100 text-red-600 hover:bg-red-100"
-              : "bg-green-100 text-green-600 hover:bg-green-100"
-          }`}
-        >
-          {isDeleted ? "Deleted" : "Active"}
-        </Badge>
-      );
+      return getSemesterStatus(row?.original?.isDeleted);
     },
   },
   {

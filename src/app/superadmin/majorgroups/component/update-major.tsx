@@ -1,20 +1,23 @@
 "use client";
 
+import { Pencil } from "lucide-react";
 import { useState, useEffect } from "react";
+
+import { Major } from "@/types/types";
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
-import { Major } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
-
-
 
 export default function UpdateMajor({ major, open, setOpen }: { major: Major, open: boolean, setOpen: (open: boolean) => void }) {
   const { updateMajor } = useMajorGroup();
+
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const [majorName, setMajorName] = useState(major.name);
   const [description, setDescription] = useState(major.description);
-  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     if (majorName && description) {
@@ -34,7 +37,7 @@ export default function UpdateMajor({ major, open, setOpen }: { major: Major, op
       deletedAt: major.deletedAt,
     };
     await updateMajor(data);
-    setOpen(false); 
+    setOpen(false);
   };
 
   return (
@@ -65,6 +68,7 @@ export default function UpdateMajor({ major, open, setOpen }: { major: Major, op
           </div>
         </div>
         <Button className="w-full mt-4" onClick={handleUpdateMajor} disabled={!isFormValid}>
+          <Pencil />
           Update
         </Button>
       </DialogContent>

@@ -1,29 +1,18 @@
 "use client";
 
 import { z } from "zod";
+import { toast } from 'sonner';
+import { Pencil } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from 'sonner';
+
+import { Campus } from "@/types/types";
+import { useCampus } from "@/contexts/superadmin/superadmin-campus-context";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useCampus } from "@/contexts/superadmin/superadmin-campus-context";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-
-interface Campus {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-  isDeleted: boolean;
-  createdDate: string;
-  updatedDate: string | null;
-  createdBy: string;
-  updatedBy: string | null;
-  deletedAt: string | null;
-}
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const formSchema = z.object({
   campusName: z.string().min(1, "Campus Name is required"),
@@ -164,6 +153,7 @@ export default function UpdateCampus({
               />
             </div>
             <Button className="w-full mt-4" type="submit">
+              <Pencil />
               Update
             </Button>
           </form>

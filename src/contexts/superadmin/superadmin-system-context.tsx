@@ -1,10 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
-import { SystemConfig } from "@/types/types";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
+import { useApi } from "@/hooks/use-api";
+import { SystemConfig } from "@/types/types";
 
 interface SuperadminSystemContextProps {
   systemConfig: SystemConfig | null;
@@ -37,7 +37,6 @@ export const SuperadminSystemProvider: React.FC<{ children: React.ReactNode }> =
     });
     setSystemConfig(response?.value);
   };
-
 
   const updateMaxTopicsForCoSupervisors = async (data: any) => {
     const response: any = await callApi("fuc/configuration/system/MaxTopicsForCoSupervisors", {
