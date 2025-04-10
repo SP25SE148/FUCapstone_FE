@@ -208,6 +208,21 @@ export interface Topic {
   topicAppraisals: any[];
 }
 
+export interface StatisticItem {
+  analysisTopicId: string,
+  englishName: string,
+  similarity: number
+}
+
+export interface Statistic {
+  analysises: StatisticItem[],
+  over80Ratio: number,
+  over90Ratio: number,
+  createdDate: string,
+  processedBy: string,
+  statusSemantic: string
+}
+
 export interface LookupProp {
   mainSupervisorEmail: string,
   searchTerm: string,

@@ -4,8 +4,8 @@ import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { Topic } from "@/types/types";
 import { useApi } from "../../hooks/use-api";
+import { Statistic, Topic } from "@/types/types";
 
 interface SupervisorTopicContextType {
   topicsOfSupervisor: Topic[];
@@ -14,6 +14,7 @@ interface SupervisorTopicContextType {
   fetchTopicsById: (id: string) => Promise<Topic>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   updateTopic: (topicId: string, data: FormData) => Promise<any>;
+  getStatistics: (id: string) => Promise<Statistic[]>;
 }
 
 const SupervisorTopicContext = createContext<
@@ -58,6 +59,16 @@ export const SupervisorTopicProvider: React.FC<{
     return response;
   };
 
+  const semanticTopicForSupervisorCreateTopic = async (topicId: string) => {
+    const response = await callApi(`fuc/topics/semantic/${topicId}`, {
+      method: "POST",
+    });
+    if (response?.isSuccess === true) {
+      toast.success("Semantic topic successfully");
+    }
+    return response;
+  };
+
   const updateTopic = async (topicId: string, data: FormData) => {
     const response = await callApi(`fuc/topics/${topicId}`, {
       method: "PUT",
@@ -66,8 +77,14 @@ export const SupervisorTopicProvider: React.FC<{
     if (response?.isSuccess === true) {
       toast.success("Update topic successfully");
       await reAppraisalTopicForMainSupervisor(topicId);
+      await semanticTopicForSupervisorCreateTopic(topicId);
     }
     return response;
+  };
+
+  const getStatistics = async (id: string) => {
+    const response = await callApi(`fuc/topics/statistic/${id}`);
+    return (response?.value);
   };
 
   useEffect(() => {
@@ -85,7 +102,8 @@ export const SupervisorTopicProvider: React.FC<{
         fetchTopicsById,
         fetchTopicsOfSupervisor,
         getPresignedUrlTopicDocument,
-        updateTopic
+        updateTopic,
+        getStatistics,
       }}
     >
       {children}
