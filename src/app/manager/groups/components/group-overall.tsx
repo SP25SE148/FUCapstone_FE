@@ -1,7 +1,8 @@
 "use client"
 
-import Overall from "@/app/manager/components/overall";
 import { useManagerGroup } from "@/contexts/manager/manager-group-context";
+
+import Overall from "@/app/manager/components/overall";
 
 export default function GroupOverall() {
     const { groupList } = useManagerGroup();

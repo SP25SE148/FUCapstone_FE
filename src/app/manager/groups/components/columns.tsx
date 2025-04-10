@@ -7,20 +7,12 @@ import { ColumnDef, Row } from "@tanstack/react-table";
 import { GroupFullInfo } from "@/types/types";
 import { getGroupStatus } from "@/utils/statusUtils";
 
-import StudentSelection from "./student-selection";
 import AssignTopic from "./assign-topic";
+import StudentSelection from "./student-selection";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
 function ActionsCell(row: Row<GroupFullInfo>) {
   const group = row.original;
@@ -55,11 +47,9 @@ function ActionsCell(row: Row<GroupFullInfo>) {
             </DropdownMenuItem>
           )}
           {noRegisterTopic && (
-            // <DropdownMenuItem onClick={() => setOpenAddTopic(true)}>
-              <div className="flex items-center gap-2">
-                <AssignTopic GroupId={group.id} />
-              </div>
-            // </DropdownMenuItem>
+            <div className="flex items-center gap-2">
+              <AssignTopic GroupId={group.id} />
+            </div>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
@@ -74,28 +64,6 @@ function ActionsCell(row: Row<GroupFullInfo>) {
 }
 
 export const columns: ColumnDef<GroupFullInfo>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "semesterName",
     header: ({ column }) => (
@@ -117,11 +85,10 @@ export const columns: ColumnDef<GroupFullInfo>[] = [
       const topicCode = row.original.topicCode;
       return (
         <span
-          className={`${
-            topicCode === "undefined"
-              ? "text-red-500 font-semibold capitalize"
-              : ""
-          }`}
+          className={`${topicCode === "undefined"
+            ? "text-red-500 font-semibold capitalize"
+            : ""
+            }`}
         >
           {topicCode}
         </span>

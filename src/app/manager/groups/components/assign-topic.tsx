@@ -1,14 +1,16 @@
 "use client"
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { toast } from "sonner"
+import { useState, useEffect } from "react"
+import { Search, X, Check, FileText } from "lucide-react"
+
+import { useManagerGroup } from "@/contexts/manager/manager-group-context"
+
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { useState, useEffect } from "react"
-import { useManagerGroup } from "@/contexts/manager/manager-group-context"
-import { toast } from "sonner"
-import { Input } from "@/components/ui/input"
-import { Search, X, Check, FileText } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 interface AssignTopicProps {
   GroupId: string
@@ -127,9 +129,8 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
                     {filteredTopics.map((topic) => (
                       <div
                         key={topic.id}
-                        className={`p-4 flex justify-between items-center hover:bg-muted/30 transition-colors ${
-                          selectedTopicId === topic.id ? "bg-primary/5" : ""
-                        }`}
+                        className={`p-4 flex justify-between items-center hover:bg-muted/30 transition-colors ${selectedTopicId === topic.id ? "bg-primary/5" : ""
+                          }`}
                       >
                         <div className="flex-1 min-w-0 pr-4">
                           <p className="font-medium text-primary truncate">{topic.englishName}</p>

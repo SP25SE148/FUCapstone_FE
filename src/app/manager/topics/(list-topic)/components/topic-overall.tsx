@@ -1,7 +1,8 @@
 "use client";
 
-import OverallStats from "@/components/layout/overall-stats";
 import { useManagerTopics } from "@/contexts/manager/manager-topic-context";
+
+import OverallStats from "@/components/layout/overall-stats";
 
 export default function TopicOverall() {
   const { topics } = useManagerTopics();
