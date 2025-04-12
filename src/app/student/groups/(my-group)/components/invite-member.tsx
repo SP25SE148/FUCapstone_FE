@@ -108,9 +108,9 @@ export default function InviteMember() {
                                                     <X />
                                                 </Button>
                                             )}
-                                            {suggestions.length > 0 && (
+                                            {suggestions?.length > 0 && (
                                                 <ul className="absolute z-10 bg-white border mt-1 w-full rounded shadow text-sm max-h-40 overflow-y-auto">
-                                                    {suggestions.map((suggestion) => (
+                                                    {suggestions?.map((suggestion) => (
                                                         <li
                                                             key={suggestion?.id}
                                                             className="px-3 py-4 hover:bg-gray-100 cursor-pointer"
