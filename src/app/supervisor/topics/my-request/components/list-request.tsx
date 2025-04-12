@@ -17,11 +17,12 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 export default function ListRequest() {
     const { requestList, updateTopicRequestStatus } = useSupervisorTopicRequest();
     const [status, setStatus] = useState<number>(0);
+    const [topicRequestId, setTopicRequestId] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openConfirm, setOpenConfirm] = useState<boolean>(false);
     const [openAccordionValues, setOpenAccordionValues] = useState<string[]>([])
 
-    async function handleConfirm(topicRequestId: string) {
+    async function handleConfirm() {
         setIsLoading(true);
         try {
             const res: any = await updateTopicRequestStatus({
@@ -67,54 +68,29 @@ export default function ListRequest() {
                                             {getTopicRequestStatus(request?.status)}
                                             <p className="text-sm text-muted-foreground">{getDate(request?.createdDate)}</p>
                                         </div>
-                                        <>
-                                            {request?.status === "UnderReview" && <div className="flex items-center justify-center gap-2 flex-wrap">
-                                                <Button
-                                                    size={"sm"}
-                                                    onClick={() => {
-                                                        setStatus(2);
-                                                        setOpenConfirm(true);
-                                                    }}
-                                                >
-                                                    Accepted
-                                                </Button>
-                                                <Button
-                                                    size={"sm"}
-                                                    onClick={() => {
-                                                        setStatus(1);
-                                                        setOpenConfirm(true);
-                                                    }}
-                                                    variant={"destructive"}
-                                                >
-                                                    Rejected
-                                                </Button>
-                                            </div>}
-
-                                            <AlertDialog open={openConfirm} onOpenChange={setOpenConfirm}>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                                        <AlertDialogDescription>
-                                                            This action cannot be undone. Please check again before submit.
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel
-                                                            disabled={isLoading}
-                                                        >
-                                                            Cancel
-                                                        </AlertDialogCancel>
-                                                        <AlertDialogAction
-                                                            onClick={() => handleConfirm(request?.topicRequestId)}
-                                                            disabled={isLoading}
-                                                        >
-                                                            {isLoading && <Loader2 className="animate-spin" />}
-                                                            {isLoading ? "Please wait" : "Continue"}
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
-                                        </>
+                                        {request?.status === "UnderReview" && <div className="flex items-center justify-center gap-2 flex-wrap">
+                                            <Button
+                                                size={"sm"}
+                                                onClick={() => {
+                                                    setStatus(2);
+                                                    setTopicRequestId(request?.topicRequestId);
+                                                    setOpenConfirm(true);
+                                                }}
+                                            >
+                                                Accepted
+                                            </Button>
+                                            <Button
+                                                size={"sm"}
+                                                onClick={() => {
+                                                    setStatus(1);
+                                                    setTopicRequestId(request?.topicRequestId);
+                                                    setOpenConfirm(true);
+                                                }}
+                                                variant={"destructive"}
+                                            >
+                                                Rejected
+                                            </Button>
+                                        </div>}
                                     </CardContent>
                                 </Card>
                             ))}
@@ -122,6 +98,32 @@ export default function ListRequest() {
                     </AccordionItem>
                 ))}
             </Accordion>
+
+            {/* Comfirm */}
+            <AlertDialog open={openConfirm} onOpenChange={setOpenConfirm}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. Please check again before submit.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel
+                            disabled={isLoading}
+                        >
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={() => handleConfirm()}
+                            disabled={isLoading}
+                        >
+                            {isLoading && <Loader2 className="animate-spin" />}
+                            {isLoading ? "Please wait" : "Continue"}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </CardContent>
         :
         <CardContent className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)]">
