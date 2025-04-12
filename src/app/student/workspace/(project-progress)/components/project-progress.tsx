@@ -171,15 +171,7 @@ export default function ProjectProgressView() {
                     <h3 className="text-sm text-muted-foreground">
                       Summary from leader:
                     </h3>
-                    <ul className="space-y-2 list-disc list-inside">
-                      {currentProjectProgressWeek?.summary
-                        ?.split("\n")
-                        ?.map((line: string, index: number) => (
-                          <li key={index} className="font-semibold text-sm">
-                            {line}
-                          </li>
-                        ))}
-                    </ul>
+                    <div dangerouslySetInnerHTML={{ __html: currentProjectProgressWeek?.summary || "" }} />
                   </div>
                 </div>
               </div>

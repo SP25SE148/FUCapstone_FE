@@ -48,7 +48,7 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
       Summary: summary,
       AssigneeId: assigneeId,
       ProjectProgressId: projectProgressId,
-      Priority: Number.parseInt(priority, 10),
+      Priority: Number(priority),
       DueDate: dueDate.toISOString(),
     })
     onClose()

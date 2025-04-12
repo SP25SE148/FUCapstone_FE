@@ -10,11 +10,11 @@ import { useSupervisorTopicRegister } from "@/contexts/supervisor/supervisor-top
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { TextEditorField } from "@/components/layout/tiptap-editor";
 
 const difficulties = [
   { value: "0", name: "Easy" },
@@ -200,10 +200,10 @@ export default function RegisterTopicForm() {
               <FormItem className="col-span-2">
                 <FormLabel>Description <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Type description for topic here..."
-                    className="resize-y"
-                    {...field}
+                   <TextEditorField
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />

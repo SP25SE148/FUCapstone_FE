@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { TextEditorField } from "@/components/layout/tiptap-editor";
 
 const formSchema = z.object({
     englishName: z.string().min(1, "English Name is required"),
@@ -167,10 +168,15 @@ export default function UpdateTopicForm() {
                             <FormItem className="col-span-2">
                                 <FormLabel>Description <span className="text-red-500">*</span></FormLabel>
                                 <FormControl>
-                                    <Textarea
+                                    {/* <Textarea
                                         placeholder="Type description for topic here..."
                                         className="resize-y"
                                         {...field}
+                                    /> */}
+                                    <TextEditorField
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        disabled={isLoading}
                                     />
                                 </FormControl>
                                 <FormMessage />
