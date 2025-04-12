@@ -5,12 +5,13 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
 import { useStudentProfile } from "./student-profile-context";
-import { Decision, GroupFullInfo, ProjectProgress } from "@/types/types";
+import { Decision, GroupFullInfo, InviteStudent, ProjectProgress } from "@/types/types";
 
 interface StudentGroupContextType {
   groupInfo: GroupFullInfo | null;
   createGroup: () => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
+  getStudentsForInvite: (searchTerm: string) => Promise<InviteStudent[]>;
   inviteMember: (data: any) => Promise<void>;
   registerGroup: () => Promise<void>;
   updateStatusInvitation: (data: any) => Promise<void>;
@@ -53,6 +54,11 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
       fetchGroupInfo();
     }
     return response;
+  };
+
+  const getStudentsForInvite = async (searchTerm: string) => {
+    const response = await callApi(`fuc/User/students/invitation?searchTerm=${searchTerm}`);
+    return (response?.value);
   };
 
   const inviteMember = async (data: any) => {
@@ -112,6 +118,7 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         groupInfo,
         createGroup,
+        getStudentsForInvite,
         inviteMember,
         registerGroup,
         fetchGroupInfo,
