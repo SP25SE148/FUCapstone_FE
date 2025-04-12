@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, FileX, PenTool, School, Star, Undo2, User2, Users } from "lucide-react";
+import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, FileX, Pencil, PenTool, RefreshCw, School, Star, Undo2, User2, Users } from "lucide-react";
 
 import { Topic } from "@/types/types";
 import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
 
 import { getDate } from "@/lib/utils";
+import { useAuth } from "@/contexts/auth-context";
 import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
 
 import GetStatistics from "./components/get-statistics";
@@ -21,8 +22,11 @@ export default function TopicDetailsPage() {
     const router = useRouter();
     const params = useParams();
     const id: string = String(params.id);
+
+    const { user } = useAuth();
+    const { fetchTopicsById, reAppraisalTopicForMainSupervisor } = useSupervisorTopic();
+
     const [topic, setTopic] = useState<Topic>();
-    const { fetchTopicsById } = useSupervisorTopic();
 
     useEffect(() => {
         (async () => {
@@ -207,6 +211,25 @@ export default function TopicDetailsPage() {
                             </Card>
                         ))}
                     </div>
+                </div>
+
+                <div className="flex justify-end items-center gap-2">
+                    {topic?.status === "Considered" && topic?.mainSupervisorName == user?.name &&
+                        <Button
+                            variant={"outline"}
+                            onClick={() => reAppraisalTopicForMainSupervisor(topic?.id)}
+                            className="border-primary text-primary hover:bg-primary hover:text-white"
+                        >
+                            <RefreshCw />
+                            Reappraisal
+                        </Button>}
+                    {topic?.status !== "Approved" && topic?.mainSupervisorName == user?.name &&
+                        <Button
+                            onClick={() => router.push(`/supervisor/topics/${topic.id}/update`)}
+                        >
+                            <Pencil />
+                            Update
+                        </Button>}
                 </div>
             </CardContent>
         </Card >
