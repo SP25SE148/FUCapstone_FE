@@ -63,7 +63,7 @@ export default function TasksTable() {
         </div>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={tasks.slice().reverse()} />
+        <DataTable columns={columns} data={tasks} />
       </CardContent>
       {showHistory && <TaskHistory onClose={() => setShowHistory(false)} />}
       {showCreateTask && <AddTask onClose={() => setShowCreateTask(false)} />}
