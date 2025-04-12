@@ -34,7 +34,7 @@ export default function UpdatePriority({ task, onClose }: UpdatePriorityProps) {
       await updateTask({
         ...task,
         projectProgressId: projectProgress.id,
-        priority: parseInt(newPriority, 10),
+        priority: Number(newPriority),
       });
     }
 

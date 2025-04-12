@@ -1,17 +1,9 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useStudentTasks } from "@/contexts/student/student-task-context";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-  SheetFooter,
-} from "@/components/ui/sheet";
+import { useState } from "react"
+import { useStudentTasks } from "@/contexts/student/student-task-context"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,15 +13,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from "@/components/ui/alert-dialog"
+import { Separator } from "@/components/ui/separator"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import {
   AlertCircle,
   Calendar,
@@ -40,51 +28,64 @@ import {
   NotebookTabs,
   Send,
   Star,
-} from "lucide-react";
+} from "lucide-react"
+import { TextEditorField } from "@/components/layout/tiptap-editor"
 
 interface LeaderEvaluationSheetProps {
   data: {
-    projectProgressId: string;
-    projectProgressWeekId: string;
-    projectProgressWeek: string;
-  };
-  open: boolean;
-  onClose: () => void;
-  refresh: () => void;
+    projectProgressId: string
+    projectProgressWeekId: string
+    projectProgressWeek: string
+  }
+  open: boolean
+  onClose: () => void
+  refresh: () => void
 }
 
-export default function LeaderEvaluationSheet({
-  data,
-  open,
-  onClose,
-  refresh,
-}: LeaderEvaluationSheetProps) {
-  const { submitSummaryWeekForLeader } = useStudentTasks();
-  const [summary, setSummary] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [openConfirm, setOpenConfirm] = useState<boolean>(false);
-  const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
+export default function LeaderEvaluationSheet({ data, open, onClose, refresh }: LeaderEvaluationSheetProps) {
+  const { submitSummaryWeekForLeader } = useStudentTasks()
+  const [summary, setSummary] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+  const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false)
 
   const handleSubmit = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const requestBody = {
         ProjectProgressId: data.projectProgressId,
         ProjectProgressWeekId: data.projectProgressWeekId,
         Summary: summary,
-      };
-      await submitSummaryWeekForLeader(requestBody);
-      setOpenConfirm(false);
-      onClose();
-      refresh();
+      }
+      await submitSummaryWeekForLeader(requestBody)
+      setOpenConfirm(false)
+      onClose()
+      refresh()
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const minRecommendedLength = 10;
-  const summaryLength = summary.length;
-  const isValidLength = summaryLength >= minRecommendedLength;
+  // Function to count text length without HTML tags
+  const countTextLength = (html: string): number => {
+    // Create a temporary div to hold the HTML
+    const tempDiv = document.createElement("div")
+    tempDiv.innerHTML = html
+    // Get the text content (without HTML tags)
+    const textContent = tempDiv.textContent || tempDiv.innerText || ""
+    return textContent.trim().length
+  }
+
+  const minRecommendedLength = 10
+  const summaryLength = countTextLength(summary)
+  const isValidLength = summaryLength >= minRecommendedLength
+
+  // Function to strip HTML tags for preview
+  const stripHtml = (html: string): string => {
+    const tempDiv = document.createElement("div")
+    tempDiv.innerHTML = html
+    return tempDiv.textContent || tempDiv.innerText || ""
+  }
 
   return (
     <>
@@ -103,8 +104,7 @@ export default function LeaderEvaluationSheet({
                   </Badge>
                 </div>
                 <SheetDescription>
-                  Provide a comprehensive summary of your team's progress for
-                  this week.
+                  Provide a comprehensive summary of your team's progress for this week.
                 </SheetDescription>
               </SheetHeader>
             </div>
@@ -123,28 +123,18 @@ export default function LeaderEvaluationSheet({
                     <div className="text-sm">
                       <p className="font-medium">Important</p>
                       <p className="text-muted-foreground">
-                        Your evaluation will be permanently saved after
-                        submission and cannot be modified later.
+                        Your evaluation will be permanently saved after submission and cannot be modified later.
                       </p>
                     </div>
                   </div>
                   <div className="relative">
-                    <Textarea
-                      placeholder="Describe your team's achievements, challenges, and plans for the upcoming week..."
-                      value={summary}
-                      onChange={(e) => setSummary(e.target.value)}
-                      className="min-h-[200px] resize-none focus-visible:ring-primary"
-                    />
+                    {/* Replace Textarea with TextEditorField */}
+                    <div className="mb-8">
+                      <TextEditorField value={summary} onChange={setSummary} disabled={isLoading} />
+                    </div>
 
                     <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-                      <Badge
-                        variant={
-                          summaryLength < minRecommendedLength
-                            ? "outline"
-                            : "default"
-                        }
-                        className="h-6"
-                      >
+                      <Badge variant={summaryLength < minRecommendedLength ? "outline" : "default"} className="h-6">
                         {summaryLength} / {minRecommendedLength}+ characters
                       </Badge>
                     </div>
@@ -164,18 +154,14 @@ export default function LeaderEvaluationSheet({
                       <span className="font-medium">Writing Tips</span>
                     </div>
                     <ChevronDown
-                      className={`h-4 w-4 transition-transform ${
-                        isCollapsibleOpen ? "transform rotate-180" : ""
-                      }`}
+                      className={`h-4 w-4 transition-transform ${isCollapsibleOpen ? "transform rotate-180" : ""}`}
                     />
                   </div>
                 </CollapsibleTrigger>
                 <Separator />
                 <CollapsibleContent>
                   <div className="p-4 space-y-3">
-                    <p className="text-sm text-muted-foreground">
-                      Consider including the following in your summary:
-                    </p>
+                    <p className="text-sm text-muted-foreground">Consider including the following in your summary:</p>
                     <ul className="space-y-2 text-sm pl-5 list-disc">
                       <li>Key accomplishments and milestones reached</li>
                       <li>Challenges faced and how they were addressed</li>
@@ -190,15 +176,11 @@ export default function LeaderEvaluationSheet({
               <div className="flex items-center justify-between text-sm text-muted-foreground pt-2">
                 <div className="flex items-center gap-2">
                   <NotebookTabs className="h-4 w-4" />
-                  <span>
-                    Project ID: {data.projectProgressId.substring(0, 8)}...
-                  </span>
+                  <span>Project ID: {data.projectProgressId.substring(0, 8)}...</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
-                  <span>
-                    Week ID: {data.projectProgressWeekId.substring(0, 8)}...
-                  </span>
+                  <span>Week ID: {data.projectProgressWeekId.substring(0, 8)}...</span>
                 </div>
               </div>
             </div>
@@ -228,8 +210,7 @@ export default function LeaderEvaluationSheet({
               Confirm Submission
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. Are you sure you want to submit your
-              evaluation?
+              This action cannot be undone. Are you sure you want to submit your evaluation?
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -239,9 +220,7 @@ export default function LeaderEvaluationSheet({
               <span className="font-medium text-sm">Summary Preview</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              {summary.length > 100
-                ? `${summary.substring(0, 100)}...`
-                : summary}
+              {stripHtml(summary).length > 100 ? `${stripHtml(summary).substring(0, 100)}...` : stripHtml(summary)}
             </p>
           </div>
 
@@ -254,5 +233,5 @@ export default function LeaderEvaluationSheet({
         </AlertDialogContent>
       </AlertDialog>
     </>
-  );
+  )
 }

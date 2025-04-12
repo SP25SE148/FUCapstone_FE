@@ -161,7 +161,7 @@ export default function TopicDetailsPage() {
                             </div>
                             <div className="space-y-2">
                                 <h3 className="text-sm text-muted-foreground">Description:</h3>
-                                <p className="font-semibold tracking-tight text-justify italic">{topic?.description}</p>
+                                <div dangerouslySetInnerHTML={{ __html: topic?.description }} />
                             </div>
                         </CardContent>
                     </Card>

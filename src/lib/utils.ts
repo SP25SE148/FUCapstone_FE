@@ -67,3 +67,9 @@ export function getTimeElapsed(dateString: string): string {
   const diffInYears = Math.floor(diffInMonths / 12);
   return `${diffInYears} year(s) ago`;
 }
+
+export function stripHtmlTags(htmlString: string) {
+  const tempElement = document.createElement('div');
+  tempElement.innerHTML = htmlString;
+  return tempElement.textContent || tempElement.innerText || '';
+}
