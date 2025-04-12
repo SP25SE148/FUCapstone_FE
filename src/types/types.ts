@@ -125,6 +125,11 @@ export interface Student {
   isHaveBeenJoinGroup: boolean;
 }
 
+export interface InviteStudent {
+  id: string;
+  email: string;
+}
+
 //#endregion
 
 //#region Template Types
