@@ -1,13 +1,16 @@
 "use client";
 
 import React from "react";
-import StudentTaskbar from "@/app/student/components/student-taskbar";
+
 import { StudentProfileProvider } from "@/contexts/student/student-profile-context";
+
+import Info from "./components/info";
+import StudentTaskbar from "@/app/student/components/student-taskbar";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode; 
+  children: React.ReactNode;
 }) {
 
   return (
@@ -17,6 +20,7 @@ export default function RootLayout({
         <div className="ml-[68px]">
           {children}
         </div>
+        <Info />
       </div>
     </StudentProfileProvider>
   );

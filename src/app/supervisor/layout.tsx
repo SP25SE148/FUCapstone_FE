@@ -2,6 +2,7 @@
 
 import React from "react";
 
+import Info from "./components/info";
 import SupervisorTaskbar from "./components/supervisor-taskbar";
 
 export default function Layout({
@@ -15,6 +16,7 @@ export default function Layout({
             <div className="ml-[68px]">
                 {children}
             </div>
+            <Info />
         </div>
     );
 }   

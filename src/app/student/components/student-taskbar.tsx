@@ -1,12 +1,12 @@
-import { Home, Users, LayoutGrid, Bell, FileText, ClipboardCheck, ShieldCheck } from 'lucide-react'
+import { Users, LayoutGrid, FileText, ClipboardCheck, ShieldCheck, BookUser } from 'lucide-react'
 
 import { Taskbar } from "@/components/layout/app-taskbar";
 
 export default function StudentTaskbar() {
   const taskbarItems = [
     {
-      icon: Home,
-      label: "Annoucements",
+      icon: BookUser,
+      label: "Informations",
       href: "/student/home",
     },
     {
