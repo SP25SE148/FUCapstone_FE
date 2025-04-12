@@ -30,6 +30,9 @@ import { useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-to
 import { getDate } from "@/lib/utils";
 import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
 
+import SematicTopic from "@/app/supervisor/topics/appraisal/[id]/components/sematic-topic";
+import GetStatistics from "@/app/supervisor/topics/appraisal/[id]/components/get-statistics";
+
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -55,26 +58,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import GetStatistics from "@/app/supervisor/topics/appraisal/[id]/components/get-statistics";
-import SematicTopic from "@/app/supervisor/topics/appraisal/[id]/components/sematic-topic";
 
 const formSchema = z.object({
   appraisalContent: z
     .string()
-    // .min(10, "Appraisal content must be at least 10 characters long.")
     .max(500, "Appraisal content must not exceed 500 characters.")
     .optional(),
 
   appraisalComment: z
     .string()
-    // .min(5, "Appraisal comment must be at least 5 characters long.")
     .max(200, "Appraisal comment must not exceed 200 characters.")
     .optional(),
 
   status: z.enum(["1", "2", "3"], {
     errorMap: () => ({ message: "Please select evaluation" }),
   }),
-});
+}).refine(
+  (data) => {
+    // Nếu status là 2 hoặc 3, thì appraisalComment phải có giá trị
+    if (data.status === "2" || data.status === "3") {
+      return !!data.appraisalComment?.trim();
+    }
+    return true;
+  },
+  {
+    path: ["appraisalComment"],
+    message: "Appraisal comment is required when status is 'Considered' or 'Rejected'",
+  }
+);
 
 export default function TopicAppraisalDetail() {
   const router = useRouter();
