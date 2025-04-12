@@ -7,34 +7,11 @@ import { getDate } from "@/lib/utils"
 import { TopicAppraisal } from "@/types/types"
 import { getTopicAppraisalStatus } from "@/utils/statusUtils"
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 
 export const columns: ColumnDef<TopicAppraisal>[] = [
-    {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: "topicEnglishName",
         header: ({ column }) => (
@@ -52,7 +29,7 @@ export const columns: ColumnDef<TopicAppraisal>[] = [
                 <Badge variant="secondary" className="text-xs font-medium w-1/2 justify-center">
                     {topicAppraisal?.attemptTime}
                 </Badge>
-            
+
         },
     },
     {
