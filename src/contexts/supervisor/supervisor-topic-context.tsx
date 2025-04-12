@@ -14,7 +14,8 @@ interface SupervisorTopicContextType {
   fetchTopicsById: (id: string) => Promise<Topic>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   updateTopic: (topicId: string, data: FormData) => Promise<any>;
-  getStatistics: (id: string) => Promise<Statistic[]>; 
+  getStatistics: (id: string) => Promise<Statistic[]>;
+  reAppraisalTopicForMainSupervisor: (topicId: string) => Promise<any>;
 }
 
 const SupervisorTopicContext = createContext<
@@ -77,7 +78,6 @@ export const SupervisorTopicProvider: React.FC<{
     });
     if (response?.isSuccess === true) {
       toast.success("Update topic successfully");
-      await reAppraisalTopicForMainSupervisor(topicId);
       await semanticTopicForSupervisorCreateTopic(topicId);
     }
     return response;
@@ -105,6 +105,7 @@ export const SupervisorTopicProvider: React.FC<{
         getPresignedUrlTopicDocument,
         updateTopic,
         getStatistics,
+        reAppraisalTopicForMainSupervisor
       }}
     >
       {children}

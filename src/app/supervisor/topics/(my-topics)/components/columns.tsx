@@ -12,33 +12,11 @@ import { getDate } from "@/lib/utils"
 import { getTopicStatus } from "@/utils/statusUtils"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
+import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context"
 
 export const columns: ColumnDef<Topic>[] = [
-    {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: "capstoneId",
         header: ({ column }) => (
@@ -100,6 +78,7 @@ export const columns: ColumnDef<Topic>[] = [
             const { user } = useAuth();
             const router = useRouter();
             const topic = row.original;
+            const { reAppraisalTopicForMainSupervisor } = useSupervisorTopic();
             return (
                 <div className="flex items-center justify-center">
                     <DropdownMenu >
@@ -117,10 +96,15 @@ export const columns: ColumnDef<Topic>[] = [
                             >
                                 View details
                             </DropdownMenuItem>
-                            {topic?.status == "Considered" && topic?.mainSupervisorName == user?.name && <DropdownMenuItem
+                            {topic?.status !== "Approved" && topic?.mainSupervisorName == user?.name && <DropdownMenuItem
                                 onClick={() => router.push(`topics/${topic.id}/update`)}
                             >
                                 Update topic
+                            </DropdownMenuItem>}
+                            {topic?.status === "Considered" && topic?.mainSupervisorName == user?.name && <DropdownMenuItem
+                                onClick={() => reAppraisalTopicForMainSupervisor(topic?.id)}
+                            >
+                                Reappraisal topic
                             </DropdownMenuItem>}
                         </DropdownMenuContent>
                     </DropdownMenu>
