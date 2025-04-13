@@ -382,6 +382,13 @@ export interface TaskRequest {
   DueDate: string;
 }
 
+export interface FucTaskHistory {
+  id: string,
+  taskId: string,
+  content: string,
+  createdDate: string
+}
+
 export interface Task {
   id: string;
   keyTask: string;
@@ -398,7 +405,7 @@ export interface Task {
   projectProgressId: string | null;
   lastUpdatedDate: string | null;
   completionDate: string | null;
-  fucTaskHistories: []
+  fucTaskHistories: FucTaskHistory[]
 }
 
 export interface DashBoardFucTask {

@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, PenTool, School, Star, Undo2, User2, Users } from "lucide-react";
+import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, LayoutList, PenTool, School, Star, Undo2, User2, Users } from "lucide-react";
 
 import { GroupFullInfo, Member } from "@/types/types";
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import { getDate } from "@/lib/utils";
 import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
+
+import DownloadDocument from "./components/download-document";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -31,12 +33,12 @@ export default function GroupInfoPage() {
         })();
     }, [])
 
-    return (
+    return groupTopicInfo &&
         <Card className="min-h-[calc(100vh-60px)]">
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <Button className="ml-6" size={"icon"}
-                        onClick={() => router.back()}
+                        onClick={() => router.push("/supervisor/groups")}
                     >
                         <Undo2 />
                     </Button>
@@ -44,6 +46,15 @@ export default function GroupInfoPage() {
                         <CardTitle className="font-semibold tracking-tight text-xl text-primary">{groupTopicInfo?.topicResponse?.englishName}</CardTitle>
                         <CardDescription>{groupTopicInfo?.topicResponse?.vietnameseName}</CardDescription>
                     </CardHeader>
+                </div>
+                <div className="flex items-center gap-2">
+                    <DownloadDocument topic={groupTopicInfo?.topicResponse} />
+                    <Button className="mr-6"
+                        onClick={() => router.push(`/supervisor/groups/${id}/project-progress`)}
+                    >
+                        <LayoutList />
+                        Project Progress
+                    </Button>
                 </div>
             </div>
             <CardContent className="space-y-4">
@@ -247,6 +258,5 @@ export default function GroupInfoPage() {
                     </div>
                 </div>
             </CardContent>
-        </Card>
-    );
+        </Card>;
 }

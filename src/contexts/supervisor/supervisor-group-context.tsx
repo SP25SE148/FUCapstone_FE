@@ -11,6 +11,7 @@ interface SupervisorGroupContextType {
   groupList: GroupShortInfo[];
   coGroupList: GroupShortInfo[];
   getTopicGroupInformation: (groupId: string) => Promise<GroupFullInfo>;
+  getPresignedUrlTopicDocument: (id: string) => Promise<string>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   getProjectProgressTemplate: () => Promise<string>;
   importProjectProgress: (data: any) => Promise<void>;
@@ -52,6 +53,11 @@ export const SupervisorGroupProvider: React.FC<{
 
   const getTopicGroupInformation = async (groupId: string) => {
     const response = await callApi(`fuc/group/${groupId}`);
+    return (response?.value);
+  };
+
+  const getPresignedUrlTopicDocument = async (id: string) => {
+    const response = await callApi(`fuc/topics/presigned/${id}`);
     return (response?.value);
   };
 
@@ -180,6 +186,7 @@ export const SupervisorGroupProvider: React.FC<{
         groupList,
         coGroupList,
         getTopicGroupInformation,
+        getPresignedUrlTopicDocument,
         getProjectProgressOfGroup,
         getProjectProgressTemplate,
         importProjectProgress,

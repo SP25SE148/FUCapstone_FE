@@ -420,6 +420,60 @@ export function getProjectProgressWeekStatus(status: number) {
 
 //#endregion
 
+//#region Task Status
+
+export function getTaskStatus(status: number) {
+  switch (status) {
+    case 0:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Done
+        </Badge>
+      );
+    case 1:
+      return (
+        <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
+          In Progress
+        </Badge>
+      );
+    case 2:
+      return (
+        <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
+          To Do
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
+export function getPriorityStatus(status: number) {
+  switch (status) {
+    case 0:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          High
+        </Badge>
+      );
+    case 1:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Medium
+        </Badge>
+      );
+    case 2:
+      return (
+        <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
+          Low
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
+//#endregion
+
 //#region Review Status
 
 export function getReviewCalendarStatus(status: string) {

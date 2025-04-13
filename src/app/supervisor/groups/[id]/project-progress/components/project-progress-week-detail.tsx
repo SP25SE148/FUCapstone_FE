@@ -61,7 +61,7 @@ export default function ProjectProgressWeekDetail({ projectProgressId, currentPr
                 ?
                 <UpdateProjectProgressWeek projectProgressId={projectProgressId} currentProjectProgressWeek={currentProjectProgressWeek} refresh={refresh} onClose={() => { setOpenEditWeek(false) }} />
                 :
-                <div className="space-y-4 max-h-[calc(100%-52px)] overflow-y-scroll">
+                <div className="space-y-4 max-h-[calc(100%-52px)] overflow-y-auto">
                     <h4 className="text-sm text-muted-foreground">
                         Meeting location: <span className="font-semibold text-sm text-foreground">{currentProjectProgressWeek?.meetingLocation}</span>
                     </h4>
