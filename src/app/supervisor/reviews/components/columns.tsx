@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Eye } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { getDate } from "@/lib/utils";
@@ -84,19 +85,23 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
     id: "action",
     cell: ({ row }) => {
       const reviewCalendar = row.original;
-      return reviewCalendar?.status !== "Done" && <Button asChild size={"sm"}>
-        <Link
-          href={{
-            pathname: `/supervisor/reviews/${reviewCalendar?.id}`,
-            query: {
-              groupId: `${reviewCalendar?.groupId}`,
-              attempt: `${reviewCalendar?.attempt}`
-            }
-          }}
+      return reviewCalendar?.status === "InProgress" &&
+        <Button
+          asChild
+          size={"icon"}
         >
-          Review
-        </Link>
-      </Button>;
+          <Link
+            href={{
+              pathname: `/supervisor/reviews/${reviewCalendar?.id}`,
+              query: {
+                groupId: `${reviewCalendar?.groupId}`,
+                attempt: `${reviewCalendar?.attempt}`
+              }
+            }}
+          >
+            <Eye />
+          </Link>
+        </Button>;
     },
   }
 ];

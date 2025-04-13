@@ -152,7 +152,7 @@ export default function GroupInfoPage() {
                             </div>
                             <div className="space-y-2">
                                 <h3 className="text-sm text-muted-foreground">Description:</h3>
-                                <p className="font-semibold tracking-tight text-justify italic">{groupTopicInfo?.topicResponse?.description}</p>
+                                <div dangerouslySetInnerHTML={{ __html: groupTopicInfo?.topicResponse?.description || "" }} />
                             </div>
                         </CardContent>
                     </Card>

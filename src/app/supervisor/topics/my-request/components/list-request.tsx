@@ -9,6 +9,7 @@ import { getTopicRequestStatus } from "@/utils/statusUtils";
 import { useSupervisorTopicRequest } from "@/contexts/supervisor/supervisor-topic-request-context";
 
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
@@ -17,6 +18,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 export default function ListRequest() {
     const { requestList, updateTopicRequestStatus } = useSupervisorTopicRequest();
     const [status, setStatus] = useState<number>(0);
+    const [reason, setReason] = useState<string>("");
     const [topicRequestId, setTopicRequestId] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openConfirm, setOpenConfirm] = useState<boolean>(false);
@@ -27,7 +29,8 @@ export default function ListRequest() {
         try {
             const res: any = await updateTopicRequestStatus({
                 TopicRequestId: topicRequestId,
-                Status: status
+                Status: status,
+                Reason: reason
             });
         } finally {
             setStatus(0);
@@ -60,8 +63,8 @@ export default function ListRequest() {
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div>
-                                                <p className="font-semibold text-primary"><Link className="text-primary underline underline-offset-2 font-bold hover:text-blue-400" href={`/supervisor/topics/my-request/group-info/${request?.groupId}`}>{request.groupCode}</Link> - Average GPA: {request.gpa}</p>
-                                                <p className="text-sm text-muted-foreground">Leader: {request?.leaderFullName} - {request.requestedBy}</p>
+                                                <p className="font-semibold text-primary"><Link className="text-primary underline underline-offset-2 font-bold hover:text-blue-400" href={`/supervisor/topics/my-request/group-info/${request?.groupId}`}>{request?.groupCode}</Link> - Average GPA: {request?.gpa?.toFixed(2)}</p>
+                                                <p className="text-sm text-muted-foreground">Leader: {request?.leaderFullName} - {request?.requestedBy}</p>
                                             </div>
                                         </div>
                                         <div className="text-right space-y-2">
@@ -108,6 +111,11 @@ export default function ListRequest() {
                             This action cannot be undone. Please check again before submit.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
+                    {status === 1 && <Textarea
+                        placeholder="Type your reason here."
+                        value={reason}
+                        onChange={(e) => setReason(e.target.value)}
+                    />}
                     <AlertDialogFooter>
                         <AlertDialogCancel
                             disabled={isLoading}
