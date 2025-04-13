@@ -5,63 +5,14 @@ import { useParams, useRouter } from "next/navigation";
 import { AlignLeft, ClipboardList, Clock, History, Undo2 } from "lucide-react";
 
 import { Task } from "@/types/types";
-import { getDate } from "@/lib/utils";
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
-import { Badge } from "@/components/ui/badge";
+import { getDate } from "@/lib/utils";
+import { getPriorityStatus, getTaskStatus } from "@/utils/statusUtils";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-const getStatus = (status: number | undefined) => {
-    switch (status) {
-        case 0:
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Done
-                </Badge>
-            );
-        case 1:
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    In Progress
-                </Badge>
-            );
-        case 2:
-            return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                    To Do
-                </Badge>
-            );
-        default:
-            return null;
-    }
-}
-
-const getPriority = (status: number | undefined) => {
-    switch (status) {
-        case 0:
-            return (
-                <Badge variant="secondary" className="select-none bg-rose-200 text-rose-800 hover:bg-rose-200">
-                    High
-                </Badge>
-            );
-        case 1:
-            return (
-                <Badge variant="secondary" className="select-none bg-green-200 text-green-800 hover:bg-green-200">
-                    Medium
-                </Badge>
-            );
-        case 2:
-            return (
-                <Badge variant="secondary" className="select-none bg-blue-200 text-blue-800 hover:bg-blue-200">
-                    Low
-                </Badge>
-            );
-        default:
-            return null;
-    }
-}
 
 export default function TaskDetailPage() {
     const { getProjectProgressTaskDetail } = useSupervisorGroup();
@@ -77,7 +28,7 @@ export default function TaskDetailPage() {
         })();
     }, [taskId])
 
-    return (
+    return task &&
         <Card className="min-h-[calc(100vh-60px)]">
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -87,7 +38,7 @@ export default function TaskDetailPage() {
                         <Undo2 />
                     </Button>
                     <CardHeader>
-                        <CardTitle className="font-semibold tracking-tight text-xl text-primary flex items-center gap-4">{task?.keyTask}{getStatus(task?.status)}</CardTitle>
+                        <CardTitle className="font-semibold tracking-tight text-xl text-primary flex items-center gap-4">{task?.keyTask}{getTaskStatus(task?.status)}</CardTitle>
                         <CardDescription>Task ID: {task?.id}</CardDescription>
                     </CardHeader>
                 </div>
@@ -183,7 +134,7 @@ export default function TaskDetailPage() {
                             </h3>
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-muted-foreground">Status</span>
-                                {getStatus(task?.status)}
+                                {getTaskStatus(task?.status)}
                             </div>
                             <Separator />
                             <div className="flex justify-between items-center">
@@ -198,27 +149,31 @@ export default function TaskDetailPage() {
                             <Separator />
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-muted-foreground">Priority</span>
-                                {getPriority(task?.priority)}
+                                {getPriorityStatus(task?.priority)}
                             </div>
                             <Separator />
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-muted-foreground">Due date</span>
-                                <span className="text-sm font-semibold tracking-tight">{getDate(task && task?.dueDate || "")}</span>
+                                <span className="text-sm font-semibold tracking-tight">{task?.dueDate && getDate(task?.dueDate)}</span>
                             </div>
                             <Separator />
                             <div className="flex justify-between items-center">
                                 <span className="text-sm text-muted-foreground">Created date</span>
-                                <span className="text-sm font-semibold tracking-tight">{getDate(task && task.createdDate || "")}</span>
+                                <span className="text-sm font-semibold tracking-tight">{task?.createdDate && getDate(task.createdDate)}</span>
                             </div>
                             <Separator />
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-muted-foreground w-24">Updated date</span>
-                                <span className="text-sm font-semibold tracking-tight">{task?.lastUpdatedDate && getDate(task && task.lastUpdatedDate || "")}</span>
+                                <span className="text-sm text-muted-foreground">Updated date</span>
+                                <span className="text-sm font-semibold tracking-tight">{task?.lastUpdatedDate && getDate(task.lastUpdatedDate)}</span>
+                            </div>
+                            <Separator />
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm text-muted-foreground">Completion date</span>
+                                <span className="text-sm font-semibold tracking-tight">{task?.completionDate && getDate(task.completionDate)}</span>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
             </CardContent>
-        </Card>
-    )
+        </Card>;
 }

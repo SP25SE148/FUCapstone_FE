@@ -23,6 +23,7 @@ export default function ProjectProgressPage() {
     const params = useParams();
     const id: string = String(params.id);
     const [isRefresh, setIsRefresh] = useState<boolean>(false);
+    const [currentWeekNumber, setCurrentWeekNumber] = useState<number>(0);
     const [projectProgress, setProjectProgress] = useState<ProjectProgress>();
     const [currentProjectProgressWeek, setCurrentProjectProgressWeek] = useState<ProjectProgressWeek | null>();
 
@@ -30,7 +31,8 @@ export default function ProjectProgressPage() {
         (async () => {
             const projectProgressDetail = await getProjectProgressOfGroup(id);
             setProjectProgress(projectProgressDetail);
-            setCurrentProjectProgressWeek(null);
+            const currentWeek = projectProgressDetail?.projectProgressWeeks?.find((x) => x?.weekNumber === currentWeekNumber)
+            setCurrentProjectProgressWeek(currentWeek);
         })();
     }, [isRefresh])
 
@@ -73,6 +75,7 @@ export default function ProjectProgressPage() {
                                         key={index}
                                         className="bg-primary/5 cursor-pointer hover:bg-primary/20"
                                         onClick={() => {
+                                            setCurrentWeekNumber(projectProgressWeek?.weekNumber)
                                             setCurrentProjectProgressWeek(projectProgressWeek)
                                         }}
                                     >
@@ -103,7 +106,10 @@ export default function ProjectProgressPage() {
                                     projectProgressId={projectProgress?.id}
                                     currentProjectProgressWeek={currentProjectProgressWeek}
                                     refresh={() => { setIsRefresh(!isRefresh) }}
-                                    onClose={() => { setCurrentProjectProgressWeek(null) }}
+                                    onClose={() => {
+                                        setCurrentProjectProgressWeek(null);
+                                        setCurrentWeekNumber(0);
+                                    }}
                                 />
                                 :
                                 <div className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)] rounded-xl border bg-card text-card-foreground shadow">
