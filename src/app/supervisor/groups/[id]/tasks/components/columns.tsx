@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
-import { User, Flag, Calendar, Hash, BarChart, ClipboardList, CalendarCheck, UserCog } from "lucide-react";
+import { User, Flag, Calendar, Hash, BarChart, ClipboardList, CalendarCheck, UserCog, CalendarPlus2 } from "lucide-react";
 
 import { Task } from "@/types/types";
 import { getDate } from "@/lib/utils";
@@ -55,18 +55,25 @@ export const columns: ColumnDef<Task>[] = [
         cell: ({ row }) => getPriorityStatus(row.original?.priority),
     },
     {
+        accessorKey: "createdDate",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Create Date" icon={<CalendarPlus2 />} />
+        ),
+        cell: ({ row }) => row.original?.createdDate && getDate(row.original?.createdDate),
+    },
+    {
         accessorKey: "dueDate",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Due Date" icon={<Calendar />} />
         ),
-        cell: ({ row }) => getDate(row.original?.dueDate),
+        cell: ({ row }) => row.original?.dueDate && getDate(row.original?.dueDate),
     },
     {
         accessorKey: "completionDate",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Completion Date" icon={<CalendarCheck />} />
         ),
-        cell: ({ row }) => getDate(row.original?.completionDate || ""),
+        cell: ({ row }) => row.original?.completionDate && getDate(row.original?.completionDate),
     },
 ];
 
