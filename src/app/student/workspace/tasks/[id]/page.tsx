@@ -25,6 +25,7 @@ import UpdateStatus from "@/app/student/workspace/tasks/components/update-status
 import AssignTask from "@/app/student/workspace/tasks/components/assign-task";
 import UpdatePriority from "@/app/student/workspace/tasks/components/update-priority";
 import UpdateDueDate from "@/app/student/workspace/tasks/components/update-duedate";
+import { Task } from "@/types/types";
 
 const getStatusBadge = (status: number) => {
   switch (status) {
@@ -51,8 +52,8 @@ const getStatusBadge = (status: number) => {
 export default function TaskDetailPage() {
   const { id } = useParams();
   const { getTaskDetail, updateTask } = useStudentTasks();
-  const [task, setTask] = useState<any | null>(null);
-  const [originalTask, setOriginalTask] = useState<any | null>(null); // Store original values
+  const [task, setTask] = useState<Task | null>(null);
+  const [originalTask, setOriginalTask] = useState<Task | null>(null); // Store original values
   const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
   const [showCommentInput, setShowCommentInput] = useState(false);
@@ -60,6 +61,7 @@ export default function TaskDetailPage() {
   const [isEditingSummary, setIsEditingSummary] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const haveUpdateDate = task?.lastUpdatedDate === null; 
+  const haveCompletionDate = task?.completionDate === null; 
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -397,6 +399,13 @@ export default function TaskDetailPage() {
                 Updated
               </span>
               <span className="text-sm">{haveUpdateDate ? "Not yet" : getDate(task.lastUpdatedDate)}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground w-24">
+              Completion Date
+              </span>
+              <span className="text-sm">{haveCompletionDate ? "Not yet" : getDate(task.completionDate)}</span>
             </div>
           </CardContent>
         </Card>
