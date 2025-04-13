@@ -451,6 +451,7 @@ export interface ReviewCriteria {
 export interface ResultDetail {
   suggestion: string | undefined,
   comment: string | undefined,
+  isReview: boolean,
   author: string
 }
 

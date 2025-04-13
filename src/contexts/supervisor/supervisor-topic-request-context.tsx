@@ -10,7 +10,7 @@ import { TopicRequest } from "@/types/types";
 interface SupervisorTopicRequestContextType {
   requestList: TopicRequest;
   getGroupById: (id: string) => Promise<any>
-  updateTopicRequestStatus: (data: { TopicRequestId: string, Status: number }) => Promise<any>
+  updateTopicRequestStatus: (data: { TopicRequestId: string, Status: number, Reason: string }) => Promise<any>
 }
 
 const SupervisorTopicRequestContext = createContext<SupervisorTopicRequestContextType | undefined>(undefined);
@@ -33,7 +33,7 @@ export const SupervisorTopicRequestProvider: React.FC<{
     return (response.value);
   }
 
-  const updateTopicRequestStatus = async (data: { TopicRequestId: string, Status: number }) => {
+  const updateTopicRequestStatus = async (data: { TopicRequestId: string, Status: number, Reason: string }) => {
     const response = await callApi(`fuc/User/update-topic-request-status`, {
       method: "PUT",
       body: data,

@@ -10,10 +10,12 @@ import { BadgeInfo, BookOpen, BookText, BookUser, BriefcaseBusiness, Calendar, C
 import { getDate } from "@/lib/utils";
 import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
 
+import { useAuth } from "@/contexts/auth-context";
 import { GroupFullInfo, Member, ReviewCriteria, ReviewResult } from "@/types/types";
 import { useSupervisorReview } from "@/contexts/supervisor/supervisor-review-context";
 
 import ResultDetails from "./components/result-details";
+import ReviewCriteriaList from "./components/review-criteria";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,6 +34,7 @@ const formSchema = z.object({
 });
 
 export default function DefenseTopicDetail() {
+  const { user } = useAuth();
   const { getGroupById, getReviewResultByGroupId, getReviewCriteria, updateReviewSuggestionAndComment } = useSupervisorReview();
 
   const router = useRouter();
@@ -40,14 +43,18 @@ export default function DefenseTopicDetail() {
   const searchParams = useSearchParams();
   const groupId = searchParams.get("groupId");
   const attempt = searchParams.get("attempt");
+
   const [showMore, setShowMore] = useState<boolean>(false);
-  const [showReviewResults, setShowReviewResults] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showReviewResults, setShowReviewResults] = useState<boolean>(false);
+
   const [results, setResults] = useState<ReviewResult[]>();
   const [groupTopicInfo, setGroupTopicInfo] = useState<GroupFullInfo>();
   const [reviewCriteria, setReviewCriteria] = useState<ReviewCriteria[]>([]);
   const leaderInfo = groupTopicInfo?.groupMemberList?.find((x: Member) => x.isLeader == true)
   const memberList = groupTopicInfo?.groupMemberList?.filter((x: Member) => x.isLeader == false)
+  const currentReview = results?.find((x) => x?.attempt == Number(attempt))
+  const currentReviewer = currentReview?.reviewCalendarResultDetailList?.find((x) => x.author == user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -94,7 +101,7 @@ export default function DefenseTopicDetail() {
         console.error("Error fetching data:", error);
       }
     })();
-  }, [])
+  }, []);
 
   return (
     <Card className="min-h-[calc(100vh-60px)]">
@@ -221,7 +228,7 @@ export default function DefenseTopicDetail() {
               </div>
               <div className="space-y-2">
                 <h3 className="text-sm text-muted-foreground">Description:</h3>
-                <p className="font-semibold tracking-tight text-justify italic">{groupTopicInfo?.topicResponse?.description}</p>
+                <div dangerouslySetInnerHTML={{ __html: groupTopicInfo?.topicResponse?.description || "" }} />
               </div>
             </CardContent>
           </Card>
@@ -326,70 +333,56 @@ export default function DefenseTopicDetail() {
         </div>}
 
         {/* Review Criteria */}
-        <div className="space-y-2">
-          <h3 className="font-semibold flex items-center gap-2">
-            <BookText className="size-4 text-primary" />
-            Review Criteria
-          </h3>
-          <Card className="bg-primary/5">
-            <CardContent className="p-6 grid grid-cols-2 gap-4">
-              {reviewCriteria?.map((criteria: ReviewCriteria, index: number) => (
-                <p key={index} className="font-semibold tracking-tight text-justify">
-                  {index + 1}. {criteria?.name}: <span className="text-sm text-muted-foreground">{criteria?.description}</span><br />
-                  - {criteria?.requirement}
-                </p>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
+        <ReviewCriteriaList reviewCriteria={reviewCriteria} />
 
         {/* My Review */}
-        <div className="space-y-2">
-          <h3 className="font-semibold flex items-center gap-2">
-            <Scale className="size-4 text-primary" />
-            My Review:
-          </h3>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="comment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Type your comment here..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="suggestion"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Type your suggestion here..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex items-center justify-end">
-                <Button type="submit">
-                  {isLoading ? <Loader2 className="animate-spin" /> : <Send />}
-                  Send
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
+        {!currentReviewer?.isReview &&
+          <div className="space-y-2">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Scale className="size-4 text-primary" />
+              My Review:
+            </h3>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="comment"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Type your comment here..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="suggestion"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Type your suggestion here..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex items-center justify-end">
+                  <Button type="submit">
+                    {isLoading ? <Loader2 className="animate-spin" /> : <Send />}
+                    Send
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>}
       </CardContent>
     </Card>
   );
