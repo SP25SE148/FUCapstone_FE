@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Task } from "@/types/types";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
@@ -16,12 +16,19 @@ interface UpdatePriorityProps {
 const priorityOptions = [
   { value: "0", label: "High", color: "bg-red-100 text-red-600" },
   { value: "1", label: "Medium", color: "bg-yellow-100 text-yellow-600" },
-  { value: "2", label: "Low", color: "bg-blue-100 text-blue-600" },
+  { value: "2", label: "Low", color: "bg-green-100 text-green-600" },
 ];
 
 export default function UpdatePriority({ task, onClose }: UpdatePriorityProps) {
-  const [priority, setPriority] = useState<string>(task.priority.toString());
+  const [priority, setPriority] = useState<string>("");
   const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
+
+  useEffect(() => {
+    if (task.priority !== null) {
+      setPriority(task.priority.toString());
+    }
+  }, [task]);
+  
 
   const handleUpdate = async (newPriority: string) => {
     setPriority(newPriority);

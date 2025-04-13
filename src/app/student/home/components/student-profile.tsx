@@ -1,6 +1,20 @@
 "use client";
 
-import { AlertCircle, BookOpen, Building, GraduationCap, Mail, User, Briefcase, BarChart, CheckCircle2, Users, Check, X } from "lucide-react";
+import {
+  AlertCircle,
+  BookOpen,
+  Building,
+  GraduationCap,
+  Mail,
+  User,
+  Briefcase,
+  BarChart,
+  CheckCircle2,
+  Users,
+  Check,
+  X,
+  CheckCircleIcon,
+} from "lucide-react";
 import type React from "react";
 import { useState, useEffect } from "react";
 import { useStudentProfile } from "@/contexts/student/student-profile-context";
@@ -9,8 +23,21 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getStudentStatus } from "@/utils/statusUtils";
@@ -62,7 +89,7 @@ export default function StudentProfile() {
   };
 
   const isFormValid = businessArea && GPA >= 5 && GPA <= 10 && confirmAccuracy;
-  const canConfirm = businessArea && GPA >= 5 && GPA <= 10
+  const canConfirm = businessArea && GPA >= 5 && GPA <= 10;
 
   if (loading) {
     return (
@@ -76,35 +103,18 @@ export default function StudentProfile() {
 
   return (
     <Card className="min-h-[calc(100vh-16px)] w-full max-w-full mx-auto shadow-lg">
-       <CardHeader className="border-b">
+      <CardHeader className="border-b">
         <div className="flex justify-between items-center">
           <CardTitle className="font-bold tracking-tight text-2xl text-primary">
             {showUpdateForm ? (
               <span className="flex items-center">
-                Update your personal information <span className="text-red-500 ml-2">(Compulsory)</span>
+                Update your personal information{" "}
+                <span className="text-red-500 ml-2">(Compulsory)</span>
               </span>
             ) : (
               "Student Profile"
             )}
           </CardTitle>
-          <div className="flex items-center gap-3">
-          {getStudentStatus(studentProfile?.status || "")}
-            <div className="flex items-center gap-2">
-              <Badge
-                variant={studentProfile?.isHaveBeenJoinGroup ? "outline" : "secondary"}
-                className="flex items-center gap-1"
-              >
-                <Users className="h-4 w-4" />
-                Have Group:
-                {studentProfile?.isHaveBeenJoinGroup ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <X className="h-4 w-4 text-red-500" />
-                )}
-              </Badge>
-            </div>
-          </div>
-          
         </div>
         <CardDescription>
           {showUpdateForm
@@ -123,7 +133,7 @@ export default function StudentProfile() {
               </CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="pt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <CardContent className="pt-4 grid grid-cols-1 md:grid-cols-5 gap-6">
             <div>
               <Label className="text-sm text-muted-foreground">
                 Student ID
@@ -141,6 +151,36 @@ export default function StudentProfile() {
               <div className="flex items-center gap-2 mt-1">
                 <Mail className="h-4 w-4 text-muted-foreground" />
                 <p className="font-medium">{studentProfile?.email}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <div>
+                <Label className="text-sm text-muted-foreground">
+                  Have Group
+                </Label>
+                <div className="flex items-center gap-2 mt-1">
+                  {studentProfile?.isHaveBeenJoinGroup ? (
+                    <>
+                      <p className="font-medium">Yes</p>
+                      <CheckCircleIcon className="h-6 w-6 text-green-500" />
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-medium">No</p>
+                      <X className="h-6 w-6 text-red-500" />
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <div>
+                <Label className="text-sm text-muted-foreground">Status</Label>
+                <div className="flex items-center gap-2 mt-1">
+                  {getStudentStatus(studentProfile?.status || "")}
+                </div>
               </div>
             </div>
           </CardContent>
@@ -263,7 +303,9 @@ export default function StudentProfile() {
                 <Checkbox
                   id="confirmAccuracy"
                   checked={confirmAccuracy}
-                  onCheckedChange={(checked) => setConfirmAccuracy(checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    setConfirmAccuracy(checked as boolean)
+                  }
                   disabled={!canConfirm}
                 />
                 <label
@@ -272,7 +314,8 @@ export default function StudentProfile() {
                     !canConfirm ? "text-muted-foreground" : ""
                   }`}
                 >
-                  I confirm that all information provided is accurate and correct
+                  I confirm that all information provided is accurate and
+                  correct
                 </label>
               </div>
             )}

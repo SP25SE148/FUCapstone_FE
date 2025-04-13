@@ -14,7 +14,6 @@ import {
   User,
 } from "lucide-react";
 
-import { getTopicRequestStatus } from "@/utils/statusUtils";
 import { useStudentTopics } from "@/contexts/student/student-topic-context";
 import { useStudentProfile } from "@/contexts/student/student-profile-context";
 
@@ -68,7 +67,6 @@ export default function TopicTable() {
   const { studentProfile } = useStudentProfile();
   const {
     passedTopicList,
-    topicRequest,
     groupInfo,
     businessAreaList,
     fetchPassedTopic,
@@ -146,12 +144,6 @@ export default function TopicTable() {
     };
     fetchPassedTopic(data);
   }, [pageNumber]);
-
-  const underReviewRequests = topicRequest
-    ? Object.entries(topicRequest).filter(([key, value]) =>
-        value.some((request) => request.status === "UnderReview")
-      )
-    : [];
 
   return !studentProfile?.isHaveBeenJoinGroup ||
     groupInfo?.status !== "InProgress" ? (
@@ -334,84 +326,8 @@ export default function TopicTable() {
             </Form>
           </Card>
         )}
-{underReviewRequests.length > 0 && (
-          <div className="border border-primary/20 rounded-lg overflow-hidden shadow-sm bg-gradient-to-r from-primary/5 to-transparent">
-            <div className="px-4 py-3 border-b border-primary/20">
-              <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
-                <ClipboardCheck className="h-5 w-5" />
-                Your Topic Requests
-              </h3>
-            </div>
-            <div className="divide-y divide-primary/10">
-              {underReviewRequests.map(([key, requests]) => (
-                <div key={key} className="p-4">
-                  {requests
-                    .filter((request) => request.status === "UnderReview")
-                    .map((request) => (
-                      <div
-                        key={request.topicRequestId}
-                        className="grid grid-cols-2 lg:grid-cols-5  gap-4 p-2 rounded-lg"
-                      >
-                        <div className="col-span-1 lg:col-span-2 flex items-center gap-4">
-                          <div className="bg-primary/10 p-2 rounded-full">
-                            <BookOpen className="size-5 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="text-sm text-muted-foreground">
-                              Topic Name
-                            </h3>
-                            <p className="font-semibold tracking-tight">
-                              {request.topicEnglishName}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                          <div className="bg-primary/10 p-2 rounded-full">
-                            <FileCheck className="size-5 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="text-sm text-muted-foreground">
-                              Topic code
-                            </h3>
-                            <p className="font-semibold tracking-tight">
-                              {request.topicCode}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                          <div className="bg-primary/10 p-2 rounded-full">
-                            <User className="size-5 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="text-sm text-muted-foreground">
-                              Supervisor
-                            </h3>
-                            <p className="font-semibold tracking-tight">
-                              {request.supervisorFullName}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                          <div className="bg-primary/10 p-2 rounded-full">
-                            <BadgeInfo className="size-5 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="text-sm text-muted-foreground">
-                              Status
-                            </h3>
-                            {getTopicRequestStatus(request?.status)}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        
+        
         {passedTopicList?.items?.length <= 0 && (
           <Card className="p-8 flex items-center justify-center bg-muted/50 border-dashed border-2">
             <div className="flex flex-col items-center justify-center gap-6 py-8">

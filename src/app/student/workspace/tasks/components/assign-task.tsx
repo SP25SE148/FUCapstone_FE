@@ -15,7 +15,7 @@ interface AssignTaskProps {
 export default function AssignTask({ task, onAssign }: AssignTaskProps) {
   const { groupInfo, updateTask, getProjectProgressOfGroup } = useStudentTasks();
   const [students, setStudents] = useState<{ studentId: string; studentFullName: string }[]>([]);
-  const [assignedTo, setAssignedTo] = useState<string>(task.assigneeId || "");
+  const [assignedTo, setAssignedTo] = useState<string>("");
 
   useEffect(() => {
     if (groupInfo?.groupMemberList) {
@@ -28,6 +28,13 @@ export default function AssignTask({ task, onAssign }: AssignTaskProps) {
       setStudents(acceptedStudents);
     }
   }, [groupInfo]);
+
+  useEffect(() => {
+    if (task.assigneeId) {
+      setAssignedTo(task.assigneeId);
+    }
+  }, [task]);
+  
 
   const handleAssign = async (value: string) => {
     setAssignedTo(value);

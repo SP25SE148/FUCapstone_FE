@@ -77,19 +77,21 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
         description: response.value.description,
         assigneeId: response.value.assigneeId,
         reporterId: response.value.reporterId,
+        reporterName: user?.name || "",
         status: response.value.status,
         priority: response.value.priority,
         dueDate: response.value.dueDate,
         createdDate: response.value.createdDate,
         projectProgressId: null,
         assigneeName: "",
-        reporterName: user?.name || "",
         lastUpdatedDate: null,
         completionDate: null,
         fucTaskHistories: []
       };
 
-      setTasks((prevTasks) => [ newTask, ...prevTasks]);
+      setTasks((prevTasks) => [newTask, ...prevTasks]);
+      console.log("new task: ", newTask);
+      console.log("tasks: ", tasks);
     } else {
       toast.error("Failed to create task");
     }
