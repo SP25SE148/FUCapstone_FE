@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { useApi } from "../../hooks/use-api";
 import { BusinessArea, GroupFullInfo, PassedTopic, PassedTopicProp, Topic, TopicRequest } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 
 
@@ -42,6 +43,7 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [groupInfo, setGroupInfo] = useState<GroupFullInfo | null>(null);
   const [topicRequest, setTopicRequest] = useState<TopicRequest | null>(null);
   const [businessAreaList, setBusinessAreaList] = useState<BusinessArea[]>([]);
+  const router = useRouter();
 
   const fetchPassedTopic = async (data: PassedTopicProp) => {
     const response = await callApi(`fuc/group/get-available-topics?MainSupervisorEmail=${data?.mainSupervisorEmail}&SearchTerm=${data?.searchTerm}&DifficultyLevel=${data?.difficultyLevel}&BusinessAreaId=${data?.businessAreaId}&PageNumber=${data?.pageNumber}&PageSize=10`);
@@ -81,6 +83,7 @@ export const StudentTopicProvider: React.FC<{ children: React.ReactNode }> = ({ 
         pageNumber: "1",
       });
       fetchTopicRequest();
+      router.push("/student/topics/topic-request");
     }
   };
 

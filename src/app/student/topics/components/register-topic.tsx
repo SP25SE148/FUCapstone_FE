@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 interface RegisterTopicProps {
-  topicId: any;
-  groupId: any;
+  topicId: string;
+  groupId: string;
 }
 
 export default function RegisterTopic({ topicId, groupId }: RegisterTopicProps) {
