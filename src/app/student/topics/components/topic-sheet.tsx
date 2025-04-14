@@ -215,7 +215,7 @@ export default function TopicSheet({ topic, open, onClose }: TopicSheetProps) {
                 Close
               </Button>
             </SheetClose>
-            {isLeader && !hasRegisteredTopic && (
+            {isLeader && !hasRegisteredTopic && groupInfo?.id &&  (
               <RegisterTopic topicId={topic.id} groupId={groupInfo?.id} />
             )}
           </div>
