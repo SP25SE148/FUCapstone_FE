@@ -273,6 +273,7 @@ export interface RequestsOfTopic {
   requestedBy: string;
   gpa: number;
   leaderFullName: string;
+  reason: string;
   createdDate: string
 }
 
