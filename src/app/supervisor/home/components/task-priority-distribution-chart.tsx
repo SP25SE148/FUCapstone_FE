@@ -47,6 +47,10 @@ export default function TaskPriorityDistributionChart() {
     Low: distribution?.Low || 0,
   }));
 
+  const hasMeaningfulData = chartData.some(
+    (item) => item.High !== 0 || item.Medium !== 0 || item.Low !== 0
+  )
+
   return (
     <Card className="transition-all duration-200 hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -58,7 +62,7 @@ export default function TaskPriorityDistributionChart() {
           <AlertTriangle className="h-6 w-6 text-orange-500" />
         </div>
       </CardHeader>
-      {chartData ?
+      {hasMeaningfulData ?
         <CardContent className="pt-4">
           <ChartContainer config={chartConfig} className="h-[350px] w-full">
             <BarChart data={chartData}>
@@ -86,7 +90,7 @@ export default function TaskPriorityDistributionChart() {
           </ChartContainer>
         </CardContent>
         :
-        <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+        <CardContent className="flex flex-col items-center justify-center h-[280px] text-center text-muted-foreground space-y-2">
           <AlertTriangle className="h-10 w-10 text-orange-500" />
           <p className="text-sm font-medium">No task priority distribution yet</p>
           <p className="text-xs">Once there's data, it will be shown here.</p>

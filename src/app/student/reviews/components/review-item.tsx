@@ -57,9 +57,9 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                                             <Clock className="size-5 text-primary" />
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-muted-foreground">Slot</h3>
+                                            <h3 className="text-sm text-muted-foreground">Time</h3>
                                             <p className="font-semibold tracking-tight">
-                                                {calendar?.slot}
+                                                {calendar?.time}
                                             </p>
                                         </div>
                                     </div>

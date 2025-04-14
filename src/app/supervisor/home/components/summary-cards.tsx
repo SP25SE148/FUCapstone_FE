@@ -72,7 +72,7 @@ export default function SummaryCards() {
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Best Performing Group */}
             <Card className="overflow-hidden border-0 shadow-md bg-gradient-to-br from-amber-400/40 to-background">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b">
@@ -109,7 +109,7 @@ export default function SummaryCards() {
                         {renderGroupStats(highest)}
                     </CardContent>
                     :
-                    <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+                    <CardContent className="flex flex-col items-center justify-center h-[280px] text-center text-muted-foreground space-y-2">
                         <Trophy className="h-10 w-10 text-amber-300" />
                         <p className="text-sm font-medium">No best performing group yet</p>
                         <p className="text-xs">Once there's data, it will be shown here.</p>
@@ -152,7 +152,7 @@ export default function SummaryCards() {
                         {renderGroupStats(lowest)}
                     </CardContent>
                     :
-                    <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+                    <CardContent className="flex flex-col items-center justify-center h-[280px] text-center text-muted-foreground space-y-2">
                         <AlarmClock className="h-10 w-10 text-blue-500" />
                         <p className="text-sm font-medium">No lowest overdue group yet</p>
                         <p className="text-xs">Once there's data, it will be shown here.</p>

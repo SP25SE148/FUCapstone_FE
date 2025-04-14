@@ -16,6 +16,10 @@ export default function AverageTaskDurationChart() {
         duration: duration ? Number((Number(duration) * 24).toFixed(2)) : 0, // convert from days to hours
     }))
 
+    const hasMeaningfulData = durationsData.some(
+        (item) => item.duration !== 0
+    )
+
     const chartConfig = {
         duration: {
             label: "Average",
@@ -34,7 +38,7 @@ export default function AverageTaskDurationChart() {
                     <Timer className="h-5 w-5 text-primary" />
                 </div>
             </CardHeader>
-            {durationsData ?
+            {hasMeaningfulData ?
                 < CardContent className="pt-4">
                     <ChartContainer config={chartConfig} className="h-[400px] w-full">
                         <BarChart data={durationsData}>
@@ -58,7 +62,7 @@ export default function AverageTaskDurationChart() {
                     </ChartContainer>
                 </CardContent>
                 :
-                <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+                <CardContent className="flex flex-col items-center justify-center h-[280px] text-center text-muted-foreground space-y-2">
                     <Timer className="h-10 w-10 text-primary" />
                     <p className="text-sm font-medium">No average task completion time yet</p>
                     <p className="text-xs">Once there's data, it will be shown here.</p>

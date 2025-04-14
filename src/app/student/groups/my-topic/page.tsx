@@ -147,9 +147,7 @@ export default function MyTopicPage() {
                 <h3 className="text-sm text-muted-foreground">
                   Description:
                 </h3>
-                <p className="font-semibold tracking-tight text-justify italic">
-                  {groupInfo?.topicResponse?.description}
-                </p>
+                <div dangerouslySetInnerHTML={{ __html: groupInfo?.topicResponse?.description }} />
               </div>
             </CardContent>
           </Card>

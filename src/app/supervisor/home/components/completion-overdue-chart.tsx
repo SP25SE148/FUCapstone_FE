@@ -25,6 +25,10 @@ export default function CompletionOverdueChart() {
     overdue: dashboard?.overdueTaskRatios?.[code] ?? 0,
   }))
 
+  const hasMeaningfulData = mergedData.some(
+    (item) => item.completion !== 0 || item.overdue !== 0
+  )
+
   const chartConfig = {
     completion: {
       label: "Completion",
@@ -47,7 +51,7 @@ export default function CompletionOverdueChart() {
           <Trophy className="h-5 w-5 text-amber-500" />
         </div>
       </CardHeader>
-      {mergedData ?
+      {hasMeaningfulData ?
         <CardContent className="pt-4">
           <ChartContainer config={chartConfig} className="h-[400px] w-full">
             <BarChart data={mergedData}>
@@ -78,7 +82,7 @@ export default function CompletionOverdueChart() {
           </ChartContainer>
         </CardContent>
         :
-        <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+        <CardContent className="flex flex-col items-center justify-center h-[280px] text-center text-muted-foreground space-y-2">
           <Trophy className="h-10 w-10 text-amber-300" />
           <p className="text-sm font-medium">No completion & overdue rate comparison yet</p>
           <p className="text-xs">Once there's data, it will be shown here.</p>
