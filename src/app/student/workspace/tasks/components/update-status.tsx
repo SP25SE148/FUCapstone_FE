@@ -35,6 +35,7 @@ export default function UpdateStatus({ task, onClose }: UpdateStatusProps) {
         ...task,
         projectProgressId: projectProgress.id,
         status: parseInt(newStatus, 10),
+        completionDate: newStatus === "0" ? new Date().toISOString() : null,
       });
     }
 
