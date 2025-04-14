@@ -1,70 +1,78 @@
-"use client"
+"use client";
 
-import { toast } from "sonner"
-import { useState, useEffect } from "react"
-import { Search, X, Check, FileText } from "lucide-react"
+import { toast } from "sonner";
+import { useState, useEffect } from "react";
+import { Search, X, Check, FileText, ChevronLeft, ChevronRight } from "lucide-react";
 
-import { useManagerGroup } from "@/contexts/manager/manager-group-context"
+import { useManagerGroup } from "@/contexts/manager/manager-group-context";
 
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface AssignTopicProps {
-  GroupId: string
+  GroupId: string;
 }
 
 export default function AssignTopic({ GroupId }: AssignTopicProps) {
-  const { fetchTopics, assignPendingTopicForGroup } = useManagerGroup()
-  const [open, setOpen] = useState<boolean>(false)
-  const [topicPending, setTopicPending] = useState<any[]>([])
-  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState<string>("")
-  const [filteredTopics, setFilteredTopics] = useState<any[]>([])
+  const { passedTopicList, fetchPassedTopic, assignPendingTopicForGroup } = useManagerGroup();
+  const [open, setOpen] = useState<boolean>(false);
+  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function handleOpen() {
-    const topics = await fetchTopics()
-    setTopicPending(topics)
-    setFilteredTopics(topics)
-    setOpen(true)
+    setOpen(true);
+    await fetchTopics();
+  }
+
+  async function fetchTopics() {
+    setIsLoading(true);
+    const data = {
+      searchTerm: searchQuery,
+      mainSupervisorEmail: "all",
+      difficultyLevel: "all",
+      businessAreaId: "all",
+      pageNumber: String(pageNumber),
+    };
+    await fetchPassedTopic(data);
+    setIsLoading(false);
   }
 
   async function handleAssign() {
     if (!selectedTopicId) {
-      toast.error("Please select a topic to assign.")
-      return
+      toast.error("Please select a topic to assign.");
+      return;
     }
 
     await assignPendingTopicForGroup({
       TopicId: selectedTopicId,
       GroupId,
-    })
+    });
 
-    setOpen(false)
+    setOpen(false);
   }
 
   useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredTopics(topicPending)
-    } else {
-      const filtered = topicPending.filter(
-        (topic) =>
-          topic.englishName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          topic.code.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
-      setFilteredTopics(filtered)
+    if (open) {
+      fetchTopics();
     }
-  }, [searchQuery, topicPending])
+  }, [pageNumber, searchQuery]);
 
   const clearSelection = () => {
-    setSelectedTopicId(null)
-  }
+    setSelectedTopicId(null);
+  };
 
   return (
     <>
-      <Button variant="ghost" className="px-1 pl-2 font-normal w-full items-start justify-start" onClick={handleOpen} >
+      <Button
+        variant="ghost"
+        className="px-1 pl-2 font-normal w-full items-start justify-start"
+        onClick={handleOpen}
+      >
         Add Topic
       </Button>
 
@@ -85,7 +93,7 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search topics by name or code..."
+                  placeholder="Search topics by name..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 w-full"
@@ -102,7 +110,12 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
                 )}
               </div>
               {selectedTopicId && (
-                <Button variant="outline" size="sm" onClick={clearSelection} className="flex items-center gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearSelection}
+                  className="flex items-center gap-1"
+                >
                   <X className="h-3.5 w-3.5" />
                   Clear Selection
                 </Button>
@@ -114,26 +127,33 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
                 <div className="flex justify-between items-center">
                   <div className="text-sm font-medium">Available Topics</div>
                   <Badge variant="outline" className="bg-primary/10">
-                    {filteredTopics.length} topics
+                    {passedTopicList?.items?.length} topics
                   </Badge>
                 </div>
               </div>
 
               <div className="h-[400px] overflow-y-auto">
-                {filteredTopics.length > 0 ? (
+                {isLoading ? (
+                  <div className="flex justify-center items-center h-full">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+                  </div>
+                ) : passedTopicList?.items?.length > 0 ? (
                   <RadioGroup
                     value={selectedTopicId ?? undefined}
                     onValueChange={(value) => setSelectedTopicId(value)}
                     className="space-y-0 divide-y"
                   >
-                    {filteredTopics.map((topic) => (
+                    {passedTopicList?.items?.map((topic) => (
                       <div
                         key={topic.id}
-                        className={`p-4 flex justify-between items-center hover:bg-muted/30 transition-colors ${selectedTopicId === topic.id ? "bg-primary/5" : ""
-                          }`}
+                        className={`p-4 flex justify-between items-center hover:bg-muted/30 transition-colors ${
+                          selectedTopicId === topic.id ? "bg-primary/5" : ""
+                        }`}
                       >
                         <div className="flex-1 min-w-0 pr-4">
-                          <p className="font-medium text-primary truncate">{topic.englishName}</p>
+                          <p className="font-medium text-primary truncate">
+                            {topic.englishName}
+                          </p>
                           <div className="flex items-center gap-2 mt-1">
                             <Badge variant="outline" className="text-xs font-normal">
                               {topic.mainSupervisorName}
@@ -158,7 +178,9 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
                   <div className="flex flex-col items-center justify-center h-[300px] text-center p-4">
                     <Search className="h-10 w-10 text-muted-foreground mb-4 opacity-20" />
                     <p className="text-muted-foreground font-medium">No topics found</p>
-                    <p className="text-sm text-muted-foreground mt-1">Try adjusting your search query</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Try adjusting your search query
+                    </p>
                   </div>
                 )}
               </div>
@@ -166,9 +188,29 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
           </div>
 
           <div className="flex justify-between items-center p-4 border-t bg-muted/10">
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
+                disabled={pageNumber === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Page {pageNumber} of {passedTopicList?.totalNumberOfPages}
+              </span>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setPageNumber((prev) => Math.min(prev + 1, passedTopicList?.totalNumberOfPages))}
+                disabled={pageNumber === passedTopicList?.totalNumberOfPages}
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
             <Button onClick={handleAssign} disabled={!selectedTopicId} className="gap-1">
               <Check className="h-4 w-4" />
               Assign Topic
@@ -177,6 +219,5 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
-
