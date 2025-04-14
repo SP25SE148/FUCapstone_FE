@@ -23,6 +23,7 @@ function ActionsCell(row: Row<GroupFullInfo>) {
   const noRegisterTopic =
     group.topicCode === "undefined" && group.groupCode !== "";
   const [open, setOpen] = useState(false);
+  const [openTopic, setOpenTopic] = useState(false);
 
   return (
     <div className="flex items-center justify-center">
@@ -47,9 +48,9 @@ function ActionsCell(row: Row<GroupFullInfo>) {
             </DropdownMenuItem>
           )}
           {noRegisterTopic && (
-            <div className="flex items-center gap-2">
-              <AssignTopic GroupId={group.id} />
-            </div>
+            <DropdownMenuItem onClick={() => setOpenTopic(true)}>
+              Assign Topic
+            </DropdownMenuItem>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
@@ -58,6 +59,12 @@ function ActionsCell(row: Row<GroupFullInfo>) {
         groupId={group.id}
         open={open}
         setOpen={() => setOpen(false)}
+      />
+
+      <AssignTopic
+        GroupId={group.id}
+        open={openTopic}
+        setOpen={() => setOpenTopic(false)}
       />
     </div>
   );

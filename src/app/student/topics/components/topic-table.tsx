@@ -1,12 +1,9 @@
 "use client";
 
 import {
-  BadgeInfo,
   BookOpen,
   ChevronLeft,
   ChevronRight,
-  ClipboardCheck,
-  FileCheck,
   FileX,
   Filter,
   Search,
