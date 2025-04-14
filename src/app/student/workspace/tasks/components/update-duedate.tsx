@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { CalendarIcon } from "lucide-react";
 import { format, isBefore, startOfDay } from "date-fns";
 
@@ -11,17 +10,26 @@ import { useStudentTasks } from "@/contexts/student/student-task-context";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useEffect, useState } from "react";
 
 interface UpdateDueDateProps {
   task: Task;
   onClose: () => void;
-}
+} 
 
 export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
-  const [date, setDate] = React.useState<Date | undefined>(
-    task.dueDate ? new Date(task.dueDate) : undefined
+  const [date, setDate] = useState<Date | undefined>(
+    undefined
   );
+  // const [date, setDate] = useState<string>("");
   const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
+
+  useEffect (() => {
+    if (task.dueDate) {
+      setDate(new Date(task.dueDate));
+    }
+  }, [task]);
+  
 
   const handleDateChange = async (selectedDate: Date | undefined) => {
     if (!selectedDate) return;
