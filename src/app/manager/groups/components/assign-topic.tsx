@@ -14,20 +14,17 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 
 interface AssignTopicProps {
   GroupId: string;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
 }
 
-export default function AssignTopic({ GroupId }: AssignTopicProps) {
+export default function AssignTopic({ GroupId, open, setOpen }: AssignTopicProps) {
   const { passedTopicList, fetchPassedTopic, assignPendingTopicForGroup } = useManagerGroup();
-  const [open, setOpen] = useState<boolean>(false);
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function handleOpen() {
-    setOpen(true);
-    await fetchTopics();
-  }
 
   async function fetchTopics() {
     setIsLoading(true);
@@ -52,8 +49,6 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
       TopicId: selectedTopicId,
       GroupId,
     });
-
-    setOpen(false);
   }
 
   useEffect(() => {
@@ -68,14 +63,6 @@ export default function AssignTopic({ GroupId }: AssignTopicProps) {
 
   return (
     <>
-      <Button
-        variant="ghost"
-        className="px-1 pl-2 font-normal w-full items-start justify-start"
-        onClick={handleOpen}
-      >
-        Add Topic
-      </Button>
-
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[900px] p-0 overflow-hidden">
           <DialogHeader className="px-6 pt-6 pb-4 border-b">
