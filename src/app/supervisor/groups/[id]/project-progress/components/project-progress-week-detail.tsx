@@ -87,9 +87,7 @@ export default function ProjectProgressWeekDetail({ projectProgressId, currentPr
                         <h3 className="text-sm text-muted-foreground">
                             Summary from leader:
                         </h3>
-                        <div className="space-y-2">
-                            {currentProjectProgressWeek?.summary}
-                        </div>
+                        <div dangerouslySetInnerHTML={{ __html: currentProjectProgressWeek?.summary || "" }} />
                     </div>
                 </div>}
         </div>

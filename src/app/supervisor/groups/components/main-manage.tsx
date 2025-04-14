@@ -4,7 +4,8 @@ import { ArrowRight, ChevronDown, ChevronUp, User } from "lucide-react";
 
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function MainManage() {
     const { groupList } = useSupervisorGroup();
@@ -27,12 +28,28 @@ export default function MainManage() {
                 {groupList?.map((group, index) => (
                     <Card
                         key={index}
-                        className="relative h-60 p-6 select-none cursor-pointer overflow-hidden bg-primary/5 hover:bg-primary/10"
-                        onClick={() => { router.push(`/supervisor/groups/${group?.groupId}`) }}
+                        className="relative h-60 select-none  overflow-hidden cursor-pointer transition-all duration-300 border border-primary bg-primary/5 hover:bg-primary/10"
+                        onClick={() => router.push(`/supervisor/groups/${group?.groupId}`)}
                     >
-                        <CardTitle className="font-semibold tracking-tight text-xl text-primary">{group?.englishName}</CardTitle>
-                        <CardDescription>{group?.groupCode}</CardDescription>
-                        <div className="absolute bottom-4 flex items-center gap-2 font-semibold text-sm text-primary hover:text-blue-400">Go to workspace <ArrowRight className="size-4" /></div>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="font-semibold tracking-tight text-xl text-primary">{group?.englishName}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex flex-wrap gap-2">
+                                <Badge variant="outline" className="bg-primary/5 text-primary hover:bg-primary/10">
+                                    Semester: {group?.semesterCode}
+                                </Badge>
+                                <Badge variant="outline" className="bg-primary/5 text-primary hover:bg-primary/10">
+                                    Group: {group?.groupCode}
+                                </Badge>
+                            </div>
+                        </CardContent>
+                        <CardFooter className="absolute bottom-0 w-full p-4 pt-8">
+                            <div className="flex items-center gap-2 font-medium text-sm text-primary group w-full">
+                                <span className="group-hover:underline transition-all">Go to workspace</span>
+                                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                            </div>
+                        </CardFooter>
                     </Card>
                 ))}
             </div>}
