@@ -47,35 +47,42 @@ export default function CompletionOverdueChart() {
           <Trophy className="h-5 w-5 text-amber-500" />
         </div>
       </CardHeader>
-      <CardContent className="pt-4">
-        <ChartContainer config={chartConfig} className="h-[400px] w-full">
-          <BarChart data={mergedData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="groupCode"
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: "var(--muted-foreground)" }}
-              tickMargin={8}
-            />
-            <Bar
-              dataKey="completion"
-              fill="var(--color-completion)"
-              radius={[4, 4, 0, 0]}
-              animationDuration={1000}
-              className="transition-all duration-300 hover:opacity-80"
-            />
-            <Bar
-              dataKey="overdue"
-              fill="var(--color-overdue)"
-              radius={[4, 4, 0, 0]}
-              animationDuration={1000}
-              className="transition-all duration-300 hover:opacity-80"
-            />
-            <ChartTooltip content={<ChartTooltipContent />} cursor={{ fill: "var(--muted)", opacity: 0.1 }} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
+      {mergedData ?
+        <CardContent className="pt-4">
+          <ChartContainer config={chartConfig} className="h-[400px] w-full">
+            <BarChart data={mergedData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="groupCode"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: "var(--muted-foreground)" }}
+                tickMargin={8}
+              />
+              <Bar
+                dataKey="completion"
+                fill="var(--color-completion)"
+                radius={[4, 4, 0, 0]}
+                animationDuration={1000}
+                className="transition-all duration-300 hover:opacity-80"
+              />
+              <Bar
+                dataKey="overdue"
+                fill="var(--color-overdue)"
+                radius={[4, 4, 0, 0]}
+                animationDuration={1000}
+                className="transition-all duration-300 hover:opacity-80"
+              />
+              <ChartTooltip content={<ChartTooltipContent />} cursor={{ fill: "var(--muted)", opacity: 0.1 }} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+        :
+        <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+          <Trophy className="h-10 w-10 text-amber-300" />
+          <p className="text-sm font-medium">No completion & overdue rate comparison yet</p>
+          <p className="text-xs">Once there's data, it will be shown here.</p>
+        </CardContent>}
     </Card>
   )
 }
