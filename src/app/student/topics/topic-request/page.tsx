@@ -15,6 +15,7 @@ import {
   BookOpen,
   ClipboardCheck,
   FileCheck,
+  MessageCircleQuestion,
   User,
 } from "lucide-react";
 
@@ -43,61 +44,79 @@ export default function TopicRequestPage() {
             {topicRequests.map(([key, requests]) => (
               <div key={key} className="px-4 py-2">
                 {requests.map((request) => (
-                  <div
-                    key={request.topicRequestId}
-                    className="grid grid-cols-2 lg:grid-cols-5  gap-4 p-6 rounded-lg bg-primary/5"
-                  >
-                    <div className="col-span-1 lg:col-span-2 flex items-center gap-4">
-                      <div className="bg-primary/10 p-2 rounded-full">
-                        <BookOpen className="size-5 text-primary" />
+                  <div key={request.topicRequestId} className="p-6 rounded-lg bg-primary/5">
+                    <div className="grid grid-cols-3 lg:grid-cols-5 gap-4 ">
+                      <div className="col-span-1 lg:col-span-2 flex items-center gap-4">
+                        <div className="bg-primary/10 p-2 rounded-full">
+                          <BookOpen className="size-5 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm text-muted-foreground">
+                            Topic Name
+                          </h3>
+                          <p className="font-semibold tracking-tight">
+                            {request.topicEnglishName}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-sm text-muted-foreground">
-                          Topic Name
-                        </h3>
-                        <p className="font-semibold tracking-tight">
-                          {request.topicEnglishName}
-                        </p>
+
+                      <div className="flex items-center gap-4">
+                        <div className="bg-primary/10 p-2 rounded-full">
+                          <FileCheck className="size-5 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm text-muted-foreground">
+                            Topic code
+                          </h3>
+                          <p className="font-semibold tracking-tight">
+                            {request.topicCode}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="bg-primary/10 p-2 rounded-full">
+                          <User className="size-5 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm text-muted-foreground">
+                            Supervisor
+                          </h3>
+                          <p className="font-semibold tracking-tight">
+                            {request.supervisorFullName}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="bg-primary/10 p-2 rounded-full">
+                          <BadgeInfo className="size-5 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm text-muted-foreground">
+                            Status
+                          </h3>
+                          {getTopicRequestStatus(request?.status)}
+                        </div>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 mt-4">
                       <div className="bg-primary/10 p-2 rounded-full">
-                        <FileCheck className="size-5 text-primary" />
+                        <MessageCircleQuestion className="size-5 text-primary" />
                       </div>
                       <div>
                         <h3 className="text-sm text-muted-foreground">
-                          Topic code
+                          Reject Reason
                         </h3>
-                        <p className="font-semibold tracking-tight">
-                          {request.topicCode}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="bg-primary/10 p-2 rounded-full">
-                        <User className="size-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="text-sm text-muted-foreground">
-                          Supervisor
-                        </h3>
-                        <p className="font-semibold tracking-tight">
-                          {request.supervisorFullName}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="bg-primary/10 p-2 rounded-full">
-                        <BadgeInfo className="size-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="text-sm text-muted-foreground">
-                          Status
-                        </h3>
-                        {getTopicRequestStatus(request?.status)}
+                        {request?.reason !== "" ? (
+                          <p className="font-semibold tracking-tight break-words whitespace-pre-line">
+                            {request?.reason}
+                          </p>
+                        ) : (
+                          <p className="italic text-muted-foreground">
+                            No content
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
