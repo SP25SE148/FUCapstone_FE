@@ -7,7 +7,7 @@ import { useApi } from "@/hooks/use-api";
 import { DefenseCalendar } from "@/types/types";
 
 interface SupervisorDefenseContextProps {
-  defenseCalendar: DefenseCalendar[] | [];
+  defenseCalendar: DefenseCalendar;
   getThesisPresignedUrl: (calendarId: string) => Promise<string>;
   importThesisDefendCapstoneMinute: (data: any) => Promise<void>;
   getDefendCapstoneCalendarById: (id: string) => Promise<any>;
@@ -28,7 +28,7 @@ export const SupervisorDefenseProvider = ({
   children: React.ReactNode;
 }) => {
   const { callApi } = useApi();
-  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar[]>([]);
+  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar>({});
 
   const getThesisPresignedUrl = async (calendarId: string) => {
     const response = await callApi(`fuc/user/defend/thesis/${calendarId}`);
