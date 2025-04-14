@@ -79,7 +79,7 @@ export default function DefenseTopicDetail() {
           </CardHeader>
         </div>
         <div className="mr-6">
-          <DownloadDocument topic={[]} />
+          <DownloadDocument groupId={defenseInfo.groupId} />
         </div>
       </div>
 
@@ -208,9 +208,7 @@ export default function DefenseTopicDetail() {
               </div>
               <div className="space-y-2">
                 <h3 className="text-sm text-muted-foreground">Description:</h3>
-                <p className="font-semibold tracking-tight text-justify italic">
-                  {defenseInfo.description}
-                </p>
+                <div dangerouslySetInnerHTML={{ __html: defenseInfo?.description || "" }} />
               </div>
             </CardContent>
           </Card>

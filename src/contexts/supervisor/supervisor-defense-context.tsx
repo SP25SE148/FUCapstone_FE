@@ -10,6 +10,7 @@ interface SupervisorDefenseContextProps {
   getThesisPresignedUrl: (calendarId: string) => Promise<string>;
   importThesisDefendCapstoneMinute: (data: any) => Promise<void>;
   getDefendCapstoneCalendarById: (id: string) => Promise<any>;
+  getPresignUrlOfGroupDocument: (groupId: string) => Promise<string>;
   updatePresidentDecisionForGroupStatus: (data: {
     IsReDefendCapstoneProject: boolean;
     CalendarId: string;
@@ -75,6 +76,11 @@ export const SupervisorDefenseProvider = ({
     return response;
   };
 
+  const getPresignUrlOfGroupDocument = async (groupId: string) => {
+    const response = await callApi(`fuc/group/documents/${groupId}`);
+    return (response?.value);
+  };
+
   useEffect(() => {
     getDefenseCalendar();
   }, []);
@@ -84,6 +90,7 @@ export const SupervisorDefenseProvider = ({
       value={{
         defenseCalendar,
         getThesisPresignedUrl,
+        getPresignUrlOfGroupDocument,
         getDefendCapstoneCalendarById,
         importThesisDefendCapstoneMinute,
         updatePresidentDecisionForGroupStatus,

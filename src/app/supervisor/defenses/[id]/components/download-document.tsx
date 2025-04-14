@@ -1,77 +1,34 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Download } from "lucide-react";
+import type React from "react"
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-// import { Topic, useStudentGroup } from "@/contexts/student/student-group-context";
+import { Download } from "lucide-react"
 
-export default function DownloadDocument() {
-// { topic }: { topic: Topic }
-  // const { getPresignedUrlTopicDocument } = useStudentGroup();
 
-  const [open, setOpen] = useState<boolean>(false);
-  // const [urlPreview, setUrlPreview] = useState<string>("");
+import { Button } from "@/components/ui/button"
+import { useSupervisorDefense } from "@/contexts/supervisor/supervisor-defense-context"
 
-  // async function handleClickPreview() {
-  //     const url = await getPresignedUrlTopicDocument(topic?.id);
-  //     setUrlPreview(url);
-  //     setOpen(true);
-  // }
+export default function DownloadDocument({groupId}: { groupId: string }) {
+    const { getPresignUrlOfGroupDocument } = useSupervisorDefense()
 
-  // async function handleDownload() {
-  //     if (!urlPreview) return;
-  //     const a = document.createElement("a");
-  //     a.href = urlPreview;
-  //     a.download = topic?.englishName;
-  //     document.body.appendChild(a);
-  //     a.click();
-  //     document.body.removeChild(a);
-  // }
+    async function handleDownload() {
+        if (groupId) {
+            const url = await getPresignUrlOfGroupDocument(groupId);
+            if (!url) return;
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `Group_Documents_${groupId}`; // Đặt tên file khi tải về
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    }
 
-  return (
-    <>
-      <Button
-        variant={"outline"}
-        // onClick={handleClickPreview}
-        className="h-12 border-primary text-primary hover:bg-primary hover:text-white"
-      >
-        <Download />
-        Document
-      </Button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-4xl w-full">
-          <DialogHeader>
-            <DialogTitle>Preview</DialogTitle>
-            <DialogDescription>
-              Document of{" "}
-              {/* <strong className="text-primary">{topic?.englishName}</strong> */}
-            </DialogDescription>
-          </DialogHeader>
-          <iframe
-            className="w-full h-[540px]"
-            // src={`https://docs.google.com/gview?url=${encodeURIComponent(urlPreview)}&embedded=true`}
-          />
-          <DialogFooter>
-            <Button
-              size={"sm"}
-              // onClick={handleDownload}
-            >
-              <Download />
-              Download
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
+    return (
+        <Button type="button" onClick={handleDownload}>
+            <Download className="h-4 w-4" />
+            Download
+        </Button>
+    )
 }
+
