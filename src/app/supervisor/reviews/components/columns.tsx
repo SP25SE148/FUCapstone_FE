@@ -47,9 +47,9 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
     },
   },
   {
-    accessorKey: "slot",
+    accessorKey: "time",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Slot" />
+      <DataTableColumnHeader column={column} title="Time" />
     ),
   },
   {

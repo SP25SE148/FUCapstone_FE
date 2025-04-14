@@ -441,7 +441,7 @@ export interface ReviewCalendar {
   mainSupervisorCode: string,
   coSupervisorsCode: [],
   attempt: number,
-  slot: number,
+  time: string,
   room: string,
   date: string,
   reviewers: string[]

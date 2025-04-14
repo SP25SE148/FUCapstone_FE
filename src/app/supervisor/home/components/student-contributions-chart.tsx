@@ -18,6 +18,10 @@ export default function StudentContributionsChart() {
     contribution: score,
   }))
 
+  const hasMeaningfulData = chartData.some(
+    (item) => item.contribution
+  )
+
   const chartConfig = {
     contribution: {
       label: "Contribution",
@@ -36,7 +40,7 @@ export default function StudentContributionsChart() {
           <Users2 className="h-5 w-5 text-cyan-600" />
         </div>
       </CardHeader>
-      {chartData ?
+      {hasMeaningfulData ?
         <CardContent className="pt-4">
           <ChartContainer config={chartConfig} className="h-[350px] w-full">
             <BarChart data={chartData}>
@@ -60,7 +64,7 @@ export default function StudentContributionsChart() {
           </ChartContainer>
         </CardContent>
         :
-        <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+        <CardContent className="flex flex-col items-center justify-center h-[280px] text-center text-muted-foreground space-y-2">
           <Users2 className="h-10 w-10 ext-cyan-600" />
           <p className="text-sm font-medium">No student contributions yet</p>
           <p className="text-xs">Once there's data, it will be shown here.</p>
