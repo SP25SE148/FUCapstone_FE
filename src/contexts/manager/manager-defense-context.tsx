@@ -8,7 +8,7 @@ import { Decision, DefenseCalendar } from "@/types/types";
 
 
 interface ManagerDefenseContextProps {
-  defenseCalendar: DefenseCalendar[] | [];
+  defenseCalendar: DefenseCalendar;
   getGroupDecisionByManager: (status: any) => Promise<Decision[]>;
   exportGroupDecisionByStatus: (status: any) => Promise<any>;
   getDefensesCalendarTemplate: () => Promise<string>;
@@ -25,7 +25,7 @@ export const ManagerDefenseProvider = ({
   children: React.ReactNode;
 }) => {
   const { callApi } = useApi();
-  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar[]>([]);
+  const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar>({});
 
   const getGroupDecisionByManager = async (status: any) => {
     const response = await callApi(`fuc/group/group-decision/${status}`);
