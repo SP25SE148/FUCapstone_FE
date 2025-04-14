@@ -46,7 +46,7 @@ export default function SummaryCards() {
                             <span>Avg. Duration</span>
                         </div>
                         <p className="text-xl font-semibold">
-                            {group.averageTaskDuration ? `${group.averageTaskDuration.toFixed(1)} days` : "N/A"}
+                            {group.averageTaskDuration ? `${Number((Number(group.averageTaskDuration) * 24).toFixed(2))} hour(s)` : "N/A"}
                         </p>
                     </div>
                 </div>
@@ -57,9 +57,9 @@ export default function SummaryCards() {
                             <Flag className="mr-1.5 h-4 w-4 text-muted-foreground" />
                             <span>Priority Distribution</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                        <div className="grid grid-cols-3 gap-4">
                             {Object.entries(group.priorityDistribution).map(([level, count]) => (
-                                <div key={level} className="flex items-center justify-between">
+                                <div key={level} className="flex items-center gap-4">
                                     <span className="text-sm">{level}:</span>
                                     <span className="font-medium">{String(count)}</span>
                                 </div>
@@ -79,34 +79,41 @@ export default function SummaryCards() {
                     <CardTitle>Best Performing Group</CardTitle>
                     <Trophy className="h-5 w-5 text-amber-500" />
                 </CardHeader>
-                <CardContent className="space-y-4 pt-6">
-                    <div className="flex items-end justify-between">
-                        <p className="text-2xl font-bold">{highest?.groupCode || "N/A"}</p>
-                        <div className="text-right">
-                            <p className="text-sm text-muted-foreground">Completion Rate</p>
-                            <p className="text-xl font-bold text-emerald-600">
-                                {highest ? `${Math.round(highest.completionTaskRatio * 100)}%` : "N/A"}
-                            </p>
-                        </div>
-                    </div>
-
-                    {highest && (
-                        <div className="space-y-1.5">
-                            <div className="flex justify-between text-sm">
-                                <span>Progress</span>
-                                <span>
-                                    {highest.completedTasks}/{highest.totalTasks} tasks
-                                </span>
+                {highest ?
+                    <CardContent className="space-y-4 pt-6">
+                        <div className="flex items-end justify-between">
+                            <p className="text-2xl font-bold">{highest?.groupCode || "N/A"}</p>
+                            <div className="text-right">
+                                <p className="text-sm text-muted-foreground">Completion Rate</p>
+                                <p className="text-xl font-bold text-emerald-600">
+                                    {highest ? `${Math.round(highest.completionTaskRatio * 100)}%` : "N/A"}
+                                </p>
                             </div>
-                            <Progress
-                                value={(highest.completedTasks / highest.totalTasks) * 100}
-                                className="h-2 bg-amber-100 [&>div]:bg-amber-500"
-                            />
                         </div>
-                    )}
 
-                    {renderGroupStats(highest)}
-                </CardContent>
+                        {highest && (
+                            <div className="space-y-1.5">
+                                <div className="flex justify-between text-sm">
+                                    <span>Progress</span>
+                                    <span>
+                                        {highest.completedTasks}/{highest.totalTasks} tasks
+                                    </span>
+                                </div>
+                                <Progress
+                                    value={(highest.completedTasks / highest.totalTasks) * 100}
+                                    className="h-2 bg-amber-100 [&>div]:bg-amber-500"
+                                />
+                            </div>
+                        )}
+
+                        {renderGroupStats(highest)}
+                    </CardContent>
+                    :
+                    <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+                        <Trophy className="h-10 w-10 text-amber-300" />
+                        <p className="text-sm font-medium">No best performing group yet</p>
+                        <p className="text-xs">Once there's data, it will be shown here.</p>
+                    </CardContent>}
             </Card>
 
             {/* Lowest Overdue Group */}
@@ -115,34 +122,41 @@ export default function SummaryCards() {
                     <CardTitle>Lowest Overdue Group</CardTitle>
                     <AlarmClock className="h-5 w-5 text-blue-500" />
                 </CardHeader>
-                <CardContent className="space-y-4 pt-6">
-                    <div className="flex items-end justify-between">
-                        <p className="text-2xl font-bold">{lowest?.groupCode || "N/A"}</p>
-                        <div className="text-right">
-                            <p className="text-sm text-muted-foreground">Overdue Rate</p>
-                            <p className="text-xl font-bold text-blue-600">
-                                {lowest ? `${Math.round(lowest.overdueTaskRatio * 100)}%` : "N/A"}
-                            </p>
-                        </div>
-                    </div>
-
-                    {lowest && (
-                        <div className="space-y-1.5">
-                            <div className="flex justify-between text-sm">
-                                <span>Overdue Tasks</span>
-                                <span>
-                                    {lowest.overdueTasks}/{lowest.totalTasks} tasks
-                                </span>
+                {lowest ?
+                    <CardContent className="space-y-4 pt-6">
+                        <div className="flex items-end justify-between">
+                            <p className="text-2xl font-bold">{lowest?.groupCode || "N/A"}</p>
+                            <div className="text-right">
+                                <p className="text-sm text-muted-foreground">Overdue Rate</p>
+                                <p className="text-xl font-bold text-blue-600">
+                                    {lowest ? `${Math.round(lowest.overdueTaskRatio * 100)}%` : "N/A"}
+                                </p>
                             </div>
-                            <Progress
-                                value={(lowest.overdueTasks / lowest.totalTasks) * 100}
-                                className="h-2 bg-blue-100 [&>div]:bg-blue-500"
-                            />
                         </div>
-                    )}
 
-                    {renderGroupStats(lowest)}
-                </CardContent>
+                        {lowest && (
+                            <div className="space-y-1.5">
+                                <div className="flex justify-between text-sm">
+                                    <span>Overdue Tasks</span>
+                                    <span>
+                                        {lowest.overdueTasks}/{lowest.totalTasks} tasks
+                                    </span>
+                                </div>
+                                <Progress
+                                    value={(lowest.overdueTasks / lowest.totalTasks) * 100}
+                                    className="h-2 bg-blue-100 [&>div]:bg-blue-500"
+                                />
+                            </div>
+                        )}
+
+                        {renderGroupStats(lowest)}
+                    </CardContent>
+                    :
+                    <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+                        <AlarmClock className="h-10 w-10 text-blue-500" />
+                        <p className="text-sm font-medium">No lowest overdue group yet</p>
+                        <p className="text-xs">Once there's data, it will be shown here.</p>
+                    </CardContent>}
             </Card>
         </div>
     )

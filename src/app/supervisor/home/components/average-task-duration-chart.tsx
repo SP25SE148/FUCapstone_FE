@@ -34,28 +34,35 @@ export default function AverageTaskDurationChart() {
                     <Timer className="h-5 w-5 text-primary" />
                 </div>
             </CardHeader>
-            <CardContent className="pt-4">
-                <ChartContainer config={chartConfig} className="h-[400px] w-full">
-                    <BarChart data={durationsData}>
-                        <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                        <XAxis
-                            dataKey="groupCode"
-                            tickLine={false}
-                            axisLine={false}
-                            tick={{ fill: "var(--muted-foreground)" }}
-                            tickMargin={8}
-                        />
-                        <Bar
-                            dataKey="duration"
-                            fill="var(--color-duration)"
-                            radius={[4, 4, 0, 0]}
-                            animationDuration={1000}
-                            className="transition-all duration-300 hover:opacity-80"
-                        />
-                        <ChartTooltip content={<ChartTooltipContent />} cursor={{ fill: "var(--muted)", opacity: 0.1 }} />
-                    </BarChart>
-                </ChartContainer>
-            </CardContent>
-        </Card>
+            {durationsData ?
+                < CardContent className="pt-4">
+                    <ChartContainer config={chartConfig} className="h-[400px] w-full">
+                        <BarChart data={durationsData}>
+                            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                            <XAxis
+                                dataKey="groupCode"
+                                tickLine={false}
+                                axisLine={false}
+                                tick={{ fill: "var(--muted-foreground)" }}
+                                tickMargin={8}
+                            />
+                            <Bar
+                                dataKey="duration"
+                                fill="var(--color-duration)"
+                                radius={[4, 4, 0, 0]}
+                                animationDuration={1000}
+                                className="transition-all duration-300 hover:opacity-80"
+                            />
+                            <ChartTooltip content={<ChartTooltipContent />} cursor={{ fill: "var(--muted)", opacity: 0.1 }} />
+                        </BarChart>
+                    </ChartContainer>
+                </CardContent>
+                :
+                <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+                    <Timer className="h-10 w-10 text-primary" />
+                    <p className="text-sm font-medium">No average task completion time yet</p>
+                    <p className="text-xs">Once there's data, it will be shown here.</p>
+                </CardContent>}
+        </Card >
     )
 }

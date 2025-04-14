@@ -36,28 +36,35 @@ export default function StudentContributionsChart() {
           <Users2 className="h-5 w-5 text-cyan-600" />
         </div>
       </CardHeader>
-      <CardContent className="pt-4">
-        <ChartContainer config={chartConfig} className="h-[350px] w-full">
-          <BarChart data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="studentId"
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-              tickMargin={8}
-            />
-            <Bar
-              dataKey="contribution"
-              fill="var(--color-contribution)"
-              radius={[4, 4, 0, 0]}
-              animationDuration={1000}
-              className="transition-all duration-300 hover:opacity-80"
-            />
-            <ChartTooltip content={<ChartTooltipContent />} cursor={{ fill: "var(--muted)", opacity: 0.1 }} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
+      {chartData ?
+        <CardContent className="pt-4">
+          <ChartContainer config={chartConfig} className="h-[350px] w-full">
+            <BarChart data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="studentId"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                tickMargin={8}
+              />
+              <Bar
+                dataKey="contribution"
+                fill="var(--color-contribution)"
+                radius={[4, 4, 0, 0]}
+                animationDuration={1000}
+                className="transition-all duration-300 hover:opacity-80"
+              />
+              <ChartTooltip content={<ChartTooltipContent />} cursor={{ fill: "var(--muted)", opacity: 0.1 }} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+        :
+        <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+          <Users2 className="h-10 w-10 ext-cyan-600" />
+          <p className="text-sm font-medium">No student contributions yet</p>
+          <p className="text-xs">Once there's data, it will be shown here.</p>
+        </CardContent>}
     </Card>
   )
 }

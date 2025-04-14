@@ -58,32 +58,39 @@ export default function TaskPriorityDistributionChart() {
           <AlertTriangle className="h-6 w-6 text-orange-500" />
         </div>
       </CardHeader>
-      <CardContent className="pt-4">
-        <ChartContainer config={chartConfig} className="h-[350px] w-full">
-          <BarChart data={chartData}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis
-              dataKey="groupCode"
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: "var(--muted-foreground)" }}
-              tickMargin={8}
-            />
-            {priorityLevels.map((level) => (
-              <Bar
-                key={level}
-                dataKey={level}
-                fill={chartConfig[level].color}
-                name={chartConfig[level].label}
-                radius={[4, 4, 0, 0]}
-                animationDuration={1000}
-                className="transition-all duration-300 hover:opacity-80"
+      {chartData ?
+        <CardContent className="pt-4">
+          <ChartContainer config={chartConfig} className="h-[350px] w-full">
+            <BarChart data={chartData}>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" />
+              <XAxis
+                dataKey="groupCode"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: "var(--muted-foreground)" }}
+                tickMargin={8}
               />
-            ))}
-            <ChartTooltip content={<ChartTooltipContent />} cursor={{ fill: "var(--muted)", opacity: 0.1 }} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
+              {priorityLevels.map((level) => (
+                <Bar
+                  key={level}
+                  dataKey={level}
+                  fill={chartConfig[level].color}
+                  name={chartConfig[level].label}
+                  radius={[4, 4, 0, 0]}
+                  animationDuration={1000}
+                  className="transition-all duration-300 hover:opacity-80"
+                />
+              ))}
+              <ChartTooltip content={<ChartTooltipContent />} cursor={{ fill: "var(--muted)", opacity: 0.1 }} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+        :
+        <CardContent className="flex flex-col items-center justify-center h-[90%] text-center text-muted-foreground space-y-2">
+          <AlertTriangle className="h-10 w-10 text-orange-500" />
+          <p className="text-sm font-medium">No task priority distribution yet</p>
+          <p className="text-xs">Once there's data, it will be shown here.</p>
+        </CardContent>}
     </Card>
   );
 }
