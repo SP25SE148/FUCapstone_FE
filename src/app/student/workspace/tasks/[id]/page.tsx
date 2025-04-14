@@ -26,6 +26,7 @@ import AssignTask from "@/app/student/workspace/tasks/components/assign-task";
 import UpdatePriority from "@/app/student/workspace/tasks/components/update-priority";
 import UpdateDueDate from "@/app/student/workspace/tasks/components/update-duedate";
 import { Task } from "@/types/types";
+import { comment } from "postcss";
 
 const getStatusBadge = (status: number) => {
   switch (status) {
@@ -60,14 +61,12 @@ export default function TaskDetailPage() {
   const [newComment, setNewComment] = useState("");
   const [isEditingSummary, setIsEditingSummary] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const haveUpdateDate = task?.lastUpdatedDate === null; 
-  const haveCompletionDate = task?.completionDate === null; 
 
   useEffect(() => {
     const fetchTask = async () => {
       if (id) {
         try {
-          const taskResponse = await getTaskDetail(id);
+          const taskResponse = await getTaskDetail(String(id));
           if (taskResponse) {
             setTask(taskResponse);
             setOriginalTask(taskResponse);
@@ -117,7 +116,7 @@ export default function TaskDetailPage() {
       comment: newComment,
     };
     await updateTask(updatedTask);
-    setTask(updatedTask);
+    // setTask(updatedTask);
     setShowCommentInput(false);
     setNewComment("");
   };
@@ -398,14 +397,14 @@ export default function TaskDetailPage() {
               <span className="text-sm text-muted-foreground w-24">
                 Updated
               </span>
-              <span className="text-sm">{haveUpdateDate ? "Not yet" : getDate(task.lastUpdatedDate)}</span>
+              <span className="text-sm">{task.lastUpdatedDate ? getDate(task.lastUpdatedDate) : "Not yet"  }</span>
             </div>
             <Separator />
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground w-24">
               Completion Date
               </span>
-              <span className="text-sm">{haveCompletionDate ? "Not yet" : getDate(task.completionDate)}</span>
+              <span className="text-sm">{task.completionDate ? getDate(task.completionDate) : "Not yet"}</span>
             </div>
           </CardContent>
         </Card>

@@ -55,7 +55,7 @@ export default function AssignTopic({ GroupId, open, setOpen }: AssignTopicProps
     if (open) {
       fetchTopics();
     }
-  }, [pageNumber, searchQuery]);
+  }, [open, pageNumber, searchQuery]);
 
   const clearSelection = () => {
     setSelectedTopicId(null);
@@ -63,7 +63,7 @@ export default function AssignTopic({ GroupId, open, setOpen }: AssignTopicProps
 
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={!isLoading ? setOpen : undefined}>
         <DialogContent className="sm:max-w-[900px] p-0 overflow-hidden">
           <DialogHeader className="px-6 pt-6 pb-4 border-b">
             <DialogTitle className="text-xl font-semibold flex items-center gap-2">

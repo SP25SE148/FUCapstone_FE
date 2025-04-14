@@ -12,7 +12,7 @@ interface StudentTaskContextProps {
   groupInfo: GroupFullInfo | null;
   createTask: (task: TaskRequest) => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
-  updateTask: (updatedTask: Task) => Promise<void>;
+  updateTask: (updatedTask: unknown) => Promise<void>;
   getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   fetchProgressTask: (projectProgressId: string) => Promise<void>;
   submitSummaryWeekForLeader: (data: { ProjectProgressId: string; ProjectProgressWeekId: string; Summary: string }) => Promise<void>;
