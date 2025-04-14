@@ -16,10 +16,24 @@ const formSchema = z.object({
   capstoneId: z.string().min(1, "Capstone ID is required"),
   capstoneName: z.string().min(1, "Capstone Name is required"),
   majorId: z.string().min(1, "Major ID is required"),
-  minMember: z.number().min(1, "Min Member must be greater than 0"),
-  maxMember: z.number().min(1, "Max Member must be greater than 0"),
-  reviewCount: z.number().min(1, "Review Count must be greater than 0"),
+  minMember: z
+    .string()
+    .transform((val) => Number(val))
+    .refine((val) => val > 0, { message: "Min Member must be greater than 0" }),
+  maxMember: z
+    .string()
+    .transform((val) => Number(val))
+    .refine((val) => val > 0, { message: "Max Member must be greater than 0" }),
+  reviewCount: z
+    .string()
+    .transform((val) => Number(val))
+    .refine((val) => val > 0, { message: "Review Count must be greater than 0" }),
+  durationWeeks: z
+    .string()
+    .transform((val) => Number(val))
+    .refine((val) => val > 0, { message: "Duration Weeks must be greater than 0" }),
 });
+
 
 export default function AddCapstone() {
   const { addCapstone } = useCapstone();
@@ -32,6 +46,7 @@ export default function AddCapstone() {
       minMember: 0,
       maxMember: 0,
       reviewCount: 0,
+      durationWeeks: 0,
     },
   });
 
@@ -43,6 +58,7 @@ export default function AddCapstone() {
       minMember: values.minMember,
       maxMember: values.maxMember,
       reviewCount: values.reviewCount,
+      durationWeeks: values.durationWeeks, 
       isDeleted: false,
       deletedAt: null,
     };
@@ -136,6 +152,19 @@ export default function AddCapstone() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Review Count</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Ex: 2" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="durationWeeks"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duration Weeks</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="Ex: 2" {...field} />
                     </FormControl>

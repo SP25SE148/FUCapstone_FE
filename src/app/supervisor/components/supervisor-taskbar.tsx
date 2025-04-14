@@ -1,4 +1,4 @@
-import { Home, Users, Bell, FileText, ClipboardCheck, ShieldCheck } from 'lucide-react'
+import { Home, Users, FileText, ClipboardCheck, ShieldCheck } from 'lucide-react'
 
 import { Taskbar } from "@/components/layout/app-taskbar";
 
