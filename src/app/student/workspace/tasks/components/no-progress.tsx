@@ -10,7 +10,7 @@ export default function NoProgress() {
                 <FileX className="size-20 text-primary" />
                 <div className="space-y-2">
                     <p className="text-2xl font-bold text-center text-primary">
-                    Your team has not been added to the Progress Week from your Ssupervisor
+                    Your team has not been added to the Progress Week from your Supervisor
                     </p>
                     <p className="text-muted-foreground text-center">
                         Please check your <Link href={"/student/workspace"} className="text-primary font-semibold hover:underline hover:underline-offset-2">Progress Week</Link>

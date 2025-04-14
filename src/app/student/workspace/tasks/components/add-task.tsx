@@ -1,47 +1,64 @@
-"use client"
+"use client";
 
-import { toast } from "sonner"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { useState, useEffect } from "react"
+import { toast } from "sonner";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useState, useEffect } from "react";
 
-import { useStudentTasks } from "@/contexts/student/student-task-context"
+import { useStudentTasks } from "@/contexts/student/student-task-context";
 
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 export default function AddTask({ onClose }: { onClose: () => void }) {
-  const { groupInfo, getProjectProgressOfGroup, createTask } = useStudentTasks()
-  const [keyTask, setKeyTask] = useState("")
-  const [description, setDescription] = useState("")
-  const [summary, setSummary] = useState("")
-  const [assigneeId, setAssigneeId] = useState("")
-  const [projectProgressId, setProjectProgressId] = useState("")
-  const [priority, setPriority] = useState("1")
-  const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { groupInfo, getProjectProgressOfGroup, createTask } =
+    useStudentTasks();
+  const [keyTask, setKeyTask] = useState("");
+  const [description, setDescription] = useState("");
+  const [summary, setSummary] = useState("");
+  const [assigneeId, setAssigneeId] = useState("");
+  const [projectProgressId, setProjectProgressId] = useState("");
+  const [priority, setPriority] = useState("1");
+  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (groupInfo) {
       getProjectProgressOfGroup(groupInfo.id).then((data) => {
         if (data?.id) {
-          setProjectProgressId(data.id) // Automatically set ProjectProgressId
+          setProjectProgressId(data.id); 
         }
-      })
+      });
     }
-  }, [groupInfo])
+  }, [groupInfo]);
 
   const handleAdd = async () => {
     if (!dueDate) {
       toast("Please select a due date before submitting.");
       return;
     }
-    setIsSubmitting(true)
+    setIsSubmitting(true);
+    const adjustedDate = new Date(dueDate);
+    adjustedDate.setHours(12, 0, 0, 0); // Đặt giờ thành 12:00 trưa để tránh lệch ngày
+
     await createTask({
       KeyTask: keyTask,
       Description: description,
@@ -49,10 +66,11 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
       AssigneeId: assigneeId,
       ProjectProgressId: projectProgressId,
       Priority: Number(priority),
-      DueDate: dueDate.toISOString(),
-    })
-    onClose()
-  }
+      DueDate: adjustedDate.toISOString(),
+    });
+
+    onClose();
+  };
 
   return (
     <Dialog open onOpenChange={onClose}>
@@ -60,7 +78,9 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
         <div className="flex flex-col h-full">
           <DialogHeader className="px-6 pt-6 pb-2">
             <DialogTitle className="text-xl">Add Task</DialogTitle>
-            <DialogDescription>Fill in the details for the new task.</DialogDescription>
+            <DialogDescription>
+              Fill in the details for the new task.
+            </DialogDescription>
           </DialogHeader>
 
           <div className="px-6 py-4 flex-1 overflow-y-auto max-h-[65vh]">
@@ -91,7 +111,10 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
                     {groupInfo?.groupMemberList
                       .filter((member) => member.status === "Accepted")
                       .map((member) => (
-                        <SelectItem key={member.studentId} value={member.studentId}>
+                        <SelectItem
+                          key={member.studentId}
+                          value={member.studentId}
+                        >
                           {member.studentFullName} - {member.studentId}
                         </SelectItem>
                       ))}
@@ -107,9 +130,17 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
                   <div className="mt-1.5 border rounded-lg overflow-hidden">
                     <div className="flex items-center gap-2 text-sm p-3 bg-muted/30 border-b">
                       <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium">{dueDate ? format(dueDate, "PPP") : "Pick a date"}</span>
+                      <span className="font-medium">
+                        {dueDate ? format(dueDate, "PPP") : "Pick a date"}
+                      </span>
                     </div>
-                    <Calendar mode="single" selected={dueDate} onSelect={setDueDate} className="p-3" disabled={(date) => date < new Date()} />
+                    <Calendar
+                      mode="single"
+                      selected={dueDate}
+                      onSelect={setDueDate}
+                      className="p-3"
+                      disabled={(date) => date < new Date()}
+                    />
                   </div>
                 </div>
 
@@ -123,10 +154,21 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
                         {priority && (
                           <div className="flex items-center gap-2">
                             <div
-                              className={`w-3 h-3 rounded-full ${priority === "0" ? "bg-red-500" : priority === "1" ? "bg-yellow-500" : "bg-green-500"
-                                }`}
+                              className={`w-3 h-3 rounded-full ${
+                                priority === "0"
+                                  ? "bg-red-500"
+                                  : priority === "1"
+                                  ? "bg-yellow-500"
+                                  : "bg-green-500"
+                              }`}
                             ></div>
-                            <span>{priority === "0" ? "High" : priority === "1" ? "Medium" : "Low"}</span>
+                            <span>
+                              {priority === "0"
+                                ? "High"
+                                : priority === "1"
+                                ? "Medium"
+                                : "Low"}
+                            </span>
                           </div>
                         )}
                       </SelectValue>
@@ -155,7 +197,10 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
 
                   {/* Description */}
                   <div className="mt-5">
-                    <Label htmlFor="description" className="text-sm font-medium">
+                    <Label
+                      htmlFor="description"
+                      className="text-sm font-medium"
+                    >
                       Description
                     </Label>
                     <Textarea
@@ -191,7 +236,14 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
             </Button>
             <Button
               onClick={handleAdd}
-              disabled={isSubmitting || !keyTask || !description || !summary || !assigneeId || !dueDate}
+              disabled={
+                isSubmitting ||
+                !keyTask ||
+                !description ||
+                !summary ||
+                !assigneeId ||
+                !dueDate
+              }
               className="ml-2"
             >
               {isSubmitting ? "Creating..." : "Create Task"}
@@ -200,6 +252,5 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

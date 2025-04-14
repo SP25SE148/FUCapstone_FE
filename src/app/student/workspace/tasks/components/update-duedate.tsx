@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarIcon } from "lucide-react";
-import { format, isBefore, startOfDay } from "date-fns";
+import { addDays, format, isBefore, startOfDay } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Task } from "@/types/types";
@@ -39,13 +39,17 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
       ? await getProjectProgressOfGroup(groupInfo.id)
       : null;
 
-    if (selectedDate && projectProgress?.id) {
-      await updateTask({
-        ...task,
-        projectProgressId: projectProgress.id,
-        dueDate: selectedDate.toISOString(),
-      });
-    }
+      if (selectedDate && projectProgress?.id) {
+        const adjustedDate = new Date(selectedDate);
+        adjustedDate.setHours(12, 0, 0, 0);
+      
+        await updateTask({
+          ...task,
+          projectProgressId: projectProgress.id,
+          dueDate: adjustedDate.toISOString(),
+        });
+      }
+      
 
     onClose();
   };

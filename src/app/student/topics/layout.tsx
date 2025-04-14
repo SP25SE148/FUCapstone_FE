@@ -5,8 +5,8 @@ import { Tabs } from "@/components/layout/app-tabs";
 import { StudentTopicProvider } from "@/contexts/student/student-topic-context";
 
 const items = [
-  { label: "Topics", href: "/student/topics" },
-  { label: "Topic Request", href: "/student/topics/topic-request" },
+  { label: "Register Topic", href: "/student/topics" },
+  { label: "Your Topic Request", href: "/student/topics/topic-request" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
