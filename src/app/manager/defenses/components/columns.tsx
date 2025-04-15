@@ -7,6 +7,7 @@ import { getDateNoTime } from "@/lib/utils"
 import { DefenseCalendarItem } from "@/types/types"
 
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
+import { getDefenseCalendarStatus } from "@/utils/statusUtils"
 
 export const columns: ColumnDef<DefenseCalendarItem>[] = [
   {
@@ -36,15 +37,20 @@ export const columns: ColumnDef<DefenseCalendarItem>[] = [
   {
     accessorKey: "time",
     header: ({ column }) => (
-      <div className="flex justify-center w-full">
         <DataTableColumnHeader column={column} title="Slot" icon={<Clock className="h-4 w-4" />} />
-      </div>
     ),
-    cell: ({ row }) => <div className="text-center">{row.original.time}</div>,
+    cell: ({ row }) => <span>{row.original.time}</span>,
   },
   {
     accessorKey: "location",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Location" icon={<Building2 className="h-4 w-4" />} />,
     cell: ({ row }) => <span>{row.original.location}</span>,
-  }
+  },
+  {
+          accessorKey: "status",
+          header: ({ column }) => (
+              <DataTableColumnHeader column={column} title="Status" />
+          ),
+          cell: ({ row }) => getDefenseCalendarStatus(row.original?.status)
+      },
 ]

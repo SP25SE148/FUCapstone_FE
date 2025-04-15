@@ -70,7 +70,7 @@ export default function GetStatistics() {
                                             <tr key={i} className="border-t hover:bg-gray-50">
                                                 <td className="px-4 py-2 border">{item.analysisTopicId}</td>
                                                 <td className="px-4 py-2 border">{item.englishName}</td>
-                                                <td className="px-4 py-2 border">{(item.similarity * 100).toFixed(2)}%</td>
+                                                <td className="px-4 py-2 border">{(item.similarity).toFixed(2)}%</td>
                                             </tr>
                                         ))}
                                     </tbody>
