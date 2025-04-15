@@ -1,4 +1,5 @@
 import { CalendarX } from "lucide-react";
+
 import { CardContent } from "@/components/ui/card";
 
 export default function NoResult() {

@@ -513,9 +513,19 @@ export interface DefenseCalendarItem {
   defendAttempt: number;
   defenseDate: string;
   location: string;
-  slot: number;
+  time: string;
   status: string;
   councilMembers: CouncilMember[];
+}
+
+export interface DefenseCalendarItemFullInfo extends DefenseCalendarItem {
+  supervisorId: string;
+  supervisorName: string;
+  topicEngName: string;
+  topicVietName: string;
+  abbreviation: string;
+  description: string;
+  capstoneId: string;
 }
 
 export interface DefenseCalendar {

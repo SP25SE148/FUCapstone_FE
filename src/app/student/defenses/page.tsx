@@ -1,13 +1,18 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CalendarIcon, Clock, MapPin, User, AlertTriangle } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { getDateNoTime } from "@/lib/utils"
+
+import { DefenseCalendarItem } from "@/types/types"
 import { useStudentDefense } from "@/contexts/student/student-defense-context"
-import { Separator } from "@/components/ui/separator"
+
+import { getDateNoTime } from "@/lib/utils"
 import { getDefenseCalendarStatus } from "@/utils/statusUtils"
+
 import NoResult from "@/app/student/defenses/components/no-result"
+
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function DefensesPage() {
   const { defenseCalendar } = useStudentDefense()
@@ -53,7 +58,7 @@ export default function DefensesPage() {
           {!defenseCalendar || defenseCalendar.length === 0 ? (
             <NoResult />
           ) : (
-            defenseCalendar?.map((defense: any) => (
+            defenseCalendar?.map((defense: DefenseCalendarItem) => (
               <div key={defense.defenseDate} className="space-y-1">
                 <h2 className="text-lg font-semibold text-primary flex items-center gap-2 px-2 py-1 bg-primary/5 rounded-md">
                   <CalendarIcon className="h-4 w-4" />
@@ -92,10 +97,10 @@ export default function DefensesPage() {
                       </div>
 
                       <div className="flex-1 mx-1 space-y-1">
-                        <div className="text-xs text-muted-foreground font-medium capitalize">Slot</div>
+                        <div className="text-xs text-muted-foreground font-medium capitalize">Time</div>
                         <div className="font-medium flex items-center gap-1.5 text-primary">
                           <Clock className="h-4 w-4 flex-shrink-0" />
-                          <span className="truncate">{defense.slot}</span>
+                          <span className="truncate">{defense.time}</span>
                         </div>
                       </div>
 
