@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { User2, X, Users, Send, BookUser, FileCheck, Calculator, School, Calendar, BriefcaseBusiness, BookOpen, BadgeInfoIcon } from "lucide-react";
 
+import { useStudentGroup } from "@/contexts/student/student-group-context";
+import { useStudentProfile } from "@/contexts/student/student-profile-context";
+
 import { getGroupMemberStatus, getGroupStatus } from "@/utils/statusUtils";
 
 import CreateGroup from "./create-group";
@@ -10,20 +13,20 @@ import InviteMember from "./invite-member";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useStudentGroup } from "@/contexts/student/student-group-context";
-import { useStudentProfile } from "@/contexts/student/student-profile-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog";
 
 export default function MyGroup() {
     const { studentProfile, loading } = useStudentProfile();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [openDelete, setOpenDelete] = useState<boolean>(false);
-    const [openRegister, setOpenRegister] = useState<boolean>(false);
-    const [deleteInfo, setDeleteInfo] = useState<{} | null>({});
     const { groupInfo, updateStatusInvitation, registerGroup } = useStudentGroup();
+
     const leaderInfo = groupInfo?.groupMemberList?.find((x) => x.isLeader == true)
     const memberList = groupInfo?.groupMemberList?.filter((x) => x.isLeader == false)
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [deleteInfo, setDeleteInfo] = useState<{} | null>({});
+    const [openDelete, setOpenDelete] = useState<boolean>(false);
+    const [openRegister, setOpenRegister] = useState<boolean>(false);
 
     const handleDeleteMember = async () => {
         setIsLoading(true);
@@ -201,7 +204,7 @@ export default function MyGroup() {
                                     <h3 className="font-semibold flex items-center gap-2">
                                         <Users className="size-4 text-primary" />
                                         Invited Student(s):
-                                        <span className="text-sm text-muted-foreground">{groupInfo?.currentNumberOfGroupPerMax}</span>
+                                        <span className="text-sm text-muted-foreground">{groupInfo?.groupMemberList?.length} member(s)</span>
                                     </h3>
                                     <div className="space-y-2">
                                         <Card className="bg-primary/5">

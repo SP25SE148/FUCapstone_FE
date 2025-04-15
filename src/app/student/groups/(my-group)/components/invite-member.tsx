@@ -1,11 +1,12 @@
 import { z } from "zod";
-import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MailPlus, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { InviteStudent } from "@/types/types";
+import { Capstone, InviteStudent } from "@/types/types";
 import { useStudentGroup } from "@/contexts/student/student-group-context";
+import { useStudentProfile } from "@/contexts/student/student-profile-context";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,8 +19,12 @@ const formSchema = z.object({
 });
 
 export default function InviteMember() {
-    const { getStudentsForInvite, inviteMember } = useStudentGroup();
+    const { studentProfile } = useStudentProfile();
+    const { getCapstoneById, getStudentsForInvite, inviteMember } = useStudentGroup();
+
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const [capstone, setCapstone] = useState<Capstone>();
     const [suggestions, setSuggestions] = useState<InviteStudent[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -69,11 +74,21 @@ export default function InviteMember() {
         }
     }
 
+    useEffect(() => {
+        if (studentProfile?.capstoneId) {
+            (async () => {
+                const capstoneDetail = await getCapstoneById(studentProfile?.capstoneId);
+                setCapstone(capstoneDetail)
+            })();
+        }
+    }, [studentProfile?.capstoneId])
+
     return (
         <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
                 <MailPlus className="size-4 text-primary" />
-                Invite Member(s)
+                Invite Member(s):
+                <span className="text-sm text-muted-foreground">Min: {capstone?.minMember} - Max: {capstone?.maxMember}</span>
             </h3>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">

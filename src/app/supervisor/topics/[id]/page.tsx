@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, FileCheck, FileX, Pencil, PenTool, RefreshCw, School, Star, Undo2, User2, Users } from "lucide-react";
+import { BadgeInfo, BookOpen, BookUser, BriefcaseBusiness, Calendar, ChevronDown, ChevronUp, FileCheck, FileX, Pencil, PenTool, RefreshCw, ScanEye, School, Star, Undo2, User2, Users } from "lucide-react";
 
 import { Topic } from "@/types/types";
 import { useSupervisorTopic } from "@/contexts/supervisor/supervisor-topic-context";
@@ -13,6 +13,7 @@ import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
 
 import GetStatistics from "./components/get-statistics";
 import DownloadDocument from "./components/download-document";
+import AppraisalDetails from "./components/appraisal-details";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -27,6 +28,7 @@ export default function TopicDetailsPage() {
     const { fetchTopicsById, reAppraisalTopicForMainSupervisor } = useSupervisorTopic();
 
     const [topic, setTopic] = useState<Topic>();
+    const [showAppraisals, setShowAppraisals] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -212,6 +214,16 @@ export default function TopicDetailsPage() {
                         ))}
                     </div>
                 </div>
+
+                {/* appraisals */}
+                {topic?.topicAppraisals?.length > 0 && <div className="space-y-2">
+                    <h3 className="font-semibold flex items-center gap-2 cursor-pointer" onClick={() => { setShowAppraisals(!showAppraisals) }}>
+                        <ScanEye className="size-4 text-primary" />
+                        Appraisal(s)
+                        {showAppraisals ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+                    </h3>
+                    {showAppraisals && <AppraisalDetails appraisals={topic?.topicAppraisals} />}
+                </div>}
 
                 <div className="flex justify-end items-center gap-2">
                     {topic?.status === "Considered" && topic?.mainSupervisorName == user?.name &&
