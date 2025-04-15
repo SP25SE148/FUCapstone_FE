@@ -3,7 +3,7 @@
 import type React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { File, FileSpreadsheet, FileText, Upload, X } from "lucide-react";
+import { Download, File, FileSpreadsheet, FileText, Upload, X } from "lucide-react";
 import { useState, useRef } from "react";
 import { useSupervisorDefense } from "@/contexts/supervisor/supervisor-defense-context";
 import {
@@ -21,7 +21,7 @@ interface UploadMinutesProps {
 const UploadMinutes: React.FC<UploadMinutesProps> = ({
   defendCapstoneCalendarId,
 }) => {
-  const { importThesisDefendCapstoneMinute } = useSupervisorDefense();
+  const { importThesisDefendCapstoneMinute, getDefenseThesisTemplate } = useSupervisorDefense();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -92,7 +92,17 @@ const UploadMinutes: React.FC<UploadMinutesProps> = ({
     setOpen(false);
     setSelectedFile(null);
   };
-  
+
+  async function handleDownload() {
+    const url = await getDefenseThesisTemplate();
+    if (!url) return;
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Template_Defense_Thesis_Minutes"; // Đặt tên file khi tải về
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
 
   return (
     <>
@@ -112,6 +122,15 @@ const UploadMinutes: React.FC<UploadMinutesProps> = ({
               <FileText className="mr-2 h-5 w-5" />
               Upload Minutes
             </AlertDialogTitle>
+            <Button
+                variant="outline"
+                type="button"
+                disabled={isUploading}
+                onClick={handleClose}
+                className="absolute top-2 right-2"
+              >
+                <X className="h-1 w-1" />
+              </Button>
           </AlertDialogHeader>
 
           <div className="space-y-5 py-2">
@@ -190,15 +209,16 @@ const UploadMinutes: React.FC<UploadMinutesProps> = ({
               </div>
             )}
             <AlertDialogFooter className="flex justify-between items-center">
+              
               <Button
-                variant="outline"
+                variant={"outline"}
                 type="button"
                 disabled={isUploading}
-                onClick={handleClose}
                 className="flex-1"
+                onClick={handleDownload}
               >
-                <X className="mr-2 h-4 w-4" />
-                Cancel
+                <Download />
+                Template
               </Button>
 
               <Button
@@ -206,7 +226,7 @@ const UploadMinutes: React.FC<UploadMinutesProps> = ({
                 onClick={handleUpload}
                 disabled={!selectedFile || isUploading}
               >
-                <Upload className="mr-2 h-4 w-4" />
+                <Upload className="h-4 w-4" />
                 {isUploading ? "Uploading..." : "Upload"}
               </Button>
             </AlertDialogFooter>

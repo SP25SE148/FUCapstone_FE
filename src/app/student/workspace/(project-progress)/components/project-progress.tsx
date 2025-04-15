@@ -67,7 +67,7 @@ export default function ProjectProgressView() {
           </div>
           <div className="flex gap-2">
             <Button variant="default" onClick={createTask}>
-              <FilePlus /> Creat Task
+              <FilePlus /> Task
             </Button>
           </div>
         </div>

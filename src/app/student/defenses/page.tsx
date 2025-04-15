@@ -1,6 +1,6 @@
 "use client"
 
-import { CalendarIcon, Clock, MapPin, User, AlertTriangle } from "lucide-react"
+import { CalendarIcon, Clock, MapPin, AlertTriangle } from "lucide-react"
 
 import { DefenseCalendarItem } from "@/types/types"
 import { useStudentDefense } from "@/contexts/student/student-defense-context"
@@ -10,24 +10,10 @@ import { getDefenseCalendarStatus } from "@/utils/statusUtils"
 
 import NoResult from "@/app/student/defenses/components/no-result"
 
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function DefensesPage() {
   const { defenseCalendar } = useStudentDefense()
-
-  // Function to sort council members (President first, then Secretary, then others)
-  function getSortedCouncilMembers(councilMembers: any) {
-    if (!councilMembers) return []
-    return [...councilMembers].sort((a, b) => {
-      if (a.isPresident) return -1
-      if (b.isPresident) return 1
-      if (a.isSecretary) return -1
-      if (b.isSecretary) return 1
-      return 0
-    })
-  }
 
   return (
     <Card className="min-h-[calc(100vh-60px)] shadow-md border-muted/40">
@@ -108,46 +94,6 @@ export default function DefensesPage() {
                         <div className="text-xs text-muted-foreground font-medium capitalize">Status</div>
                         <div>{getDefenseCalendarStatus(defense.status)}</div>
                       </div>
-                    </div>
-                  </div>
-                  <Separator />
-                  <div className="p-5 bg-muted/5">
-                    <h3 className="text-sm font-medium flex items-center gap-1.5 mb-4 text-primary">
-                      <User className="h-4 w-4" />
-                      Council Members
-                    </h3>
-                    <div className="flex flex-nowrap justify-between items-center">
-                      {getSortedCouncilMembers(defense.councilMembers).map((member) => (
-                        <div
-                          key={member.id}
-                          className="flex-1 mx-1 flex items-center gap-2 p-3 rounded-md bg-background border border-muted/60 shadow-sm"
-                        >
-                          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
-                            <User className="h-4 w-4" />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="font-medium text-sm truncate">{member.supervisorName}</p>
-                            <div className="text-xs text-muted-foreground">
-                              {member.isPresident ? (
-                                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 mt-1">
-                                  President
-                                </Badge>
-                              ) : member.isSecretary ? (
-                                <Badge
-                                  variant="outline"
-                                  className="bg-purple-50 text-purple-700 border-purple-200 mt-1"
-                                >
-                                  Secretary
-                                </Badge>
-                              ) : (
-                                <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200 mt-1">
-                                  Member
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
                     </div>
                   </div>
                 </div>

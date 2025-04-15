@@ -85,7 +85,7 @@ const ContinueDefense: React.FC<ContinueDefenseProps> = ({ defendCapstoneCalenda
                   onClick={() => setSelectedOption("2nd Defense")}
                 >
                   <div className="flex flex-col items-center">
-                    <span className="font-medium">2nd Defense</span>
+                    <span className="font-medium">ReDefense</span>
                     <span className="text-xs text-muted-foreground">Defend thesis again next time</span>
                   </div>
                 </Button>
@@ -106,7 +106,7 @@ const ContinueDefense: React.FC<ContinueDefenseProps> = ({ defendCapstoneCalenda
 
               <Button className="w-full h-10 mt-4" onClick={handleSave} disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save Decision"}
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
           </div>
