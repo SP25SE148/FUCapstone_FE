@@ -5,18 +5,18 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "../../hooks/use-api";
 import { useStudentProfile } from "./student-profile-context";
-import { Decision, GroupFullInfo, InviteStudent, ProjectProgress } from "@/types/types";
+import { Capstone, Decision, GroupFullInfo, InviteStudent } from "@/types/types";
 
 interface StudentGroupContextType {
   groupInfo: GroupFullInfo | null;
-  createGroup: () => Promise<void>;
   fetchGroupInfo: () => Promise<void>;
+  createGroup: () => Promise<void>;
+  getCapstoneById: (id: string) => Promise<Capstone>;
   getStudentsForInvite: (searchTerm: string) => Promise<InviteStudent[]>;
   inviteMember: (data: any) => Promise<void>;
-  registerGroup: () => Promise<void>;
   updateStatusInvitation: (data: any) => Promise<void>;
+  registerGroup: () => Promise<void>;
   getPresignedUrlTopicDocument: (id: string) => Promise<string>;
-  getProjectProgressOfGroup: (groupId: string) => Promise<ProjectProgress>;
   getGroupDecisionResponse: (groupId: string) => Promise<Decision>;
 }
 
@@ -39,11 +39,6 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
     setGroupInfo(response?.value);
   };
 
-  const getProjectProgressOfGroup = async (groupId: string) => {
-    const response = await callApi(`fuc/group/${groupId}/progress`);
-    return (response?.value);
-  };
-
   const createGroup = async () => {
     const response = await callApi("fuc/Group", {
       method: "POST",
@@ -54,6 +49,11 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
       fetchGroupInfo();
     }
     return response;
+  };
+
+  const getCapstoneById = async (id: string) => {
+    const response = await callApi(`fuc/AcademicManagement/capstone/${id}`);
+    return response?.value;
   };
 
   const getStudentsForInvite = async (searchTerm: string) => {
@@ -86,13 +86,6 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
     return response;
   };
 
-  const getPresignedUrlTopicDocument = async (id: string) => {
-    const response = await callApi(`fuc/topics/presigned/${id}`, {
-      method: "GET",
-    });
-    return (response?.value);
-  };
-
   const registerGroup = async () => {
     const response = await callApi(`fuc/Group`, {
       method: "PUT",
@@ -102,6 +95,13 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
       fetchGroupInfo();
     }
     return response;
+  };
+
+  const getPresignedUrlTopicDocument = async (id: string) => {
+    const response = await callApi(`fuc/topics/presigned/${id}`, {
+      method: "GET",
+    });
+    return (response?.value);
   };
 
   const getGroupDecisionResponse = async (groupId: string) => {
@@ -117,14 +117,14 @@ export const StudentGroupProvider: React.FC<{ children: React.ReactNode }> = ({
     <StudentGroupContext.Provider
       value={{
         groupInfo,
+        fetchGroupInfo,
         createGroup,
+        getCapstoneById,
         getStudentsForInvite,
         inviteMember,
-        registerGroup,
-        fetchGroupInfo,
         updateStatusInvitation,
+        registerGroup,
         getPresignedUrlTopicDocument,
-        getProjectProgressOfGroup,
         getGroupDecisionResponse
       }}
     >

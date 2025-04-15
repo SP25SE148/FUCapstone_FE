@@ -251,13 +251,13 @@ export interface TopicAppraisal {
   topicAppraisalId: string,
   topicId: string,
   supervisorId: string | null,
-  managerId: string | null,
   topicEnglishName: string,
   appraisalContent: string | null,
   appraisalComment: string | null,
-  status: string,
+  status: string | number,
   attemptTime: number,
-  appraisalDate: string | null
+  appraisalDate: string | null,
+  createdDate: string | null
 }
 
 export interface RequestsOfTopic {
