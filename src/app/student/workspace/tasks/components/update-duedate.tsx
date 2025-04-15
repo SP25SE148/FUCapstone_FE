@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarIcon } from "lucide-react";
-import { addDays, format, isBefore, startOfDay } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Task } from "@/types/types";
@@ -21,7 +21,6 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
   const [date, setDate] = useState<Date | undefined>(
     undefined
   );
-  // const [date, setDate] = useState<string>("");
   const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
 
   useEffect (() => {

@@ -32,6 +32,16 @@ export default function SystemConfigPage() {
       </CardHeader>
       <CardContent className="p-6">
         <div className="space-y-8">
+        <div className="p-4 rounded-lg border border-primary/90  flex items-start gap-3 mt-2">
+            <Info className="h-5 w-5 text-primary mt-0.5" />
+            <div>
+              <h4 className="font-medium text-primary">System Configuration Notes</h4>
+              <p className="text-sm text-primary">
+                Changes to these settings will affect system-wide behavior. Please ensure you understand the
+                implications before making changes.
+              </p>
+            </div>
+          </div>
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Users className="h-5 w-5 text-primary" />
@@ -123,17 +133,6 @@ export default function SystemConfigPage() {
                   />
                 </CardContent>
               </Card>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-lg border border-primary/90  flex items-start gap-3 mt-6">
-            <Info className="h-5 w-5 text-primary mt-0.5" />
-            <div>
-              <h4 className="font-medium text-primary">System Configuration Notes</h4>
-              <p className="text-sm text-primary">
-                Changes to these settings will affect system-wide behavior. Please ensure you understand the
-                implications before making changes.
-              </p>
             </div>
           </div>
         </div>

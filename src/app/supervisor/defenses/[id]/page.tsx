@@ -2,11 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { BookOpen, Users, FileCheck, Calendar, PenTool, User2, MapPin, Clock } from "lucide-react";
+import {
+  BookOpen,
+  Users,
+  FileCheck,
+  Calendar,
+  PenTool,
+  User2,
+  MapPin,
+  Clock,
+  BookText,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 
 import { getDateNoTime } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
-import { DefenseCalendarItemFullInfo } from "@/types/types";
+import { DefenseCalendarItemFullInfo, ReviewResult } from "@/types/types";
 import { useSupervisorDefense } from "@/contexts/supervisor/supervisor-defense-context";
 
 import UploadMinutes from "@/app/supervisor/defenses/[id]/components/upload-minutes";
@@ -15,16 +27,27 @@ import DownloadDocument from "@/app/supervisor/defenses/[id]/components/download
 
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import ResultDetails from "@/app/supervisor/defenses/[id]/components/result-details";
 
 export default function DefenseTopicDetail() {
   const params = useParams();
   const id: string = String(params.id);
 
   const { user } = useAuth();
-  const { getDefendCapstoneCalendarById } = useSupervisorDefense();
+  const { getDefendCapstoneCalendarById, getReviewResultByGroupId } =
+    useSupervisorDefense();
 
+  const [results, setResults] = useState<ReviewResult[]>();
   const [defenseInfo, setDefenseInfo] = useState<DefenseCalendarItemFullInfo>();
+  const [showReviewResults, setShowReviewResults] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchDefenseInfo = async () => {
@@ -37,6 +60,18 @@ export default function DefenseTopicDetail() {
     fetchDefenseInfo();
   }, [id, getDefendCapstoneCalendarById]);
 
+  useEffect(() => {
+    const fetchReviewResults = async () => {
+      if (defenseInfo) {
+        const data = await getReviewResultByGroupId(defenseInfo.groupId);
+        if (data) {
+          setResults(data);
+        }
+      }
+    };
+    fetchReviewResults();
+  }, [defenseInfo, getReviewResultByGroupId]);
+
   if (!defenseInfo) {
     return <p className="text-center text-red-500">Defense not found.</p>;
   }
@@ -44,17 +79,17 @@ export default function DefenseTopicDetail() {
   const isSecretary = defenseInfo.councilMembers.some(
     (member: any) =>
       member.supervisorId ===
-      user?.[
-      "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
-      ] && member.isSecretary
+        user?.[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+        ] && member.isSecretary
   );
 
   const isPresident = defenseInfo.councilMembers.some(
     (member: any) =>
       member.supervisorId ===
-      user?.[
-      "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
-      ] && member.isPresident
+        user?.[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+        ] && member.isPresident
   );
 
   return (
@@ -198,7 +233,11 @@ export default function DefenseTopicDetail() {
               </div>
               <div className="space-y-2">
                 <h3 className="text-sm text-muted-foreground">Description:</h3>
-                <div dangerouslySetInnerHTML={{ __html: defenseInfo?.description || "" }} />
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: defenseInfo?.description || "",
+                  }}
+                />
               </div>
             </CardContent>
           </Card>
@@ -293,10 +332,32 @@ export default function DefenseTopicDetail() {
               </div>
             </div>
           )}
+
+        {results && (
+          <div className="space-y-2 mt-6 mb-6">
+            <h3
+              className="font-semibold flex items-center gap-2 cursor-pointer"
+              onClick={() => {
+                setShowReviewResults(!showReviewResults);
+              }}
+            >
+              <BookText className="size-3 text-primary" />
+              Review Results
+              {showReviewResults ? (
+                <ChevronUp className="mr-6" />
+              ) : (
+                <ChevronDown className="mr-6" />
+              )}
+            </h3>
+            {showReviewResults && <ResultDetails results={results} />}
+          </div>
+        )}
       </CardContent>
 
-      <CardFooter className="flex justify-end gap-4">
-        {(isSecretary || isPresident) && <UploadMinutes defendCapstoneCalendarId={defenseInfo.id} />}
+      <CardFooter className="flex justify-end gap-2">
+        {(isSecretary || isPresident) && (
+          <UploadMinutes defendCapstoneCalendarId={defenseInfo.id} />
+        )}
 
         {isPresident && (
           <ContinueDefense defendCapstoneCalendarId={defenseInfo.id} />

@@ -4,11 +4,13 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "@/hooks/use-api";
-import { DefenseCalendar } from "@/types/types";
+import { DefenseCalendar, ReviewResult } from "@/types/types";
 
 interface SupervisorDefenseContextProps {
   defenseCalendar: DefenseCalendar;
+  getDefenseThesisTemplate: () => Promise<string>;
   getThesisPresignedUrl: (calendarId: string) => Promise<string>;
+  getReviewResultByGroupId: (groupId: string) => Promise<ReviewResult[]>;
   importThesisDefendCapstoneMinute: (data: any) => Promise<void>;
   getDefendCapstoneCalendarById: (id: string) => Promise<any>;
   getPresignUrlOfGroupDocument: (groupId: string) => Promise<string>;
@@ -65,6 +67,11 @@ export const SupervisorDefenseProvider = ({
     return response?.value;
   };
 
+  const getDefenseThesisTemplate = async () => {
+    const response = await callApi("fuc/Documents/defend-thesis");
+    return (response?.value);
+};
+
   const importThesisDefendCapstoneMinute = async (data: any) => {
     const response: any = await callApi("fuc/user/defend/thesis", {
       method: "POST",
@@ -82,6 +89,11 @@ export const SupervisorDefenseProvider = ({
     return (response?.value);
   };
 
+  const getReviewResultByGroupId = async (groupId: string) => {
+    const response = await callApi(`fuc/user/review-calendar-result/${groupId}`);
+    return (response?.value);
+};
+
   useEffect(() => {
     getDefenseCalendar();
   }, []);
@@ -91,6 +103,8 @@ export const SupervisorDefenseProvider = ({
       value={{
         defenseCalendar,
         getThesisPresignedUrl,
+        getDefenseThesisTemplate,
+        getReviewResultByGroupId,
         getPresignUrlOfGroupDocument,
         getDefendCapstoneCalendarById,
         importThesisDefendCapstoneMinute,
