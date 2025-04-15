@@ -40,7 +40,7 @@ export const SuperadminTemplateProvider = ({ children }: { children: React.React
   };
 
   const getPresignedUrlTemplateDocument = async (id: string) => {
-    const response = await callApi(`fuc/Documents/template/presigned/${id}`, {
+    const response = await callApi(`fuc/Documents/templates/presigned/${id}`, {
       method: "GET",
     });
     return (response?.value);
