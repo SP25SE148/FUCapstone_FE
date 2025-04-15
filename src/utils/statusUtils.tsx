@@ -509,28 +509,19 @@ export function getDefenseCalendarStatus(status: string) {
   switch (status) {
     case "NotStarted":
       return (
-        <Badge
-          variant="outline"
-          className="bg-red-50 text-red-700 border-red-200 font-medium"
-        >
+        <Badge style={{ backgroundColor: "#60a5fa", color: "white" }}>
           Not Started
         </Badge>
       );
     case "InProgress":
       return (
-        <Badge
-          variant="outline"
-          className="bg-blue-50 text-blue-700 border-blue-200 font-medium"
-        >
+        <Badge style={{ backgroundColor: "#3b82f6", color: "white" }}>
           In Progress
         </Badge>
       );
     case "Done":
       return (
-        <Badge
-          variant="outline"
-          className="bg-green-50 text-green-700 border-green-200 font-medium"
-        >
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
           Done
         </Badge>
       );

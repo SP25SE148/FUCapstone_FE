@@ -28,7 +28,7 @@ export const ManagerDefenseProvider = ({
   const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar>({});
 
   const getGroupDecisionByManager = async (status: any) => {
-    const response = await callApi(`fuc/group/group-decision/${status}`);
+    const response = await callApi(`fuc/group/group-decision?status=${status}`);
     return response?.value;
   };
 
