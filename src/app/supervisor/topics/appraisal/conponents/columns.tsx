@@ -39,7 +39,7 @@ export const columns: ColumnDef<TopicAppraisal>[] = [
         ),
         cell: ({ row }) => {
             const topicAppraisal = row.original;
-            return getTopicAppraisalStatus(topicAppraisal?.status);
+            return getTopicAppraisalStatus(String(topicAppraisal?.status));
         },
     },
     {
