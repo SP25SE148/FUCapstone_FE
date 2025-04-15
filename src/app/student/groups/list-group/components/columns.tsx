@@ -10,32 +10,9 @@ import { getGroupStatus } from "@/utils/statusUtils"
 import GroupInfoSheet from "./group-info-sheet"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 
 export const columns: ColumnDef<GroupFullInfo>[] = [
-    {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: "campusName",
         header: ({ column }) => (
@@ -108,8 +85,8 @@ export const columns: ColumnDef<GroupFullInfo>[] = [
 
             return (
                 <div className="flex items-center justify-center">
-                    <Button variant="ghost" className="h-8 w-8 p-0" onClick={() => setOpen(true)}>
-                        <Eye className="h-4 w-4" />
+                    <Button size={"icon"} onClick={() => setOpen(true)}>
+                        <Eye />
                     </Button>
 
                     <GroupInfoSheet open={open} onClose={() => setOpen(false)} group={group} />

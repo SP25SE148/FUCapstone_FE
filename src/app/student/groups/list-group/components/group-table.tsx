@@ -31,7 +31,7 @@ export default function GroupTable() {
         :
         <Card className="min-h-[calc(100vh-60px)]">
             < CardHeader >
-                <CardTitle className="font-semibold tracking-tight text-xl text-primary">List Group</CardTitle>
+                <CardTitle className="font-semibold tracking-tight text-xl text-primary">Find Group</CardTitle>
                 <CardDescription>Information of list group is available to join</CardDescription>
             </CardHeader >
             <CardContent>
