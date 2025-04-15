@@ -97,25 +97,27 @@ export default function ListRequest() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <div className="bg-primary/10 p-2 rounded-full">
-                        <MessageCircleQuestion className="size-5 text-primary" />
+                    {request?.status === "Rejected" && (
+                      <div className="flex items-start gap-3">
+                        <div className="bg-primary/10 p-2 rounded-full">
+                          <MessageCircleQuestion className="size-5 text-primary" />
+                        </div>
+                        <div className="max-w-3xl">
+                          <h3 className="text-sm text-muted-foreground">
+                            Reject Reason
+                          </h3>
+                          {request?.reason !== "" ? (
+                            <p className="font-semibold tracking-tight break-words whitespace-pre-line">
+                              {request?.reason}
+                            </p>
+                          ) : (
+                            <p className="italic text-muted-foreground">
+                              No content
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div className="max-w-3xl">
-                        <h3 className="text-sm text-muted-foreground">
-                          Reject Reason
-                        </h3>
-                        {request?.reason !== "" ? (
-                          <p className="font-semibold tracking-tight break-words whitespace-pre-line">
-                            {request?.reason}
-                          </p>
-                        ) : (
-                          <p className="italic text-muted-foreground">
-                            No content
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                    )}
                     <div className="text-right space-y-2">
                       {getTopicRequestStatus(request?.status)}
                       <p className="text-sm text-muted-foreground">

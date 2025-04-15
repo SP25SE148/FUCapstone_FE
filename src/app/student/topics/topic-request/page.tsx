@@ -44,7 +44,10 @@ export default function TopicRequestPage() {
             {topicRequests.map(([key, requests]) => (
               <div key={key} className="px-4 py-2">
                 {requests.map((request) => (
-                  <div key={request.topicRequestId} className="p-6 rounded-lg bg-primary/5">
+                  <div
+                    key={request.topicRequestId}
+                    className="p-6 rounded-lg bg-primary/5"
+                  >
                     <div className="grid grid-cols-3 lg:grid-cols-5 gap-4 ">
                       <div className="col-span-1 lg:col-span-2 flex items-center gap-4">
                         <div className="bg-primary/10 p-2 rounded-full">
@@ -100,25 +103,27 @@ export default function TopicRequestPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 mt-4">
-                      <div className="bg-primary/10 p-2 rounded-full">
-                        <MessageCircleQuestion className="size-5 text-primary" />
+                    {request?.status === "Rejected" && (
+                      <div className="flex items-center gap-3 mt-4">
+                        <div className="bg-primary/10 p-2 rounded-full">
+                          <MessageCircleQuestion className="size-5 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm text-muted-foreground">
+                            Reject Reason
+                          </h3>
+                          {request?.reason !== "" ? (
+                            <p className="font-semibold tracking-tight break-words whitespace-pre-line">
+                              {request?.reason}
+                            </p>
+                          ) : (
+                            <p className="italic text-muted-foreground">
+                              No content
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-sm text-muted-foreground">
-                          Reject Reason
-                        </h3>
-                        {request?.reason !== "" ? (
-                          <p className="font-semibold tracking-tight break-words whitespace-pre-line">
-                            {request?.reason}
-                          </p>
-                        ) : (
-                          <p className="italic text-muted-foreground">
-                            No content
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
