@@ -34,13 +34,13 @@ export const columns: ColumnDef<DefenseCalendarItem>[] = [
     cell: ({ row }) => <div className="text-center">{row.original.defendAttempt}</div>,
   },
   {
-    accessorKey: "slot",
+    accessorKey: "time",
     header: ({ column }) => (
       <div className="flex justify-center w-full">
         <DataTableColumnHeader column={column} title="Slot" icon={<Clock className="h-4 w-4" />} />
       </div>
     ),
-    cell: ({ row }) => <div className="text-center">{row.original.slot}</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.time}</div>,
   },
   {
     accessorKey: "location",

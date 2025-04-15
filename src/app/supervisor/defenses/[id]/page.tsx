@@ -1,40 +1,30 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import {
-  BookOpen,
-  Users,
-  FileCheck,
-  Calendar,
-  PenTool,
-  User2,
-  MapPin,
-  Clock,
-} from "lucide-react";
-import { useParams } from "next/navigation";
-import DownloadDocument from "@/app/supervisor/defenses/[id]/components/download-document";
 import { useState, useEffect } from "react";
-import { useSupervisorDefense } from "@/contexts/supervisor/supervisor-defense-context";
+import { useParams } from "next/navigation";
+import { BookOpen, Users, FileCheck, Calendar, PenTool, User2, MapPin, Clock } from "lucide-react";
+
 import { getDateNoTime } from "@/lib/utils";
+import { useAuth } from "@/contexts/auth-context";
+import { DefenseCalendarItemFullInfo } from "@/types/types";
+import { useSupervisorDefense } from "@/contexts/supervisor/supervisor-defense-context";
+
 import UploadMinutes from "@/app/supervisor/defenses/[id]/components/upload-minutes";
 import ContinueDefense from "@/app/supervisor/defenses/[id]/components/continue-defense";
-import { useAuth } from "@/contexts/auth-context";
+import DownloadDocument from "@/app/supervisor/defenses/[id]/components/download-document";
+
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 
 export default function DefenseTopicDetail() {
   const params = useParams();
   const id: string = String(params.id);
+
   const { user } = useAuth();
   const { getDefendCapstoneCalendarById } = useSupervisorDefense();
-  const [defenseInfo, setDefenseInfo] = useState<any>(null);
+
+  const [defenseInfo, setDefenseInfo] = useState<DefenseCalendarItemFullInfo>();
 
   useEffect(() => {
     const fetchDefenseInfo = async () => {
@@ -54,17 +44,17 @@ export default function DefenseTopicDetail() {
   const isSecretary = defenseInfo.councilMembers.some(
     (member: any) =>
       member.supervisorId ===
-        user?.[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
-        ] && member.isSecretary
+      user?.[
+      "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+      ] && member.isSecretary
   );
 
   const isPresident = defenseInfo.councilMembers.some(
     (member: any) =>
       member.supervisorId ===
-        user?.[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
-        ] && member.isPresident
+      user?.[
+      "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+      ] && member.isPresident
   );
 
   return (
@@ -111,9 +101,9 @@ export default function DefenseTopicDetail() {
                       <Clock className="size-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="text-sm text-muted-foreground">Slot</h3>
+                      <h3 className="text-sm text-muted-foreground">Time</h3>
                       <p className="font-semibold tracking-tight">
-                        {defenseInfo.slot}
+                        {defenseInfo.time}
                       </p>
                     </div>
                   </div>
@@ -214,6 +204,36 @@ export default function DefenseTopicDetail() {
           </Card>
         </div>
 
+        {defenseInfo.supervisorName && (
+          <div className="space-y-2">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Users className="size-4 text-primary" />
+              Supervisor(s):
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              <Card className="bg-primary/5">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="size-12 border-2 border-primary">
+                      <AvatarFallback className="bg-primary/10">
+                        <User2 className="size-6 text-primary" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold">
+                        {defenseInfo.supervisorName}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {defenseInfo.supervisorId}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )}
+
         {defenseInfo &&
           defenseInfo.councilMembers &&
           defenseInfo.councilMembers.length > 0 && (
@@ -273,59 +293,6 @@ export default function DefenseTopicDetail() {
               </div>
             </div>
           )}
-
-        {defenseInfo.mainSupervisorName && (
-          <div className="space-y-2">
-            <h3 className="font-semibold flex items-center gap-2">
-              <Users className="size-4 text-primary" />
-              Supervisor(s):
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              <Card className="bg-primary/5">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="size-12 border-2 border-primary">
-                      <AvatarFallback className="bg-primary/10">
-                        <User2 className="size-6 text-primary" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-semibold">
-                        {defenseInfo.mainSupervisorName}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {defenseInfo.mainSupervisorEmail}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              {defenseInfo.coSupervisors?.map(
-                (supervisor: any, index: number) => (
-                  <Card key={index} className="bg-primary/5">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="size-12 border-2 border-primary">
-                          <AvatarFallback className="bg-primary/10">
-                            <User2 className="size-6 text-primary" />
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-semibold">
-                            {supervisor.SupervisorName}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {supervisor.SupervisorEmail}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              )}
-            </div>
-          </div>
-        )}
       </CardContent>
 
       <CardFooter className="flex justify-end gap-4">
