@@ -334,7 +334,7 @@ export default function LookupTopicPage() {
                                     </FormItem>
                                 )}
                             />
-                            <div className="flex justify-end gap-4">
+                            <div className="flex justify-end gap-2">
                                 <Button type="reset" onClick={handleReset} variant={"outline"}>
                                     <Trash2 />
                                     Clear
