@@ -8,6 +8,7 @@ import { EvaluationStudent, EvaluationWeek } from "@/types/types";
 import { useSupervisorGroup } from "@/contexts/supervisor/supervisor-group-context";
 
 import ExportEvaluation from "./components/export-evaluation";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -39,33 +40,34 @@ export default function MyEvaluationPage() {
                 <CardContent>
                     <Table className="border min-w-max select-none">
                         <TableHeader className="bg-primary hover:bg-primary">
-                            <TableRow className="hover:bg-primary">
-                                <TableHead className="py-2 h-fit text-background sticky left-0 bg-primary z-10">
+                            <TableRow className="border-none hover:bg-primary">
+                                <TableHead className="py-2 h-fit text-white sticky left-0 bg-primary z-10">
                                     Student
                                 </TableHead>
                                 {evaluationWeekly?.[0].evaluationWeeks?.map((evaluationWeek: EvaluationWeek, index: number) => (
-                                    <TableCell key={index} className="py-2 h-fit w-[200px] text-background">
+                                    <TableCell key={index} className="py-2 h-fit min-w-[200px] text-white">
                                         Week {evaluationWeek?.weekNumber}
                                     </TableCell>
                                 ))}
-                                <TableCell className="py-2 h-fit text-center text-background sticky right-0 bg-primary z-10">
+                                <TableCell className="py-2 h-fit text-center text-white sticky right-0 bg-primary z-10">
                                     Average Contribution
                                 </TableCell>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {evaluationWeekly?.map((student: EvaluationStudent, index: number) => (
-                                <TableRow key={index}>
-                                    <TableCell className="font-bold sticky left-0 bg-white z-10">
+                                <TableRow key={index} className="border-none bg-primary/5 hover:bg-primary/20">
+                                    <TableCell className="font-bold sticky left-0 z-10 bg-primary text-white">
                                         {student?.studentName}
                                     </TableCell>
                                     {student?.evaluationWeeks?.map((evaluationWeek: EvaluationWeek, index: number) => (
-                                        <TableCell key={index} className="space-y-2 w-[200px]">
+                                        <TableCell key={index} className="space-y-2 min-w-[200px]">
                                             <p className="text-muted-foreground">Contribution: <span className="text-foreground font-semibold">{evaluationWeek?.contributionPercentage}%</span></p>
                                             <p className="text-muted-foreground">Status: <span className="text-foreground font-semibold">{evaluationWeek?.status}</span></p>
+                                            <p className="text-muted-foreground">Comment: <span className="text-foreground font-semibold">{evaluationWeek?.comments}</span></p>
                                         </TableCell>
                                     ))}
-                                    <TableCell className="font-bold text-center sticky right-0 bg-white z-10">
+                                    <TableCell className="font-bold text-center sticky right-0 z-10 bg-primary text-white">
                                         {student?.averageContributionPercentage?.toFixed(2)}%
                                     </TableCell>
                                 </TableRow>
@@ -82,7 +84,8 @@ export default function MyEvaluationPage() {
                                 No reviews have been made yet.
                             </p>
                             <p className="text-muted-foreground text-center text-sm">
-                                Please take a evaluation to view and export the file.                            </p>
+                                Please take a evaluation to view and export the file.
+                            </p>
                         </div>
                     </div>
                 </CardContent>}

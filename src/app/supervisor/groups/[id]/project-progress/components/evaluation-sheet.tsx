@@ -130,7 +130,9 @@ export default function EvaluationSheet({ data, open, onClose, refresh }: GroupI
                                             min={0}
                                             value={evaluations[index]?.contributionPercentage}
                                             onChange={(e) => {
-                                                const value = e.target.value === "" ? 0 : Math.max(0, parseFloat(e.target.value));
+                                                let value = parseFloat(e.target.value);
+                                                if (isNaN(value)) value = 0;
+                                                value = Math.max(0, Math.min(100, value)); // Đảm bảo từ 0 đến 100
                                                 handleInputChange(index, "contributionPercentage", value);
                                             }}
                                             onBlur={(e) => {
@@ -139,6 +141,9 @@ export default function EvaluationSheet({ data, open, onClose, refresh }: GroupI
                                                 }
                                             }}
                                         />
+                                        {evaluations[index]?.contributionPercentage > 100 && (
+                                            <p className="text-red-500 text-sm mt-1">Max is 100%</p>
+                                        )}
                                     </TableCell>
                                     <TableCell>
                                         <Select

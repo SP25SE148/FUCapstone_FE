@@ -11,13 +11,11 @@ export default function DetailItem({ result }: { result: ReviewResult }) {
     const [showDetail, setShowDetail] = useState<boolean>(true);
 
     return (
-        <Card
-            className="cursor-pointer select-none hover:shadow-md transition-all"
-            onClick={() => { setShowDetail(!showDetail) }}
-        >
+        <Card>
             <div
+                onClick={() => { setShowDetail(!showDetail) }}
                 className={cn(
-                    `flex items-center justify-between bg-primary/20 rounded-t-xl`,
+                    `flex items-center justify-between bg-primary/20 rounded-t-xl cursor-pointer select-none`,
                     !showDetail && "rounded-xl"
                 )}
             >
