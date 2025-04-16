@@ -5,8 +5,8 @@ import { getDate } from "@/lib/utils"
 import { CalendarIcon, Clock, MapPin, Users, RotateCw, User2, ChevronUp, ChevronDown } from "lucide-react"
 
 import { ReviewCalendar } from "@/types/types"
+import { getReviewCalendarStatus } from "@/utils/statusUtils"
 
-import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -23,9 +23,7 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                     <div className="flex items-center gap-2">
                         <RotateCw className="size-4 text-primary" />
                         <CardTitle className="font-semibold tracking-tight text-xl text-primary">Review {calendar?.attempt}</CardTitle>
-                        <Badge variant="outline" className="mr-4 bg-primary text-background font-medium">
-                            {calendar?.status}
-                        </Badge>
+                        {getReviewCalendarStatus(calendar?.status)}
                     </div>
                 </CardHeader>
                 {showDetail ? <ChevronUp className="size-4 text-primary mr-4" /> : <ChevronDown className="size-4 text-primary mr-4" />}
