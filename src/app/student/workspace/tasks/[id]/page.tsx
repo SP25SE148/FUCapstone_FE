@@ -26,6 +26,7 @@ import AssignTask from "@/app/student/workspace/tasks/components/assign-task";
 import UpdatePriority from "@/app/student/workspace/tasks/components/update-priority";
 import UpdateDueDate from "@/app/student/workspace/tasks/components/update-duedate";
 import { Task } from "@/types/types";
+import { useAuth } from "@/contexts/auth-context";
 
 const getStatusBadge = (status: number) => {
   switch (status) {
@@ -52,6 +53,7 @@ const getStatusBadge = (status: number) => {
 export default function TaskDetailPage() {
   const { id } = useParams();
   const { getTaskDetail, updateTask } = useStudentTasks();
+  const { user } = useAuth();
   const [task, setTask] = useState<Task | null>(null);
   const [originalTask, setOriginalTask] = useState<Task | null>(null); // Store original values
   const [summary, setSummary] = useState("");
@@ -60,8 +62,11 @@ export default function TaskDetailPage() {
   const [newComment, setNewComment] = useState("");
   const [isEditingSummary, setIsEditingSummary] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-
-  useEffect(() => {
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const studentCode =
+    user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"];
+  
+    useEffect(() => {
     const fetchTask = async () => {
       if (id) {
         try {
@@ -80,6 +85,17 @@ export default function TaskDetailPage() {
     };
     fetchTask();
   }, [id, getTaskDetail]);
+
+  useEffect(() => {
+    if (
+      (task?.assigneeId === studentCode || task?.reporterId === studentCode) &&
+      task?.status !== 0
+    ) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [task?.assigneeId, task?.reporterId, studentCode, task]);
 
   const handleSave = async (field: "summary" | "description") => {
     if (!task) return;
@@ -199,6 +215,7 @@ export default function TaskDetailPage() {
             </CardHeader>
             <CardContent>
               <Textarea
+                disabled={!isActive}
                 value={summary}
                 onChange={(e) => {
                   setSummary(e.target.value);
@@ -233,6 +250,7 @@ export default function TaskDetailPage() {
             </CardHeader>
             <CardContent>
               <Textarea
+                disabled={!isActive}
                 value={description}
                 onChange={(e) => {
                   setDescription(e.target.value);
@@ -267,6 +285,7 @@ export default function TaskDetailPage() {
                 <TabsContent value="comments" className="space-y-4">
                   {!showCommentInput && (
                     <Button
+                      disabled={!isActive}
                       variant="outline"
                       className="w-full justify-start text-muted-foreground"
                       onClick={() => setShowCommentInput(true)}
@@ -279,6 +298,7 @@ export default function TaskDetailPage() {
                   {showCommentInput && (
                     <div className="space-y-2">
                       <Textarea
+                        disabled={!isActive}
                         placeholder="Add a comment..."
                         className="min-h-[60px] bg-white"
                         value={newComment}
@@ -396,14 +416,20 @@ export default function TaskDetailPage() {
               <span className="text-sm text-muted-foreground w-24">
                 Updated
               </span>
-              <span className="text-sm">{task.lastUpdatedDate ? getDate(task.lastUpdatedDate) : "Not yet"  }</span>
+              <span className="text-sm">
+                {task.lastUpdatedDate
+                  ? getDate(task.lastUpdatedDate)
+                  : "Not yet"}
+              </span>
             </div>
             <Separator />
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground w-24">
-              Completion Date
+                Completion Date
               </span>
-              <span className="text-sm">{task.completionDate ? getDate(task.completionDate) : "Not yet"}</span>
+              <span className="text-sm">
+                {task.completionDate ? getDate(task.completionDate) : "Not yet"}
+              </span>
             </div>
           </CardContent>
         </Card>

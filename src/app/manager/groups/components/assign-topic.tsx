@@ -16,7 +16,7 @@ interface AssignTopicProps {
   GroupId: string;
   open?: boolean;
   setOpen?: (open: boolean) => void;
-}
+} 
 
 export default function AssignTopic({ GroupId, open, setOpen }: AssignTopicProps) {
   const { passedTopicList, fetchPassedTopic, assignPendingTopicForGroup } = useManagerGroup();
@@ -45,15 +45,25 @@ export default function AssignTopic({ GroupId, open, setOpen }: AssignTopicProps
       return;
     }
 
-    await assignPendingTopicForGroup({
+    const response = await assignPendingTopicForGroup({
       TopicId: selectedTopicId,
       GroupId,
     });
+    if (response !== undefined) {
+      setOpen?.(false);
+      setSelectedTopicId(null);
+      setSearchQuery("");
+      setPageNumber(1);
+    }
   }
 
   useEffect(() => {
     if (open) {
       fetchTopics();
+    } else {
+      setSelectedTopicId(null);
+      setSearchQuery("");
+      setPageNumber(1);
     }
   }, [open, pageNumber, searchQuery]);
 

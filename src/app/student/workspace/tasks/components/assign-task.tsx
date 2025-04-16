@@ -6,6 +6,7 @@ import { Task } from "@/types/types";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
 
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import { useAuth } from "@/contexts/auth-context";
 
 interface AssignTaskProps {
   task: Task;
@@ -16,6 +17,9 @@ export default function AssignTask({ task, onAssign }: AssignTaskProps) {
   const { groupInfo, updateTask, getProjectProgressOfGroup } = useStudentTasks();
   const [students, setStudents] = useState<{ studentId: string; studentFullName: string }[]>([]);
   const [assignedTo, setAssignedTo] = useState<string>("");
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const { user } = useAuth();
+  const studentCode = user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"];
 
   useEffect(() => {
     if (groupInfo?.groupMemberList) {
@@ -34,6 +38,14 @@ export default function AssignTask({ task, onAssign }: AssignTaskProps) {
       setAssignedTo(task.assigneeId);
     }
   }, [task]);
+
+  useEffect(() => {
+    if ((assignedTo === studentCode || task.reporterId === studentCode) && task.status !== 0) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [assignedTo, task.reporterId, studentCode, task]);
   
 
   const handleAssign = async (value: string) => {
@@ -60,7 +72,7 @@ export default function AssignTask({ task, onAssign }: AssignTaskProps) {
   };
 
   return (
-    <Select onValueChange={handleAssign} value={assignedTo}>
+    <Select onValueChange={handleAssign} value={assignedTo} disabled={!isActive}>
       <SelectTrigger className="w-full">
         <span>{getStudentName(assignedTo)}</span>
       </SelectTrigger>

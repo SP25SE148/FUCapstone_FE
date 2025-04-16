@@ -42,7 +42,7 @@ function ActionsCell(row: Row<GroupFullInfo>) {
           >
             Copy group ID
           </DropdownMenuItem>
-          {!isFull && (
+          {!isFull && ( 
             <DropdownMenuItem onClick={() => setOpen(true)}>
               Add Member
             </DropdownMenuItem>

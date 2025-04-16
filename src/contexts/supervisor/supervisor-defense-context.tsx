@@ -68,7 +68,7 @@ export const SupervisorDefenseProvider = ({
   };
 
   const getDefenseThesisTemplate = async () => {
-    const response = await callApi("fuc/Documents/defend-thesis");
+    const response = await callApi("fuc/Documents/thesis-minutes");
     return (response?.value);
 };
 
