@@ -23,6 +23,7 @@ import UpdateDueDate from "@/app/student/workspace/tasks/components/update-dueda
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { getDate } from "@/lib/utils";
 
+
 const UpdateStatusCell = ({ task }: { task: Task }) => {
   return <UpdateStatus task={task} onClose={() => {}} />;
 };
@@ -36,10 +37,22 @@ const UpdateDueDateCell = ({ task }: { task: Task }) => {
 };
 
 const CompletionDateCell = ({ task }: { task: Task }) => {
+  const now = new Date();
+  const dueDate = new Date(task.dueDate);
+  const isExpired = !task.completionDate && now > dueDate;
+
+  if (task.completionDate) {
+    return <>{getDate(task.completionDate)}</>;
+  }
+
   return (
-    <>{task?.completionDate ? getDate(task.completionDate) : <p className="text-red-400">Not Done</p>}</>
+    <p className={isExpired ? "text-red-600 font-semibold" : "text-gray-400"}>
+      {isExpired ? "Task Expired" : "Not Done"}
+    </p>
   );
 };
+
+
 
 const KeyTaskCell = ({ task }: { task: Task }) => {
   const router = useRouter();

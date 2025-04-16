@@ -8,7 +8,6 @@ import { useStudentTasks } from "@/contexts/student/student-task-context";
 
 import AddTask from "@/app/student/workspace/tasks/components/add-task";
 import NoProgress from "@/app/student/workspace/tasks/components/no-progress";
-import TaskHistory from "@/app/student/workspace/tasks/components/task-history";
 
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -18,7 +17,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/co
 export default function TasksTable() {
   const { tasks, fetchProgressTask, groupInfo, getProjectProgressOfGroup } =
     useStudentTasks();
-  const [showHistory, setShowHistory] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [projectProgress, setProjectProgress] = useState<ProjectProgress>();
 
@@ -65,7 +63,6 @@ export default function TasksTable() {
       <CardContent>
         <DataTable columns={columns} data={tasks} />
       </CardContent>
-      {showHistory && <TaskHistory onClose={() => setShowHistory(false)} />}
       {showCreateTask && <AddTask onClose={() => setShowCreateTask(false)} />}
     </Card>
 

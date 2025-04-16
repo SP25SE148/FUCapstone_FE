@@ -6,7 +6,13 @@ import { Task } from "@/types/types";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
 
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { useAuth } from "@/contexts/auth-context";
 
 interface UpdatePriorityProps {
   task: Task;
@@ -21,14 +27,29 @@ const priorityOptions = [
 
 export default function UpdatePriority({ task, onClose }: UpdatePriorityProps) {
   const [priority, setPriority] = useState<string>("");
-  const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
+  const { updateTask, getProjectProgressOfGroup, groupInfo } =
+    useStudentTasks();
+  const { user } = useAuth();
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const studentCode =
+    user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"];
+
+  useEffect(() => {
+    if (
+      (task.assigneeId === studentCode || task.reporterId === studentCode) &&
+      task.status !== 0
+    ) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [task.assigneeId, task.reporterId, studentCode, task]);
 
   useEffect(() => {
     if (task.priority !== null) {
       setPriority(task.priority.toString());
     }
   }, [task]);
-  
 
   const handleUpdate = async (newPriority: string) => {
     setPriority(newPriority);
@@ -49,19 +70,25 @@ export default function UpdatePriority({ task, onClose }: UpdatePriorityProps) {
   };
 
   const getPriorityLabel = (priorityValue: string) => {
-    const priorityOption = priorityOptions.find((option) => option.value === priorityValue);
+    const priorityOption = priorityOptions.find(
+      (option) => option.value === priorityValue
+    );
     return priorityOption ? priorityOption.label : "Unknown";
   };
 
   const getPriorityColor = (priorityValue: string) => {
-    const priorityOption = priorityOptions.find((option) => option.value === priorityValue);
+    const priorityOption = priorityOptions.find(
+      (option) => option.value === priorityValue
+    );
     return priorityOption ? priorityOption.color : "bg-gray-100 text-gray-600";
   };
 
   return (
-    <Select onValueChange={handleUpdate} value={priority}>
+    <Select onValueChange={handleUpdate} value={priority} disabled={!isActive}>
       <SelectTrigger className="w-full">
-        <Badge className={getPriorityColor(priority)}>{getPriorityLabel(priority)}</Badge>
+        <Badge className={getPriorityColor(priority)}>
+          {getPriorityLabel(priority)}
+        </Badge>
       </SelectTrigger>
       <SelectContent>
         {priorityOptions.map((option) => (

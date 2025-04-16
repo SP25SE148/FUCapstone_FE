@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/auth-context";
 
 interface UpdateDueDateProps {
   task: Task;
@@ -18,10 +19,14 @@ interface UpdateDueDateProps {
 } 
 
 export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
+  const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
+  const { user } = useAuth();
+  const studentCode = user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"];
+  const isActive = task.reporterId === studentCode && task.status !== 0;
+
   const [date, setDate] = useState<Date | undefined>(
     undefined
   );
-  const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
 
   useEffect (() => {
     if (task.dueDate) {
@@ -62,6 +67,7 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          disabled={!isActive}
           variant={"outline"}
           className={cn(
             "w-full justify-start text-left font-normal",
@@ -78,7 +84,7 @@ export default function UpdateDueDate({ task, onClose }: UpdateDueDateProps) {
           selected={date}
           onSelect={handleDateChange}
           initialFocus
-          disabled={(date) => isDateDisabled(date)}
+          disabled={!isActive}
         />
       </PopoverContent>
     </Popover>

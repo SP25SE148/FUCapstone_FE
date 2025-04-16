@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Task } from "@/types/types";
 import { useStudentTasks } from "@/contexts/student/student-task-context";
 
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import { useAuth } from "@/contexts/auth-context";
 
 interface UpdateStatusProps {
   task: Task;
@@ -20,8 +21,25 @@ const statusOptions = [
 ];
 
 export default function UpdateStatus({ task, onClose }: UpdateStatusProps) {
-  const [status, setStatus] = useState<string>(task.status.toString());
+  const [status, setStatus] = useState<string>("");
   const { updateTask, getProjectProgressOfGroup, groupInfo } = useStudentTasks();
+  const { user } = useAuth();
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const studentCode = user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"];
+
+  useEffect(() => {
+      if ((task.assigneeId === studentCode || task.reporterId === studentCode) && task.status !== 0) {
+        setIsActive(true);
+      } else {
+        setIsActive(false);
+      }
+    }, [task.assigneeId, task.reporterId, studentCode, task]);
+
+    useEffect(() => {
+      if (task.status !== null) {
+        setStatus(task.status.toString());
+      }
+    }, [task]);
 
   const handleUpdate = async (newStatus: string) => {
     setStatus(newStatus);
@@ -53,7 +71,7 @@ export default function UpdateStatus({ task, onClose }: UpdateStatusProps) {
   };
 
   return (
-    <Select onValueChange={handleUpdate} value={status}>
+    <Select onValueChange={handleUpdate} value={status} disabled={!isActive}>
       <SelectTrigger className="w-full">
         <Badge className={getStatusColor(status)}>{getStatusLabel(status)}</Badge>
       </SelectTrigger>
