@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 
 export default function NotAllow() {
     return (
-        <Card className="min-h-[calc(100vh-16px)] flex items-center justify-center bg-gradient-to-tr from-primary/20 to-background">
+        <Card className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-gradient-to-tr from-primary/20 to-background">
             <div className="flex flex-col items-center justify-center gap-8">
                 <Users className="size-20 text-primary" />
                 <div className="space-y-2">

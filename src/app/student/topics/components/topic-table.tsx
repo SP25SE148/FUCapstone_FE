@@ -146,7 +146,7 @@ export default function TopicTable() {
     groupInfo?.status !== "InProgress" ? (
     <NotAllow />
   ) : (
-    <Card className="min-h-[calc(100vh-16px)]">
+    <Card className="min-h-[calc(100vh-60px)]">
       <CardHeader>
         <CardTitle className="font-semibold tracking-tight text-xl text-primary flex items-center gap-2">
           <BookOpen className="h-6 w-6" />
@@ -323,8 +323,8 @@ export default function TopicTable() {
             </Form>
           </Card>
         )}
-        
-        
+
+
         {passedTopicList?.items?.length <= 0 && (
           <Card className="p-8 flex items-center justify-center bg-muted/50 border-dashed border-2">
             <div className="flex flex-col items-center justify-center gap-6 py-8">
@@ -359,9 +359,8 @@ export default function TopicTable() {
                 pageNumber > 1 ? handlePreviousPage : (e) => e.preventDefault()
               }
               disabled={pageNumber === 1}
-              className={`flex items-center gap-1 ${
-                pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`flex items-center gap-1 ${pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             >
               <ChevronLeft className="h-4 w-4" />
               Previous
@@ -389,11 +388,10 @@ export default function TopicTable() {
                   : (e) => e.preventDefault()
               }
               disabled={pageNumber === passedTopicList?.totalNumberOfPages}
-              className={`flex items-center gap-1 ${
-                pageNumber === passedTopicList?.totalNumberOfPages
+              className={`flex items-center gap-1 ${pageNumber === passedTopicList?.totalNumberOfPages
                   ? "opacity-50 cursor-not-allowed"
                   : ""
-              }`}
+                }`}
             >
               Next
               <ChevronRight className="h-4 w-4" />
