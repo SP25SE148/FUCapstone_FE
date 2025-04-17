@@ -1,46 +1,20 @@
 "use client";
 
-import {
-  AlertCircle,
-  BookOpen,
-  Building,
-  GraduationCap,
-  Mail,
-  User,
-  Briefcase,
-  BarChart,
-  CheckCircle2,
-  Users,
-  Check,
-  X,
-  CheckCircleIcon,
-} from "lucide-react";
 import type React from "react";
 import { useState, useEffect } from "react";
+import { AlertCircle, BookOpen, GraduationCap, Mail, User, Briefcase, BarChart, CheckCircle2, Users, X, CheckCircleIcon, BadgeInfoIcon, BriefcaseBusiness, BookText, School, IdCard, ALargeSmall } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { getStudentStatus } from "@/utils/statusUtils";
 import { useStudentProfile } from "@/contexts/student/student-profile-context";
-import { Label } from "@/components/ui/label";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SkeletonLoader } from "@/components/layout/skeleton-loader";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
-import { getStudentStatus } from "@/utils/statusUtils";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 
 export default function StudentProfile() {
   const {
@@ -93,28 +67,28 @@ export default function StudentProfile() {
 
   if (loading) {
     return (
-      <Card className="min-h-[calc(100vh-16px)] max-w-4xl mx-auto">
+      <Card className="min-h-[calc(100vh-16px)]">
         <CardContent className="pt-6">
-          <SkeletonLoader />
+          <Skeleton className="min-h-[calc(100vh-64px)] w-full" />
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="min-h-[calc(100vh-16px)] w-full max-w-full mx-auto shadow-lg">
+    <Card className="min-h-[calc(100vh-16px)]">
       <CardHeader className="border-b">
         <div className="flex justify-between items-center">
-          <CardTitle className="font-bold tracking-tight text-2xl text-primary">
-            {showUpdateForm ? (
-              <span className="flex items-center">
-                Update your personal information{" "}
-                <span className="text-red-500 ml-2">(Compulsory)</span>
-              </span>
-            ) : (
-              "Student Profile"
-            )}
-          </CardTitle>
+          {showUpdateForm ? (
+            <CardTitle className="font-semibold tracking-tight text-xl text-primary flex items-center gap-2">
+              Update your personal information
+              <span className="text-red-500">(Compulsory)</span>
+            </CardTitle>
+          ) : (
+            <CardTitle className="font-semibold tracking-tight text-xl text-primary">
+              Student Profile
+            </CardTitle>
+          )}
         </div>
         <CardDescription>
           {showUpdateForm
@@ -123,128 +97,168 @@ export default function StudentProfile() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-4 py-6">
+      <CardContent className="space-y-4 p-6">
         <Card className="border shadow-sm">
-          <CardHeader className="bg-primary/5">
-            <div className="flex items-center gap-2">
+          <CardHeader className="bg-primary/5 rounded-t-xl">
+            <CardTitle className="font-semibold tracking-tight text-lg text-primary flex items-center gap-2">
               <User className="h-5 w-5 text-primary" />
-              <CardTitle className="text-lg font-medium text-primary">
-                Personal Information
-              </CardTitle>
-            </div>
+              Personal Information
+            </CardTitle>
           </CardHeader>
-          <CardContent className="pt-4 grid grid-cols-1 md:grid-cols-5 gap-6">
-            <div>
-              <Label className="text-sm text-muted-foreground">
-                Student ID
-              </Label>
-              <p className="font-medium mt-1">{studentProfile?.id}</p>
-            </div>
-
-            <div>
-              <Label className="text-sm text-muted-foreground">Full Name</Label>
-              <p className="font-medium mt-1">{studentProfile?.fullName}</p>
-            </div>
-
-            <div>
-              <Label className="text-sm text-muted-foreground">Email</Label>
-              <div className="flex items-center gap-2 mt-1">
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                <p className="font-medium">{studentProfile?.email}</p>
+          <CardContent className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="flex items-center space-x-2">
+              <div className="rounded-md p-2">
+                <IdCard className="size-4 text-primary" />
               </div>
-            </div>
-
-            <div className="flex items-center justify-center">
               <div>
-                <Label className="text-sm text-muted-foreground">
-                  Have Group
-                </Label>
-                <div className="flex items-center gap-2 mt-1">
-                  {studentProfile?.isHaveBeenJoinGroup ? (
-                    <>
-                      <p className="font-medium">Yes</p>
-                      <CheckCircleIcon className="h-6 w-6 text-green-500" />
-                    </>
-                  ) : (
-                    <>
-                      <p className="font-medium">No</p>
-                      <X className="h-6 w-6 text-red-500" />
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center">
-              <div>
-                <Label className="text-sm text-muted-foreground">Status</Label>
-                <div className="flex items-center gap-2 mt-1">
-                  {getStudentStatus(studentProfile?.status || "")}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border shadow-sm">
-          <CardHeader className="bg-primary/5">
-            <div className="flex items-center gap-2">
-              <GraduationCap className="h-5 w-5 text-primary" />
-              <CardTitle className="text-lg font-medium text-primary">
-                Academic Information
-              </CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <Label className="text-sm text-muted-foreground">Major</Label>
-              <div className="flex items-center gap-2 mt-1">
-                <BookOpen className="h-4 w-4 text-muted-foreground" />
-                <p className="font-medium">
-                  {studentProfile?.majorName} ({studentProfile?.majorId})
+                <h3 className="text-sm text-muted-foreground">Student ID</h3>
+                <p className="font-semibold tracking-tight">
+                  {studentProfile?.id}
                 </p>
               </div>
             </div>
 
-            <div>
-              <Label className="text-sm text-muted-foreground">Capstone</Label>
-              <p className="font-medium mt-1">
-                {studentProfile?.capstoneName} ({studentProfile?.capstoneId})
-              </p>
+            <div className="flex items-center space-x-2">
+              <div className="rounded-md p-2">
+                <ALargeSmall className="size-4 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-sm text-muted-foreground">Full Name</h3>
+                <p className="font-semibold tracking-tight">
+                  {studentProfile?.fullName}
+                </p>
+              </div>
             </div>
 
-            <div>
-              <Label className="text-sm text-muted-foreground">Campus</Label>
-              <div className="flex items-center gap-2 mt-1">
-                <Building className="h-4 w-4 text-muted-foreground" />
-                <p className="font-medium">{studentProfile?.campusName}</p>
+            <div className="flex items-center space-x-2">
+              <div className="rounded-md p-2">
+                <Mail className="size-4 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-sm text-muted-foreground">Email</h3>
+                <p className="font-semibold tracking-tight">
+                  {studentProfile?.email}
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card className="border shadow-sm">
-          <CardHeader className="bg-primary/5">
-            <div className="flex items-center gap-2">
-              <Briefcase className="h-5 w-5 text-primary" />
-              <CardTitle className="text-lg font-medium text-primary">
-                Capstone Project Information
-              </CardTitle>
-            </div>
+          <CardHeader className="bg-primary/5 rounded-t-xl">
+            <CardTitle className="font-semibold tracking-tight text-lg text-primary flex items-center gap-2">
+              <GraduationCap className="h-5 w-5 text-primary" />
+              Academic Information
+            </CardTitle>
           </CardHeader>
-          <CardContent className="pt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <CardContent className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="flex items-center space-x-2">
+              <div className="rounded-md p-2">
+                <School className="size-4 text-primary" />
+              </div>
               <div>
-                <Label className="text-sm text-muted-foreground">
-                  Business Area
-                </Label>
-                {showUpdateForm ? (
-                  <div className="mt-1">
+                <h3 className="text-sm text-muted-foreground">Campus</h3>
+                <p className="font-semibold tracking-tight">
+                  {studentProfile?.campusName}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="rounded-md p-2">
+                <BookText className="size-4 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-sm text-muted-foreground">Major</h3>
+                <p className="font-semibold tracking-tight">
+                  {studentProfile?.majorId} - <span className="text-muted-foreground text-sm">{studentProfile?.majorName}</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="rounded-md p-2">
+                <BookOpen className="size-4 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-sm text-muted-foreground">Capstone</h3>
+                <p className="font-semibold tracking-tight">
+                  {studentProfile?.capstoneId} - <span className="text-muted-foreground text-sm">{studentProfile?.capstoneName}</span>
+                </p>
+              </div>
+            </div>
+
+          </CardContent>
+        </Card>
+
+        <Card className="border shadow-sm">
+          <CardHeader className="bg-primary/5 rounded-t-xl">
+            <CardTitle className="font-semibold tracking-tight text-lg text-primary flex items-center gap-2">
+              <Briefcase className="h-5 w-5 text-primary" />
+              Capstone Project Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 space-y-4">
+            {showUpdateForm && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Warning</AlertTitle>
+                <AlertDescription>
+                  Please enter information accurately as it may affect your
+                  group assignment and project execution.
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div
+              className={cn(
+                "grid gap-4",
+                showUpdateForm ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+              )}
+            >
+              <div className="flex items-center space-x-2">
+                <div className="rounded-md p-2">
+                  <BadgeInfoIcon className="size-4 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-sm text-muted-foreground">Status</h3>
+                  {getStudentStatus(studentProfile?.status || "")}
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <div className="rounded-md p-2">
+                  <Users className="size-4 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-sm text-muted-foreground">Have Group</h3>
+                  {studentProfile?.isHaveBeenJoinGroup ? (
+                    <>
+                      <p className="font-semibold tracking-tight flex items-center gap-2">
+                        Yes
+                        <CheckCircleIcon className="h-6 w-6 text-green-500" />
+                      </p>
+
+                    </>
+                  ) : (
+                    <p className="font-semibold tracking-tight flex items-center gap-2">
+                      No
+                      <X className="h-6 w-6 text-red-500" />
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <div className="rounded-md p-2">
+                  <BriefcaseBusiness className="size-4 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-sm text-muted-foreground">Business area</h3>
+                  {showUpdateForm ? (
                     <Select
                       value={businessArea}
                       onValueChange={setBusinessArea}
                     >
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full mt-1">
                         <SelectValue placeholder="Select a business area" />
                       </SelectTrigger>
                       <SelectContent>
@@ -255,19 +269,21 @@ export default function StudentProfile() {
                         ))}
                       </SelectContent>
                     </Select>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 mt-1">
-                    <Briefcase className="h-4 w-4 text-muted-foreground" />
-                    <p className="font-medium">{businessArea}</p>
-                  </div>
-                )}
+                  ) : (
+                    <p className="font-semibold tracking-tight">
+                      {businessArea}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              <div>
-                <Label className="text-sm text-muted-foreground">GPA</Label>
-                {showUpdateForm ? (
-                  <div className="mt-1">
+              <div className="flex items-center space-x-2">
+                <div className="rounded-md p-2">
+                  <BarChart className="size-4 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-sm text-muted-foreground">GPA</h3>
+                  {showUpdateForm ? (
                     <Input
                       type="number"
                       value={GPA}
@@ -275,31 +291,19 @@ export default function StudentProfile() {
                       min={5}
                       max={10}
                       step={0.1}
-                      className="w-full"
+                      className="w-full mt-1"
                     />
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 mt-1">
-                    <BarChart className="h-4 w-4 text-muted-foreground" />
-                    <p className="font-medium">{GPA.toFixed(1)}</p>
-                  </div>
-                )}
+                  ) : (
+                    <p className="font-semibold tracking-tight">
+                      {GPA.toFixed(1)}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
 
             {showUpdateForm && (
-              <Alert variant="destructive" className="mb-6">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Warning</AlertTitle>
-                <AlertDescription>
-                  Please enter information accurately as it may affect your
-                  group assignment and project execution.
-                </AlertDescription>
-              </Alert>
-            )}
-
-            {showUpdateForm && (
-              <div className="flex items-center space-x-2 mt-4 border-t pt-3">
+              <div className="flex items-center space-x-2 border-t pt-3">
                 <Checkbox
                   id="confirmAccuracy"
                   checked={confirmAccuracy}
@@ -310,9 +314,8 @@ export default function StudentProfile() {
                 />
                 <label
                   htmlFor="confirmAccuracy"
-                  className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed ${
-                    !canConfirm ? "text-muted-foreground" : ""
-                  }`}
+                  className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed ${!canConfirm ? "text-muted-foreground" : ""
+                    }`}
                 >
                   I confirm that all information provided is accurate and
                   correct
@@ -324,15 +327,13 @@ export default function StudentProfile() {
       </CardContent>
 
       {showUpdateForm && (
-        <CardFooter className="flex justify-end pt-0 border-t p-6">
+        <CardFooter className="flex justify-end border-t p-6">
           <Button
             onClick={handleSubmit}
             disabled={!isFormValid}
-            className="px-6"
-            size="lg"
           >
-            <CheckCircle2 className="mr-2 h-4 w-4" />
-            Update Information
+            <CheckCircle2 />
+            UPDATE INFORMATION
           </Button>
         </CardFooter>
       )}
