@@ -1,19 +1,15 @@
 "use client";
 
+import { Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
+import { cn, getDateNoTime } from "@/lib/utils";
+import { useSupervisorDefense } from "@/contexts/supervisor/supervisor-defense-context";
+
 import { columns } from "./components/columns";
 import { DataTable } from "@/components/ui/data-table";
-import { useSupervisorDefense } from "@/contexts/supervisor/supervisor-defense-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar } from "lucide-react";
-import { cn, getDateNoTime } from "@/lib/utils";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function DefensesPage() {
   const { defenseCalendar } = useSupervisorDefense();
@@ -37,8 +33,8 @@ export default function DefensesPage() {
         </CardTitle>
         <CardDescription>Defenses schedule and information.</CardDescription>
       </CardHeader>
-      <CardContent>
-        {defenseDates.length > 0 ? (
+      {defenseDates.length > 0 ?
+        <CardContent>
           <Tabs
             defaultValue={defenseDates[0]}
             value={activeTab || defenseDates[0]}
@@ -70,18 +66,21 @@ export default function DefensesPage() {
               </TabsContent>
             ))}
           </Tabs>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-            <Calendar className="h-12 w-12 mb-4 opacity-20" />
-            <p className="text-lg font-medium">
-              No defense schedules available
-            </p>
-            <p className="text-sm">
-              Defense schedules will appear here when they become available
-            </p>
+        </CardContent>
+        :
+        <CardContent className="h-[calc(100vh-188px)] max-h-[calc(100vh-188px)]">
+          <div className="h-full flex flex-col items-center justify-center gap-8">
+            <Calendar className="size-20 text-primary" />
+            <div className="space-y-2">
+              <p className="text-xl font-bold text-center text-primary">
+                No defense schedules available.
+              </p>
+              <p className="text-muted-foreground text-center text-sm">
+                Defense schedules will appear here when they become available.
+              </p>
+            </div>
           </div>
-        )}
-      </CardContent>
-    </Card>
+        </CardContent>}
+    </Card >
   );
 }

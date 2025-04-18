@@ -282,6 +282,7 @@ export function TextEditorField({
   disabled?: boolean
 }) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         bulletList: {

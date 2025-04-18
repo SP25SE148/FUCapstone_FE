@@ -1,24 +1,20 @@
 "use client";
 
+import { Bell } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+import { getTimeElapsed } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 import { useSignalR } from "@/contexts/signalR-context";
-import { useRouter } from "next/navigation";
-import { Bell } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { getTimeElapsed } from "@/lib/utils";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function NotificationsPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const { connection, unreadedNoti } = useSignalR();
   const [notifications, setNotifications] = useState<any>();
-  const router = useRouter(); 
 
   useEffect(() => {
     if (!connection || connection.state !== "Connected") return;
@@ -46,7 +42,7 @@ export default function NotificationsPage() {
 
       case "TopicApprovedEvent":
       case "TopicStatusUpdatedEvent":
-      case "NewSupervisorAssignedForTopicEvent":  
+      case "NewSupervisorAssignedForTopicEvent":
         router.push("/supervisor/topics");
         break;
 
@@ -70,12 +66,14 @@ export default function NotificationsPage() {
           <strong className="text-primary">{user?.name}</strong>
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          {notifications?.map((notification: any) => (
+      {notifications && notifications?.length > 0
+        ?
+        <CardContent>
+          <div className="space-y-2">
+            {notifications?.map((notification: any) => (
               <div
                 key={notification?.id}
-                className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-200 group cursor-pointer"
+                className="p-3 rounded-md border border-border hover:bg-accent/50 transition-all duration-20 cursor-pointer"
                 onClick={() => handleNotificationClick(notification?.type)}
               >
                 <div className="flex items-start gap-3">
@@ -84,9 +82,6 @@ export default function NotificationsPage() {
                     <p className="font-semibold transition-all duration-200">
                       {notification?.content}
                     </p>
-                    {/* <p className="font-semibold transition-all duration-200">
-                      {notification?.type}
-                    </p> */}
                     <p className="text-sm font-medium text-primary  transition-all duration-200">
                       {getTimeElapsed(notification?.createdDate)}
                     </p>
@@ -94,15 +89,22 @@ export default function NotificationsPage() {
                 </div>
               </div>
             ))}
-
-          {!notifications ||
-            (notifications.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
-                <p>No notifications yet</p>
-              </div>
-            ))}
-        </div>
-      </CardContent>
+          </div>
+        </CardContent>
+        :
+        <CardContent className="h-[calc(100vh-120px)] max-h-[calc(100vh-120px)]">
+          <div className="h-full flex flex-col items-center justify-center gap-8">
+            <Bell className="size-20 text-primary" />
+            <div className="space-y-2">
+              <p className="text-xl font-bold text-center text-primary">
+                No notifications yet.
+              </p>
+              <p className="text-muted-foreground text-center text-sm">
+                Please check again later.
+              </p>
+            </div>
+          </div>
+        </CardContent>}
     </Card>
   );
 }

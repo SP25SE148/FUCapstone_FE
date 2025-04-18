@@ -191,7 +191,7 @@ export default function ListRequest() {
       <div className="h-full flex flex-col items-center justify-center gap-8">
         <Inbox className="size-20 text-primary" />
         <div className="space-y-2">
-          <p className="text-xl font-bold text-center">
+          <p className="text-xl font-bold text-center text-primary">
             You did not receive any requests.
           </p>
           <p className="text-muted-foreground text-center text-sm">

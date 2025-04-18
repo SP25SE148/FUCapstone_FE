@@ -28,7 +28,7 @@ export default function MainManage() {
                 {groupList?.map((group, index) => (
                     <Card
                         key={index}
-                        className="relative h-60 select-none  overflow-hidden cursor-pointer transition-all duration-300 border border-primary bg-primary/5 hover:bg-primary/10"
+                        className="relative h-60 select-none overflow-hidden cursor-pointer transition-all duration-300 border border-primary bg-primary/5 hover:bg-primary/10"
                         onClick={() => router.push(`/supervisor/groups/${group?.groupId}`)}
                     >
                         <CardHeader className="pb-2">
