@@ -121,6 +121,7 @@ export interface Student {
   email: string;
   status: string;
   gpa: number;
+  skills: string;
   businessArea: string;
   isHaveBeenJoinGroup: boolean;
 }
@@ -155,6 +156,7 @@ export interface SystemConfig {
   expirationTeamUpDuration: number;
   maxAttemptTimesToDefendCapstone: number;
   maxAttemptTimesToReviewTopic: number
+  semanticTopicThroughSemesters: number;
 }
 
 export interface TimeConfig {
@@ -292,6 +294,7 @@ export interface Member {
   studentFullName: string;
   studentEmail: string;
   gpa: number;
+  skills: string;
   isLeader: boolean;
   createdBy: string,
   createdDate: string,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Clock, Check, X, Inbox, User2 } from "lucide-react";
+import { Clock, Check, X, Inbox, User2, BicepsFlexedIcon, Brain } from "lucide-react";
 
 import { cn, getDate } from "@/lib/utils";
 import { getGroupMemberStatus } from "@/utils/statusUtils";
@@ -67,6 +67,9 @@ export default function InvitationReceived() {
                     <div className="space-y-2">
                       <p className="text-sm font-medium">
                         <span className="text-primary font-bold">{request.createdBy} - GPA: {request?.gpa}</span> invited you to join their group.
+                      </p>
+                      <p className="text-sm font-medium text-foreground flex items-center gap-1 pr-4">
+                        <span className="text-primary text-sm font-bold">Skills: </span> {request.skills}
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="size-3" />

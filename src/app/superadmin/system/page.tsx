@@ -1,6 +1,6 @@
 "use client"
 
-import { Settings, Users, Clock, Shield, BookOpen, RefreshCw, Info } from "lucide-react"
+import { Settings, Users, Clock, Shield, BookOpen, RefreshCw, Info, BrainCircuit, FileCheck2 } from "lucide-react"
 
 import { useSuperadminSystem } from "@/contexts/superadmin/superadmin-system-context"
 
@@ -17,6 +17,7 @@ export default function SystemConfigPage() {
     updateExpirationTeamUpDuration,
     updateMaxAttemptTimesToDefendCapstone,
     updateMaxAttemptTimesToReviewTopic,
+    updateSemanticTopicThroughSemesters
   } = useSuperadminSystem()
 
   if (!systemConfig) return <div className="flex items-center justify-center h-64">Loading...</div>
@@ -83,7 +84,7 @@ export default function SystemConfigPage() {
               <Card>
                 <CardContent className="p-4">
                   <InputGroup
-                    label="Topic request expiration duration"
+                    label="Topic request expiration duration (hours)"
                     value={systemConfig.expirationTopicRequestDuration}
                     onSave={(value) => updateExpirationTopicRequestDuration(value)}
                     icon={<Clock className="h-5 w-5 text-muted-foreground" />}
@@ -94,7 +95,7 @@ export default function SystemConfigPage() {
               <Card>
                 <CardContent className="p-4">
                   <InputGroup
-                    label="Team-up expiration duration"
+                    label="Team-up expiration duration (hours)"
                     value={systemConfig.expirationTeamUpDuration}
                     onSave={(value) => updateExpirationTeamUpDuration(value)}
                     icon={<Users className="h-5 w-5 text-muted-foreground" />}
@@ -130,6 +131,27 @@ export default function SystemConfigPage() {
                     value={systemConfig.maxAttemptTimesToReviewTopic}
                     onSave={(value) => updateMaxAttemptTimesToReviewTopic(value)}
                     icon={<RefreshCw className="h-5 w-5 text-muted-foreground" />}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          <Separator />
+          
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <BrainCircuit className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-semibold">AI Semantic Checking</h3>
+            </div>
+            <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
+              <Card>
+                <CardContent className="p-4">
+                  <InputGroup
+                    label="Checking in the last ... semesters"
+                    value={systemConfig.semanticTopicThroughSemesters}
+                    onSave={(value) => updateSemanticTopicThroughSemesters(value)}
+                    icon={<FileCheck2 className="h-5 w-5 text-muted-foreground" />}
                   />
                 </CardContent>
               </Card>

@@ -234,6 +234,9 @@ export default function MyGroup() {
                                                         <div>
                                                             <p className="font-semibold text-primary">{member.studentFullName} - {member.studentId} - GPA: {member?.gpa}</p>
                                                             <p className="text-sm text-muted-foreground">{member?.isLeader ? "Leader" : "Member"} - {member.studentEmail}</p>
+                                                            <p className="text-sm font-medium text-muted-foreground flex items-center gap-1 pr-4">
+                                                                <span className="text-primary text-sm font-bold">Skills: </span> {member?.skills}
+                                                            </p>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-2">

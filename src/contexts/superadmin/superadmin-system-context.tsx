@@ -15,6 +15,7 @@ interface SuperadminSystemContextProps {
   updateExpirationTeamUpDuration: (data: any) => Promise<void>;
   updateMaxAttemptTimesToDefendCapstone: (data: any) => Promise<void>;
   updateMaxAttemptTimesToReviewTopic: (data: any) => Promise<void>;
+  updateSemanticTopicThroughSemesters: (data: any) => Promise<void>;
 }
 
 const SuperadminSystemContext = createContext<SuperadminSystemContextProps | undefined>(undefined);
@@ -110,6 +111,18 @@ export const SuperadminSystemProvider: React.FC<{ children: React.ReactNode }> =
     return response
   };
 
+  const updateSemanticTopicThroughSemesters = async (data: any) => {
+    const response: any = await callApi("fuc/configuration/system/SemanticTopicThroughSemesters", {
+      method: "PATCH",
+      body: data,
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Update Semantic Topic Through Semesters successfully");
+    }
+    return response
+  };
+
   useEffect(() => {
     fetchSystemConfig();
   }, []);
@@ -120,6 +133,7 @@ export const SuperadminSystemProvider: React.FC<{ children: React.ReactNode }> =
         systemConfig,
         fetchSystemConfig,
         updateMaxTopicsForCoSupervisors,
+        updateSemanticTopicThroughSemesters,
         updateMaxTopicAppraisalsForTopic,
         updateExpirationTopicRequestDuration,
         updateExpirationTeamUpDuration,

@@ -17,6 +17,7 @@ interface StudentProfileContextType {
   updateStudentProfile: (data: {
     businessAreaId: string;
     GPA: number;
+    skills: string;
   }) => Promise<void>;
 }
 
@@ -50,6 +51,7 @@ export const StudentProfileProvider: React.FC<{
   const updateStudentProfile = async (data: {
     businessAreaId: string;
     GPA: number;
+    skills: string;
   }) => {
     const response = await callApi(`fuc/User/student`, {
       method: "PUT",

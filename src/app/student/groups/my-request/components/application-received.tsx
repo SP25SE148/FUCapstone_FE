@@ -10,7 +10,16 @@ import { useStudentGroupRequest } from "@/contexts/student/student-group-request
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function ApplicationReceived() {
   const { listRequest, updateJoinGroupRequest } = useStudentGroupRequest();
@@ -29,21 +38,21 @@ export default function ApplicationReceived() {
       setIsLoading(false);
       setOpen(false);
     }
-  }
+  };
 
   return (
     <div className="rounded-md border p-4 space-y-2 bg-muted">
-      {listRequest?.joinGroupRequested === null || listRequest?.joinGroupRequested?.length === 0
-        ?
-        (<div className="flex flex-col items-center justify-center">
+      {listRequest?.joinGroupRequested === null ||
+      listRequest?.joinGroupRequested?.length === 0 ? (
+        <div className="flex flex-col items-center justify-center">
           <Inbox className="h-16 w-16 text-muted-foreground" />
           <p className="mt-4 text-lg font-medium text-muted-foreground">
             No Request
           </p>
           <p className="text-muted-foreground">You have no request.</p>
-        </div>)
-        :
-        (listRequest?.joinGroupRequested
+        </div>
+      ) : (
+        listRequest?.joinGroupRequested
           ?.slice()
           ?.reverse()
           ?.map((request: Member, index: number) => (
@@ -58,7 +67,16 @@ export default function ApplicationReceived() {
                     </Avatar>
                     <div className="space-y-2">
                       <p className="text-sm font-medium">
-                        <span className="text-primary font-bold">{request.studentFullName} - GPA: {request?.gpa}</span> request to join your group.
+                        <span className="text-primary font-bold">
+                          {request.studentFullName} - GPA: {request?.gpa}
+                        </span>{" "}
+                        request to join your group.
+                      </p>
+                      <p className="text-sm font-medium text-foreground flex items-center gap-1 pr-4">
+                        <span className="text-primary text-sm font-bold">
+                          Skills:{" "}
+                        </span>{" "}
+                        {request.skills}
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="size-3" />
@@ -75,9 +93,9 @@ export default function ApplicationReceived() {
                           className="bg-primary text-white hover:bg-primary/90"
                           onClick={() => {
                             setInfo({
-                              "Id": request?.id,
-                              "Status": 1
-                            })
+                              Id: request?.id,
+                              Status: 1,
+                            });
                             setOpen(true);
                           }}
                         >
@@ -90,9 +108,9 @@ export default function ApplicationReceived() {
                           className="border-red-500 text-red-500 hover:bg-red-500 hover:text-background"
                           onClick={() => {
                             setInfo({
-                              "Id": request?.id,
-                              "Status": 2
-                            })
+                              Id: request?.id,
+                              Status: 2,
+                            });
                             setOpen(true);
                           }}
                         >
@@ -106,31 +124,45 @@ export default function ApplicationReceived() {
               </Card>
 
               {/* confirm */}
-              {request.status === "Pending" && <AlertDialog open={open} onOpenChange={() => { setOpen(false) }}>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>{info?.Status === 1 ? "Approve" : "Reject"} Request</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to {info?.Status === 1 ? "approve" : "reject"} this request?
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isLoading}>No</AlertDialogCancel>
-                    <AlertDialogAction
-                      disabled={isLoading}
-                      className={cn(
-                        info?.Status === 2 && "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-                      )}
-                      onClick={handleConfirm}
-                    >
-                      Yes, {info?.Status === 1 ? "Approve" : "Reject"}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>}
+              {request.status === "Pending" && (
+                <AlertDialog
+                  open={open}
+                  onOpenChange={() => {
+                    setOpen(false);
+                  }}
+                >
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        {info?.Status === 1 ? "Approve" : "Reject"} Request
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to{" "}
+                        {info?.Status === 1 ? "approve" : "reject"} this
+                        request?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel disabled={isLoading}>
+                        No
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        disabled={isLoading}
+                        className={cn(
+                          info?.Status === 2 &&
+                            "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        )}
+                        onClick={handleConfirm}
+                      >
+                        Yes, {info?.Status === 1 ? "Approve" : "Reject"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
             </div>
           ))
-        )}
+      )}
     </div>
   );
-};
+}

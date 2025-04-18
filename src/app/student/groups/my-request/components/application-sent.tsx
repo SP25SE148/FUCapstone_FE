@@ -60,6 +60,9 @@ export default function ApplicationSent() {
                       <p className="text-sm font-medium">
                         You have sent a request to join <span className="text-primary font-bold">{request.studentFullName} - GPA: {request?.gpa}</span> group.
                       </p>
+                      <p className="text-sm font-medium text-foreground flex items-center gap-1 pr-4">
+                        <span className="text-primary text-sm font-bold">Skills: </span> {request.skills}
+                      </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="size-3" />
                         {getDate(request.createdDate)}
