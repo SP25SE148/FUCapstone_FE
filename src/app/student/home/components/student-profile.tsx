@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { AlertCircle, BookOpen, GraduationCap, Mail, User, Briefcase, BarChart, CheckCircle2, Users, X, CheckCircleIcon, BadgeInfoIcon, BriefcaseBusiness, BookText, School, IdCard, ALargeSmall } from "lucide-react";
+import { AlertCircle, BookOpen, GraduationCap, Mail, User, Briefcase, BarChart, CheckCircle2, Users, X, CheckCircleIcon, BadgeInfoIcon, BriefcaseBusiness, BookText, School, IdCard, ALargeSmall, Brain } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { getStudentStatus } from "@/utils/statusUtils";
@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function StudentProfile() {
   const {
@@ -26,6 +27,7 @@ export default function StudentProfile() {
   const [loading, setLoading] = useState(true);
   const [businessArea, setBusinessArea] = useState("");
   const [GPA, setGPA] = useState<number>(0);
+  const [skills, setSkills] = useState("");
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [confirmAccuracy, setConfirmAccuracy] = useState(false);
 
@@ -33,8 +35,9 @@ export default function StudentProfile() {
     if (studentProfile) {
       setBusinessArea(studentProfile.businessArea);
       setGPA(studentProfile.gpa);
+      setSkills(studentProfile.skills);
       setShowUpdateForm(
-        studentProfile.businessArea === "" || studentProfile.gpa === 0
+        studentProfile.businessArea === "" || studentProfile.gpa === 0 || studentProfile.skills === null
       );
     }
   }, [studentProfile]);
@@ -56,6 +59,7 @@ export default function StudentProfile() {
       await updateStudentProfile({
         businessAreaId: selectedBusinessArea.id,
         GPA: GPA,
+        skills: skills,
       });
       setShowUpdateForm(false);
       setConfirmAccuracy(false);
@@ -63,7 +67,7 @@ export default function StudentProfile() {
   };
 
   const isFormValid = businessArea && GPA >= 5 && GPA <= 10 && confirmAccuracy;
-  const canConfirm = businessArea && GPA >= 5 && GPA <= 10;
+  const canConfirm = skills && businessArea && GPA >= 5 && GPA <= 10;
 
   if (loading) {
     return (
@@ -301,6 +305,28 @@ export default function StudentProfile() {
                 </div>
               </div>
             </div>
+
+            <div className="flex items-center space-x-2">
+                <div className="rounded-md p-2">
+                  <Brain className="size-4 text-primary" />
+                </div>
+                <div className="w-full flex-1">
+                  <h3 className="text-sm text-muted-foreground">Skills</h3>
+                  {showUpdateForm ? (
+                    <Textarea
+                      value={skills}
+                      onChange={(e) => setSkills(e.target.value)}
+                      placeholder="Enter your skills"
+                      className="w-full mt-1"
+                      rows={3}
+                    />
+                  ) : (
+                    <p className="font-semibold tracking-tight">
+                      {skills}
+                    </p>
+                  )}
+                </div>
+              </div>
 
             {showUpdateForm && (
               <div className="flex items-center space-x-2 border-t pt-3">
