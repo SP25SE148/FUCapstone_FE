@@ -8,6 +8,7 @@ import { getDate } from "@/lib/utils";
 import { getTopicDifficulty, getTopicStatus } from "@/utils/statusUtils";
 
 import DownloadDocument from "./download-document";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -19,7 +20,7 @@ export default function ItemTopic({ topic }: { topic: Topic }) {
         <>
             {/* item topic */}
             <Card
-                className="p-4 grid grid-cols-5 items-center cursor-pointer hover:bg-muted"
+                className="p-4 grid grid-cols-5 items-center cursor-pointer select-none overflow-hidden transition-all duration-300 border border-primary bg-primary/5 hover:bg-primary/10"
                 onClick={() => {
                     setOpenDetail(true);
                 }}

@@ -82,7 +82,8 @@ export default function NotificationsPage() {
           <strong className="text-primary">{user?.name}</strong>
         </CardDescription>
       </CardHeader>
-      {notifications && notifications?.length > 0 ?
+      {notifications && notifications?.length > 0
+        ?
         <CardContent>
           <div className="space-y-2">
             {notifications?.map((notification: any) => (
