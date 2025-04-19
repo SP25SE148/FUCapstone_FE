@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const formSchema = z.object({
   campusName: z.string().min(1, "Campus Name is required"),
@@ -78,7 +78,7 @@ export default function AddCampus() {
           Add Campus
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             <Building className="h-5 w-5" />
@@ -88,11 +88,7 @@ export default function AddCampus() {
         </DialogHeader>
 
         <Card className="border shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Campus Information</CardTitle>
-            <CardDescription>Enter the basic information required for campus registration.</CardDescription>
-          </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <div className="grid gap-5 md:grid-cols-2">
