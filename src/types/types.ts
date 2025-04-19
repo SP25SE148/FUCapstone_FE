@@ -157,6 +157,8 @@ export interface SystemConfig {
   maxAttemptTimesToDefendCapstone: number;
   maxAttemptTimesToReviewTopic: number
   semanticTopicThroughSemesters: number;
+  timeConfigurationRemindInDaysBeforeDueDate: number;
+  projectProgressRemindInDaysBeforeDueDate: number;
 }
 
 export interface TimeConfig {

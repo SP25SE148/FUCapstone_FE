@@ -9,26 +9,38 @@ import { SystemConfig } from "@/types/types";
 interface SuperadminSystemContextProps {
   systemConfig: SystemConfig | null;
   fetchSystemConfig: () => Promise<void>;
-  updateMaxTopicsForCoSupervisors: (data: any) => Promise<void>;
-  updateMaxTopicAppraisalsForTopic: (data: any) => Promise<void>;
-  updateExpirationTopicRequestDuration: (data: any) => Promise<void>;
-  updateExpirationTeamUpDuration: (data: any) => Promise<void>;
-  updateMaxAttemptTimesToDefendCapstone: (data: any) => Promise<void>;
-  updateMaxAttemptTimesToReviewTopic: (data: any) => Promise<void>;
-  updateSemanticTopicThroughSemesters: (data: any) => Promise<void>;
+  updateMaxTopicsForCoSupervisors: (data: number) => Promise<void>;
+  updateMaxTopicAppraisalsForTopic: (data: number) => Promise<void>;
+  updateExpirationTopicRequestDuration: (data: number) => Promise<void>;
+  updateExpirationTeamUpDuration: (data: number) => Promise<void>;
+  updateMaxAttemptTimesToDefendCapstone: (data: number) => Promise<void>;
+  updateMaxAttemptTimesToReviewTopic: (data: number) => Promise<void>;
+  updateSemanticTopicThroughSemesters: (data: number) => Promise<void>;
+  updateProjectProgressRemindInDaysBeforeDueDate: (
+    data: number
+  ) => Promise<void>;
+  updateTimeConfigurationRemindInDaysBeforeDueDate: (
+    data: number
+  ) => Promise<void>;
 }
 
-const SuperadminSystemContext = createContext<SuperadminSystemContextProps | undefined>(undefined);
+const SuperadminSystemContext = createContext<
+  SuperadminSystemContextProps | undefined
+>(undefined);
 
 export const useSuperadminSystem = () => {
   const context = useContext(SuperadminSystemContext);
   if (!context) {
-    throw new Error("useSuperadminSystem must be used within a SuperadminSystemProvider");
+    throw new Error(
+      "useSuperadminSystem must be used within a SuperadminSystemProvider"
+    );
   }
   return context;
 };
 
-export const SuperadminSystemProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const SuperadminSystemProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const { callApi } = useApi();
   const [systemConfig, setSystemConfig] = useState<SystemConfig | null>(null);
 
@@ -39,88 +51,152 @@ export const SuperadminSystemProvider: React.FC<{ children: React.ReactNode }> =
     setSystemConfig(response?.value);
   };
 
-  const updateMaxTopicsForCoSupervisors = async (data: any) => {
-    const response: any = await callApi("fuc/configuration/system/MaxTopicsForCoSupervisors", {
-      method: "PATCH",
-      body: data,
-    });
+  const updateMaxTopicsForCoSupervisors = async (data: number) => {
+    const response = await callApi(
+      "fuc/configuration/system/MaxTopicsForCoSupervisors",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
 
     if (response?.isSuccess === true) {
-      toast.success("Update max topics for co-supervisors successfully");
+      fetchSystemConfig();
+      toast.success("Update successfully");
     }
-    return response
+    return response;
   };
 
-  const updateMaxTopicAppraisalsForTopic = async (data: any) => {
-    const response: any = await callApi("/fuc/configuration/system/MaxTopicAppraisalsForTopic", {
-      method: "PATCH",
-      body: data,
-    });
+  const updateMaxTopicAppraisalsForTopic = async (data: number) => {
+    const response = await callApi(
+      "/fuc/configuration/system/MaxTopicAppraisalsForTopic",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
 
     if (response?.isSuccess === true) {
-      toast.success("Update max topic appraisals successfully");
+      fetchSystemConfig();
+      toast.success("Update successfully");
     }
-    return response
+    return response;
   };
 
-  const updateExpirationTopicRequestDuration = async (data: any) => {
-    const response: any = await callApi("fuc/configuration/system/ExpirationTopicRequestDuration", {
-      method: "PATCH",
-      body: data,
-    });
+  const updateExpirationTopicRequestDuration = async (data: number) => {
+    const response = await callApi(
+      "fuc/configuration/system/ExpirationTopicRequestDuration",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
 
     if (response?.isSuccess === true) {
-      toast.success("Update expiration topic request duration successfully");
+      fetchSystemConfig();
+      toast.success("Update successfully");
     }
-    return response
+    return response;
   };
 
-  const updateExpirationTeamUpDuration = async (data: any) => {
-    const response: any = await callApi("fuc/configuration/system/ExpirationTeamUpDuration", {
-      method: "PATCH",
-      body: data,
-    });
+  const updateExpirationTeamUpDuration = async (data: number) => {
+    const response = await callApi(
+      "fuc/configuration/system/ExpirationTeamUpDuration",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
 
     if (response?.isSuccess === true) {
-      toast.success("Update expiration team up duration successfully");
+      fetchSystemConfig();
+      toast.success("Update successfully");
     }
-    return response
+    return response;
   };
 
-  const updateMaxAttemptTimesToDefendCapstone = async (data: any) => {
-    const response: any = await callApi("fuc/configuration/system/MaxAttemptTimesToDefendCapstone", {
-      method: "PATCH",
-      body: data,
-    });
+  const updateMaxAttemptTimesToDefendCapstone = async (data: number) => {
+    const response = await callApi(
+      "fuc/configuration/system/MaxAttemptTimesToDefendCapstone",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
 
     if (response?.isSuccess === true) {
-      toast.success("Update max attempt times to defend capstone successfully");
+      fetchSystemConfig();
+      toast.success("Update successfully");
     }
-    return response
+    return response;
   };
 
-  const updateMaxAttemptTimesToReviewTopic = async (data: any) => {
-    const response: any = await callApi("fuc/configuration/system/MaxAttemptTimesToReviewTopic", {
-      method: "PATCH",
-      body: data,
-    });
+  const updateMaxAttemptTimesToReviewTopic = async (data: number) => {
+    const response = await callApi(
+      "fuc/configuration/system/MaxAttemptTimesToReviewTopic",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
 
     if (response?.isSuccess === true) {
-      toast.success("Update max attempt times to review topic successfully");
+      fetchSystemConfig();
+      toast.success("Update successfully");
     }
-    return response
+    return response;
   };
 
-  const updateSemanticTopicThroughSemesters = async (data: any) => {
-    const response: any = await callApi("fuc/configuration/system/SemanticTopicThroughSemesters", {
-      method: "PATCH",
-      body: data,
-    });
+  const updateSemanticTopicThroughSemesters = async (data: number) => {
+    const response = await callApi(
+      "fuc/configuration/system/SemanticTopicThroughSemesters",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
 
     if (response?.isSuccess === true) {
-      toast.success("Update Semantic Topic Through Semesters successfully");
+      fetchSystemConfig();
+      toast.success("Update successfully");
     }
-    return response
+    return response;
+  };
+
+  const updateTimeConfigurationRemindInDaysBeforeDueDate = async (
+    data: number
+  ) => {
+    const response = await callApi(
+      "fuc/configuration/system/TimeConfigurationRemindInDaysBeforeDueDate",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
+
+    if (response?.isSuccess === true) {
+      fetchSystemConfig();
+      toast.success("Update successfully");
+    }
+    return response;
+  };
+
+  const updateProjectProgressRemindInDaysBeforeDueDate = async (
+    data: number
+  ) => {
+    const response = await callApi(
+      "fuc/configuration/system/ProjectProgressRemindInDaysBeforeDueDate",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
+
+    if (response?.isSuccess === true) {
+      fetchSystemConfig();
+      toast.success("Update successfully");
+    }
+    return response;
   };
 
   useEffect(() => {
@@ -132,13 +208,15 @@ export const SuperadminSystemProvider: React.FC<{ children: React.ReactNode }> =
       value={{
         systemConfig,
         fetchSystemConfig,
-        updateMaxTopicsForCoSupervisors,
-        updateSemanticTopicThroughSemesters,
-        updateMaxTopicAppraisalsForTopic,
-        updateExpirationTopicRequestDuration,
         updateExpirationTeamUpDuration,
+        updateMaxTopicsForCoSupervisors,
+        updateMaxTopicAppraisalsForTopic,
+        updateMaxAttemptTimesToReviewTopic,
+        updateSemanticTopicThroughSemesters,
+        updateExpirationTopicRequestDuration,
         updateMaxAttemptTimesToDefendCapstone,
-        updateMaxAttemptTimesToReviewTopic
+        updateProjectProgressRemindInDaysBeforeDueDate,
+        updateTimeConfigurationRemindInDaysBeforeDueDate,
       }}
     >
       {children}
