@@ -3,6 +3,7 @@
 import { useAuth } from "@/contexts/auth-context";
 import { useAdminStudent } from "@/contexts/admin/admin-student-context";
 
+import EstimateTopic from "./estimate-topic";
 import AddStudent from "./add-student/add-student";
 
 import { columns } from "./columns";
@@ -20,7 +21,10 @@ export default function StudentTable() {
                     <CardTitle className="font-semibold tracking-tight text-xl">Students</CardTitle>
                     <CardDescription>Campus {user?.CampusId}</CardDescription>
                 </CardHeader>
-                <AddStudent />
+                <div className="flex items-center gap-2">
+                    <EstimateTopic />
+                    <AddStudent />
+                </div>
             </div>
             <CardContent>
                 <DataTable columns={columns} data={students || []} />

@@ -14,6 +14,7 @@ interface AdminStudentContextProps {
   getStudentsTemplate: () => Promise<string>;
   importStudent: (data: any) => Promise<void>;
   fetchCapstoneListByMajor: (majorId: string) => Promise<Capstone[]>;
+  estimateTopics: () => Promise<void>;
 }
 
 const AdminStudentContext = createContext<AdminStudentContextProps | undefined>(undefined);
@@ -72,13 +73,33 @@ export const AdminStudentProvider = ({ children }: { children: React.ReactNode }
     return (response?.value);
   };
 
+  const estimateTopics = async () => {
+    const response: any = await callApi("fuc/configuration/estimate/minimum-topics", {
+      method: "POST",
+    });
+
+    if (response?.isSuccess === true) {
+      toast.success("Estimate topics successfully");
+    }
+    return response
+  };
+
   useEffect(() => {
     fetchStudentList();
   }, []);
 
   return (
     <AdminStudentContext.Provider
-      value={{ students, fetchStudentList, addStudent, getStudentsTemplate, importStudent, fetchMajorList, fetchCapstoneListByMajor }}
+      value={{
+        students,
+        fetchStudentList,
+        addStudent,
+        getStudentsTemplate,
+        importStudent,
+        fetchMajorList,
+        fetchCapstoneListByMajor,
+        estimateTopics
+      }}
     >
       {children}
     </AdminStudentContext.Provider>

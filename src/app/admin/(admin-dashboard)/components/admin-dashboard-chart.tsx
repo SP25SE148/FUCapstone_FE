@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Label, Pie, PieChart } from "recharts";
+import { FileCheck, UserPen } from "lucide-react";
 
 import { useAdminDashboard } from "@/contexts/admin/admin-dashboard-context";
 
@@ -42,6 +43,10 @@ export default function AdminDashBoardCharts() {
     }));
   }, [dashboard?.supervisorsInEachMajor, supervisorsInEachMajorConfig]);
 
+  const hasMeaningfulSupervisorsChartData = supervisorsInEachMajorData.some(
+    (item) => item.value !== 0
+  )
+
   const totalSupervisors = React.useMemo(() => {
     return supervisorsInEachMajorData.reduce((acc, curr) => acc + curr?.value, 0);
   }, [supervisorsInEachMajorData]);
@@ -77,6 +82,10 @@ export default function AdminDashBoardCharts() {
     }));
   }, [dashboard?.topicsInEachCapstone, topicsInEachCapstoneConfig]);
 
+  const hasMeaningfulTopicsChartData = topicsInEachCapstoneData.some(
+    (item) => item.value !== 0
+  )
+
   const totalTopics = React.useMemo(() => {
     return topicsInEachCapstoneData.reduce((acc, curr) => acc + curr.value, 0);
   }, [topicsInEachCapstoneData]);
@@ -89,56 +98,64 @@ export default function AdminDashBoardCharts() {
           <CardTitle>Supervisors by Major</CardTitle>
           <CardDescription>In this semester</CardDescription>
         </CardHeader>
-        <CardContent className="flex-1 pb-0">
-          <ChartContainer
-            config={supervisorsInEachMajorConfig}
-            className="mx-auto aspect-square max-h-[350px]"
-          >
-            <PieChart>
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Pie
-                data={supervisorsInEachMajorData}
-                dataKey="value"
-                nameKey="major"
-                innerRadius={60}
-                strokeWidth={5}
-              >
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                        >
-                          <tspan
+        {hasMeaningfulSupervisorsChartData
+          ?
+          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={supervisorsInEachMajorConfig}
+              className="mx-auto aspect-square max-h-[350px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={supervisorsInEachMajorData}
+                  dataKey="value"
+                  nameKey="major"
+                  innerRadius={60}
+                  strokeWidth={5}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            textAnchor="middle"
+                            dominantBaseline="middle"
                           >
-                            {totalSupervisors?.toLocaleString()}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 24}
-                            className="fill-muted-foreground"
-                          >
-                            Supervisor(s)
-                          </tspan>
-                        </text>
-                      );
-                    }
-                  }}
-                />
-              </Pie>
-            </PieChart>
-          </ChartContainer>
-        </CardContent>
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-3xl font-bold"
+                            >
+                              {totalSupervisors?.toLocaleString()}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-muted-foreground"
+                            >
+                              Supervisor(s)
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          :
+          <CardContent className="flex flex-col items-center justify-center h-[350px] text-center text-muted-foreground space-y-2">
+            <UserPen className="h-10 w-10 text-primary" />
+            <p className="text-sm font-medium">No data yet</p>
+            <p className="text-xs">Once there's data, it will be shown here.</p>
+          </CardContent>}
       </Card>
 
       {/* Topics Chart */}
@@ -147,56 +164,64 @@ export default function AdminDashBoardCharts() {
           <CardTitle>Topic(s) Overview</CardTitle>
           <CardDescription>In this semester</CardDescription>
         </CardHeader>
-        <CardContent className="flex-1 pb-0">
-          <ChartContainer
-            config={topicsInEachCapstoneConfig}
-            className="mx-auto aspect-square max-h-[350px]"
-          >
-            <PieChart>
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Pie
-                data={topicsInEachCapstoneData}
-                dataKey="value"
-                nameKey="capstone"
-                innerRadius={60}
-                strokeWidth={5}
-              >
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                        >
-                          <tspan
+        {hasMeaningfulTopicsChartData
+          ?
+          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={topicsInEachCapstoneConfig}
+              className="mx-auto aspect-square max-h-[350px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={topicsInEachCapstoneData}
+                  dataKey="value"
+                  nameKey="capstone"
+                  innerRadius={60}
+                  strokeWidth={5}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            textAnchor="middle"
+                            dominantBaseline="middle"
                           >
-                            {totalTopics.toLocaleString()}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 24}
-                            className="fill-muted-foreground"
-                          >
-                            Topic(s)
-                          </tspan>
-                        </text>
-                      );
-                    }
-                  }}
-                />
-              </Pie>
-            </PieChart>
-          </ChartContainer>
-        </CardContent>
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-3xl font-bold"
+                            >
+                              {totalTopics.toLocaleString()}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-muted-foreground"
+                            >
+                              Topic(s)
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          :
+          <CardContent className="flex flex-col items-center justify-center h-[350px] text-center text-muted-foreground space-y-2">
+            <FileCheck className="h-10 w-10 text-primary" />
+            <p className="text-sm font-medium">No data yet</p>
+            <p className="text-xs">Once there's data, it will be shown here.</p>
+          </CardContent>}
       </Card>
     </div>
   );

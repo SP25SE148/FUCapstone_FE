@@ -1,6 +1,6 @@
 "use client";
 
-import { Users, UserPen, User, FileText } from "lucide-react";
+import { UserPen, FileText, Calculator } from "lucide-react";
 
 import { useManagerDashboard } from "@/contexts/manager/manager-dashboard-context";
 
@@ -11,10 +11,9 @@ export default function ManagerDashBoardOverall() {
 
     const items = [
         { title: "Supervisors", stat: dashboard?.supervisors || 0, icon: UserPen },
-        { title: "Students", stat: dashboard?.students || 0, icon: User },
-        { title: "Groups", stat: dashboard?.groups || 0, icon: Users },
+        { title: "Estimate Topic", stat: dashboard?.maxTopicsOfCapstone || 0, icon: Calculator },
         { title: "Topics", stat: dashboard?.topics || 0, icon: FileText },
     ];
 
-    return DashboardOverall({ items });
+    return <DashboardOverall items={items} classnames="lg:grid-cols-3" />;
 }

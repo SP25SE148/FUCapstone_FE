@@ -7,6 +7,7 @@ import { useSuperadminDashboard } from "@/contexts/superadmin/superadmin-dashboa
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, } from "@/components/ui/chart";
+import { ChartColumn, UserPen } from "lucide-react";
 
 export default function DashBoardCharts() {
   const { dashboard } = useSuperadminDashboard();
@@ -35,6 +36,10 @@ export default function DashBoardCharts() {
       group: value.groups,
     }));
   }, [dashboard?.dataPerCampus]);
+
+  const hasMeaningfulTopicGroupChartData = topicGroupPerCampusData.some(
+    (item) => item?.topic !== 0 || item?.group !== 0
+  )
 
   // PieChart Config
   const generateChartConfig = (keys: string[]): ChartConfig => {
@@ -80,6 +85,10 @@ export default function DashBoardCharts() {
     });
   }, [dashboard?.dataPerCampus, supervisorsPerCampusConfig]);
 
+  const hasMeaningfulSupervisorChartData = supervisorsPerCampusData.some(
+    (item) => item?.value !== 0
+  )
+
   const totalSupervisors = React.useMemo(() => {
     return supervisorsPerCampusData.reduce((acc, curr) => acc + curr.value, 0);
   }, [supervisorsPerCampusData]);
@@ -109,6 +118,10 @@ export default function DashBoardCharts() {
     });
   }, [dashboard?.dataPerCampus, studentsPerCampusConfig]);
 
+  const hasMeaningfulStudentChartData = studentsPerCampusData.some(
+    (item) => item?.value !== 0
+  )
+
   const totalStudents = React.useMemo(() => {
     return studentsPerCampusData.reduce((acc, curr) => acc + curr.value, 0);
   }, [studentsPerCampusData]);
@@ -121,23 +134,31 @@ export default function DashBoardCharts() {
           <CardTitle>Topics & Groups per Campus</CardTitle>
           <CardDescription>In this semester</CardDescription>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={topicGroupPerCampusData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="campus"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <ChartLegend content={<ChartLegendContent />} />
-              <Bar dataKey="topic" fill={chartConfig.topic.color} radius={4} />
-              <Bar dataKey="group" fill={chartConfig.group.color} radius={4} />
-            </BarChart>
-          </ChartContainer>
-        </CardContent>
+        {hasMeaningfulTopicGroupChartData
+          ?
+          <CardContent>
+            <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+              <BarChart accessibilityLayer data={topicGroupPerCampusData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="campus"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Bar dataKey="topic" fill={chartConfig.topic.color} radius={4} />
+                <Bar dataKey="group" fill={chartConfig.group.color} radius={4} />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          :
+          <CardContent className="flex flex-col items-center justify-center h-[350px] text-center text-muted-foreground space-y-2">
+            <ChartColumn className="h-10 w-10 text-primary" />
+            <p className="text-sm font-medium">No data yet</p>
+            <p className="text-xs">Once there's data, it will be shown here.</p>
+          </CardContent>}
       </Card>
 
       {/* Pie Chart 1: Supervisors */}
@@ -146,56 +167,64 @@ export default function DashBoardCharts() {
           <CardTitle>Supervisors Overview</CardTitle>
           <CardDescription>In this semester</CardDescription>
         </CardHeader>
-        <CardContent>
-          <ChartContainer
-            config={supervisorsPerCampusConfig}
-            className="mx-auto aspect-square max-h-[350px]"
-          >
-            <PieChart>
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Pie
-                data={supervisorsPerCampusData}
-                dataKey="value"
-                nameKey="campus"
-                innerRadius={60}
-                strokeWidth={5}
-              >
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                        >
-                          <tspan
+        {hasMeaningfulSupervisorChartData
+          ?
+          <CardContent>
+            <ChartContainer
+              config={supervisorsPerCampusConfig}
+              className="mx-auto aspect-square max-h-[350px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={supervisorsPerCampusData}
+                  dataKey="value"
+                  nameKey="campus"
+                  innerRadius={60}
+                  strokeWidth={5}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            textAnchor="middle"
+                            dominantBaseline="middle"
                           >
-                            {totalSupervisors?.toLocaleString()}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 24}
-                            className="fill-muted-foreground"
-                          >
-                            Supervisor(s)
-                          </tspan>
-                        </text>
-                      );
-                    }
-                  }}
-                />
-              </Pie>
-            </PieChart>
-          </ChartContainer>
-        </CardContent>
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-3xl font-bold"
+                            >
+                              {totalSupervisors?.toLocaleString()}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-muted-foreground"
+                            >
+                              Supervisor(s)
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          :
+          <CardContent className="flex flex-col items-center justify-center h-[350px] text-center text-muted-foreground space-y-2">
+            <UserPen className="h-10 w-10 text-primary" />
+            <p className="text-sm font-medium">No data yet</p>
+            <p className="text-xs">Once there's data, it will be shown here.</p>
+          </CardContent>}
       </Card>
 
       {/* Pie Chart 2: Students */}
@@ -204,56 +233,64 @@ export default function DashBoardCharts() {
           <CardTitle>Students Overview</CardTitle>
           <CardDescription>In this semester</CardDescription>
         </CardHeader>
-        <CardContent>
-          <ChartContainer
-            config={studentsPerCampusConfig}
-            className="mx-auto aspect-square max-h-[350px]"
-          >
-            <PieChart>
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Pie
-                data={studentsPerCampusData}
-                dataKey="value"
-                nameKey="campus"
-                innerRadius={60}
-                strokeWidth={5}
-              >
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                        >
-                          <tspan
+        {hasMeaningfulStudentChartData
+          ?
+          <CardContent>
+            <ChartContainer
+              config={studentsPerCampusConfig}
+              className="mx-auto aspect-square max-h-[350px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={studentsPerCampusData}
+                  dataKey="value"
+                  nameKey="campus"
+                  innerRadius={60}
+                  strokeWidth={5}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            className="fill-foreground text-3xl font-bold"
+                            textAnchor="middle"
+                            dominantBaseline="middle"
                           >
-                            {totalStudents?.toLocaleString()}
-                          </tspan>
-                          <tspan
-                            x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 24}
-                            className="fill-muted-foreground"
-                          >
-                            Student(s)
-                          </tspan>
-                        </text>
-                      );
-                    }
-                  }}
-                />
-              </Pie>
-            </PieChart>
-          </ChartContainer>
-        </CardContent>
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-3xl font-bold"
+                            >
+                              {totalStudents?.toLocaleString()}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-muted-foreground"
+                            >
+                              Student(s)
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          :
+          <CardContent className="flex flex-col items-center justify-center h-[350px] text-center text-muted-foreground space-y-2">
+            <UserPen className="h-10 w-10 text-primary" />
+            <p className="text-sm font-medium">No data yet</p>
+            <p className="text-xs">Once there's data, it will be shown here.</p>
+          </CardContent>}
       </Card>
     </div>
   );

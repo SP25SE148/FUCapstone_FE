@@ -24,7 +24,7 @@ export default function DashboardOverall({ items, classnames }: DashboardOverall
   return (
     <div
       className={cn(
-        "grid gap-4 md:grid-cols-2 lg:grid-cols-4",
+        "grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
         classnames
       )}
     >
