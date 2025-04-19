@@ -1,6 +1,7 @@
 import { SupervisorDashboardProvider } from "@/contexts/supervisor/supervisor-dashboard-context";
 
 import SummaryCards from "./components/summary-cards";
+import EstimateTopic from "./components/estimate-topic";
 import CompletionOverdueChart from "./components/completion-overdue-chart";
 import AverageTaskDurationChart from "./components/average-task-duration-chart";
 import StudentContributionsChart from "./components/student-contributions-chart";
@@ -17,6 +18,7 @@ export default function Home() {
                     <CardDescription>Dashboard overview about my groups</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                    <EstimateTopic />
                     <SummaryCards />
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <CompletionOverdueChart />

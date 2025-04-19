@@ -16,7 +16,7 @@ export default function AddStudent() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="m-6">
+                <Button className="mr-6">
                     <CirclePlus />
                     Add
                 </Button>
