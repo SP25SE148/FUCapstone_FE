@@ -27,7 +27,7 @@ export default function CampusTable() {
         {loading ? (
           <SkeletonLoader />
         ) : (
-          <DataTable columns={columns} data={campuses} />
+          <DataTable columns={columns} data={campuses.slice().reverse()} />
         )}
       </CardContent>
     </Card>
