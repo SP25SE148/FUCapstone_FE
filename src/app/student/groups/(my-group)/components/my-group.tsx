@@ -218,6 +218,9 @@ export default function MyGroup() {
                                                     <div>
                                                         <p className="font-semibold text-primary">{leaderInfo?.studentFullName} - {leaderInfo?.studentId} - GPA: {leaderInfo?.gpa}</p>
                                                         <p className="text-sm text-muted-foreground">{leaderInfo?.isLeader ? "Leader" : "Member"} - {leaderInfo?.studentEmail}</p>
+                                                        <p className="text-sm font-medium text-muted-foreground flex items-center gap-1 pr-4">
+                                                            <span className="text-primary text-sm font-bold">Skills: </span> {leaderInfo?.skills}
+                                                        </p>                                                        
                                                     </div>
                                                 </div>
                                             </CardContent>
