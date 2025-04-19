@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
+import { ChartColumn, User, UserPen } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, Label, Pie, PieChart, XAxis, } from "recharts";
 
 import { useSuperadminDashboard } from "@/contexts/superadmin/superadmin-dashboard-context";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, } from "@/components/ui/chart";
-import { ChartColumn, UserPen } from "lucide-react";
 
 export default function DashBoardCharts() {
   const { dashboard } = useSuperadminDashboard();
@@ -287,7 +287,7 @@ export default function DashBoardCharts() {
           </CardContent>
           :
           <CardContent className="flex flex-col items-center justify-center h-[350px] text-center text-muted-foreground space-y-2">
-            <UserPen className="h-10 w-10 text-primary" />
+            <User className="h-10 w-10 text-primary" />
             <p className="text-sm font-medium">No data yet</p>
             <p className="text-xs">Once there's data, it will be shown here.</p>
           </CardContent>}
