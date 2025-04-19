@@ -12,10 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 
 export default function StudentProfile() {
   const {
@@ -27,7 +27,7 @@ export default function StudentProfile() {
   const [loading, setLoading] = useState(true);
   const [businessArea, setBusinessArea] = useState("");
   const [GPA, setGPA] = useState<number>(0);
-  const [skills, setSkills] = useState("");
+  const [skills, setSkills] = useState<string>("");
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [confirmAccuracy, setConfirmAccuracy] = useState(false);
 
@@ -307,26 +307,26 @@ export default function StudentProfile() {
             </div>
 
             <div className="flex items-center space-x-2">
-                <div className="rounded-md p-2">
-                  <Brain className="size-4 text-primary" />
-                </div>
-                <div className="w-full flex-1">
-                  <h3 className="text-sm text-muted-foreground">Skills</h3>
-                  {showUpdateForm ? (
-                    <Textarea
-                      value={skills}
-                      onChange={(e) => setSkills(e.target.value)}
-                      placeholder="Enter your skills"
-                      className="w-full mt-1"
-                      rows={3}
-                    />
-                  ) : (
-                    <p className="font-semibold tracking-tight">
-                      {skills}
-                    </p>
-                  )}
-                </div>
+              <div className="rounded-md p-2">
+                <Brain className="size-4 text-primary" />
               </div>
+              <div className="w-full flex-1">
+                <h3 className="text-sm text-muted-foreground">Skills</h3>
+                {showUpdateForm ? (
+                  <Textarea
+                    value={skills ?? ""}
+                    onChange={(e) => setSkills(e.target.value)}
+                    placeholder="Enter your skills"
+                    className="w-full mt-1"
+                    rows={3}
+                  />
+                ) : (
+                  <p className="font-semibold tracking-tight">
+                    {skills}
+                  </p>
+                )}
+              </div>
+            </div>
 
             {showUpdateForm && (
               <div className="flex items-center space-x-2 border-t pt-3">
