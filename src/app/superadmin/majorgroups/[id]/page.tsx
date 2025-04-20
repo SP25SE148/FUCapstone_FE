@@ -1,40 +1,24 @@
 "use client";
 
-import { CirclePlus } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { Major } from "@/types/types";
 import { useMajorGroup, SuperadminMajorGroupProvider, } from "@/contexts/superadmin/superadmin-majorgroup-context";
 
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { SkeletonLoader } from "@/components/layout/skeleton-loader";
 import { majorColumns } from "@/app/superadmin/majorgroups/component/majorgroup-table-columns";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
+import AddMajor from "@/app/superadmin/majorgroups/component/add-major";
 
 function MajorPageContent() {
   const params = useParams();
   const groupId = params.id as string;
-  const { getMajorsByMajorGroupId, addMajor, updateMajor, removeMajor } = useMajorGroup();
-  const [loading, setLoading] = useState(true);
-  const [majors, setMajors] = useState<Major[]>([]);
-
-  const fetchMajors = async () => {
-    setLoading(true);
-    try {
-      const data: Major[] = await getMajorsByMajorGroupId(groupId);
-      setMajors(data);
-    } catch (err) {
-      console.error("Error fetching majors:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { getMajorsByMajorGroupId, loading, majors } = useMajorGroup();
 
   useEffect(() => {
-    fetchMajors();
-  }, [getMajorsByMajorGroupId, groupId, updateMajor, addMajor, removeMajor]);
+    getMajorsByMajorGroupId(groupId);
+  }, []);
 
   return (
     <div>
@@ -52,16 +36,13 @@ function MajorPageContent() {
               List of majors in the selected major group
             </CardDescription>
           </CardHeader>
-          <Button className="mr-6">
-            <CirclePlus />
-            Add
-          </Button>
+          <AddMajor majorGroupId={groupId} />
         </div>
         <CardContent>
           {loading ? (
             <SkeletonLoader />
           ) : (
-            <DataTable columns={majorColumns} data={majors} />
+            <DataTable columns={majorColumns} data={majors.slice().reverse()}/>
           )}
         </CardContent>
       </Card >

@@ -75,7 +75,7 @@ export default function AddCampus() {
       <DialogTrigger asChild>
         <Button className="mr-6">
           <CirclePlus className="mr-2 h-4 w-4" />
-          Add Campus
+          Add
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl">

@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 import { useApi } from '@/hooks/use-api';
-import { Capstone } from '@/types/types';
+import { Capstone, Major } from '@/types/types';
 
 interface CapstoneContextProps {
   capstones: Capstone[];
@@ -12,6 +12,7 @@ interface CapstoneContextProps {
   fetchCapstoneList: () => Promise<void>;
   addCapstone: (data: Capstone) => Promise<void>;
   updateCapstone: (data: any) => Promise<void>;
+  fetchMajorList: () => Promise<Major[]>;
   removeCapstone: (id: string) => Promise<void>;
 }
 
@@ -80,13 +81,18 @@ export const SuperadminCapstoneProvider = ({ children }: { children: React.React
     return response;
   };
 
+  const fetchMajorList = async () => {
+    const response = await callApi("fuc/AcademicManagement/major");
+    return response?.value;
+  };
+
   useEffect(() => {
     fetchCapstoneList();
   }, []);
 
   return (
     <SuperadminCapstoneContext.Provider
-      value={{ capstones, loading, fetchCapstoneList, addCapstone, updateCapstone, removeCapstone }}
+      value={{ capstones, loading, fetchCapstoneList, addCapstone, updateCapstone, removeCapstone, fetchMajorList }}
     >
       {children}
     </SuperadminCapstoneContext.Provider>

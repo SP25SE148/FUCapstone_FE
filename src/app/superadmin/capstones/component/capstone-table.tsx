@@ -27,7 +27,7 @@ export default function CapstoneTable() {
         {loading ? (
           <SkeletonLoader />
         ) : (
-          <DataTable columns={columns} data={capstones} />
+          <DataTable columns={columns} data={capstones.slice().reverse()} />
         )}
       </CardContent>
     </Card>

@@ -8,6 +8,7 @@ import { Major, MajorGroup } from "@/types/types";
 
 interface MajorGroupContextProps {
   majorGroups: MajorGroup[];
+  majors: Major[];
   loading: boolean;
   fetchMajorGroupList: () => Promise<void>;
   addMajorGroup: (data: MajorGroup) => Promise<void>;
@@ -31,6 +32,7 @@ export const SuperadminMajorGroupProvider = ({
   const { callApi } = useApi();
   const [loading, setLoading] = useState<boolean>(false);
   const [majorGroups, setMajorGroups] = useState<MajorGroup[]>([]);
+  const [majors, setMajors] = useState<Major[]>([]);
 
   const fetchMajorGroupList = async () => {
     setLoading(true);
@@ -132,6 +134,11 @@ export const SuperadminMajorGroupProvider = ({
           method: "GET",
         }
       );
+      setMajors(response?.value || []);
+      setTimeout(() => {
+        setMajors(response?.value || []);
+        setLoading(false);
+      }, 1000);
 
       return response?.value;
     } catch (error) {
@@ -148,6 +155,7 @@ export const SuperadminMajorGroupProvider = ({
     <SuperadminMajorGroupContext.Provider
       value={{
         majorGroups,
+        majors,
         loading,
         fetchMajorGroupList,
         addMajorGroup,
