@@ -27,7 +27,7 @@ export default function AdminsTable() {
         {loading ? (
           <SkeletonLoader />
         ) : (
-          <DataTable columns={columns} data={admins} />
+          <DataTable columns={columns} data={admins.slice().reverse()} />
         )}
       </CardContent>
     </Card>

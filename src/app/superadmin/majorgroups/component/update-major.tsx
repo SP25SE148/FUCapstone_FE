@@ -1,77 +1,114 @@
-"use client";
+"use client"
 
-import { Pencil } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Pencil, BookOpen, FileText } from "lucide-react"
 
-import { Major } from "@/types/types";
-import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context";
+import type { Major } from "@/types/types"
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context"
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Card, CardContent } from "@/components/ui/card"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-export default function UpdateMajor({ major, open, setOpen }: { major: Major, open: boolean, setOpen: (open: boolean) => void }) {
-  const { updateMajor } = useMajorGroup();
+const formSchema = z.object({
+  majorName: z.string().min(1, "Major Name is required"),
+  description: z.string().min(1, "Description is required"),
+})
 
-  const [isFormValid, setIsFormValid] = useState(false);
+export default function UpdateMajor({
+  major,
+  open,
+  setOpen,
+}: { major: Major; open: boolean; setOpen: (open: boolean) => void }) {
+  const { updateMajor } = useMajorGroup()
 
-  const [majorName, setMajorName] = useState(major.name);
-  const [description, setDescription] = useState(major.description);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      majorName: major.name,
+      description: major.description,
+    },
+  })
 
-  useEffect(() => {
-    if (majorName && description) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
-    }
-  }, [majorName, description]);
+  const isFormValid = form.formState.isValid
 
-  const handleUpdateMajor = async () => {
+  const handleUpdateMajor = async (values: z.infer<typeof formSchema>) => {
     const data = {
       id: major.id,
       majorGroupId: major.majorGroupId,
-      name: major.name,
-      description,
+      name: values.majorName,
+      description: values.description,
       isDeleted: major.isDeleted,
       deletedAt: major.deletedAt,
-    };
-    await updateMajor(data);
-    setOpen(false);
-  };
+    }
+    await updateMajor(data)
+    setOpen(false)
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Update major</DialogTitle>
+          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+            <BookOpen className="h-5 w-5" />
+            Update Major
+          </DialogTitle>
           <DialogDescription>Update the details of the major below.</DialogDescription>
         </DialogHeader>
-        <div className="space-y-2">
-          <div className="space-y-1">
-            <Label htmlFor="majorName">Major Name</Label>
-            <Input
-              id="majorName"
-              placeholder="Ex: Business"
-              value={majorName}
-              onChange={(e) => setMajorName(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="description">Description</Label>
-            <Input
-              id="description"
-              placeholder="Ex: Business-related majors."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button className="w-full mt-4" onClick={handleUpdateMajor} disabled={!isFormValid}>
-          <Pencil />
-          Update
-        </Button>
+
+        <Card className="border shadow-sm">
+          <CardContent className="pt-6">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleUpdateMajor)} className="space-y-5">
+                <FormField
+                  control={form.control}
+                  name="majorName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2 font-medium">
+                        <BookOpen className="h-4 w-4 text-gray-500" />
+                        Major Name
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: Business" {...field} className="h-10" />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2 font-medium">
+                        <FileText className="h-4 w-4 text-gray-500" />
+                        Description
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: Business-related majors." {...field} className="h-10" />
+                      </FormControl>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="pt-3">
+                  <Button type="submit" className="w-full" disabled={!isFormValid}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Update
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

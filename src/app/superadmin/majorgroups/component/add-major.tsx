@@ -1,11 +1,5 @@
 "use client"
 
-import { CirclePlus, FolderOpen, Hash, FileText } from "lucide-react"
-import { useState } from "react"
-
-import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context"
-
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -15,27 +9,35 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { useMajorGroup } from "@/contexts/superadmin/superadmin-majorgroup-context"
+import { CirclePlus, Hash, BookOpen, FileText } from "lucide-react"
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
+type AddMajorProps = {
+  majorGroupId: string
+}
+
 const formSchema = z.object({
-  majorGroupId: z.string().min(1, "Major Group ID is required"),
-  majorGroupName: z.string().min(1, "Major Group Name is required"),
+  majorId: z.string().min(1, "Major ID is required"),
+  majorName: z.string().min(1, "Major Name is required"),
   description: z.string().min(1, "Description is required"),
 })
 
-export default function AddMajorGroup() {
-  const { addMajorGroup } = useMajorGroup()
+export default function AddMajor({ majorGroupId }: AddMajorProps) {
+  const { addMajor, getMajorsByMajorGroupId } = useMajorGroup()
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      majorGroupId: "",
-      majorGroupName: "",
+      majorId: "",
+      majorName: "",
       description: "",
     },
   })
@@ -47,20 +49,22 @@ export default function AddMajorGroup() {
     form.reset()
   }
 
-  const handleAddMajorGroup = async (values: z.infer<typeof formSchema>) => {
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleAddMajor = async (values: z.infer<typeof formSchema>) => {
     const data = {
-      id: values.majorGroupId,
-      name: values.majorGroupName,
+      id: values.majorId,
+      name: values.majorName,
       description: values.description,
+      majorGroupId,
       isDeleted: false,
       deletedAt: null,
     }
-    await addMajorGroup(data)
+    await addMajor(data)
+    getMajorsByMajorGroupId(majorGroupId)
     setOpen(false)
-  }
-
-  const handleOpenChange = () => {
-    setOpen(true)
   }
 
   return (
@@ -70,7 +74,7 @@ export default function AddMajorGroup() {
         if (!isOpen) {
           handleClose()
         } else {
-          handleOpenChange()
+          handleOpen()
         }
       }}
     >
@@ -83,24 +87,24 @@ export default function AddMajorGroup() {
       <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-            <FolderOpen className="h-5 w-5" />
-            Add New Major Group
+            <BookOpen className="h-5 w-5" />
+            Add New Major
           </DialogTitle>
-          <DialogDescription>Fill information to add new major group</DialogDescription>
+          <DialogDescription>Fill information to add new major</DialogDescription>
         </DialogHeader>
 
         <Card className="border shadow-sm">
           <CardContent className="pt-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleAddMajorGroup)} className="space-y-5">
+              <form onSubmit={form.handleSubmit(handleAddMajor)} className="space-y-5">
                 <FormField
                   control={form.control}
-                  name="majorGroupId"
+                  name="majorId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center gap-2 font-medium">
                         <Hash className="h-4 w-4 text-gray-500" />
-                        Major Group ID
+                        Major ID
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Ex: BUS" {...field} className="h-10" />
@@ -112,12 +116,12 @@ export default function AddMajorGroup() {
 
                 <FormField
                   control={form.control}
-                  name="majorGroupName"
+                  name="majorName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center gap-2 font-medium">
-                        <FolderOpen className="h-4 w-4 text-gray-500" />
-                        Major Group Name
+                        <BookOpen className="h-4 w-4 text-gray-500" />
+                        Major Name
                       </FormLabel>
                       <FormControl>
                         <Input placeholder="Ex: Business" {...field} className="h-10" />

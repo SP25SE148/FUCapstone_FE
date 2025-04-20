@@ -3,13 +3,14 @@
 import { toast } from "sonner";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-import { Admin } from "@/types/types";
+import { Admin, Campus } from "@/types/types";
 import { useApi } from "@/hooks/use-api";
 
 interface AdminContextProps {
   admins: Admin[];
   loading: boolean;
   fetchAdminList: () => Promise<void>;
+  fetchCampusList: () => Promise<Campus[]>;
   addAdmin: (data: Admin) => Promise<void>;
 }
 
@@ -51,12 +52,17 @@ export const SuperadminAdminProvider = ({ children }: { children: React.ReactNod
     return response;
   };
 
+  const fetchCampusList = async () => {
+    const response = await callApi("fuc/AcademicManagement/campus");
+    return response?.value;
+  };
+
   useEffect(() => {
     fetchAdminList();
   }, []);
 
   return (
-    <SuperadminAdminContext.Provider value={{ admins, loading, fetchAdminList, addAdmin }}>
+    <SuperadminAdminContext.Provider value={{ admins, loading, fetchAdminList, addAdmin, fetchCampusList }}>
       {children}
     </SuperadminAdminContext.Provider>
   );

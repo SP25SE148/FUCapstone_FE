@@ -27,7 +27,7 @@ export default function MajorGroupTable() {
         {loading ? (
           <SkeletonLoader />
         ) : (
-          <DataTable columns={columns} data={majorGroups} />
+          <DataTable columns={columns} data={majorGroups.slice().reverse()} />
         )}
       </CardContent>
     </Card>
