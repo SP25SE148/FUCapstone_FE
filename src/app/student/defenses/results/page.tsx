@@ -23,7 +23,7 @@ export default function ResultsPage() {
                 setResults(resultDetails)
             })();
         }
-    }, [groupInfo])
+    }, [getDefendResultByGroupId, groupInfo])
 
     return (
         <Card className="min-h-[calc(100vh-60px)]">

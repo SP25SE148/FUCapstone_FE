@@ -57,7 +57,7 @@ export default function MyEvaluationPage() {
                         <TableBody>
                             {evaluationWeekly?.map((student: EvaluationStudent, index: number) => (
                                 <TableRow key={index} className="border-none bg-primary/5 hover:bg-primary/20">
-                                    <TableCell className="font-bold sticky left-0 z-10 bg-primary text-white">
+                                    <TableCell className="font-bold sticky left-0 z-10 bg-muted">
                                         {student?.studentName}
                                     </TableCell>
                                     {student?.evaluationWeeks?.map((evaluationWeek: EvaluationWeek, index: number) => (
@@ -67,7 +67,7 @@ export default function MyEvaluationPage() {
                                             <p className="text-muted-foreground">Comment: <span className="text-foreground font-semibold">{evaluationWeek?.comments}</span></p>
                                         </TableCell>
                                     ))}
-                                    <TableCell className="font-bold text-center sticky right-0 z-10 bg-primary text-white">
+                                    <TableCell className="font-bold text-center sticky right-0 z-10 bg-muted">
                                         {student?.averageContributionPercentage?.toFixed(2)}%
                                     </TableCell>
                                 </TableRow>

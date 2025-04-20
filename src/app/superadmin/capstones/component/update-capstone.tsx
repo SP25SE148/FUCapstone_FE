@@ -230,7 +230,7 @@ export default function UpdateCapstone({
 
                 <div className="pt-3">
                   <Button type="submit" className="w-full">
-                    <Pencil className="mr-2 h-4 w-4" />
+                    <Pencil className="h-4 w-4" />
                     Update
                   </Button>
                 </div>

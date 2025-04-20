@@ -60,7 +60,7 @@ export default function InvitationSent() {
                       <p className="text-sm font-medium">
                         Request to <span className="text-primary font-bold">{request.studentFullName} - GPA: {request?.gpa}</span> to join your group.
                       </p>
-                      <p className="text-sm font-medium text-foreground flex items-center gap-1 pr-4">
+                      <p className="text-sm font-medium text-foreground flex items-start gap-1 pr-4">
                         <span className="text-primary text-sm font-bold">Skills: </span> {request.skills}
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">

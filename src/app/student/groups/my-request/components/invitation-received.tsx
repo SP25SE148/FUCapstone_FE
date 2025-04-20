@@ -68,7 +68,7 @@ export default function InvitationReceived() {
                       <p className="text-sm font-medium">
                         <span className="text-primary font-bold">{request.createdBy} - GPA: {request?.gpa}</span> invited you to join their group.
                       </p>
-                      <p className="text-sm font-medium text-foreground flex items-center gap-1 pr-4">
+                      <p className="text-sm font-medium text-foreground flex items-start gap-1 pr-4">
                         <span className="text-primary text-sm font-bold">Skills: </span> {request.skills}
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
