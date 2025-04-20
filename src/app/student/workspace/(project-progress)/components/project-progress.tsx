@@ -65,11 +65,15 @@ export default function ProjectProgressView() {
               Detail information of project progress
             </CardDescription>
           </div>
-          <div className="flex gap-2">
-            <Button variant="default" onClick={createTask}>
-              <FilePlus /> Task
-            </Button>
-          </div>
+          {projectProgress ? (
+            <div className="flex gap-2">
+              <Button variant="default" onClick={createTask}>
+                <FilePlus /> Task
+              </Button>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </CardHeader>
       {projectProgress ? (

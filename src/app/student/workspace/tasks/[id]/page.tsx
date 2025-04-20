@@ -63,6 +63,10 @@ export default function TaskDetailPage() {
   const [isEditingSummary, setIsEditingSummary] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [isActive, setIsActive] = useState<boolean>(false);
+  const now = new Date();
+  const dueDate = new Date(task?.dueDate || "");
+  const isExpired = !task?.completionDate && now > dueDate;
+
   const studentCode =
     user?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"];
   
@@ -427,8 +431,12 @@ export default function TaskDetailPage() {
               <span className="text-sm text-muted-foreground w-24">
                 Completion Date
               </span>
-              <span className="text-sm">
-                {task.completionDate ? getDate(task.completionDate) : "Not yet"}
+              <span className={isExpired ? "text-red-500" : "text-sm"}>
+                {isExpired
+                  ? "Task Expired"
+                  : task.completionDate
+                  ? getDate(task.completionDate)
+                  : "Not Done"}
               </span>
             </div>
           </CardContent>

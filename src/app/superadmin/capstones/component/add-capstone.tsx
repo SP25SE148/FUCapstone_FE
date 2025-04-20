@@ -132,7 +132,7 @@ export default function AddCapstone() {
     >
       <DialogTrigger asChild>
         <Button className="mr-6">
-          <CirclePlus className="mr-2 h-4 w-4" />
+          <CirclePlus className="h-4 w-4" />
           Add
         </Button>
       </DialogTrigger>
@@ -323,7 +323,7 @@ export default function AddCapstone() {
 
                 <div className="pt-3">
                   <Button type="submit" className="w-full">
-                    <CirclePlus className="mr-2 h-4 w-4" />
+                    <CirclePlus className="h-4 w-4" />
                     Add
                   </Button>
                 </div>

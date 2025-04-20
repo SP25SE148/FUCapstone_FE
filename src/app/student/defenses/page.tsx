@@ -45,7 +45,7 @@ export default function DefensesPage() {
             <NoResult />
           ) : (
             defenseCalendar?.map((defense: DefenseCalendarItem) => (
-              <div key={defense.defenseDate} className="space-y-1">
+              <div key={defense.id} className="space-y-1">
                 <h2 className="text-lg font-semibold text-primary flex items-center gap-2 px-2 py-1 bg-primary/5 rounded-md">
                   <CalendarIcon className="h-4 w-4" />
                   {getDateNoTime(defense.defenseDate)}
