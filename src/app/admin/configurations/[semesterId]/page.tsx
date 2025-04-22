@@ -41,7 +41,8 @@ export default function TimeConfigDetailsPage() {
 
     const { getTimeConfigBySemesterId, updateTimeConfig } = useAdminConfig();
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isRefresh, setIsRefresh] = useState<boolean>(false);
     const [timeConfig, setTimeConfig] = useState<TimeConfig>();
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -52,6 +53,7 @@ export default function TimeConfigDetailsPage() {
         setIsLoading(true);
         const data = {
             "id": timeConfig?.id,
+            "semesterId": timeConfig?.semesterId,
             "teamUpDate": values?.teamUpDate && format(values?.teamUpDate, "yyyy-MM-dd'T'HH:mm:ss"),
             "teamUpExpirationDate": values?.teamUpExpirationDate && format(values?.teamUpExpirationDate, "yyyy-MM-dd'T'HH:mm:ss"),
             "registTopicForSupervisorDate": values?.registTopicForSupervisorDate && format(values?.registTopicForSupervisorDate, "yyyy-MM-dd'T'HH:mm:ss"),
@@ -68,6 +70,7 @@ export default function TimeConfigDetailsPage() {
             const res: any = await updateTimeConfig(data);
             if (res?.isSuccess) {
                 form.reset();
+                setIsRefresh(!isRefresh)
             }
         } finally {
             setIsLoading(false);
@@ -79,7 +82,7 @@ export default function TimeConfigDetailsPage() {
             const timeConfigDetail = await getTimeConfigBySemesterId(semesterId);
             setTimeConfig(timeConfigDetail)
         })();
-    }, [])
+    }, [isRefresh])
 
     useEffect(() => {
         if (timeConfig?.teamUpDate) {

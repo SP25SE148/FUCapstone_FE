@@ -58,7 +58,6 @@ export const AdminConfigProvider = ({ children }: { children: React.ReactNode })
     });
 
     if (response?.isSuccess === true) {
-      getTimeConfig();
       toast.success("Update time config successfully");
     }
     return response
