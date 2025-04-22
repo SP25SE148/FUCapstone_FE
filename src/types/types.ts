@@ -163,10 +163,18 @@ export interface SystemConfig {
 
 export interface TimeConfig {
   id: string,
+  semesterId: string,
+  semesterName: string,
   teamUpDate: string,
   teamUpExpirationDate: string,
-  registTopicDate: string,
-  registTopicExpiredDate: string,
+  registTopicForSupervisorDate: string,
+  registTopicForSupervisorExpiredDate: string,
+  registTopicForGroupDate: string,
+  registTopicForGroupExpiredDate: string,
+  reviewAttemptDate: string,
+  reviewAttemptExpiredDate: string,
+  defendCapstoneProjectDate: string,
+  defendCapstoneProjectExpiredDate: string,
   isActived: boolean,
   campusId: string
 }

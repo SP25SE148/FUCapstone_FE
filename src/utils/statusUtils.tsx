@@ -608,3 +608,26 @@ export function getReDefenseStatus(status: boolean) {
 }
 
 //#endregion
+
+//#region TimeConfig Status
+
+export function getTimeConfigStatus(status: boolean) {
+  switch (status) {
+    case true:
+      return (
+        <Badge style={{ backgroundColor: "#16a34a", color: "white" }}>
+          Active
+        </Badge>
+      );
+    case false:
+      return (
+        <Badge style={{ backgroundColor: "#dc2626", color: "white" }}>
+          Inactive
+        </Badge>
+      );
+    default:
+      return null;
+  }
+}
+
+//#endregion
