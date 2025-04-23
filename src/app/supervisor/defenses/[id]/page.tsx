@@ -360,7 +360,7 @@ export default function DefenseTopicDetail() {
         )}
 
         {isPresident && (
-          <ContinueDefense defendCapstoneCalendarId={defenseInfo.id} />
+          <ContinueDefense defendCapstoneCalendarId={defenseInfo.id} defendCapstoneAttempt={defenseInfo.defendAttempt}/>
         )}
       </CardFooter>
     </Card>
