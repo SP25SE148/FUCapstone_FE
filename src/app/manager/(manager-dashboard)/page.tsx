@@ -1,6 +1,6 @@
 import { ManagerDashboardProvider } from "@/contexts/manager/manager-dashboard-context";
 
-import InfoArchive from "./components/info-archive";
+import SelectSemester from "./components/select-semester";
 import ManagerGroupSummary from "./components/manager-group-summary";
 import ManagerGroupOverall from "./components/manager-group-overall";
 import ManagerDashBoardCharts from "./components/manager-dashboard-chart";
@@ -10,7 +10,7 @@ export default function ManagerDashboardPage() {
     return (
         <ManagerDashboardProvider>
             <div className="flex flex-col gap-4">
-                <InfoArchive />
+                <SelectSemester/>
                 <ManagerGroupOverall/>
                 <ManagerGroupSummary />
                 <ManagerDashBoardOverall />
