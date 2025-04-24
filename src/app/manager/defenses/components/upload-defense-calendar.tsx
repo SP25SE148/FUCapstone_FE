@@ -3,27 +3,21 @@
 import type React from "react"
 
 import * as XLSX from "xlsx"
-import { useState, useRef } from "react"
-import { useParams } from "next/navigation"
+import { useState, useRef, useEffect } from "react"
 import { Download, FileSpreadsheet, Loader2, Upload, X } from "lucide-react"
+
+import { Semester } from "@/types/types"
+import { useManagerDefense } from "@/contexts/manager/manager-defense-context"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { useManagerDefense } from "@/contexts/manager/manager-defense-context"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
 
 export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
-  const params = useParams()
-  const id: string = String(params.id)
-  const { importDefenseCalendar, getDefensesCalendarTemplate } = useManagerDefense()
+  const { semesters, getSemestersBetweenCurrentDate, importDefenseCalendar, getDefensesCalendarTemplate } = useManagerDefense()
 
   const [open, setOpen] = useState<boolean>(false)
   const [fileData, setFileData] = useState<any[]>([])
@@ -33,6 +27,7 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [errorMessage, setErrorMessage] = useState<string>("")
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [selectedSemester, setSelectedSemester] = useState<string | undefined>()
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -135,7 +130,7 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
     setIsUploading(true)
     try {
       const formData = new FormData()
-      formData.append("GroupId", id)
+      selectedSemester && formData.append("SemesterId", selectedSemester)
       formData.append("File", selectedFile)
       const res: any = await importDefenseCalendar(formData)
       if (res?.isSuccess) {
@@ -150,6 +145,18 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
       setIsUploading(false)
     }
   }
+
+  useEffect(() => {
+    if (open) {
+      getSemestersBetweenCurrentDate();
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (semesters && semesters.length > 0) {
+      setSelectedSemester(semesters[0].id)
+    }
+  }, [semesters])
 
   return (
     <>
@@ -174,8 +181,27 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
             </DialogTitle>
             <DialogDescription>Download template and upload defense calendar for capstone.</DialogDescription>
           </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <h3 className="text-sm text-muted-foreground">Semester:</h3>
+              {semesters ? (
+                <Select value={selectedSemester} onValueChange={setSelectedSemester}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select semester" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {semesters?.map((semester: Semester, index: number) => (
+                      <SelectItem key={index} value={semester.id}>
+                        <strong>{semester.id}</strong> - <span className="text-muted-foreground text-xs">{semester.name}</span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Skeleton className="h-10 w-[180px]" />
+              )}
+            </div>
 
-          <div className="space-y-5 py-2">
             <div>
               {!selectedFile ? (
                 <div
@@ -239,8 +265,8 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
 
             <div className="grid grid-cols-2 gap-3">
               <Button variant="outline" type="button" disabled={isUploading} onClick={handleDownload} className="h-11">
-                <Download className="mr-2 h-4 w-4" />
-                Download Template
+                <Download />
+                Template
               </Button>
               <Button type="button" disabled={isUploading || !selectedFile} className="h-11" onClick={handleUpload}>
                 {isUploading ? (
@@ -250,7 +276,7 @@ export default function UploadDefenseCalendar({ refresh }: { refresh?: any }) {
                   </>
                 ) : (
                   <>
-                    <Upload className="mr-2 h-4 w-4" />
+                    <Upload />
                     Upload
                   </>
                 )}

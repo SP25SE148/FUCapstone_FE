@@ -4,14 +4,16 @@ import { toast } from "sonner";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { useApi } from "@/hooks/use-api";
-import { Decision, DefenseCalendar } from "@/types/types";
+import { Decision, DefenseCalendar, Semester } from "@/types/types";
 
 
 interface ManagerDefenseContextProps {
+  semesters: Semester[];
   defenseCalendar: DefenseCalendar;
   getGroupDecisionByManager: (status: any) => Promise<Decision[]>;
   exportGroupDecisionByStatus: (status: any) => Promise<any>;
   getDefensesCalendarTemplate: () => Promise<string>;
+  getSemestersBetweenCurrentDate: () => Promise<void>
   importDefenseCalendar: (data: any) => Promise<void>;
 }
 
@@ -25,6 +27,7 @@ export const ManagerDefenseProvider = ({
   children: React.ReactNode;
 }) => {
   const { callApi } = useApi();
+  const [semesters, setSemesters] = useState<Semester[]>([]);
   const [defenseCalendar, setDefenseCalendar] = useState<DefenseCalendar>({});
 
   const getGroupDecisionByManager = async (status: any) => {
@@ -50,6 +53,11 @@ export const ManagerDefenseProvider = ({
     setDefenseCalendar(response?.value);
   };
 
+  const getSemestersBetweenCurrentDate = async () => {
+    const response = await callApi("fuc/AcademicManagement/semester/get-semesters-between-current-date");
+    setSemesters(response?.value || []);
+  };
+
   const importDefenseCalendar = async (data: any) => {
     const response: any = await callApi("fuc/user/defend/calendar", {
       method: "POST",
@@ -70,10 +78,12 @@ export const ManagerDefenseProvider = ({
   return (
     <ManagerDefenseContext.Provider
       value={{
+        semesters,
         defenseCalendar,
         getGroupDecisionByManager,
         exportGroupDecisionByStatus,
         getDefensesCalendarTemplate,
+        getSemestersBetweenCurrentDate,
         importDefenseCalendar,
       }}
     >
