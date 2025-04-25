@@ -26,7 +26,7 @@ export default function ItemTopic({ topic }: { topic: Topic }) {
                 }}
             >
                 <div className="col-span-3">
-                    <p className="font-semibold tracking-tight text-lg text-primary">{topic?.code} - {topic?.englishName} - {topic?.abbreviation}</p>
+                    <p className="font-semibold tracking-tight text-lg text-primary">{topic?.code === "undefined" || topic?.code === "" ? "_ _ _" : topic?.code} - {topic?.englishName} - {topic?.abbreviation}</p>
                     <p className="text-sm text-muted-foreground">{topic?.vietnameseName}</p>
                 </div>
                 <div className="col-span-2 text-right space-y-2">
@@ -100,7 +100,7 @@ export default function ItemTopic({ topic }: { topic: Topic }) {
                                                 <h3 className="text-sm text-muted-foreground">
                                                     Topic code
                                                 </h3>
-                                                <p className="font-semibold tracking-tight">{topic?.code}</p>
+                                                <p className="font-semibold tracking-tight">{topic?.code === "undefined" || topic?.code === "" ? "_ _ _" : topic?.code}</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-2">

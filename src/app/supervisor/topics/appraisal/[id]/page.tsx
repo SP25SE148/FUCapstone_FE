@@ -214,7 +214,7 @@ export default function TopicAppraisalDetail() {
                       Topic code
                     </h3>
                     <p className="font-semibold tracking-tight">
-                      {topic?.code}
+                      {topic?.code === "undefined" || topic?.code === "" ? "_ _ _" : topic?.code}
                     </p>
                   </div>
                 </div>

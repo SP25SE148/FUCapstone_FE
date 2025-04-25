@@ -88,7 +88,7 @@ export default function GroupInfoPage() {
                                         <div>
                                             <h3 className="text-sm text-muted-foreground">Topic Code</h3>
                                             <p className="font-semibold tracking-tight">
-                                                {group?.topicCode}
+                                                {group?.topicCode === "undefined" || group?.topicCode === "" ? "_ _ _" : group?.topicCode}
                                             </p>
                                         </div>
                                     </div>
@@ -167,7 +167,7 @@ export default function GroupInfoPage() {
                             <h3 className="font-semibold flex items-center gap-2">
                                 <Users className="size-4 text-primary" />
                                 Member(s):
-                                <span className="text-sm text-muted-foreground">{group?.currentNumberOfGroupPerMax}</span>
+                                <span className="text-sm text-muted-foreground">{group?.currentNumberOfGroupPerMax?.charAt(0)} member(s)</span>
                             </h3>
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                                 <Card className="bg-primary/5">

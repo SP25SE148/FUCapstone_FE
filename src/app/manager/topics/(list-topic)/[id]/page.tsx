@@ -127,7 +127,7 @@ export default function TopicDetail() {
                     <h3 className="text-sm text-muted-foreground">
                       Topic code
                     </h3>
-                    <p className="font-semibold tracking-tight">{topic?.code}</p>
+                    <p className="font-semibold tracking-tight">{topic?.code === "undefined" || topic?.code === "" ? "_ _ _" : topic?.code}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">

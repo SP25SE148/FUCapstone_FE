@@ -111,7 +111,7 @@ export default function MyGroup() {
                                                 <div>
                                                     <h3 className="text-sm text-muted-foreground">Group Code</h3>
                                                     <p className="font-semibold tracking-tight">
-                                                        {groupInfo?.groupCode}
+                                                        {groupInfo?.groupCode === "" ? "_ _ _" : groupInfo?.groupCode}
                                                     </p>
                                                 </div>
                                             </div>
@@ -122,7 +122,7 @@ export default function MyGroup() {
                                                 <div>
                                                     <h3 className="text-sm text-muted-foreground">Topic Code</h3>
                                                     <p className="font-semibold tracking-tight">
-                                                        {groupInfo?.topicCode}
+                                                        {groupInfo?.topicCode === "undefined" || groupInfo?.topicCode === "" || groupInfo?.topicCode === null ? "_ _ _" : groupInfo?.topicCode}
                                                     </p>
                                                 </div>
                                             </div>
@@ -220,7 +220,7 @@ export default function MyGroup() {
                                                         <p className="text-sm text-muted-foreground">{leaderInfo?.isLeader ? "Leader" : "Member"} - {leaderInfo?.studentEmail}</p>
                                                         <p className="text-sm font-medium text-muted-foreground flex items-start gap-1 pr-4">
                                                             <span className="text-primary text-sm font-bold">Skills: </span> {leaderInfo?.skills}
-                                                        </p>                                                        
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </CardContent>
