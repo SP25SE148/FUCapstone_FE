@@ -42,7 +42,7 @@ function ActionsCell(row: Row<GroupFullInfo>) {
           >
             Copy group ID
           </DropdownMenuItem>
-          {!isFull && ( 
+          {!isFull && (
             <DropdownMenuItem onClick={() => setOpen(true)}>
               Add Member
             </DropdownMenuItem>
@@ -82,25 +82,22 @@ export const columns: ColumnDef<GroupFullInfo>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Group Code" />
     ),
+    cell: ({ row }) => (
+      <span className="font-medium text-sm">
+        {row?.original?.groupCode === "" ? "_ _ _" : row?.original?.groupCode}
+      </span>
+    )
   },
   {
     accessorKey: "topicCode",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Topic Code" />
     ),
-    cell: ({ row }) => {
-      const topicCode = row.original.topicCode;
-      return (
-        <span
-          className={`${topicCode === "undefined"
-            ? "text-red-500 font-semibold capitalize"
-            : ""
-            }`}
-        >
-          {topicCode}
-        </span>
-      );
-    },
+    cell: ({ row }) => (
+      <span className="font-medium text-sm">
+        {row?.original?.topicCode === "undefined" || row?.original?.topicCode === "" || row?.original?.topicCode === null ? "_ _ _" : row?.original?.topicCode}
+      </span>
+    )
   },
   {
     accessorKey: "averageGPA",
