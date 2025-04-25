@@ -6,10 +6,10 @@ import { useParams } from "next/navigation";
 
 import { getDate } from "@/lib/utils";
 import { Statistic } from "@/types/types";
+import { useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useSupervisorTopicAppraisal } from "@/contexts/supervisor/supervisor-topic-appraisal-context";
 
 export default function GetStatistics() {
     const { getStatistics } = useSupervisorTopicAppraisal();
@@ -38,7 +38,7 @@ export default function GetStatistics() {
                     <DialogDescription>All statistic of topic</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-6 p-2 w-full max-h-[540px] overflow-y-auto">
-                    {statistics.map((stat, index) => (
+                    {statistics?.map((stat, index) => (
                         <div key={index} className="bg-white shadow rounded-xl p-2">
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-lg font-semibold leading-none tracking-tight">Statistic #{index + 1}</h2>
@@ -56,7 +56,7 @@ export default function GetStatistics() {
                                 </div>
                             </div>
 
-                            <div className="overflow-x-auto">
+                            {stat?.analysises && <div className="overflow-x-auto">
                                 <table className="min-w-full text-sm text-left text-gray-700 border">
                                     <thead className="bg-gray-100">
                                         <tr>
@@ -66,7 +66,7 @@ export default function GetStatistics() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {stat.analysises.map((item, i) => (
+                                        {stat?.analysises?.map((item, i) => (
                                             <tr key={i} className="border-t hover:bg-gray-50">
                                                 <td className="px-4 py-2 border">{item.analysisTopicId}</td>
                                                 <td className="px-4 py-2 border">{item.englishName}</td>
@@ -75,7 +75,7 @@ export default function GetStatistics() {
                                         ))}
                                     </tbody>
                                 </table>
-                            </div>
+                            </div>}
                         </div>
                     ))}
                 </div>
