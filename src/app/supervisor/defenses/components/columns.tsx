@@ -20,7 +20,7 @@ const ActionsCell = ({ defendInfo }: { defendInfo: DefenseCalendarItem }) => {
 
   return (
     <div className="flex items-center justify-end">
-      {defendInfo.status !== "Done" && (
+      {defendInfo.status === "InProgress" && (
         <Button
           variant="ghost"
           size="sm"
@@ -31,7 +31,7 @@ const ActionsCell = ({ defendInfo }: { defendInfo: DefenseCalendarItem }) => {
           <ArrowRight className="h-3.5 w-3.5 ml-1" />
           <span className="sr-only">View details</span>
         </Button>
-      )}
+      )} 
     </div>
   )
 }

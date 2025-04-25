@@ -104,7 +104,7 @@ export const StudentTaskProvider: React.FC<{ children: React.ReactNode }> = ({ c
       body: {
         TaskId: updatedTask.id,
         ProjectProgressId: updatedTask.projectProgressId,
-        KeyTask: updatedTask.keyTask,
+        // KeyTask: updatedTask.keyTask,
         Description: updatedTask.description,
         Summary: updatedTask.summary,
         Comment: updatedTask.comment || "",
