@@ -22,6 +22,7 @@ export default function RegisterTopic({ topicId, groupId }: RegisterTopicProps) 
     setLoading(true);
     try {
       await createTopicRequest(topicId, groupId);
+      console.log("Topic registered successfully");
     } finally {
       setLoading(false);
       setOpen(false);

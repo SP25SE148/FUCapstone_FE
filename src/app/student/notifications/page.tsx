@@ -95,10 +95,10 @@ export default function NotificationsPage() {
                 <div className="flex items-start gap-3">
                   <Bell className="h-5 w-5 text-muted-foreground mt-0.5" />
                   <div>
-                    <p className="font-semibold transition-all duration-200">
+                    <p className="font-semibold text-sm sm:text-base transition-all duration-200">
                       {notification?.content}
                     </p>
-                    <p className="text-sm font-medium text-primary  transition-all duration-200">
+                    <p className="text-xs sm:text-sm font-medium text-primary transition-all duration-200">
                       {getTimeElapsed(notification?.createdDate)}
                     </p>
                   </div>

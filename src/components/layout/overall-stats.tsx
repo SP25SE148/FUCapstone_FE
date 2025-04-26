@@ -13,7 +13,7 @@ export default function OverallStats({
             <CardHeader>
                 <CardTitle className="font-semibold tracking-tight text-xl">Overall</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <CardContent className="grid gap-4 grid-cols-2 sm:grid-cols-4 ">
                 {items?.map((item, index) => (
                     <div key={index}>
                         <p className="pb-2 tracking-tight text-sm font-medium">{item.title}</p>

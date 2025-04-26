@@ -9,7 +9,7 @@ export default function NotAllow() {
             <div className="flex flex-col items-center justify-center gap-8">
                 <Users className="size-20 text-primary" />
                 <div className="space-y-2">
-                    <p className="text-2xl font-bold text-center text-primary">
+                    <p className="text-2xl md:text-xl font-bold text-center text-primary">
                         You are not currently in any groups or your group still pending.
                     </p>
                     <p className="text-muted-foreground text-center">

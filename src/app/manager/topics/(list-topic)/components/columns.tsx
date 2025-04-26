@@ -39,6 +39,7 @@ export const columns: ColumnDef<Topic>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Topic Code" />
     ),
+
     cell: ({ row }) => (
       <span className="font-medium text-sm">
         {row?.original?.code === "undefined" || row?.original?.code === "" ? "_ _ _" : row?.original?.code}
@@ -95,12 +96,12 @@ export const columns: ColumnDef<Topic>[] = [
           {latestAppraisals.map((appraisal) => (
             <div
               key={appraisal.topicAppraisalId}
-              className="flex items-center justify-start gap-2"
+              className="flex items-center justify-around gap-2"
             >
               <span className="font-medium text-sm">
                 {appraisal.supervisorId}
               </span>
-              -
+              <span>-</span>
               <span className="text-sm text-muted-foreground">
                 {getTopicAppraisalStatus2(appraisal.status)}
               </span>

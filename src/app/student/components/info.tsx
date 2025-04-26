@@ -13,7 +13,7 @@ export default function Info() {
             className="fixed top-2 right-12 z-[45] bg-background border-primary"
             variant="outline"
             onClick={() => {
-                router.push("/supervisor/home")
+                router.push("/student/home")
             }}
         >
             <User />

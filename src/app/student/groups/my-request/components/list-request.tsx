@@ -33,7 +33,7 @@ export function ListRequest() {
   const handleTabChange = (value: string) => {
     setActiveTab(value)
 
-    // tạo URLSearchParams 
+    // tạo URLSearchParams
     const params = new URLSearchParams(searchParams.toString())
     params.set("tab", value)
 
@@ -49,11 +49,19 @@ export function ListRequest() {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="invitation-sent">Invitation sent</TabsTrigger>
-            <TabsTrigger value="invitation-received">Invitation received</TabsTrigger>
-            <TabsTrigger value="application-sent">Application sent</TabsTrigger>
-            <TabsTrigger value="application-received">Application received</TabsTrigger>
+          <TabsList className="mb-4 grid grid-cols-2 sm:grid-cols-4 h-auto">
+            <TabsTrigger value="invitation-sent" className="py-2 px-1 sm:px-3 text-xs sm:text-sm">
+              Invitation sent
+            </TabsTrigger>
+            <TabsTrigger value="invitation-received" className="py-2 px-1 sm:px-3 text-xs sm:text-sm">
+              Invitation received
+            </TabsTrigger>
+            <TabsTrigger value="application-sent" className="py-2 px-1 sm:px-3 text-xs sm:text-sm">
+              Application sent
+            </TabsTrigger>
+            <TabsTrigger value="application-received" className="py-2 px-1 sm:px-3 text-xs sm:text-sm">
+              Application received
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="invitation-sent">
             <InvitationSent />

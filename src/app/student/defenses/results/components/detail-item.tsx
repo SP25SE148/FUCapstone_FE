@@ -38,7 +38,7 @@ export default function DetailItem({ result }: { result: DefenseResult }) {
                     </h3>
                     <Card className="bg-primary/5">
                         <CardContent className="p-4">
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 text-sm">
                                 <div className="flex items-center space-x-2">
                                     <div className="rounded-md p-2">
                                         <Users className="size-5 text-primary" />
