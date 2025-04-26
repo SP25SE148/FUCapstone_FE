@@ -41,9 +41,7 @@ export const columns: ColumnDef<Topic>[] = [
     ),
     cell: ({ row }) => {
       const topic = row.original;
-      return (
-        <span className="font-medium text-sm">{topic.code}</span>
-      );
+      return <span className="font-medium text-sm">{topic.code}</span>;
     },
   },
   {
@@ -96,12 +94,12 @@ export const columns: ColumnDef<Topic>[] = [
           {latestAppraisals.map((appraisal) => (
             <div
               key={appraisal.topicAppraisalId}
-              className="flex items-center justify-start gap-2"
+              className="flex items-center justify-around gap-2"
             >
               <span className="font-medium text-sm">
                 {appraisal.supervisorId}
               </span>
-              -
+              <span>-</span>
               <span className="text-sm text-muted-foreground">
                 {getTopicAppraisalStatus2(appraisal.status)}
               </span>

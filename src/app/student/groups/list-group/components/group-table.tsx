@@ -6,8 +6,8 @@ import { useStudentProfile } from "@/contexts/student/student-profile-context";
 import { useStudentListGroup } from "@/contexts/student/student-list-group-context";
 
 import { columns } from "./columns";
-import { DataTable } from "@/components/ui/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTable } from "@/app/student/components/data-table";
 
 export default function GroupTable() {
     const { listGroup } = useStudentListGroup();
@@ -17,12 +17,12 @@ export default function GroupTable() {
         ?
         <Card className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-gradient-to-tr from-primary/20 to-background">
             <div className="flex flex-col items-center justify-center gap-8">
-                <Users className="size-20 text-primary" />
+                <Users className="size-14 md:size-20 text-primary" />
                 <div className="space-y-2">
-                    <p className="text-2xl font-bold text-center text-primary">
+                    <p className="text-xl md:text-2xl lg:text-2xl font-bold text-center text-primary">
                         You are currently in a group.
                     </p>
-                    <p className="text-muted-foreground text-center">
+                    <p className="text-muted-foreground text-center text-sm md:text-base lg:text-base">
                         This section is only for student does not in any groups.
                     </p>
                 </div>

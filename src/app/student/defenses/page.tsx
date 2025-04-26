@@ -56,7 +56,7 @@ export default function DefensesPage() {
                   className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
                   <div className="bg-gradient-to-r from-primary/5 to-transparent p-5">
-                    <div className="flex flex-nowrap justify-between items-center">
+                    <div className="grid grid-cols-2 sm:grid-cols-5 justify-between items-center">
                       <div className="flex-1 mx-1 space-y-1">
                         <div className="text-xs text-muted-foreground font-medium capitalize">Location</div>
                         <div className="font-medium flex items-center gap-1.5">

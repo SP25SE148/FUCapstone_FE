@@ -38,7 +38,7 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                         </h3>
                         <Card className="bg-primary/5">
                             <CardContent className="p-4">
-                                <div className="grid grid-cols-3 gap-4 text-sm">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
                                     <div className="flex items-center space-x-2">
                                         <div className="rounded-md p-2">
                                             <CalendarIcon className="size-5 text-primary" />
@@ -83,7 +83,7 @@ export default function ReviewItem({ calendar }: { calendar: ReviewCalendar }) {
                             <Users className="size-4 text-primary" />
                             Reviewer(s)
                         </h3>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {calendar?.reviewers?.map((reviewer: string, index: number) => (
                                 <Card key={index} className="bg-primary/5">
                                     <CardContent className="p-4">

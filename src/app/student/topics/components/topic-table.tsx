@@ -351,7 +351,7 @@ export default function TopicTable() {
 
         {/* pagination */}
         {passedTopicList?.items?.length > 0 && (
-          <div className="flex items-center justify-center gap-4 pt-4 border-t">
+          <div className="flex items-center justify-center gap-2 sm:gap-4 pt-4 border-t">
             <Button
               size={"sm"}
               variant="outline"
@@ -362,12 +362,12 @@ export default function TopicTable() {
               className={`flex items-center gap-1 ${pageNumber === 1 ? "opacity-50 cursor-not-allowed" : ""
                 }`}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-3 sm:h-4 w-3 sm:w-4" />
               Previous
             </Button>
 
-            <div className="flex items-center gap-2 text-sm">
-              <span className="px-3 py-1 bg-primary/10 rounded-md font-medium">
+            <div className="flex items-center gap-2 text-xs sm:text-base">
+              <span className="px-2 sm:px-3 py-1 bg-primary/10 rounded-md font-medium">
                 {passedTopicList?.currentPage}
               </span>
               <span className="text-muted-foreground">
@@ -375,7 +375,7 @@ export default function TopicTable() {
               </span>
             </div>
 
-            <div className="text-sm text-muted-foreground px-2 py-1 bg-muted rounded-md">
+            <div className="text-xs sm:text-sm text-muted-foreground px-1 sm:px-2 py-1 bg-muted rounded-md">
               Total: {passedTopicList?.totalNumberOfItems}
             </div>
 
@@ -394,7 +394,7 @@ export default function TopicTable() {
                 }`}
             >
               Next
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-3 sm:h-4 w-3 sm:w-4" />
             </Button>
           </div>
         )}

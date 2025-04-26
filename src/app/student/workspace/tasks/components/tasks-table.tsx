@@ -9,8 +9,8 @@ import { useStudentTasks } from "@/contexts/student/student-task-context";
 import AddTask from "@/app/student/workspace/tasks/components/add-task";
 import NoProgress from "@/app/student/workspace/tasks/components/no-progress";
 
+import { DataTable } from "@/app/student/components/data-table";
 import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/app/student/workspace/tasks/components/tasks-table-columns";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 

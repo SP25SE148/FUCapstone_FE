@@ -28,7 +28,7 @@ export function Taskbar({
 
   return (
     <nav
-      className="fixed top-2 bottom-2 flex flex-col items-center justify-center gap-4 rounded-lg shadow-lg border-2 border-primary bg-primary"
+      className="fixed top-2 bottom-2 flex flex-col items-center justify-center gap-3 sm:gap-4 rounded-lg shadow-lg border-2 border-primary bg-primary"
     >
       {items.map((item, index) => {
         return (
@@ -41,13 +41,13 @@ export function Taskbar({
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex flex-col items-center p-2 mx-2 rounded-md text-white",
+                    "flex flex-col items-center p-2 mx-1 sm:mx-2 rounded-md text-white",
                     pathname.includes(item.href)
                       ? "bg-white text-primary shadow-md"
                       : "hover:bg-white/20"
                   )}
                 >
-                  <item.icon className="h-6 w-6" />
+                  <item.icon className="h-5 sm:h-6 w-5 sm:w-6" />
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right">
@@ -72,7 +72,7 @@ export function Taskbar({
                   : "hover:bg-white/20"
               )}
             >
-              <Bell className="h-6 w-6" />
+              <Bell className="h-5 sm:h-6 w-5 sm:w-6" />
               {unreadedNoti > 0 && <span className="absolute -top-2 -right-2 size-6 flex items-center justify-center text-xs rounded-lg bg-rose-600 text-background">{unreadedNoti > 99 ? "99+" : unreadedNoti}</span>}
             </Link>
           </TooltipTrigger>
@@ -81,7 +81,7 @@ export function Taskbar({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <TooltipProvider
+      <TooltipProvider 
         delayDuration={200}
       >
         <Tooltip>
@@ -90,7 +90,7 @@ export function Taskbar({
               className="flex flex-col items-center p-2 mx-2 rounded-md text-white hover:bg-white/20"
               onClick={signOutHandler}
             >
-              <LogOut className="h-6 w-6" />
+              <LogOut className="h-5 sm:h-6 w-5 sm:w-6" />
             </div>
           </TooltipTrigger>
           <TooltipContent side="right">
