@@ -81,7 +81,6 @@ export default function MyGroup() {
               </Button>
             )}
           </div>
-
           {/* Body */}
           <CardContent>
             <div className="space-y-6 md:space-y-8">
@@ -117,7 +116,7 @@ export default function MyGroup() {
                         </div>
                         <div className="min-w-0">
                           <h3 className="text-xs md:text-sm text-muted-foreground">Group Code</h3>
-                          <p className="font-semibold tracking-tight break-words">{groupInfo?.groupCode}</p>
+                          <p className="font-semibold tracking-tight break-words">{groupInfo?.groupCode === "" ? "_ _ _" : groupInfo?.groupCode}</p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-2">
@@ -126,7 +125,7 @@ export default function MyGroup() {
                         </div>
                         <div className="min-w-0">
                           <h3 className="text-xs md:text-sm text-muted-foreground">Topic Code</h3>
-                          <p className="font-semibold tracking-tight break-words">{groupInfo?.topicCode}</p>
+                          <p className="font-semibold tracking-tight break-words">{groupInfo?.topicCode === "undefined" || groupInfo?.topicCode === "" || groupInfo?.topicCode === null ? "_ _ _" : groupInfo?.topicCode}</p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-2">

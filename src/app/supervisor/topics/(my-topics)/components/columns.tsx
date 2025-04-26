@@ -34,6 +34,11 @@ export const columns: ColumnDef<Topic>[] = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Code" />
         ),
+        cell: ({ row }) => (
+            <span className="font-medium text-sm">
+                {row?.original?.code === "undefined" || row?.original?.code === "" ? "_ _ _" : row?.original?.code}
+            </span>
+        )
     },
     {
         accessorKey: "englishName",
