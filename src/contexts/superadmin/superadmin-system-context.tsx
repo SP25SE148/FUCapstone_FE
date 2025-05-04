@@ -22,6 +22,7 @@ interface SuperadminSystemContextProps {
   updateTimeConfigurationRemindInDaysBeforeDueDate: (
     data: number
   ) => Promise<void>;
+  updateMinimumPercentageOfStudentsDefend: (data: number) => Promise<void>;
 }
 
 const SuperadminSystemContext = createContext<
@@ -199,6 +200,24 @@ export const SuperadminSystemProvider: React.FC<{
     return response;
   };
 
+  const updateMinimumPercentageOfStudentsDefend = async (
+    data: number
+  ) => {
+    const response = await callApi(
+      "fuc/configuration/system/MinimumPercentageOfStudentsDefend",
+      {
+        method: "PATCH",
+        body: data,
+      }
+    );
+
+    if (response?.isSuccess === true) {
+      fetchSystemConfig();
+      toast.success("Update successfully");
+    }
+    return response;
+  };
+
   useEffect(() => {
     fetchSystemConfig();
   }, []);
@@ -215,6 +234,7 @@ export const SuperadminSystemProvider: React.FC<{
         updateSemanticTopicThroughSemesters,
         updateExpirationTopicRequestDuration,
         updateMaxAttemptTimesToDefendCapstone,
+        updateMinimumPercentageOfStudentsDefend,
         updateProjectProgressRemindInDaysBeforeDueDate,
         updateTimeConfigurationRemindInDaysBeforeDueDate,
       }}

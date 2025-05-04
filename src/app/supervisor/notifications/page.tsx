@@ -50,6 +50,10 @@ export default function NotificationsPage() {
         router.push("/supervisor/topics/my-request");
         break;
 
+       case "ReviewCalendar":
+        router.push("/supervisor/reviews");
+        break; 
+
       default:
         console.warn("No route defined for this notification type:", type);
     }

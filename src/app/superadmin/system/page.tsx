@@ -12,6 +12,8 @@ import {
   FileCheck2,
   TableProperties,
   FolderKanban,
+  Percent,
+  Settings2,
 } from "lucide-react";
 
 import { useSuperadminSystem } from "@/contexts/superadmin/superadmin-system-context";
@@ -36,6 +38,7 @@ export default function SystemConfigPage() {
     updateMaxAttemptTimesToDefendCapstone,
     updateMaxAttemptTimesToReviewTopic,
     updateSemanticTopicThroughSemesters,
+    updateMinimumPercentageOfStudentsDefend,
     updateTimeConfigurationRemindInDaysBeforeDueDate,
     updateProjectProgressRemindInDaysBeforeDueDate,
   } = useSuperadminSystem();
@@ -44,6 +47,8 @@ export default function SystemConfigPage() {
     return (
       <div className="flex items-center justify-center h-64">Loading...</div>
     );
+    
+const minimumPercentageOfStudentsDefendValue = (systemConfig.minimumPercentageOfStudentsDefend * 100).toFixed(0);
 
   return (
     <Card className="min-h-[calc(100vh-60px)] bg-gradient-to-tr from-primary/5 to-background">
@@ -218,20 +223,34 @@ export default function SystemConfigPage() {
 
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <BrainCircuit className="h-5 w-5 text-primary" />
-              <h3 className="text-lg font-semibold">AI Semantic Checking</h3>
+              <Settings2 className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-semibold">System</h3>
             </div>
             <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
               <Card>
                 <CardContent className="p-4">
                   <InputGroup
-                    label="Checking in the last ... semesters"
+                    label="AI Semantic Checking in the last ... semesters"
                     value={systemConfig.semanticTopicThroughSemesters}
                     onSave={(value) =>
                       updateSemanticTopicThroughSemesters(value)
                     }
                     icon={
-                      <FileCheck2 className="h-5 w-5 text-muted-foreground" />
+                      <BrainCircuit className="h-5 w-5 text-muted-foreground" />
+                    }
+                  />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <InputGroup
+                    label="Minimum percentage of students to defend (%)"
+                    value={minimumPercentageOfStudentsDefendValue}
+                    onSave={(value) =>
+                      updateMinimumPercentageOfStudentsDefend(value/100)
+                    }
+                    icon={
+                      <Percent className="h-5 w-5 text-muted-foreground" />
                     }
                   />
                 </CardContent>

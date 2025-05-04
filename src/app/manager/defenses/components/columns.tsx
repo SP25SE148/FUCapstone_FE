@@ -15,6 +15,23 @@ import { DefenseCalendarItem } from "@/types/types";
 
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { getDefenseCalendarStatus } from "@/utils/statusUtils";
+import { useManagerDefense } from "@/contexts/manager/manager-defense-context";
+import UpdateStatus from "@/app/manager/defenses/components/update-status";
+
+const canUpdateStatus = (status: string) => {
+  return status !== "Done";
+};
+
+const ActionCell = ({ row }: { row: any }) => {
+  const { updateDefenseCalendarStatus } = useManagerDefense(); 
+      const defenseCalendar = row.original;
+
+      return (
+        <UpdateStatus
+          onUpdate={(newStatus) => updateDefenseCalendarStatus(defenseCalendar.id, newStatus)} 
+        />
+      );
+}
 
 export const columns: ColumnDef<DefenseCalendarItem>[] = [
   {
@@ -94,4 +111,17 @@ export const columns: ColumnDef<DefenseCalendarItem>[] = [
     ),
     cell: ({ row }) => getDefenseCalendarStatus(row.original?.status),
   },
+  {
+      id: "actions",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="" />
+      ),
+      cell: ({ row }) => {
+        return canUpdateStatus(row.original?.status) ? (
+          <ActionCell row={row} />
+        ) : (
+          <></>
+        );
+      },
+    },
 ];

@@ -15,6 +15,7 @@ interface ManagerDefenseContextProps {
   getDefensesCalendarTemplate: () => Promise<string>;
   getSemestersBetweenCurrentDate: () => Promise<void>
   importDefenseCalendar: (data: any) => Promise<void>;
+  updateDefenseCalendarStatus: (id: string, status: number) => Promise<void>;
 }
 
 const ManagerDefenseContext = createContext<
@@ -71,6 +72,18 @@ export const ManagerDefenseProvider = ({
     return response;
   };
 
+   const updateDefenseCalendarStatus = async (id: string, status: number) => {
+          const response: any = await callApi(`fuc/user/defend-calendar/status`, {
+              method: "PUT",
+              body: { Id: id, Status: status },
+          });
+          if (response?.isSuccess === true) {
+            getDefenseCalendar();
+              toast.success("Update defense calendar status successfully");
+          }
+          return response
+      };
+
   useEffect(() => {
     getDefenseCalendar();
   }, []);
@@ -85,6 +98,7 @@ export const ManagerDefenseProvider = ({
         getDefensesCalendarTemplate,
         getSemestersBetweenCurrentDate,
         importDefenseCalendar,
+        updateDefenseCalendarStatus,
       }}
     >
       {children}
