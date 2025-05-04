@@ -10,6 +10,7 @@ interface ManagerReviewContextProps {
     reviewCalendar: ReviewCalendar[] | []
     getReviewsCalendarTemplate: () => Promise<string>;
     importReview: (data: any) => Promise<void>;
+    updateReviewCalendarStatus: (id: string, status: number) => Promise<void>;
 }
 
 const ManagerReviewContext = createContext<ManagerReviewContextProps | undefined>(undefined);
@@ -41,6 +42,18 @@ export const ManagerReviewProvider = ({ children }: { children: React.ReactNode 
         setReviewCalendar(response?.value);
     };
 
+    const updateReviewCalendarStatus = async (id: string, status: number) => {
+        const response: any = await callApi(`fuc/user/review-calendar/status`, {
+            method: "PUT",
+            body: { Id: id, Status: status },
+        });
+        if (response?.isSuccess === true) {
+            getReviewCalendar();
+            toast.success("Update review calendar status successfully");
+        }
+        return response
+    };
+
     useEffect(() => {
         getReviewCalendar();
     }, []);
@@ -50,7 +63,8 @@ export const ManagerReviewProvider = ({ children }: { children: React.ReactNode 
             value={{
                 reviewCalendar,
                 getReviewsCalendarTemplate,
-                importReview
+                importReview,
+                updateReviewCalendarStatus
             }}
         >
             {children}

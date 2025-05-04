@@ -6,6 +6,25 @@ import { getReviewCalendarStatus } from "@/utils/statusUtils";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import UpdateStatus from "@/app/manager/reviews/components/update-status";
+import { useManagerReview } from "@/contexts/manager/manager-review-context";
+
+const canUpdateStatus = (status: string) => {
+  return status !== "Done";
+};
+
+const ActionCell = ({ row }: { row: any }) => {
+  const { updateReviewCalendarStatus } = useManagerReview();
+  const reviewCalendar = row.original;
+
+  return (
+    <UpdateStatus
+      onUpdate={(newStatus) =>
+        updateReviewCalendarStatus(reviewCalendar.id, newStatus)
+      }
+    />
+  );
+};
 
 export const columns: ColumnDef<ReviewCalendar>[] = [
   {
@@ -27,7 +46,7 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
     ),
     cell: ({ row }) => (
       <div className="max-w-80">
-        <span >{row.original?.topicEnglishName}</span>
+        <span>{row.original?.topicEnglishName}</span>
       </div>
     ),
   },
@@ -81,5 +100,19 @@ export const columns: ColumnDef<ReviewCalendar>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => getReviewCalendarStatus(row.original?.status),
+  },
+
+  {
+    id: "actions",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="" />
+    ),
+    cell: ({ row }) => {
+      return canUpdateStatus(row.original?.status) ? (
+        <ActionCell row={row} />
+      ) : (
+        <></>
+      );
+    },
   },
 ];

@@ -159,6 +159,7 @@ export interface SystemConfig {
   semanticTopicThroughSemesters: number;
   timeConfigurationRemindInDaysBeforeDueDate: number;
   projectProgressRemindInDaysBeforeDueDate: number;
+  minimumPercentageOfStudentsDefend: number;
 }
 
 export interface TimeConfig {
