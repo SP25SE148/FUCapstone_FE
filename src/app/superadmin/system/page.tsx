@@ -9,7 +9,6 @@ import {
   RefreshCw,
   Info,
   BrainCircuit,
-  FileCheck2,
   TableProperties,
   FolderKanban,
   Percent,
@@ -48,7 +47,7 @@ export default function SystemConfigPage() {
       <div className="flex items-center justify-center h-64">Loading...</div>
     );
     
-const minimumPercentageOfStudentsDefendValue = (systemConfig.minimumPercentageOfStudentsDefend * 100).toFixed(0);
+const minimumPercentageOfStudentsDefendValue = (systemConfig.minimumPercentageOfStudentsDefend * 100);
 
   return (
     <Card className="min-h-[calc(100vh-60px)] bg-gradient-to-tr from-primary/5 to-background">
