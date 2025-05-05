@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CheckCircle2, Clock, Pencil, RefreshCw } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Switch } from "@/components/ui/switch";
 
 enum DefenseCalendarStatus {
   Pending = 0,
@@ -15,23 +16,23 @@ enum DefenseCalendarStatus {
 }
 
 interface UpdateStatusProps {
-  onUpdate: (newStatus: DefenseCalendarStatus) => Promise<void> 
+  onUpdate: (newStatus: number, isRedefend: boolean) => Promise<void>;
 }
 
 const UpdateStatus: React.FC<UpdateStatusProps> = ({ onUpdate }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<DefenseCalendarStatus | null>(null)
   const [isUpdating, setIsUpdating] = useState(false)
+  const [isRedefend, setIsRedefend] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
 
-  // Reset selected status when dialog opens/closes
   useEffect(() => {
     if (isDialogOpen) {
-      setSelectedStatus(null)
+      setSelectedStatus(null);
+      setIsRedefend(false);
     }
   }, [isDialogOpen])
 
-  // Get all available statuses as enum values
   const availableStatuses = Object.values(DefenseCalendarStatus).filter(
     (status) => typeof status === "number",
   ) as DefenseCalendarStatus[]
@@ -44,7 +45,7 @@ const UpdateStatus: React.FC<UpdateStatusProps> = ({ onUpdate }) => {
 
     setIsUpdating(true)
     try {
-      await onUpdate(selectedStatus)
+      await onUpdate(selectedStatus, isRedefend);
       setShowSuccess(true)
       setTimeout(() => {
         setShowSuccess(false)
@@ -142,6 +143,15 @@ const UpdateStatus: React.FC<UpdateStatusProps> = ({ onUpdate }) => {
                       })}
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium">Redefend</label>
+                  <Switch
+                    checked={isRedefend}
+                    onCheckedChange={setIsRedefend}
+                    disabled={selectedStatus !== 2}
+                  />
                 </div>
               </div>
 

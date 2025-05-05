@@ -31,6 +31,7 @@ interface ManagerGroupContextProps {
     StudentId: string;
   }) => Promise<void>;
   exportGroup: () => Promise<any>;
+  deleteGroup: (groupId: string) => Promise<any>;
 }
 
 const ManagerGroupContext = createContext<ManagerGroupContextProps | undefined>(
@@ -139,6 +140,17 @@ export const ManagerGroupProvider = ({
     return response;
   };
 
+  const deleteGroup = async (groupId: string) => {
+    const response = await callApi(`fuc/user/group/delete/${groupId}`, {
+      method: "DELETE",
+    });
+    if (response?.isSuccess) {
+      toast.success("Delete group successfully!");
+      getAllGroupByCapstone();
+    }
+    return response;
+  }
+
   useEffect(() => {
     if (pathName === "/manager/groups") {
       getAllGroupByCapstone();
@@ -157,6 +169,7 @@ export const ManagerGroupProvider = ({
         passedTopicList,
         remainStudentList,
         fetchTopics,
+        deleteGroup,
         fetchPassedTopic,
         assignPendingTopicForGroup,
         mergeRemainStudentsIntoGroup,

@@ -97,7 +97,7 @@ export default function ApplicationReceived() {
                               setOpen(true)
                             }}
                           >
-                            <Check className="mr-1 h-4 w-4" />
+                            <Check className="h-4 w-4" />
                             Approve
                           </Button>
                           <Button
@@ -112,7 +112,7 @@ export default function ApplicationReceived() {
                               setOpen(true)
                             }}
                           >
-                            <X className="mr-1 h-4 w-4" />
+                            <X className="h-4 w-4" />
                             Reject
                           </Button>
                         </>

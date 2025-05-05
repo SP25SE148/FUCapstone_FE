@@ -19,7 +19,7 @@ import { useManagerDefense } from "@/contexts/manager/manager-defense-context";
 import UpdateStatus from "@/app/manager/defenses/components/update-status";
 
 const canUpdateStatus = (status: string) => {
-  return status !== "Done";
+  return status !== "";
 };
 
 const ActionCell = ({ row }: { row: any }) => {
@@ -28,7 +28,7 @@ const ActionCell = ({ row }: { row: any }) => {
 
       return (
         <UpdateStatus
-          onUpdate={(newStatus) => updateDefenseCalendarStatus(defenseCalendar.id, newStatus)} 
+          onUpdate={(newStatus, isRedefend) => updateDefenseCalendarStatus(defenseCalendar.id, newStatus, isRedefend)} 
         />
       );
 }

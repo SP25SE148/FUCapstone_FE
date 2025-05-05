@@ -15,7 +15,7 @@ interface ManagerDefenseContextProps {
   getDefensesCalendarTemplate: () => Promise<string>;
   getSemestersBetweenCurrentDate: () => Promise<void>
   importDefenseCalendar: (data: any) => Promise<void>;
-  updateDefenseCalendarStatus: (id: string, status: number) => Promise<void>;
+  updateDefenseCalendarStatus: (id: string, status: number, isRedend: boolean ) => Promise<void>;
 }
 
 const ManagerDefenseContext = createContext<
@@ -72,10 +72,10 @@ export const ManagerDefenseProvider = ({
     return response;
   };
 
-   const updateDefenseCalendarStatus = async (id: string, status: number) => {
+   const updateDefenseCalendarStatus = async (id: string, status: number, isRedend: boolean) => {
           const response: any = await callApi(`fuc/user/defend-calendar/status`, {
               method: "PUT",
-              body: { Id: id, Status: status },
+              body: { Id: id, Status: status, IsRedend: isRedend },
           });
           if (response?.isSuccess === true) {
             getDefenseCalendar();

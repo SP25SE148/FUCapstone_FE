@@ -61,6 +61,8 @@ export const InputGroup = ({ label, value, onSave, onCancel, icon }: InputGroupP
           <Input
             type="number"
             value={currentValue}
+            min={0}
+            max={100}
             onChange={(e) => setCurrentValue(Number(e.target.value))}
             className="w-32"
           />
