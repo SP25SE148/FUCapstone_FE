@@ -107,7 +107,7 @@ export default function InvitationReceived() {
                               setOpen(true)
                             }}
                           >
-                            <Check className="mr-1 h-4 w-4" />
+                            <Check className="h-4 w-4" />
                             Accept
                           </Button>
                           <Button
@@ -124,7 +124,7 @@ export default function InvitationReceived() {
                               setOpen(true)
                             }}
                           >
-                            <X className="mr-1 h-4 w-4" />
+                            <X className="h-4 w-4" />
                             Reject
                           </Button>
                         </>

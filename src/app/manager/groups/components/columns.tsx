@@ -12,7 +12,15 @@ import StudentSelection from "./student-selection";
 
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import DeleteGroup from "@/app/manager/groups/components/delete-group";
 
 function ActionsCell(row: Row<GroupFullInfo>) {
   const group = row.original;
@@ -22,8 +30,10 @@ function ActionsCell(row: Row<GroupFullInfo>) {
   const isFull = current >= max;
   const noRegisterTopic =
     group.topicCode === "undefined" && group.groupCode !== "";
+  const noDelete = group.topicCode === "undefined"
   const [open, setOpen] = useState(false);
   const [openTopic, setOpenTopic] = useState(false);
+  const [openDeleteGroup, setOpenDeleteGroup] = useState(false);
 
   return (
     <div className="flex items-center justify-center">
@@ -52,6 +62,11 @@ function ActionsCell(row: Row<GroupFullInfo>) {
               Assign Topic
             </DropdownMenuItem>
           )}
+          {noDelete && (
+          <DropdownMenuItem onClick={() => setOpenDeleteGroup(true)}>
+            Delete Group
+          </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -65,6 +80,12 @@ function ActionsCell(row: Row<GroupFullInfo>) {
         GroupId={group.id}
         open={openTopic}
         setOpen={() => setOpenTopic(false)}
+      />
+
+      <DeleteGroup
+        groupId={group.id}
+        open={openDeleteGroup}
+        setOpen={() => setOpenDeleteGroup(false)}
       />
     </div>
   );
@@ -86,7 +107,7 @@ export const columns: ColumnDef<GroupFullInfo>[] = [
       <span className="font-medium text-sm">
         {row?.original?.groupCode === "" ? "_ _ _" : row?.original?.groupCode}
       </span>
-    )
+    ),
   },
   {
     accessorKey: "topicCode",
@@ -95,9 +116,13 @@ export const columns: ColumnDef<GroupFullInfo>[] = [
     ),
     cell: ({ row }) => (
       <span className="font-medium text-sm">
-        {row?.original?.topicCode === "undefined" || row?.original?.topicCode === "" || row?.original?.topicCode === null ? "_ _ _" : row?.original?.topicCode}
+        {row?.original?.topicCode === "undefined" ||
+        row?.original?.topicCode === "" ||
+        row?.original?.topicCode === null
+          ? "_ _ _"
+          : row?.original?.topicCode}
       </span>
-    )
+    ),
   },
   {
     accessorKey: "averageGPA",
