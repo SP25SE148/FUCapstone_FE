@@ -234,8 +234,8 @@ export interface StatisticItem {
 
 export interface Statistic {
   analysises: StatisticItem[],
+  over60Ratio: number,
   over80Ratio: number,
-  over90Ratio: number,
   createdDate: string,
   processedBy: string,
   statusSemantic: string
