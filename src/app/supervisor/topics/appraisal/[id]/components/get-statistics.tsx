@@ -47,8 +47,8 @@ export default function GetStatistics() {
 
                             <div className="grid grid-cols-2 gap-4 text-sm text-gray-700 mb-4">
                                 <div>
+                                    <p><strong>Over 60% Ratio:</strong> {stat.over60Ratio}</p>
                                     <p><strong>Over 80% Ratio:</strong> {stat.over80Ratio}</p>
-                                    <p><strong>Over 90% Ratio:</strong> {stat.over90Ratio}</p>
                                 </div>
                                 <div>
                                     <p><strong>Processed By:</strong> {stat.processedBy}</p>
