@@ -8,7 +8,13 @@ import { getTimeElapsed } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 import { useSignalR } from "@/contexts/signalR-context";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function NotificationsPage() {
   const { user } = useAuth();
@@ -65,9 +71,13 @@ export default function NotificationsPage() {
       case "GroupStatusUpdatedEvent":
         router.push("/student/groups");
         break;
-      
-        case "ReviewCalendar":
+
+      case "ReviewCalendar":
         router.push("/student/reviews");
+        break;
+
+      case "DefendCapstoneCalendar":
+        router.push("/student/defenses");
         break;
 
       default:
@@ -86,8 +96,7 @@ export default function NotificationsPage() {
           <strong className="text-primary">{user?.name}</strong>
         </CardDescription>
       </CardHeader>
-      {notifications && notifications?.length > 0
-        ?
+      {notifications && notifications?.length > 0 ? (
         <CardContent>
           <div className="space-y-2">
             {notifications?.map((notification: any) => (
@@ -114,7 +123,7 @@ export default function NotificationsPage() {
             ))}
           </div>
         </CardContent>
-        :
+      ) : (
         <CardContent className="h-[calc(100vh-120px)] max-h-[calc(100vh-120px)]">
           <div className="h-full flex flex-col items-center justify-center gap-8">
             <Bell className="size-20 text-primary" />
@@ -127,7 +136,8 @@ export default function NotificationsPage() {
               </p>
             </div>
           </div>
-        </CardContent>}
+        </CardContent>
+      )}
     </Card>
   );
 }

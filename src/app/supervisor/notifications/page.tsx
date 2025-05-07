@@ -54,6 +54,10 @@ export default function NotificationsPage() {
         router.push("/supervisor/reviews");
         break; 
 
+        case "DefendCapstoneCalendar":
+          router.push("/supervisor/defenses");
+          break;
+
       default:
         console.warn("No route defined for this notification type:", type);
     }
