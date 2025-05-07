@@ -65,6 +65,10 @@ export default function NotificationsPage() {
       case "GroupStatusUpdatedEvent":
         router.push("/student/groups");
         break;
+      
+        case "ReviewCalendar":
+        router.push("/student/reviews");
+        break;
 
       default:
         console.warn("No route defined for this notification type:", type);
@@ -98,6 +102,9 @@ export default function NotificationsPage() {
                     <p className="font-semibold text-sm sm:text-base transition-all duration-200">
                       {notification?.content}
                     </p>
+                    {/* <p className="font-semibold text-sm sm:text-base transition-all duration-200">
+                      {notification?.type}
+                    </p> */}
                     <p className="text-xs sm:text-sm font-medium text-primary transition-all duration-200">
                       {getTimeElapsed(notification?.createdDate)}
                     </p>
