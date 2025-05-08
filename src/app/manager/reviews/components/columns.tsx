@@ -10,7 +10,7 @@ import UpdateStatus from "@/app/manager/reviews/components/update-status";
 import { useManagerReview } from "@/contexts/manager/manager-review-context";
 
 const canUpdateStatus = (status: string) => {
-  return status !== "Done";
+  return status !== "";
 };
 
 const ActionCell = ({ row }: { row: any }) => {
