@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils"
 import { Switch } from "@/components/ui/switch";
 
 enum DefenseCalendarStatus {
-  Pending = 0,
+  NotStarted = 0,
   InProgress = 1,
   Done = 2,
 }
@@ -26,6 +26,7 @@ const UpdateStatus: React.FC<UpdateStatusProps> = ({ onUpdate }) => {
   const [isRedefend, setIsRedefend] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
 
+
   useEffect(() => {
     if (isDialogOpen) {
       setSelectedStatus(null);
@@ -38,31 +39,31 @@ const UpdateStatus: React.FC<UpdateStatusProps> = ({ onUpdate }) => {
   ) as DefenseCalendarStatus[]
 
   const handleUpdate = async () => {
-    if (!selectedStatus) {
-      setIsDialogOpen(false)
-      return
+    if (selectedStatus === null || selectedStatus === undefined) {
+      setIsDialogOpen(false);
+      return;
     }
-
-    setIsUpdating(true)
+  
+    setIsUpdating(true);
     try {
       await onUpdate(selectedStatus, isRedefend);
-      setShowSuccess(true)
+      setShowSuccess(true);
       setTimeout(() => {
-        setShowSuccess(false)
-        setIsDialogOpen(false)
-      }, 1500)
+        setShowSuccess(false);
+        setIsDialogOpen(false);
+      }, 1500);
     } catch (error) {
-      console.error("Failed to update status:", error)
+      console.error("Failed to update status:", error);
     } finally {
-      setIsUpdating(false)
+      setIsUpdating(false);
     }
-  }
+  };
 
   const getStatusConfig = (status: DefenseCalendarStatus) => {
     switch (status) {
-      case DefenseCalendarStatus.Pending:
+      case DefenseCalendarStatus.NotStarted:
         return {
-          label: "Pending",
+          label: "Not Started",
           color: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
           icon: <Clock className="w-4 h-4 mr-1" />,
           badgeColor: "bg-yellow-100 text-yellow-800 border-yellow-200",

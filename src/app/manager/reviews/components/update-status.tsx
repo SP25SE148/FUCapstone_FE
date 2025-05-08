@@ -35,9 +35,9 @@ const UpdateStatus: React.FC<UpdateStatusProps> = ({ onUpdate }) => {
   ) as ReviewCalendarStatus[]
 
   const handleUpdate = async () => {
-    if (!selectedStatus) {
-      setIsDialogOpen(false)
-      return
+    if (selectedStatus === null || selectedStatus === undefined) {
+      setIsDialogOpen(false);
+      return;
     }
 
     setIsUpdating(true)
