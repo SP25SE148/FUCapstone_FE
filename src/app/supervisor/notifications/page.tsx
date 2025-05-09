@@ -54,7 +54,7 @@ export default function NotificationsPage() {
         router.push("/supervisor/reviews");
         break; 
 
-        case "DefendCapstoneCalendar":
+        case "DefendCapstoneProjectInformationCalendar":
           router.push("/supervisor/defenses");
           break;
 

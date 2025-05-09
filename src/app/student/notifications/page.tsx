@@ -76,7 +76,7 @@ export default function NotificationsPage() {
         router.push("/student/reviews");
         break;
 
-      case "DefendCapstoneCalendar":
+      case "DefendCapstoneProjectInformationCalendar":
         router.push("/student/defenses");
         break;
 
