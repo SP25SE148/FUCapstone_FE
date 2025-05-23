@@ -7,7 +7,7 @@
 <h2>Project Screenshots:</h2>
 
 <h3>Superadmin</h3>
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<div style="display: flex; gap: 10px;">
   <div>
     <img src="https://firebasestorage.googleapis.com/v0/b/createsyllabusuploading.appspot.com/o/FUC_FE_Screenshots%2FSuperadmin_View_System_Config.png?alt=media&token=11607521-63b2-4ba1-a30d-12aabe1820ef" alt="View System Config" width="400" height="auto">
     <p style="font-style: italic;">View System Config</p>
