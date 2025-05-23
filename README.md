@@ -4,6 +4,54 @@
 
 <p id="description">FUC is a unified system to manage and support the working process of lecturers and students according to their instructions easily and consistently when performing the graduation project of FPT University</p>
 
+<h2>🧐 Features</h2>
+
+Here're some of the project's best features:
+
+*   Register the group for students
+*   Request for topic registration for students
+*   Group task management for students
+*   Register the topic for supervisor
+*   Approve the topic for Supervisor
+*   Own group manager for supervisor
+*   Review topic for supervisor
+*   Decide the Defense results for Supervisor
+
+<h2>🛠️ Installation Steps:</h2>
+
+<p>1. Open Terminal Emulator (Command Prompt PowerShell Terminal) in the folder will contain the project</p>
+
+<p>2. Clone project on your computer</p>
+
+git clone https://github.com/SP25SE148/FUCapstone_FE.git
+
+<p>3. Navigate to folders containing projects</p>
+
+cd FUCapstone_FE
+
+<p>4. Install the necessary packages to run the project</p>
+
+npm install --force
+
+<p>5. Run the project</p>
+
+npm run dev
+
+<p>6. Access to the path</p>
+
+https://localhost:3000/
+
+<h2>💻 Built with</h2>
+
+Technologies used in the project:
+
+*   NextJS
+*   Typescript
+*   Shadcn UI
+*   React Hook Form
+*   XLSX
+*   TailwindCSS
+
 <h2>Project Screenshots:</h2>
 
 <h3>Superadmin</h3>
@@ -153,50 +201,3 @@
     <p style="font-style: italic;">Add Task</p>
   </div>
 </div>
-<h2>🧐 Features</h2>
-
-Here're some of the project's best features:
-
-*   Register the group for students
-*   Request for topic registration for students
-*   Group task management for students
-*   Register the topic for supervisor
-*   Approve the topic for Supervisor
-*   Own group manager for supervisor
-*   Review topic for supervisor
-*   Decide the Defense results for Supervisor
-
-<h2>🛠️ Installation Steps:</h2>
-
-<p>1. Open Terminal Emulator (Command Prompt PowerShell Terminal) in the folder will contain the project</p>
-
-<p>2. Clone project on your computer</p>
-
-git clone https://github.com/SP25SE148/FUCapstone_FE.git
-
-<p>3. Navigate to folders containing projects</p>
-
-cd FUCapstone_FE
-
-<p>4. Install the necessary packages to run the project</p>
-
-npm install --force
-
-<p>5. Run the project</p>
-
-npm run dev
-
-<p>6. Access to the path</p>
-
-https://localhost:3000/
-
-<h2>💻 Built with</h2>
-
-Technologies used in the project:
-
-*   NextJS
-*   Typescript
-*   Shadcn UI
-*   React Hook Form
-*   XLSX
-*   TailwindCSS
