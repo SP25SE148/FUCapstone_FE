@@ -43,7 +43,8 @@ export const useApi = () => {
 
 
         try {
-            let response = await fetch(`https://localhost:8000/${endpoint}`, {
+            // let response = await fetch(`https://localhost:8000/${endpoint}`, {
+            let response = await fetch(`https://fucapstone-be-gateway.onrender.com/${endpoint}`, {
                 method,
                 headers,
                 body: requestBody,
@@ -55,7 +56,8 @@ export const useApi = () => {
                 await refreshAccessToken(currentToken, refreshToken);
 
                 // Gửi lại request với token mới
-                response = await fetch(`https://localhost:8000/${endpoint}`, {
+                // response = await fetch(`https://localhost:8000/${endpoint}`, {
+                response = await fetch(`https://fucapstone-be-gateway.onrender.com/${endpoint}`, {
                     method,
                     headers,
                     body: requestBody,

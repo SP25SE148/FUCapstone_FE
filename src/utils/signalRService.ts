@@ -9,7 +9,8 @@ export const startSignalRConnection = async (token: string) => {
     }
 
     connection = new signalR.HubConnectionBuilder()
-        .withUrl(`https://localhost:8000/notifications?access_token=${token}`, {
+        // .withUrl(`https://localhost:8000/notifications?access_token=${token}`, {
+        .withUrl(`https://fucapstone-be-gateway.onrender.com/notifications?access_token=${token}`, {
             withCredentials: false
         })
         .withAutomaticReconnect()
