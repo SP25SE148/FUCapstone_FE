@@ -23,24 +23,32 @@ Here're some of the project's best features:
 
 <p>2. Clone project on your computer</p>
 
+```
 git clone https://github.com/SP25SE148/FUCapstone_FE.git
+```
 
 <p>3. Navigate to folders containing projects</p>
 
+```
 cd FUCapstone_FE
+```
 
 <p>4. Install the necessary packages to run the project</p>
 
+```
 npm install --force
+```
 
 <p>5. Run the project</p>
 
+```
 npm run dev
-
+```
 <p>6. Access to the path</p>
 
+```
 https://localhost:3000/
-
+```
 <h2>💻 Built with</h2>
 
 Technologies used in the project:
