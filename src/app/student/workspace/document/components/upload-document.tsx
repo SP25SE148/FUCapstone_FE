@@ -22,8 +22,8 @@ const formSchema = z.object({
         .refine((files) => {
             const file = files[0]
             const fileName = file.name.toLowerCase()
-            return fileName.endsWith(".zip") || fileName.endsWith(".rar")
-        }, "Only compressed files (.zip, .rar) are accepted"),
+            return fileName.endsWith(".zip")
+        }, "Only compressed files (.zip) are accepted"),
 })
 
 export default function UploadDocument({ refresh }: { refresh?: () => void }) {
@@ -84,7 +84,7 @@ export default function UploadDocument({ refresh }: { refresh?: () => void }) {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Upload Group Document</DialogTitle>
-                    <DialogDescription>Upload a compressed folder (.zip, .rar) containing the required files.</DialogDescription>
+                    <DialogDescription>Upload a compressed folder (.zip) containing the required files.</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -93,13 +93,13 @@ export default function UploadDocument({ refresh }: { refresh?: () => void }) {
                             name="file"
                             render={({ field: { onChange, value, ...rest } }) => (
                                 <FormItem>
-                                    <FormLabel>Compressed File (.zip, .rar)</FormLabel>
+                                    <FormLabel>Compressed File (.zip)</FormLabel>
                                     <FormControl>
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-2">
                                                 <Input
                                                     type="file"
-                                                    accept=".zip,.rar"
+                                                    accept=".zip"
                                                     disabled={isLoading}
                                                     onChange={handleFileChange}
                                                     className="cursor-pointer"
